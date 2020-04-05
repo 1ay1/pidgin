@@ -2585,6 +2585,8 @@ purple_media_element_info_finalize(GObject *info)
 			PURPLE_MEDIA_ELEMENT_INFO_GET_PRIVATE(info);
 	g_free(priv->id);
 	g_free(priv->name);
+
+	parent_class->finalize(info);
 }
 
 static void
