@@ -303,6 +303,9 @@ I can find them.
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
+PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0 >= 2.26],
+			    AC_DEFINE(HAVE_GIOUNIX, 1, [Have gio-unix]), [])
+
 GLIB_GENMARSHAL=`pkg-config --variable=glib_genmarshal glib-2.0`
 AC_SUBST(GLIB_GENMARSHAL)
 

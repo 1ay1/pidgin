@@ -80,6 +80,18 @@ typedef struct
 
 		} file;
 
+		struct
+		{
+#ifdef HAVE_GIOUNIX
+			GCancellable *cancellable;
+			GDBusConnection *dbus_connection;
+			gchar *session_path;
+			guint signal_id;
+			guint32 node_id;
+#endif
+
+		} screenshare;
+
 	} u;
 
 } PidginRequestData;
@@ -1707,6 +1719,331 @@ pidgin_request_folder(const char *title, const char *dirname,
 }
 
 #ifdef USE_VV
+
+#ifdef HAVE_GIOUNIX
+#include <gio/gunixfdlist.h>
+
+static gboolean portal_failed;
+
+static void screenshare_cancel_cb(GtkWidget *button, PidginRequestData *data);
+
+static void portal_cancel_cb(PidginRequestData *data)
+{
+	screenshare_cancel_cb(NULL, data);
+}
+
+static void portal_fallback(PidginRequestData *data)
+{
+	purple_debug_info("pidgin", "Fallback from XDP portal screenshare\n");
+	portal_failed = TRUE;
+
+	if (data->dialog) {
+		pidgin_auto_parent_window(data->dialog);
+		gtk_widget_show_all(data->dialog);
+	} else {
+		portal_cancel_cb(data);
+	}
+}
+
+static void request_completed_cb(GObject *object, GAsyncResult *res, gpointer _data)
+{
+	PidginRequestData *data = _data;
+	GError *error = NULL;
+	GDBusMessage *msg = g_dbus_connection_send_message_with_reply_finish(data->u.screenshare.dbus_connection,
+									     res,
+									     &error);
+	if (!msg || g_dbus_message_to_gerror(msg, &error)) {
+		/* This is the expected failure mode when XDP screencast isn't available.
+		 * Don't be too noisy about it; just fall back to direct mode. */
+		purple_debug_info("pidgin",
+				  "ScreenCast call failed: %s\n", error->message);
+		portal_fallback(data);
+	}
+}
+
+
+static guint portal_session_nr, portal_request_nr;
+
+static gchar *portal_request_path(GDBusConnection *dc, GVariantBuilder *b)
+{
+	const gchar *bus_name = g_dbus_connection_get_unique_name(dc);
+	gchar *dot, *request_str = g_strdup_printf("u%u", portal_request_nr++);
+	gchar *request_path = g_strdup_printf("/org/freedesktop/portal/desktop/request/%s/%s",
+					      bus_name + 1, request_str);
+
+	g_variant_builder_add(b, "{sv}", "handle_token", g_variant_new_take_string(request_str));
+
+	dot = request_path;
+	while ((dot = strchr(dot, '.')))
+		*dot = '_';
+
+	return request_path;
+}
+
+static void screen_cast_call(PidginRequestData *data, const gchar *method, const gchar *str_arg,
+			     GVariantBuilder *opts, GDBusSignalCallback cb)
+{
+	GDBusMessage *msg;
+	GVariantBuilder b;
+	gchar *request_path;
+
+	if (data->u.screenshare.signal_id)
+		g_dbus_connection_signal_unsubscribe(data->u.screenshare.dbus_connection,
+						     data->u.screenshare.signal_id);
+
+	if (!opts)
+		opts = g_variant_builder_new(G_VARIANT_TYPE("a{sv}"));
+	request_path = portal_request_path(data->u.screenshare.dbus_connection, opts);
+
+	data->u.screenshare.signal_id = g_dbus_connection_signal_subscribe(data->u.screenshare.dbus_connection,
+									   "org.freedesktop.portal.Desktop",
+									   "org.freedesktop.portal.Request",
+									   "Response", request_path, NULL, 0,
+									   cb, data, NULL);
+	g_free(request_path);
+
+	msg = g_dbus_message_new_method_call("org.freedesktop.portal.Desktop",
+					     "/org/freedesktop/portal/desktop",
+					     "org.freedesktop.portal.ScreenCast",
+					     method);
+
+	g_variant_builder_init(&b, G_VARIANT_TYPE_TUPLE);
+	if (data->u.screenshare.session_path)
+		g_variant_builder_add(&b, "o", data->u.screenshare.session_path);
+	if (str_arg)
+		g_variant_builder_add(&b, "s", str_arg);
+	g_variant_builder_add(&b, "a{sv}", opts);
+
+	g_dbus_message_set_body(msg, g_variant_builder_end(&b));
+
+	g_dbus_connection_send_message_with_reply(data->u.screenshare.dbus_connection, msg,
+						  0, 200, NULL, NULL, request_completed_cb, data);
+}
+
+static GstElement *create_pipewiresrc_cb(PurpleMedia *media, const gchar *session_id,
+					 const gchar *participant)
+{
+	GstElement *ret;
+	GObject *info;
+	gchar *node_id;
+
+	info = g_object_get_data(G_OBJECT(media), "src-element");
+	if (!info)
+		return NULL;
+
+	ret = gst_element_factory_make("pipewiresrc", NULL);
+	if (ret == NULL)
+		return NULL;
+
+	/* Take the node-id and fd from the PurpleMediaElementInfo
+	 * and apply them to the pipewiresrc */
+	node_id = g_strdup_printf("%u",
+				  GPOINTER_TO_UINT(g_object_get_data(info, "node-id")));
+	g_object_set(ret,"path", node_id, "do-timestamp", TRUE,
+		     "fd", GPOINTER_TO_UINT(g_object_get_data(info, "fd")),
+		     NULL);
+	g_free(node_id);
+
+	return ret;
+}
+
+static void close_pipewire_fd(gpointer _fd)
+{
+	int fd = GPOINTER_TO_INT(_fd);
+
+	close(fd);
+}
+
+static void pipewire_fd_cb(GObject *object, GAsyncResult *res, gpointer _data)
+{
+	PidginRequestData *data = _data;
+	GError *error = NULL;
+	GUnixFDList *l;
+	int pipewire_fd;
+	GDBusMessage *msg = g_dbus_connection_send_message_with_reply_finish(data->u.screenshare.dbus_connection,
+									     res,
+									     &error);
+	if (!msg || g_dbus_message_to_gerror(msg, &error)) {
+		purple_debug_info("pidgin", "OpenPipeWireRemote request failed: %s\n", error->message);
+		purple_notify_error(NULL, _("Screen share error"),
+				    _("OpenPipeWireRemote request failed"), error->message);
+		g_clear_error(&error);
+		portal_cancel_cb(data);
+		return;
+	}
+	l = g_dbus_message_get_unix_fd_list(msg);
+	if (!l) {
+		purple_debug_info("pidgin", "OpenPipeWireRemote request failed to yield a file descriptor\n");
+		purple_notify_error(NULL, _("Screen share error"), _("OpenPipeWireRemote request failed"),
+				    _("No file descriptor found"));
+		portal_cancel_cb(data);
+		return;
+	}
+	pipewire_fd = g_unix_fd_list_get(l, 0, NULL);
+
+	if (data->cbs[0] != NULL) {
+		GObject *info;
+		info = g_object_new(PURPLE_TYPE_MEDIA_ELEMENT_INFO,
+				    "id", "screenshare-window",
+				    "name", "Screen share single window",
+				    "type", PURPLE_MEDIA_ELEMENT_VIDEO | PURPLE_MEDIA_ELEMENT_SRC |
+				    PURPLE_MEDIA_ELEMENT_ONE_SRC,
+				    "create-cb", create_pipewiresrc_cb, NULL);
+		g_object_set_data_full(info, "fd", GUINT_TO_POINTER(pipewire_fd), close_pipewire_fd);
+		g_object_set_data(info, "node-id", GUINT_TO_POINTER(data->u.screenshare.node_id));
+		/* When the DBus connection closes, the session ends. So keep it attached
+		   to the PurpleMediaElementInfo, which in turn should be attached to
+		   the owning PurpleMedia for the lifetime of the session. */
+		g_object_set_data_full(info, "dbus-connection",
+				       g_object_ref(data->u.screenshare.dbus_connection),
+				       g_object_unref);
+		((PurpleRequestScreenshareCb)data->cbs[0])(data->user_data, info);
+	}
+
+	purple_request_close(PURPLE_REQUEST_SCREENSHARE, data);
+}
+
+
+static void get_pipewire_fd(PidginRequestData *data)
+{
+	GDBusMessage *msg;
+	GVariant *args;
+
+	if (data->u.screenshare.signal_id)
+		g_dbus_connection_signal_unsubscribe(data->u.screenshare.dbus_connection,
+						     data->u.screenshare.signal_id);
+	data->u.screenshare.signal_id = 0;
+
+	msg = g_dbus_message_new_method_call("org.freedesktop.portal.Desktop",
+					     "/org/freedesktop/portal/desktop",
+					     "org.freedesktop.portal.ScreenCast",
+					     "OpenPipeWireRemote");
+
+	args = g_variant_new("(oa{sv})", data->u.screenshare.session_path, NULL);
+	g_dbus_message_set_body(msg, args);
+
+	g_dbus_connection_send_message_with_reply(data->u.screenshare.dbus_connection, msg,
+						  0, 200, NULL, NULL, pipewire_fd_cb, data);
+}
+
+static void started_cb(GDBusConnection *dc, const gchar *sender_name,
+		       const gchar *object_path, const gchar *interface_name,
+		       const gchar *signal_name, GVariant *params, gpointer _data)
+{
+	PidginRequestData *data = _data;
+	GVariant *args, *streams;
+	guint code;
+
+	g_variant_get(params, "(u@a{sv})", &code, &args);
+	if (code || !g_variant_lookup(args, "streams", "@a(ua{sv})", &streams) ||
+	    g_variant_n_children(streams) != 1) {
+		purple_debug_info("pidgin", "Screencast Start call returned %d\n", code);
+		purple_notify_error(NULL, _("Screen share error"),
+				    _("Screencast \"Start\" failed"), NULL);
+		portal_cancel_cb(data);
+		return;
+	}
+
+	g_variant_get_child(streams, 0, "(u@a{sv})", &data->u.screenshare.node_id, NULL);
+
+	get_pipewire_fd(data);
+}
+
+static void source_selected_cb(GDBusConnection *dc, const gchar *sender_name,
+			       const gchar *object_path, const gchar *interface_name,
+			       const gchar *signal_name, GVariant *params, gpointer _data)
+{
+	PidginRequestData *data = _data;
+	guint code;
+
+	g_variant_get(params, "(u@a{sv})", &code, NULL);
+	if (code) {
+		purple_debug_info("pidgin", "Screencast SelectSources call returned %d\n", code);
+		purple_notify_error(NULL, _("Screen share error"),
+				    _("Screencast \"SelectSources\" failed"), NULL);
+		portal_cancel_cb(data);
+		return;
+	}
+
+	screen_cast_call(data, "Start", "", NULL, started_cb);
+}
+
+static void sess_created_cb(GDBusConnection *dc, const gchar *sender_name,
+			    const gchar *object_path, const gchar *interface_name,
+			    const gchar *signal_name, GVariant *params, gpointer _data)
+{
+	PidginRequestData *data = _data;
+	GVariantBuilder opts;
+	GVariant *args;
+	guint code;
+
+	g_variant_get(params, "(u@a{sv})", &code, &args);
+	if (code || !g_variant_lookup(args, "session_handle", "s",
+				      &data->u.screenshare.session_path)) {
+		purple_debug_info("pidgin", "Screencast CreateSession call returned %d\n", code);
+		purple_notify_error(NULL, _("Screen share error"),
+				    _("Screencast \"CreateSession\" failed."), NULL);
+		portal_cancel_cb(data);
+		return;
+	}
+
+	g_variant_builder_init(&opts, G_VARIANT_TYPE("a{sv}"));
+	g_variant_builder_add(&opts, "{sv}", "multiple", g_variant_new_boolean(FALSE));
+	g_variant_builder_add(&opts, "{sv}", "types", g_variant_new_uint32(3));
+
+	screen_cast_call(data, "SelectSources", NULL, &opts, source_selected_cb);
+}
+
+static void portal_conn_cb(GObject *object, GAsyncResult *res, gpointer _data)
+{
+	PidginRequestData *data = _data;
+	GVariantBuilder opts;
+	GError *error = NULL;
+	gchar *session_token;
+
+	data->u.screenshare.dbus_connection = g_dbus_connection_new_for_address_finish(res, &error);
+	if (!data->u.screenshare.dbus_connection) {
+		purple_debug_info("pidgin", "Connection to XDP portal failed: %s\n", error->message);
+		portal_fallback(data);
+		return;
+	}
+
+	session_token = g_strdup_printf("u%u", portal_session_nr++);
+
+	g_variant_builder_init(&opts, G_VARIANT_TYPE("a{sv}"));
+	g_variant_builder_add(&opts, "{sv}", "session_handle_token",
+			      g_variant_new_take_string(session_token));
+
+	screen_cast_call(data, "CreateSession", NULL, &opts, sess_created_cb);
+}
+
+static gboolean request_xdp_portal_screenshare(PidginRequestData *data)
+{
+	gchar *addr;
+
+	if (portal_failed)
+		return FALSE;
+
+	data->u.screenshare.cancellable = g_cancellable_new();
+
+	/* We create a new connection instead of using g_bus_get() because it
+	 * makes cleanup a *lot* easier. Just kill the connection. */
+	addr = g_dbus_address_get_for_bus_sync(G_BUS_TYPE_SESSION, NULL, NULL);
+	if (!addr) {
+		portal_failed = TRUE;
+		return FALSE;
+	}
+
+	g_dbus_connection_new_for_address(addr,
+					  G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION |
+					  G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT, NULL,
+					  data->u.screenshare.cancellable, portal_conn_cb, data);
+	g_free(addr);
+	return TRUE;
+}
+
+#endif
+
 static GstElement *create_screensrc_cb(PurpleMedia *media, const gchar *session_id,
 				       const gchar *participant);
 
@@ -1911,7 +2248,8 @@ screenshare_videotest_cb(GtkWidget *button, PidginRequestData *data)
 static void
 screenshare_cancel_cb(GtkWidget *button, PidginRequestData *data)
 {
-	generic_response_start(data);
+	if (data->dialog)
+		generic_response_start(data);
 
 	if (data->cbs[0] != NULL)
 		((PurpleRequestScreenshareCb)data->cbs[0])(data->user_data, NULL);
@@ -2055,6 +2393,21 @@ static void *pidgin_request_screenshare_media(const char *title, const char *pri
 		g_object_set_data(G_OBJECT(dialog), "radio", radio);
 	}
 
+#ifdef HAVE_GIOUNIX
+	/*
+	 * We create the dialog for direct x11/win share here anyway, because
+	 * it's simpler than storing everything we need to create it, including
+	 * the PurpleAccount which we can't just take a ref on because it isn't
+	 * just a GObject yet. On fallback, the dialog can be used immediately.
+	 */
+	if (request_xdp_portal_screenshare(data)) {
+		purple_debug_info("pidgin", "Attempt XDP portal screenshare\n");
+		return data;
+	}
+#endif
+
+	purple_debug_info("pidgin", "Using direct screenshare\n");
+
 	/* Show everything. */
 	pidgin_auto_parent_window(dialog);
 
@@ -2072,12 +2425,24 @@ pidgin_close_request(PurpleRequestType type, void *ui_handle)
 
 	g_free(data->cbs);
 
-	gtk_widget_destroy(data->dialog);
+	if (data->dialog)
+		gtk_widget_destroy(data->dialog);
 
 	if (type == PURPLE_REQUEST_FIELDS)
 		purple_request_fields_destroy(data->u.multifield.fields);
 	else if (type == PURPLE_REQUEST_FILE)
 		g_free(data->u.file.name);
+	else if (type == PURPLE_REQUEST_SCREENSHARE) {
+#ifdef HAVE_GIOUNIX
+		g_cancellable_cancel(data->u.screenshare.cancellable);
+		if (data->u.screenshare.signal_id)
+			g_dbus_connection_signal_unsubscribe(data->u.screenshare.dbus_connection,
+							     data->u.screenshare.signal_id);
+		g_clear_object(&data->u.screenshare.dbus_connection);
+		g_free(data->u.screenshare.session_path);
+		g_clear_object(&data->u.screenshare.cancellable);
+#endif
+	}
 
 	g_free(data);
 }
