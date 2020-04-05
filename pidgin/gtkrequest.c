@@ -1817,7 +1817,7 @@ static void screen_cast_call(PidginRequestData *data, const gchar *method, const
 	g_dbus_message_set_body(msg, g_variant_builder_end(&b));
 
 	g_dbus_connection_send_message_with_reply(data->u.screenshare.dbus_connection, msg,
-						  0, 200, NULL, NULL, request_completed_cb, data);
+						  0, 2000, NULL, NULL, request_completed_cb, data);
 }
 
 static GstElement *create_pipewiresrc_cb(PurpleMedia *media, const gchar *session_id,
