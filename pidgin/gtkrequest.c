@@ -92,6 +92,8 @@ typedef struct
 			gchar *session_path;
 			guint signal_id;
 			guint32 node_id;
+			guint portal_session_nr;
+			guint portal_request_nr;
 
 		} screenshare;
 
@@ -1758,16 +1760,15 @@ static void request_completed_cb(GObject *object, GAsyncResult *res, gpointer _d
 	}
 }
 
-
-static guint portal_session_nr, portal_request_nr;
-
-static gchar *portal_request_path(GDBusConnection *dc, GVariantBuilder *b)
+static gchar *portal_request_path(PidginRequestData *data, GVariantBuilder *b)
 {
-	const gchar *bus_name = g_dbus_connection_get_unique_name(dc);
-	gchar *dot, *request_str; 
+	const gchar *bus_name;
+	gchar *dot, *request_str;
 	gchar *request_path;
 
-	request_str = g_strdup_printf("u%u", portal_request_nr++);
+	bus_name = g_dbus_connection_get_unique_name(data->u.screenshare.dbus_connection);
+
+	request_str = g_strdup_printf("u%u", data->u.screenshare.portal_request_nr++);
 	if (!request_str)
 		return NULL;
 
@@ -1802,7 +1803,7 @@ static void screen_cast_call(PidginRequestData *data, const gchar *method, const
 	if (!opts)
 		opts = g_variant_builder_new(G_VARIANT_TYPE("a{sv}"));
 
-	request_path = portal_request_path(data->u.screenshare.dbus_connection, opts);
+	request_path = portal_request_path(data, opts);
 	if (!request_path) {
 		g_variant_builder_unref(opts);
 		purple_notify_error(NULL, _("Screen share error"),
@@ -2023,7 +2024,7 @@ static void portal_conn_cb(GObject *object, GAsyncResult *res, gpointer _data)
 		return;
 	}
 
-	session_token = g_strdup_printf("u%u", portal_session_nr++);
+	session_token = g_strdup_printf("u%u", data->u.screenshare.portal_session_nr++);
 
 	g_variant_builder_init(&opts, G_VARIANT_TYPE("a{sv}"));
 	g_variant_builder_add(&opts, "{sv}", "session_handle_token",
