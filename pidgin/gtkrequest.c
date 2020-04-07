@@ -1769,8 +1769,9 @@ static gchar *portal_request_path(PidginRequestData *data, GVariantBuilder *b)
 	bus_name = g_dbus_connection_get_unique_name(data->u.screenshare.dbus_connection);
 
 	request_str = g_strdup_printf("u%u", data->u.screenshare.portal_request_nr++);
-	if (!request_str)
+	if (!request_str) {
 		return NULL;
+	}
 
 	request_path = g_strdup_printf("/org/freedesktop/portal/desktop/request/%s/%s",
 				       bus_name + 1, request_str);
@@ -1782,8 +1783,9 @@ static gchar *portal_request_path(PidginRequestData *data, GVariantBuilder *b)
 	g_variant_builder_add(b, "{sv}", "handle_token", g_variant_new_take_string(request_str));
 
 	dot = request_path;
-	while ((dot = strchr(dot, '.')))
+	while ((dot = strchr(dot, '.'))) {
 		*dot = '_';
+	}
 
 	return request_path;
 }
@@ -1800,8 +1802,9 @@ static void screen_cast_call(PidginRequestData *data, const gchar *method, const
 						     data->u.screenshare.signal_id);
 	}
 
-	if (!opts)
+	if (!opts) {
 		opts = g_variant_builder_new(G_VARIANT_TYPE("a{sv}"));
+	}
 
 	request_path = portal_request_path(data, opts);
 	if (!request_path) {
@@ -1824,10 +1827,12 @@ static void screen_cast_call(PidginRequestData *data, const gchar *method, const
 					     method);
 
 	g_variant_builder_init(&b, G_VARIANT_TYPE_TUPLE);
-	if (data->u.screenshare.session_path)
+	if (data->u.screenshare.session_path) {
 		g_variant_builder_add(&b, "o", data->u.screenshare.session_path);
-	if (str_arg)
+	}
+	if (str_arg) {
 		g_variant_builder_add(&b, "s", str_arg);
+	}
 	g_variant_builder_add(&b, "a{sv}", opts);
 
 	g_dbus_message_set_body(msg, g_variant_builder_end(&b));
@@ -1844,12 +1849,14 @@ static GstElement *create_pipewiresrc_cb(PurpleMedia *media, const gchar *sessio
 	gchar *node_id;
 
 	info = g_object_get_data(G_OBJECT(media), "src-element");
-	if (!info)
+	if (!info) {
 		return NULL;
+	}
 
 	ret = gst_element_factory_make("pipewiresrc", NULL);
-	if (ret == NULL)
+	if (ret == NULL) {
 		return NULL;
+	}
 
 	/* Take the node-id and fd from the PurpleMediaElementInfo
 	 * and apply them to the pipewiresrc */
@@ -1925,9 +1932,10 @@ static void get_pipewire_fd(PidginRequestData *data)
 	GDBusMessage *msg;
 	GVariant *args;
 
-	if (data->u.screenshare.signal_id)
+	if (data->u.screenshare.signal_id) {
 		g_dbus_connection_signal_unsubscribe(data->u.screenshare.dbus_connection,
 						     data->u.screenshare.signal_id);
+	}
 	data->u.screenshare.signal_id = 0;
 
 	msg = g_dbus_message_new_method_call("org.freedesktop.portal.Desktop",
@@ -2037,8 +2045,9 @@ static gboolean request_xdp_portal_screenshare(PidginRequestData *data)
 {
 	gchar *addr;
 
-	if (portal_failed)
+	if (portal_failed) {
 		return FALSE;
+	}
 
 	data->u.screenshare.cancellable = g_cancellable_new();
 
@@ -2264,8 +2273,9 @@ screenshare_videotest_cb(GtkWidget *button, PidginRequestData *data)
 static void
 screenshare_cancel_cb(GtkWidget *button, PidginRequestData *data)
 {
-	if (data->dialog)
+	if (data->dialog) {
 		generic_response_start(data);
+	}
 
 	if (data->cbs[0] != NULL)
 		((PurpleRequestScreenshareCb)data->cbs[0])(data->user_data, NULL);
@@ -2441,14 +2451,15 @@ pidgin_close_request(PurpleRequestType type, void *ui_handle)
 
 	g_free(data->cbs);
 
-	if (data->dialog)
+	if (data->dialog) {
 		gtk_widget_destroy(data->dialog);
+	}
 
-	if (type == PURPLE_REQUEST_FIELDS)
+	if (type == PURPLE_REQUEST_FIELDS) {
 		purple_request_fields_destroy(data->u.multifield.fields);
-	else if (type == PURPLE_REQUEST_FILE)
+	} else if (type == PURPLE_REQUEST_FILE) {
 		g_free(data->u.file.name);
-	else if (type == PURPLE_REQUEST_SCREENSHARE) {
+	} else if (type == PURPLE_REQUEST_SCREENSHARE) {
 #ifdef HAVE_GIOUNIX
 		g_cancellable_cancel(data->u.screenshare.cancellable);
 		if (data->u.screenshare.signal_id)
