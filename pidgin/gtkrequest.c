@@ -1855,7 +1855,7 @@ static GstElement *create_pipewiresrc_cb(PurpleMedia *media, const gchar *sessio
 	node_id = g_strdup_printf("%u",
 				  GPOINTER_TO_UINT(g_object_get_data(info, "node-id")));
 	g_object_set(ret,"path", node_id, "do-timestamp", TRUE,
-		     "fd", GPOINTER_TO_UINT(g_object_get_data(info, "fd")),
+		     "fd", GPOINTER_TO_INT(g_object_get_data(info, "fd")),
 		     NULL);
 	g_free(node_id);
 
@@ -1904,7 +1904,7 @@ static void pipewire_fd_cb(GObject *object, GAsyncResult *res, gpointer _data)
 				    "type", PURPLE_MEDIA_ELEMENT_VIDEO | PURPLE_MEDIA_ELEMENT_SRC |
 				    PURPLE_MEDIA_ELEMENT_ONE_SRC,
 				    "create-cb", create_pipewiresrc_cb, NULL);
-		g_object_set_data_full(info, "fd", GUINT_TO_POINTER(pipewire_fd), close_pipewire_fd);
+		g_object_set_data_full(info, "fd", GINT_TO_POINTER(pipewire_fd), close_pipewire_fd);
 		g_object_set_data(info, "node-id", GUINT_TO_POINTER(data->u.screenshare.node_id));
 		/* When the DBus connection closes, the session ends. So keep it attached
 		   to the PurpleMediaElementInfo, which in turn should be attached to
