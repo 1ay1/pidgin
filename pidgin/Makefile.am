@@ -161,6 +161,7 @@ pidgin_LDADD = \
 	$(GTKSPELL_LIBS) \
 	$(LIBXML_LIBS) \
 	$(GTK_LIBS) \
+	$(GIO_UNIX_LIBS) \
 	$(top_builddir)/libpurple/libpurple.la
 
 AM_CPPFLAGS = \
@@ -176,6 +177,7 @@ AM_CPPFLAGS = \
 	$(GSTREAMER_CFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(GTK_CFLAGS) \
+	$(GIO_UNIX_CFLAGS) \
 	$(DBUS_CFLAGS) \
 	$(GTKSPELL_CFLAGS) \
 	$(LIBXML_CFLAGS) \
