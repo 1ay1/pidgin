@@ -97,6 +97,10 @@ struct _PurpleMediaManagerPrivate
 	GType backend_type;
 	GstCaps *video_caps;
 
+	gchar *video_src_id;
+	gchar *video_sink_id;
+	gchar *audio_src_id;
+	gchar *audio_sink_id;
 	PurpleMediaElementInfo *video_src;
 	PurpleMediaElementInfo *video_sink;
 	PurpleMediaElementInfo *audio_src;
@@ -294,6 +298,12 @@ purple_media_manager_finalize (GObject *media)
 			g_list_delete_link(priv->elements, priv->elements)) {
 		g_object_unref(priv->elements->data);
 	}
+
+	g_free(priv->audio_src_id);
+	g_free(priv->video_src_id);
+	g_free(priv->audio_sink_id);
+	g_free(priv->video_sink_id);
+
 	if (priv->video_caps)
 		gst_caps_unref(priv->video_caps);
 #ifdef HAVE_MEDIA_APPLICATION
@@ -1362,6 +1372,7 @@ purple_media_manager_register_element(PurpleMediaManager *manager,
 {
 #ifdef USE_VV
 	PurpleMediaElementInfo *info2;
+	PurpleMediaElementType type;
 	gchar *id;
 	GQuark detail;
 
@@ -1370,9 +1381,9 @@ purple_media_manager_register_element(PurpleMediaManager *manager,
 
 	id = purple_media_element_info_get_id(info);
 	info2 = purple_media_manager_get_element_info(manager, id);
-	g_free(id);
 
 	if (info2 != NULL) {
+		g_free(id);
 		g_object_unref(info2);
 		return FALSE;
 	}
@@ -1386,6 +1397,31 @@ purple_media_manager_register_element(PurpleMediaManager *manager,
 				purple_media_manager_signals[ELEMENTS_CHANGED],
 				detail);
 	}
+
+	/* Restore previously active src/sink elements if they were replugged */
+	type = purple_media_element_info_get_element_type(info);
+	if (type & PURPLE_MEDIA_ELEMENT_SRC) {
+		if (type & PURPLE_MEDIA_ELEMENT_AUDIO &&
+		    purple_strequal(manager->priv->audio_src_id, id)) {
+			manager->priv->audio_src = info;
+		}
+		if (type & PURPLE_MEDIA_ELEMENT_VIDEO &&
+		    purple_strequal(manager->priv->video_src_id, id)) {
+			    manager->priv->video_src = info;
+		}
+	}
+	if (type & PURPLE_MEDIA_ELEMENT_SINK) {
+		if (type & PURPLE_MEDIA_ELEMENT_AUDIO &&
+		    purple_strequal(manager->priv->audio_sink_id, id)) {
+			    manager->priv->audio_sink = info;
+		}
+		if (type & PURPLE_MEDIA_ELEMENT_VIDEO &&
+		    purple_strequal(manager->priv->video_sink_id, id)) {
+			    manager->priv->video_sink = info;
+		}
+	}
+
+	g_free(id);
 
 	return TRUE;
 #else
@@ -1452,7 +1488,6 @@ purple_media_manager_set_active_element(PurpleMediaManager *manager,
 
 	id = purple_media_element_info_get_id(info);
 	info2 = purple_media_manager_get_element_info(manager, id);
-	g_free(id);
 
 	if (info2 == NULL)
 		purple_media_manager_register_element(manager, info);
@@ -1464,24 +1499,37 @@ purple_media_manager_set_active_element(PurpleMediaManager *manager,
 	if (type & PURPLE_MEDIA_ELEMENT_SRC) {
 		if (type & PURPLE_MEDIA_ELEMENT_AUDIO) {
 			manager->priv->audio_src = info;
+			g_free(manager->priv->audio_src_id);
+			manager->priv->audio_src_id = id;
+			id = NULL;
 			ret = TRUE;
 		}
 		if (type & PURPLE_MEDIA_ELEMENT_VIDEO) {
 			manager->priv->video_src = info;
+			g_free(manager->priv->video_src_id);
+			manager->priv->video_src_id = id;
+			id = NULL;
 			ret = TRUE;
 		}
 	}
 	if (type & PURPLE_MEDIA_ELEMENT_SINK) {
 		if (type & PURPLE_MEDIA_ELEMENT_AUDIO) {
 			manager->priv->audio_sink = info;
+			g_free(manager->priv->audio_sink_id);
+			manager->priv->audio_sink_id = id;
+			id = NULL;
 			ret = TRUE;
 		}
 		if (type & PURPLE_MEDIA_ELEMENT_VIDEO) {
 			manager->priv->video_sink = info;
+			g_free(manager->priv->video_sink_id);
+			manager->priv->video_sink_id = id;
+			id = NULL;
 			ret = TRUE;
 		}
 	}
 
+	g_free(id);
 	return ret;
 #else
 	return FALSE;
