@@ -1145,8 +1145,9 @@ menu_send_file_cb(gpointer data, guint action, GtkWidget *widget)
 
 	if (purple_conversation_get_type(conv) == PURPLE_CONV_TYPE_IM) {
 		serv_send_file(purple_conversation_get_gc(conv), purple_conversation_get_name(conv), NULL);
+	} else if (purple_conversation_get_type(conv) == PURPLE_CONV_TYPE_CHAT) {
+		serv_chat_send_file(purple_conversation_get_gc(conv), purple_conv_chat_get_id(PURPLE_CONV_CHAT(conv)), NULL);
 	}
-
 }
 
 static void
@@ -6564,7 +6565,7 @@ gray_stuff_out(PidginConversation *gtkconv)
 
 		/* Deal with menu items */
 		gtk_widget_show(win->menu.view_log);
-		gtk_widget_hide(win->menu.send_file);
+		gtk_widget_show(win->menu.send_file);
 		gtk_widget_hide(g_object_get_data(G_OBJECT(win->window), "get_attention"));
 		gtk_widget_hide(win->menu.add_pounce);
 		gtk_widget_hide(win->menu.get_info);
@@ -6652,6 +6653,10 @@ gray_stuff_out(PidginConversation *gtkconv)
 		{
 			gtk_widget_set_sensitive(win->menu.add, (prpl_info->join_chat != NULL));
 			gtk_widget_set_sensitive(win->menu.remove, (prpl_info->join_chat != NULL));
+			gtk_widget_set_sensitive(win->menu.send_file,
+									 (PURPLE_PROTOCOL_PLUGIN_HAS_FUNC(prpl_info, chat_send_file) &&
+									  (!PURPLE_PROTOCOL_PLUGIN_HAS_FUNC(prpl_info, chat_can_receive_file) ||
+									   prpl_info->chat_can_receive_file(gc, purple_conv_chat_get_id(PURPLE_CONV_CHAT(conv))))));
 			gtk_widget_set_sensitive(win->menu.alias,
 									 (account != NULL) &&
 									 (purple_blist_find_chat(account, purple_conversation_get_name(conv)) != NULL));

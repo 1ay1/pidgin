@@ -666,6 +666,31 @@ struct _PurplePluginProtocolInfo
 	 * @since 2.14.0
 	 */
 	char *(*get_cb_alias)(PurpleConnection *gc, int id, const char *who);
+
+
+	/**
+	 *  Determine whether a chat can receive a file
+	 *
+	 *  @param gc  the connection on which the room is.
+	 *  @param id  the ID of the chat room.
+	 *  @return    whether it is OK to use chat_send_file() to send a
+	 *             file to this chat.
+	 *
+	 * @since 2.14.0
+	 */
+	gboolean (*chat_can_receive_file)(PurpleConnection *, int id);
+
+	/**
+	 *  Send a file to a chat room
+	 *
+	 *  @param gc  the connection on which the room is.
+	 *  @param id  the ID of the chat room.
+	 *  @param filename the file to be sent.
+	 *
+	 * @since 2.14.0
+	 */
+	void (*chat_send_file)(PurpleConnection *, int id, const char *filename);
+
 };
 
 #define PURPLE_PROTOCOL_PLUGIN_HAS_FUNC(prpl, member) \

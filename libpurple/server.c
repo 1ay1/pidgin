@@ -992,3 +992,19 @@ void serv_send_file(PurpleConnection *gc, const char *who, const char *file)
 			prpl_info->send_file(gc, who, file);
 	}
 }
+
+void serv_chat_send_file(PurpleConnection *gc, int id, const char *file)
+{
+	PurplePlugin *prpl;
+	PurplePluginProtocolInfo *prpl_info;
+
+	if (gc) {
+		prpl = purple_connection_get_prpl(gc);
+		prpl_info = PURPLE_PLUGIN_PROTOCOL_INFO(prpl);
+
+		if (prpl_info->chat_send_file &&
+		    (!prpl_info->chat_can_receive_file
+		     || prpl_info->chat_can_receive_file(gc, id)))
+			prpl_info->chat_send_file(gc, id, file);
+	}
+}
