@@ -18,10 +18,10 @@
       time.
     </_p>
   </description>
-  <url type="homepage">http://www.pidgin.im/</url>
+  <url type="homepage">https://www.pidgin.im/</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://old.pidgin.im/shared/img/contact_window.png</image>
+      <image>https://old.pidgin.im/shared/img/contact_window.png</image>
       <_caption>The buddy list showing friends on different networks.</_caption>
     </screenshot>
   </screenshots>
