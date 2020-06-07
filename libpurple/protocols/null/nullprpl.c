@@ -1124,7 +1124,9 @@ static PurplePluginProtocolInfo prpl_info =
   NULL,                                /* get_public_alias */
   NULL,                                /* add_buddy_with_invite */
   NULL,                                /* add_buddies_with_invite */
-  NULL                                 /* get_cb_alias */
+  NULL,                                /* get_cb_alias */
+  NULL,                                /* chat_can_receive_file */
+  NULL,                                /* chat_send_file */
 };
 
 static void nullprpl_init(PurplePlugin *plugin)
