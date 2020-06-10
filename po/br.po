@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:08-0500\n"
 "PO-Revision-Date: 2017-09-23 20:58+0000\n"
 "Last-Translator: Irriep Nala Novram <allannkorh@yahoo.fr>\n"
 "Language-Team: Breton (http://www.transifex.com/pidgin/pidgin/language/br/)\n"
@@ -1840,6 +1840,10 @@ msgstr "Re vras eo ar gemenadenn."
 msgid "Unable to send message."
 msgstr "Dic'houest da gas ar gemennadenn."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Kas ar gemenadenn"
 
@@ -2180,18 +2184,18 @@ msgstr "C'hwitet eo bet kerzhskrivañ ar gaozeadenn."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;RESPONT "
 "EMGEFREEK&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;RESPONT "
 "EMGEFREEK&gt;:</b></font> %s<br/>\n"
@@ -2266,6 +2270,29 @@ msgstr "Fazi "
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Fazi krouidigezh an estez : %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "N'eus ket bet tu diskargañ an enlugellad"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Son ebet"
+
+msgid "Disabled"
+msgstr "Diweredekaet"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4885,6 +4912,21 @@ msgstr ""
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Diuzit loaz %s a fell deoc'h kas ur restr dezhañ"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "Mankout a ra un naoudi gant al lanv XMPP"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Lost leun"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Aonik"
@@ -9464,6 +9506,9 @@ msgstr ""
 msgid "artist"
 msgstr "arzour"
 
+msgid "lead developer"
+msgstr "diorroer pennañ"
+
 msgid "voice and video"
 msgstr "mouezh ha video"
 
@@ -9499,9 +9544,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "aozer orin"
-
-msgid "lead developer"
-msgstr "diorroer pennañ"
 
 msgid "Senior Contributor/QA"
 msgstr ""
@@ -10890,9 +10932,6 @@ msgstr ""
 msgid "Cannot start browser configuration program."
 msgstr ""
 
-msgid "Disabled"
-msgstr "Diweredekaet"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr ""
@@ -11156,6 +11195,39 @@ msgstr ""
 msgid "Status to a_pply at startup:"
 msgstr ""
 
+msgid "DROP"
+msgstr ""
+
+#, c-format
+msgid "Silence threshold: %d%%"
+msgstr ""
+
+msgid "Volume:"
+msgstr "Ampled :"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Aodio"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Video"
+
+msgid "_Device"
+msgstr "_Trobarzhell"
+
+msgid "Audio"
+msgstr "Aodio"
+
+msgid "Input"
+msgstr "Enkas"
+
+msgid "Output"
+msgstr "Ezkas"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr "Etrefas"
 
@@ -11167,6 +11239,10 @@ msgstr "Statud / Dizoberiant"
 
 msgid "Themes"
 msgstr ""
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Mouezh ha Video"
 
 msgid "Allow all users to contact me"
 msgstr "Aotren an holl arverien da vont e darempred ganin"
@@ -11250,6 +11326,49 @@ msgstr "Dibab un anv nevez"
 
 msgid "Select Folder..."
 msgstr "Diuzañ un doser"
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Rannadenn skramm"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Fazi krouidigezh an estez : %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "N'eo bet kavet kerzhlevr ebet"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Enlakaat ur skeudenn"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Prenestr nevez"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Kudenn dianav"
 
 #. list button
 msgid "_Get List"
@@ -12570,35 +12689,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "Aodio"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Ezkas"
-
 msgid "_Plugin"
 msgstr "_Enlugellad"
-
-msgid "_Device"
-msgstr "_Trobarzhell"
-
-msgid "Input"
-msgstr "Enkas"
 
 msgid "P_lugin"
 msgstr "E_nlugellad"
 
 msgid "D_evice"
 msgstr "T_robarzhell"
-
-msgid "DROP"
-msgstr ""
-
-msgid "Volume:"
-msgstr "Ampled :"
 
 msgid "Silence threshold:"
 msgstr ""

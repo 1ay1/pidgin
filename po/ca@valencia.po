@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:08-0500\n"
 "PO-Revision-Date: 2017-09-19 19:26+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Catalan (Valencian) (http://www.transifex.com/pidgin/pidgin/"
@@ -1830,6 +1830,10 @@ msgstr "El missatge és massa llarg."
 msgid "Unable to send message."
 msgstr "No s'ha pogut enviar el missatge."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Envia el missatge"
 
@@ -2164,18 +2168,18 @@ msgstr "Ha fallat el registre d'esta conversa."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "RESPOSTA&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "RESPOSTA&gt;:</b></font> %s<br/>\n"
@@ -2245,6 +2249,29 @@ msgstr "Error en la conferència"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "S'ha produït un error en crear la sessió: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "No s'ha pogut descarregar el connector"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Sense so"
+
+msgid "Disabled"
+msgstr "Inhabilitat"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4857,6 +4884,21 @@ msgstr ""
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Escolliu a quin recurs de %s voleu enviar un fitxer"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "Manca l'identificador del fluxe XMPP"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Cua plena"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Espantat"
@@ -9648,6 +9690,9 @@ msgstr "Error fatal"
 msgid "artist"
 msgstr "artista"
 
+msgid "lead developer"
+msgstr "desenvolupador principal"
+
 msgid "voice and video"
 msgstr "veu i vídeo"
 
@@ -9683,9 +9728,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "autor original"
-
-msgid "lead developer"
-msgstr "desenvolupador principal"
 
 msgid "Senior Contributor/QA"
 msgstr "Col·laborador veterà/CQ"
@@ -11113,9 +11155,6 @@ msgstr ""
 msgid "Cannot start browser configuration program."
 msgstr "No s'ha pogut iniciar el programa de configuració del navegador."
 
-msgid "Disabled"
-msgstr "Inhabilitat"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Empra l'_adreça IP detectada automàticament: %s"
@@ -11384,6 +11423,39 @@ msgstr "En i_niciar, empra el mateix estat que en eixir per darrer cop"
 msgid "Status to a_pply at startup:"
 msgstr "Estat a _utilitzar en iniciar:"
 
+msgid "DROP"
+msgstr "DROP"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Llindar per al silenci:"
+
+msgid "Volume:"
+msgstr "Volum:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Àudio"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Vídeo en directe"
+
+msgid "_Device"
+msgstr "_Dispositiu"
+
+msgid "Audio"
+msgstr "Àudio"
+
+msgid "Input"
+msgstr "Entrada"
+
+msgid "Output"
+msgstr "Eixida"
+
+msgid "Video"
+msgstr "Vídeo"
+
 msgid "Interface"
 msgstr "Interfície"
 
@@ -11395,6 +11467,10 @@ msgstr "Estat / Inactiu"
 
 msgid "Themes"
 msgstr "Temes"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Veu i vídeo"
 
 msgid "Allow all users to contact me"
 msgstr "Permet a tots els usuaris contactar amb mi"
@@ -11478,6 +11554,49 @@ msgstr "Trieu un nom nou"
 
 msgid "Select Folder..."
 msgstr "Selecciona una carpeta..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Compartició de pantalla"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "S'ha produït un error en crear la sessió: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "No s'ha trobat cap registre"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Insereix una imatge"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Finestra nova"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Codi d'error desconegut"
 
 #. list button
 msgid "_Get List"
@@ -12853,35 +12972,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "Àudio"
-
-msgid "Video"
-msgstr "Vídeo"
-
-msgid "Output"
-msgstr "Eixida"
-
 msgid "_Plugin"
 msgstr "_Connectors"
-
-msgid "_Device"
-msgstr "_Dispositiu"
-
-msgid "Input"
-msgstr "Entrada"
 
 msgid "P_lugin"
 msgstr "C_onnectors"
 
 msgid "D_evice"
 msgstr "D_ispositiu"
-
-msgid "DROP"
-msgstr "DROP"
-
-msgid "Volume:"
-msgstr "Volum:"
 
 msgid "Silence threshold:"
 msgstr "Llindar per al silenci:"

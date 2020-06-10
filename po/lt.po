@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:11-0500\n"
 "PO-Revision-Date: 2017-09-23 18:36+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/pidgin/pidgin/language/"
@@ -1849,6 +1849,10 @@ msgstr "Žinutė per ilga."
 msgid "Unable to send message."
 msgstr "Negalima išsiųsti žinutės."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Nusiųsti žinutę"
 
@@ -2190,18 +2194,18 @@ msgstr "Nepavyko šio pokalbio įrašyti į žurnalą."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTOMATINIS "
 "ATSAKYMAS&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTOMATINIS "
 "ATSAKYMAS&gt;:</b></font> %s<br/>\n"
@@ -2276,6 +2280,29 @@ msgstr "Konferencijos klaida"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Seanso sukūrimo klaida: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Nepavyko iškelti papildinio"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "be garsų"
+
+msgid "Disabled"
+msgstr "Išjungta"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4887,6 +4914,21 @@ msgstr ""
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Parinkite %s išteklių, į kurį norite nusiųsti failą"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "Trūksta XMPP srauto ID"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Eilė pilna"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Išsigandęs"
@@ -9716,6 +9758,9 @@ msgstr "Lemtingos klaidos"
 msgid "artist"
 msgstr "dailininkas"
 
+msgid "lead developer"
+msgstr "pagrindinis kūrėjas"
+
 msgid "voice and video"
 msgstr "garsas ir vaizdas"
 
@@ -9751,9 +9796,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "pradinis autorius"
-
-msgid "lead developer"
-msgstr "pagrindinis kūrėjas"
 
 msgid "Senior Contributor/QA"
 msgstr "Vyresnysis bendradarbis/kokybės kontrolė"
@@ -11169,9 +11211,6 @@ msgstr "Nepavyko paleisti įgaliotojo serverio konfigūravimo programos."
 msgid "Cannot start browser configuration program."
 msgstr "Nepavyko paleisti naršyklės nustatymų programos."
 
-msgid "Disabled"
-msgstr "Išjungta"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Naudoti _automatiškai aptiktą IP adresą: %s"
@@ -11437,6 +11476,39 @@ msgstr "Programos paleidimo metu nustatyti paskutinę prieš tai naudotą būsen
 msgid "Status to a_pply at startup:"
 msgstr "Programos paleidimo metu nustatyti būseną:"
 
+msgid "DROP"
+msgstr "DROP"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Tylos slenkstis:"
+
+msgid "Volume:"
+msgstr "Garsumas:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Garsas"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Tiesioginis vaizdas"
+
+msgid "_Device"
+msgstr "_Įrenginys"
+
+msgid "Audio"
+msgstr "Garsas"
+
+msgid "Input"
+msgstr "Įvestis"
+
+msgid "Output"
+msgstr "Išvestis"
+
+msgid "Video"
+msgstr "Vaizdas"
+
 msgid "Interface"
 msgstr "Sąsaja"
 
@@ -11448,6 +11520,10 @@ msgstr "Būsenos ir neveiklumas"
 
 msgid "Themes"
 msgstr "Temos"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Balsas ir video"
 
 msgid "Allow all users to contact me"
 msgstr "Leisti visiems naudotojams susisiekti su manimi"
@@ -11532,6 +11608,49 @@ msgstr "Parinkti kitą vardą"
 
 msgid "Select Folder..."
 msgstr "Pasirinkite aplanką..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Ekrano dalinimasis"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Seanso sukūrimo klaida: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Žurnalų nerasta"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Įterpti vaizdą"
+
+#, fuzzy
+msgid "Select window"
+msgstr "naujame lange"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Nežinomas mazgo tipas"
 
 #. list button
 msgid "_Get List"
@@ -12898,35 +13017,14 @@ msgstr "Suteikia Unity integravimą."
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr "Suteikia integravimą į Unity pranešimų meniu ir leistuką."
 
-msgid "Audio"
-msgstr "Garsas"
-
-msgid "Video"
-msgstr "Vaizdas"
-
-msgid "Output"
-msgstr "Išvestis"
-
 msgid "_Plugin"
 msgstr "_Papildinys"
-
-msgid "_Device"
-msgstr "_Įrenginys"
-
-msgid "Input"
-msgstr "Įvestis"
 
 msgid "P_lugin"
 msgstr "P_apildinys"
 
 msgid "D_evice"
 msgstr "Į_renginys"
-
-msgid "DROP"
-msgstr "DROP"
-
-msgid "Volume:"
-msgstr "Garsumas:"
 
 msgid "Silence threshold:"
 msgstr "Tylos slenkstis:"

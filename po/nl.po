@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:12-0500\n"
 "PO-Revision-Date: 2017-09-19 11:38+0000\n"
 "Last-Translator: Gideon van Melle <translations@gvmelle.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/pidgin/pidgin/language/nl/)\n"
@@ -1840,6 +1840,10 @@ msgstr "Het bericht is te groot."
 msgid "Unable to send message."
 msgstr "Kan het bericht niet verzenden."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Verstuur bericht"
 
@@ -2185,18 +2189,18 @@ msgstr "Kan logboek van dit gesprek niet bijhouden."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "ANTWOORD&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "ANTWOORD&gt;:</b></font> %s<br/>\n"
@@ -2271,6 +2275,29 @@ msgstr "Conferentie fout"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Fout bij maken sessie: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Kan plug-in niet uitschakelen"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Geen geluid"
+
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4898,6 +4925,21 @@ msgstr ""
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Geef de bron van %s naar degene die u een bestand wilt sturen"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "XMPP datastroom ID mist"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Wachtrij vol"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Bang"
@@ -9716,6 +9758,9 @@ msgstr "Fatale fout"
 msgid "artist"
 msgstr "artiest"
 
+msgid "lead developer"
+msgstr "hoofdontwikkelaar"
+
 msgid "voice and video"
 msgstr "spraak en video"
 
@@ -9751,9 +9796,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "originele maker"
-
-msgid "lead developer"
-msgstr "hoofdontwikkelaar"
 
 msgid "Senior Contributor/QA"
 msgstr "Senior meewerker/QA"
@@ -11184,9 +11226,6 @@ msgstr "Kan het programma voor proxy-instellingen niet starten."
 msgid "Cannot start browser configuration program."
 msgstr "Kan het programma voor browserinstellingen niet starten."
 
-msgid "Disabled"
-msgstr "Uitgeschakeld"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Gebruik _automatisch ontdekt IP-adres: %s"
@@ -11452,6 +11491,39 @@ msgstr "_Laatst Status herstellen bij opstarten"
 msgid "Status to a_pply at startup:"
 msgstr "Te gebruiken _status bij opstarten:"
 
+msgid "DROP"
+msgstr "DROP"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Stiltedrempel:"
+
+msgid "Volume:"
+msgstr "Volume:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Audio"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Live Video"
+
+msgid "_Device"
+msgstr "_Apparaat"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Input"
+msgstr "Input"
+
+msgid "Output"
+msgstr "Output"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr "Interface"
 
@@ -11463,6 +11535,10 @@ msgstr "Status / inactief"
 
 msgid "Themes"
 msgstr "Thema's"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Spraak en Video"
 
 msgid "Allow all users to contact me"
 msgstr "Alle gebruikers mogen contact met mij maken"
@@ -11546,6 +11622,49 @@ msgstr "Kies een nieuwe naam"
 
 msgid "Select Folder..."
 msgstr "Map selecteren..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Gedeelde schermen"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Fout bij maken sessie: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Geen logboek gevonden"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Afbeelding invoegen"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Nieuw venster"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Onbekende node-type"
 
 #. list button
 msgid "_Get List"
@@ -12920,35 +13039,14 @@ msgstr "Zorgt voor integratie met Unity."
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr "Zorgt voor integratie met Unity's berichtgeving menu en launcher."
 
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Output"
-
 msgid "_Plugin"
 msgstr "_Plug-in"
-
-msgid "_Device"
-msgstr "_Apparaat"
-
-msgid "Input"
-msgstr "Input"
 
 msgid "P_lugin"
 msgstr "P_lug-in"
 
 msgid "D_evice"
 msgstr "A_pparaat"
-
-msgid "DROP"
-msgstr "DROP"
-
-msgid "Volume:"
-msgstr "Volume:"
 
 msgid "Silence threshold:"
 msgstr "Stiltedrempel:"

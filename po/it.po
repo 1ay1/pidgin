@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:10-0500\n"
 "PO-Revision-Date: 2017-09-19 19:20+0000\n"
 "Last-Translator: Sebastiano Pistore <SebastianoPistore.info@protonmail.ch>\n"
 "Language-Team: Italian (http://www.transifex.com/pidgin/pidgin/language/"
@@ -1857,6 +1857,10 @@ msgstr "Il messaggio è troppo grande."
 msgid "Unable to send message."
 msgstr "Impossibile inviare il messaggio."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Invia messaggio"
 
@@ -2201,18 +2205,18 @@ msgstr "Il log di questa conversazione non è riuscito."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;RISPOSTA "
 "AUTOMATICA&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;RISPOSTA "
 "AUTOMATICA&gt;:</b></font> %s<br/>\n"
@@ -2290,6 +2294,29 @@ msgstr "Errore nella conferenza"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Errore nella creazione della sessione: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Impossibile rimuovere il plugin"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Nessun suono"
+
+msgid "Disabled"
+msgstr "Disabilitato"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4926,6 +4953,21 @@ msgstr ""
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Scegli a quale risorsa di %s vuoi inviare un file"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "ID dello stream XMPP mancante"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Coda piena"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Spaventato"
@@ -9753,6 +9795,9 @@ msgstr "Errore fatale"
 msgid "artist"
 msgstr "artista"
 
+msgid "lead developer"
+msgstr "sviluppatore principale"
+
 msgid "voice and video"
 msgstr "voce e video"
 
@@ -9788,9 +9833,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "autore originale"
-
-msgid "lead developer"
-msgstr "sviluppatore principale"
 
 msgid "Senior Contributor/QA"
 msgstr "Collaboratore senior/QA"
@@ -11220,9 +11262,6 @@ msgstr "Impossibile avviare il programma per la configurazione del proxy."
 msgid "Cannot start browser configuration program."
 msgstr "Impossibile avviare il programma di configurazione del browser."
 
-msgid "Disabled"
-msgstr "Disabilitato"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Usa l'indirizzo IP rilevato _automaticamente: %s"
@@ -11492,6 +11531,39 @@ msgstr "Utilizza lo stato impostato l'ultima volta"
 msgid "Status to a_pply at startup:"
 msgstr "Stato da _utilizzare all'avvio:"
 
+msgid "DROP"
+msgstr "Disconnessione"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Soglia del silenzio:"
+
+msgid "Volume:"
+msgstr "Volume:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Audio"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Video live"
+
+msgid "_Device"
+msgstr "_Dispositivo"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Input"
+msgstr "Ingresso"
+
+msgid "Output"
+msgstr "Uscita"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr "Interfaccia"
 
@@ -11503,6 +11575,10 @@ msgstr "Stato / Inattività"
 
 msgid "Themes"
 msgstr "Temi"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Voce e Video"
 
 msgid "Allow all users to contact me"
 msgstr "Consenti a tutti di contattarmi"
@@ -11586,6 +11662,49 @@ msgstr "Scegli un nuovo nome"
 
 msgid "Select Folder..."
 msgstr "Scegli cartella..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Condivisone dello schermo"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Errore nella creazione della sessione: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Nessun log trovato"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Inserisci un'immagine"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Nuova finestra"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Tipo di nodo sconosciuto"
 
 #. list button
 msgid "_Get List"
@@ -12975,35 +13094,14 @@ msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 "Fornisce l'integrazione tra il programma e il menu dei messaggi di Unity."
 
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Uscita"
-
 msgid "_Plugin"
 msgstr "_Plugin"
-
-msgid "_Device"
-msgstr "_Dispositivo"
-
-msgid "Input"
-msgstr "Ingresso"
 
 msgid "P_lugin"
 msgstr "P_lugin"
 
 msgid "D_evice"
 msgstr "D_ispositivo"
-
-msgid "DROP"
-msgstr "Disconnessione"
-
-msgid "Volume:"
-msgstr "Volume:"
 
 msgid "Silence threshold:"
 msgstr "Soglia del silenzio:"

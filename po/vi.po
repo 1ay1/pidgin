@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:14-0500\n"
 "PO-Revision-Date: 2017-09-19 19:26+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/pidgin/pidgin/language/"
@@ -1822,6 +1822,10 @@ msgstr "tin nhắn quá lớn."
 msgid "Unable to send message."
 msgstr "Không thể gửi tin nhắn."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Gửi tin nhắn"
 
@@ -2159,18 +2163,18 @@ msgstr "Không thể theo dõi được cuộc trao đổi này."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;Trả-Lời-Tự-"
 "Động&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;Trả-Lời-Tự-"
 "Động&gt;:</b></font> %s<br/>\n"
@@ -2240,6 +2244,29 @@ msgstr "Lỗi hội thảo"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Gặp lỗi khi tạo buổi hợp: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Không thể bỏ nạp phần bổ sung"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Không có âm thanh"
+
+msgid "Disabled"
+msgstr "Bị tắt"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4860,6 +4887,21 @@ msgstr ""
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Hãy chọn tài nguyên nào của %s cho đó bạn muốn gửi tập tin"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "Dòng XMPP thiếu ID "
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Hàng đợi đã đầy"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Sợ"
@@ -9599,6 +9641,9 @@ msgstr "Lỗi nghiêm trọng"
 msgid "artist"
 msgstr "nghệ sĩ"
 
+msgid "lead developer"
+msgstr "nhà phát triển lãnh đạo"
+
 msgid "voice and video"
 msgstr "thoại và phim"
 
@@ -9634,9 +9679,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "tác giả đầu tiên"
-
-msgid "lead developer"
-msgstr "nhà phát triển lãnh đạo"
 
 msgid "Senior Contributor/QA"
 msgstr "Người đóng góp cấp cao/ tin chắc chất lượng"
@@ -11044,9 +11086,6 @@ msgstr "Không thể khởi chạy chương trình cấu hình máy phục vụ 
 msgid "Cannot start browser configuration program."
 msgstr "Không thể khởi chạy chương trình cấu hình trình duyệt."
 
-msgid "Disabled"
-msgstr "Bị tắt"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Dùng đị_a chỉ IP tự động phát hiện: %s"
@@ -11312,6 +11351,39 @@ msgstr "Khởi chạ_y thì dùng trạng thái từ lần thoát cuối"
 msgid "Status to a_pply at startup:"
 msgstr "Trạng thái cần dùng khi _khởi chạy:"
 
+msgid "DROP"
+msgstr "DROP"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Ngưỡng yên tĩnh:"
+
+msgid "Volume:"
+msgstr "Â_m lượng:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Âm thanh"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Ảnh động trực tiếp"
+
+msgid "_Device"
+msgstr "_Thiết bị"
+
+msgid "Audio"
+msgstr "Âm thanh"
+
+msgid "Input"
+msgstr "Đầu vào"
+
+msgid "Output"
+msgstr "Kết xuất"
+
+msgid "Video"
+msgstr "Phim"
+
 msgid "Interface"
 msgstr "Giao diện"
 
@@ -11323,6 +11395,10 @@ msgstr "Trạng thái / Nghỉ"
 
 msgid "Themes"
 msgstr "Sắc thái"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "Â_m thanh và video "
 
 msgid "Allow all users to contact me"
 msgstr "Cho phép mọi người dùng liên lạc với bạn"
@@ -11406,6 +11482,49 @@ msgstr "Chọn tên mới"
 
 msgid "Select Folder..."
 msgstr "Chọn thư mục..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Chia sẻ màn hình"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Gặp lỗi khi tạo buổi hợp: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Không tìm thấy sổ theo dõi"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Chèn ảnh"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Cửa sổ mới"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Mã nút thông tin không rõ"
 
 #. list button
 msgid "_Get List"
@@ -12769,35 +12888,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "Âm thanh"
-
-msgid "Video"
-msgstr "Phim"
-
-msgid "Output"
-msgstr "Kết xuất"
-
 msgid "_Plugin"
 msgstr "_Phần bổ sung"
-
-msgid "_Device"
-msgstr "_Thiết bị"
-
-msgid "Input"
-msgstr "Đầu vào"
 
 msgid "P_lugin"
 msgstr "Phần bổ _sung"
 
 msgid "D_evice"
 msgstr "Thiết _bị"
-
-msgid "DROP"
-msgstr "DROP"
-
-msgid "Volume:"
-msgstr "Â_m lượng:"
 
 msgid "Silence threshold:"
 msgstr "Ngưỡng yên tĩnh:"

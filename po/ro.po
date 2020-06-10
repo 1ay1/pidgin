@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:13-0500\n"
 "PO-Revision-Date: 2017-09-19 11:39+0000\n"
 "Last-Translator: drazvan\n"
 "Language-Team: Romanian (http://www.transifex.com/pidgin/pidgin/language/"
@@ -1837,6 +1837,10 @@ msgstr "Mesajul este prea mare."
 msgid "Unable to send message."
 msgstr "Nu se poate trimite mesajul."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Trimitere mesaj"
 
@@ -2184,18 +2188,18 @@ msgstr "Înregistrarea acestei discuții a eșuat."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;Răspuns "
 "automat&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;Răspuns "
 "automat&gt;>:</b></font> %s<br/>\n"
@@ -2264,6 +2268,29 @@ msgstr "Eroare de conferință"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Eroare la crearea sesiunii: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Nu s-a putut descărca modulul"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Fără audio"
+
+msgid "Disabled"
+msgstr "Dezactivat"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4877,6 +4904,21 @@ msgstr "Nu se poate trimite fișierul către %s, nu e subscris pentru prezență
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr ""
 "Precizați cărei resurse a contactului %s doriți să-i trimiteți fișierul"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "Lipsește ID-ul fluxului XMPP"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Coadă plină"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Temător"
@@ -9709,6 +9751,9 @@ msgstr "Erori fatale"
 msgid "artist"
 msgstr "artist"
 
+msgid "lead developer"
+msgstr "programator principal"
+
 msgid "voice and video"
 msgstr "voce și video"
 
@@ -9744,9 +9789,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "autorul inițial"
-
-msgid "lead developer"
-msgstr "programator principal"
 
 msgid "Senior Contributor/QA"
 msgstr "Contributor major/CTC"
@@ -11171,9 +11213,6 @@ msgstr "Nu s-a putut porni programul de configurare a unui proxy."
 msgid "Cannot start browser configuration program."
 msgstr "Nu s-a putut porni programul de configurare a unui navigator."
 
-msgid "Disabled"
-msgstr "Dezactivat"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Utilizează adresa IP _autodetectată: %s"
@@ -11439,6 +11478,39 @@ msgstr "Utilizează _ultimul status"
 msgid "Status to a_pply at startup:"
 msgstr "Status de utili_zat la pornire:"
 
+msgid "DROP"
+msgstr "Liniște"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Prag de detectare a liniștii:"
+
+msgid "Volume:"
+msgstr "Volum:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Audio"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Video în direct"
+
+msgid "_Device"
+msgstr "_Dispozitiv"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Input"
+msgstr "Intrare"
+
+msgid "Output"
+msgstr "Ieșire"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr "Interfață"
 
@@ -11450,6 +11522,10 @@ msgstr "Statusuri"
 
 msgid "Themes"
 msgstr "Teme"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Voce și video"
 
 msgid "Allow all users to contact me"
 msgstr "Permite tuturor să mă contacteze"
@@ -11533,6 +11609,49 @@ msgstr "Nume nou"
 
 msgid "Select Folder..."
 msgstr "Alegeți un director..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Partajare ecran"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Eroare la crearea sesiunii: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Nu s-au găsit înregistrări."
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Inserare imagine"
+
+#, fuzzy
+msgid "Select window"
+msgstr "În ferestre noi"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Tip necunoscut de nod"
 
 #. list button
 msgid "_Get List"
@@ -12895,35 +13014,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Ieșire"
-
 msgid "_Plugin"
 msgstr "_Modul"
-
-msgid "_Device"
-msgstr "_Dispozitiv"
-
-msgid "Input"
-msgstr "Intrare"
 
 msgid "P_lugin"
 msgstr "Mo_dul"
 
 msgid "D_evice"
 msgstr "Dispo_zitiv"
-
-msgid "DROP"
-msgstr "Liniște"
-
-msgid "Volume:"
-msgstr "Volum:"
 
 msgid "Silence threshold:"
 msgstr "Prag de detectare a liniștii:"

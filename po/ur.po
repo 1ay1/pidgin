@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:14-0500\n"
 "PO-Revision-Date: 2017-09-19 19:26+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Urdu (http://www.transifex.com/pidgin/pidgin/language/ur/)\n"
@@ -1755,6 +1755,10 @@ msgstr "پیام بہت بڑا ہے۔"
 msgid "Unable to send message."
 msgstr "پیام بھیجنے میں ناقابل۔"
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "میسیج بھیجو"
 
@@ -2094,18 +2098,18 @@ msgstr "اس مکالمے کا لاگینگ ناکام ہوا۔"
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<فانٹ رنگ=\"#16569E\"><فانٹ سائز=\"2\">(%s)</فانٹ> <b>%s &lt;AUTO-REPLY&gt;:"
 "</b></فانٹ> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<فانٹ رنگ=\"#A82F2F\"><فانٹ سائز=\"2\">(%s)</فانٹ> <b>%s &lt;AUTO-REPLY&gt;:"
 "</b></فانٹ> %s<br/>\n"
@@ -2169,6 +2173,29 @@ msgstr ""
 
 #, c-format
 msgid "Error creating session: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "پبلک کلیدلرڈ نہیں ہو سکی"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "/Tools/Mute Sounds"
+
+msgid "Disabled"
+msgstr ""
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
 msgstr ""
 
 #, c-format
@@ -4716,6 +4743,20 @@ msgstr "%sکوفا ئل بھیجنے میں نہ قابل،صارف فائل ٹ�
 
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
+msgstr ""
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+msgid "XMPP stream management"
+msgstr ""
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "قطار فل"
+
+msgid "No further messages will be queued"
 msgstr ""
 
 msgid "Afraid"
@@ -9383,6 +9424,9 @@ msgstr "فیٹل خامی"
 msgid "artist"
 msgstr ""
 
+msgid "lead developer"
+msgstr "لیڈ تکمیل کار"
+
 msgid "voice and video"
 msgstr ""
 
@@ -9418,9 +9462,6 @@ msgstr ""
 
 msgid "original author"
 msgstr "اصل مصنف"
-
-msgid "lead developer"
-msgstr "لیڈ تکمیل کار"
 
 msgid "Senior Contributor/QA"
 msgstr ""
@@ -10789,9 +10830,6 @@ msgstr ""
 msgid "Cannot start browser configuration program."
 msgstr ""
 
-msgid "Disabled"
-msgstr ""
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr ""
@@ -11057,6 +11095,38 @@ msgstr "Use status from last _exit at startup"
 msgid "Status to a_pply at startup:"
 msgstr "Status to a_pply at startup:"
 
+msgid "DROP"
+msgstr ""
+
+#, c-format
+msgid "Silence threshold: %d%%"
+msgstr ""
+
+msgid "Volume:"
+msgstr ""
+
+msgid "Test Audio"
+msgstr ""
+
+#, fuzzy
+msgid "Test Video"
+msgstr "جاری ویڈیو"
+
+msgid "_Device"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Input"
+msgstr ""
+
+msgid "Output"
+msgstr ""
+
+msgid "Video"
+msgstr ""
+
 msgid "Interface"
 msgstr "انٹرفیس"
 
@@ -11068,6 +11138,10 @@ msgstr "اسٹیٹس/ Idle"
 
 msgid "Themes"
 msgstr ""
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "جاری ویڈیو"
 
 msgid "Allow all users to contact me"
 msgstr "صارفین کو اجازت دیں کہ وہ مجھ سے رابطہ کریں"
@@ -11152,6 +11226,48 @@ msgstr "نیانام منتخب كریں"
 
 msgid "Select Folder..."
 msgstr "فولڈ ر منتخب كریں۔۔۔"
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "XMLتصریف خامی"
+
+msgid "Error creating screencast request"
+msgstr ""
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "كوئی بھی لاگس نہیں ملے تھے"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "امیج داخل کرو"
+
+#, fuzzy
+msgid "Select window"
+msgstr "نیاونڈو"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "نامعلوم خامی "
 
 #. list button
 msgid "_Get List"
@@ -12484,34 +12600,13 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr ""
-
-msgid "Video"
-msgstr ""
-
-msgid "Output"
-msgstr ""
-
 msgid "_Plugin"
-msgstr ""
-
-msgid "_Device"
-msgstr ""
-
-msgid "Input"
 msgstr ""
 
 msgid "P_lugin"
 msgstr ""
 
 msgid "D_evice"
-msgstr ""
-
-msgid "DROP"
-msgstr ""
-
-msgid "Volume:"
 msgstr ""
 
 msgid "Silence threshold:"

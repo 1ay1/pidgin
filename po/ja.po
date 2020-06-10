@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:10-0500\n"
 "PO-Revision-Date: 2017-09-19 15:00+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/pidgin/pidgin/language/"
@@ -1796,6 +1796,10 @@ msgstr "メッセージが長すぎます"
 msgid "Unable to send message."
 msgstr "メッセージを送信できません"
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "メッセージの送信"
 
@@ -2134,18 +2138,18 @@ msgstr "このメッセージのログを記録できませんでした"
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "REPLY&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "REPLY&gt;:</b></font> %s<br/>\n"
@@ -2210,6 +2214,29 @@ msgstr "会議でエラー"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "セッションの作成でエラー: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "アイコンを送信できませんでした"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "サウンドなし"
+
+msgid "Disabled"
+msgstr ""
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4793,6 +4820,21 @@ msgstr ""
 
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
+msgstr ""
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "XMPP ストリームに ID がありません"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "キューが一杯です"
+
+msgid "No further messages will be queued"
 msgstr ""
 
 msgid "Afraid"
@@ -9474,6 +9516,9 @@ msgstr "致命的なエラー"
 msgid "artist"
 msgstr "アーティスト"
 
+msgid "lead developer"
+msgstr "メインの開発者"
+
 msgid "voice and video"
 msgstr "声とビデオ"
 
@@ -9509,9 +9554,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "オリジナルの作者"
-
-msgid "lead developer"
-msgstr "メインの開発者"
 
 msgid "Senior Contributor/QA"
 msgstr ""
@@ -10893,9 +10935,6 @@ msgstr "プロキシの設定プログラムを起動できません。"
 msgid "Cannot start browser configuration program."
 msgstr "ブラウザの設定プログラムを起動できません。"
 
-msgid "Disabled"
-msgstr ""
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "自動的に検出した IP アドレスを使用(_A): %s"
@@ -11161,6 +11200,39 @@ msgstr "最後に終了した時の状態を継承する(_E)"
 msgid "Status to a_pply at startup:"
 msgstr "起動時に適用する状態(_P):"
 
+msgid "DROP"
+msgstr ""
+
+#, c-format
+msgid "Silence threshold: %d%%"
+msgstr ""
+
+msgid "Volume:"
+msgstr "音量:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "オーディオ"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "ライブ・ビデオ"
+
+msgid "_Device"
+msgstr "デバイス(_D)"
+
+msgid "Audio"
+msgstr "オーディオ"
+
+msgid "Input"
+msgstr "入力"
+
+msgid "Output"
+msgstr ""
+
+msgid "Video"
+msgstr "ビデオ"
+
 msgid "Interface"
 msgstr "インターフェース"
 
@@ -11172,6 +11244,10 @@ msgstr "状態/待機"
 
 msgid "Themes"
 msgstr "テーマ"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "音声とビデオ(_V)"
 
 msgid "Allow all users to contact me"
 msgstr "すべてのユーザからのコンタクトを許可する"
@@ -11255,6 +11331,49 @@ msgstr "別の名前を付ける"
 
 msgid "Select Folder..."
 msgstr "フォルダの選択..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "XML 解析エラー"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "セッションの作成でエラー: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "ログが見つかりませんでした"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "画像の挿入"
+
+#, fuzzy
+msgid "Select window"
+msgstr "新しいウィンドウで開く"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "不明なノードの種類"
 
 #. list button
 msgid "_Get List"
@@ -12595,35 +12714,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "オーディオ"
-
-msgid "Video"
-msgstr "ビデオ"
-
-msgid "Output"
-msgstr ""
-
 msgid "_Plugin"
 msgstr "プラグイン(_P)"
-
-msgid "_Device"
-msgstr "デバイス(_D)"
-
-msgid "Input"
-msgstr "入力"
 
 msgid "P_lugin"
 msgstr "プラグイン(_L)"
 
 msgid "D_evice"
 msgstr "デバイス(_E)"
-
-msgid "DROP"
-msgstr ""
-
-msgid "Volume:"
-msgstr "音量:"
 
 msgid "Silence threshold:"
 msgstr ""

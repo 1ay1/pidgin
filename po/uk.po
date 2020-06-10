@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:14-0500\n"
 "PO-Revision-Date: 2017-09-19 11:38+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/pidgin/pidgin/language/"
@@ -1832,6 +1832,10 @@ msgstr "Повідомлення надто довге."
 msgid "Unable to send message."
 msgstr "Не вдається відправити повідомлення."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Надсилання повідомлення"
 
@@ -2177,18 +2181,18 @@ msgstr "Помилка ведення журналу цієї розмови."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;"
 "АВТО_ВІДПОВІДЬ&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;"
 "АВТО_ВІДПОВІДЬ&gt;:</b></font> %s<br/>\n"
@@ -2257,6 +2261,29 @@ msgstr "Помилка конференції"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Помилка створення сеансу: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Не вдається вивантажити додаток"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Немає звуку"
+
+msgid "Disabled"
+msgstr "Вимкнений"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4858,6 +4885,21 @@ msgstr "Не вдалося надіслати файл до %s, не підпи
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Виберіть ресурс %s, до якого ви хочете надіслати файл"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "Бракує ID потоку XMPP"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Черга переповнена"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Боюся"
@@ -9690,6 +9732,9 @@ msgstr "Фатальна помилка"
 msgid "artist"
 msgstr "виконавець"
 
+msgid "lead developer"
+msgstr "головний розробник"
+
 msgid "voice and video"
 msgstr "голос та відео"
 
@@ -9725,9 +9770,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "початковий автор"
-
-msgid "lead developer"
-msgstr "головний розробник"
 
 msgid "Senior Contributor/QA"
 msgstr "Головний сприяльник та спеціаліст з якості"
@@ -11143,9 +11185,6 @@ msgstr "Не вдається запустити програму налашту
 msgid "Cannot start browser configuration program."
 msgstr "Не вдалося запустити програму налаштування переглядача."
 
-msgid "Disabled"
-msgstr "Вимкнений"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Використовувати визначену _автоматично адресу IP: %s"
@@ -11411,6 +11450,39 @@ msgstr "Використовувати останній стан після за
 msgid "Status to a_pply at startup:"
 msgstr "Застосувати _стан після запуску:"
 
+msgid "DROP"
+msgstr "ПРОПУСК"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Поріг тиші:"
+
+msgid "Volume:"
+msgstr "Гучність:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Аудіо"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Відео наживо"
+
+msgid "_Device"
+msgstr "_Пристрій"
+
+msgid "Audio"
+msgstr "Аудіо"
+
+msgid "Input"
+msgstr "Введення"
+
+msgid "Output"
+msgstr "Виведення"
+
+msgid "Video"
+msgstr "Відео"
+
 msgid "Interface"
 msgstr "Зовнішній вигляд"
 
@@ -11422,6 +11494,10 @@ msgstr "Стан та бездіяльність"
 
 msgid "Themes"
 msgstr "Теми"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Голос та відео"
 
 msgid "Allow all users to contact me"
 msgstr "Дозволити доступ усім користувачам"
@@ -11505,6 +11581,49 @@ msgstr "Виберіть нове ім'я"
 
 msgid "Select Folder..."
 msgstr "Вибрати теку..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Спільний екран"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Помилка створення сеансу: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Не знайдений жодний журнал"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Вставити зображення"
+
+#, fuzzy
+msgid "Select window"
+msgstr "нове вікно"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Невідомий тип вузла"
 
 #. list button
 msgid "_Get List"
@@ -12867,35 +12986,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "Аудіо"
-
-msgid "Video"
-msgstr "Відео"
-
-msgid "Output"
-msgstr "Виведення"
-
 msgid "_Plugin"
 msgstr "_Додаток"
-
-msgid "_Device"
-msgstr "_Пристрій"
-
-msgid "Input"
-msgstr "Введення"
 
 msgid "P_lugin"
 msgstr "_Додаток"
 
 msgid "D_evice"
 msgstr "_Пристрій"
-
-msgid "DROP"
-msgstr "ПРОПУСК"
-
-msgid "Volume:"
-msgstr "Гучність:"
 
 msgid "Silence threshold:"
 msgstr "Поріг тиші:"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:14-0500\n"
 "PO-Revision-Date: 2017-09-19 19:26+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/pidgin/pidgin/"
@@ -1779,6 +1779,10 @@ msgstr "消息太长。"
 msgid "Unable to send message."
 msgstr "无法发送消息。"
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "发送消息"
 
@@ -2102,18 +2106,18 @@ msgstr "记录此对话的失败。"
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;自动回复&gt;:"
 "</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;自动回复&gt;:"
 "</b></font> %s<br/>\n"
@@ -2178,6 +2182,29 @@ msgstr "会议出错"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "创建会话出错：%s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "无法卸载插件"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "无声"
+
+msgid "Disabled"
+msgstr "禁用"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4687,6 +4714,21 @@ msgstr "无法给 %s 发送文件：未添加用户监视"
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "请选择您要发送文件的 %s 所使用的资源 ID"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "XMPP 流 ID 缺失"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "队列已满"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "害怕"
@@ -9292,6 +9334,9 @@ msgstr "致命错误"
 msgid "artist"
 msgstr "美工"
 
+msgid "lead developer"
+msgstr "开发领导者"
+
 msgid "voice and video"
 msgstr "声音和视频"
 
@@ -9327,9 +9372,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "原作者"
-
-msgid "lead developer"
-msgstr "开发领导者"
 
 msgid "Senior Contributor/QA"
 msgstr "其他贡献者/质量保证"
@@ -10705,9 +10747,6 @@ msgstr "无法启动代理配置程序。"
 msgid "Cannot start browser configuration program."
 msgstr "无法启动浏览器配置程序。"
 
-msgid "Disabled"
-msgstr "禁用"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "使用自动检测到的 IP 地址(_A)：%s"
@@ -10973,6 +11012,39 @@ msgstr "启动时使用上次退出时的状态(_E)"
 msgid "Status to a_pply at startup:"
 msgstr "启动时应用的状态(_P)："
 
+msgid "DROP"
+msgstr ""
+
+#, c-format
+msgid "Silence threshold: %d%%"
+msgstr ""
+
+msgid "Volume:"
+msgstr ""
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "音频"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "实时视频"
+
+msgid "_Device"
+msgstr "设备(_D)"
+
+msgid "Audio"
+msgstr "音频"
+
+msgid "Input"
+msgstr "输入"
+
+msgid "Output"
+msgstr "输出"
+
+msgid "Video"
+msgstr "视频"
+
 msgid "Interface"
 msgstr "界面"
 
@@ -10984,6 +11056,10 @@ msgstr "状态和发呆"
 
 msgid "Themes"
 msgstr "主题"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "音视频设置"
 
 msgid "Allow all users to contact me"
 msgstr "允许所有用户联系我"
@@ -11067,6 +11143,49 @@ msgstr "选择新名称"
 
 msgid "Select Folder..."
 msgstr "选择文件夹..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "屏幕共享"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "创建会话出错：%s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "未找到聊天记录。"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "插入图像"
+
+#, fuzzy
+msgid "Select window"
+msgstr "新建窗口"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "未知的错误代码 %d"
 
 #. list button
 msgid "_Get List"
@@ -12394,35 +12513,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "音频"
-
-msgid "Video"
-msgstr "视频"
-
-msgid "Output"
-msgstr "输出"
-
 msgid "_Plugin"
 msgstr "插件(_P)"
-
-msgid "_Device"
-msgstr "设备(_D)"
-
-msgid "Input"
-msgstr "输入"
 
 msgid "P_lugin"
 msgstr "插件(_L)"
 
 msgid "D_evice"
 msgstr "设备(_E)"
-
-msgid "DROP"
-msgstr ""
-
-msgid "Volume:"
-msgstr ""
 
 msgid "Silence threshold:"
 msgstr ""

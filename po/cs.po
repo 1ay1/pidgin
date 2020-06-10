@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:08-0500\n"
 "PO-Revision-Date: 2017-09-23 19:10+0000\n"
 "Last-Translator: David Vachulka <david@konstrukce-cad.com>\n"
 "Language-Team: Czech (http://www.transifex.com/pidgin/pidgin/language/cs/)\n"
@@ -1820,6 +1820,10 @@ msgstr "Zpráva je příliš velká."
 msgid "Unable to send message."
 msgstr "Nemohu odeslat zprávu."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Odeslat zprávu"
 
@@ -2155,18 +2159,18 @@ msgstr "Zaznamenávání této konverzace selhalo."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "ODPOVĚĎ&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "ODPOVĚĎ&gt;:</b></font> %s<br/>\n"
@@ -2240,6 +2244,29 @@ msgstr "Chyba konference"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Chyba vytváření sezení: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Nemohu odebrat zásuvný modul"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Žádný zvuk"
+
+msgid "Disabled"
+msgstr "Zakázané"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4835,6 +4862,21 @@ msgstr "Nemohu odeslat soubor %s, nepřihlášen k přítomnosti uživatele"
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Zvolte prosím zdroj %s, kterému chcete odeslat soubor"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "Chybějící ID XMPP přenosu"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Fronta plná"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Vylekaný"
@@ -9617,6 +9659,9 @@ msgstr "Fatální chyba"
 msgid "artist"
 msgstr "umělec"
 
+msgid "lead developer"
+msgstr "vedoucí vývojář"
+
 msgid "voice and video"
 msgstr "hlas a video"
 
@@ -9652,9 +9697,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "původní autor"
-
-msgid "lead developer"
-msgstr "vedoucí vývojář"
 
 msgid "Senior Contributor/QA"
 msgstr "Senior přispěvatel/QA"
@@ -11071,9 +11113,6 @@ msgstr "Nemohu spustit program pro konfiguraci proxy."
 msgid "Cannot start browser configuration program."
 msgstr "Nemohu spustit konfiguraci prohlížeče."
 
-msgid "Disabled"
-msgstr "Zakázané"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Použít _automaticky detekovanou IP adresu: %s"
@@ -11339,6 +11378,39 @@ msgstr "Používat při spouštění stav podle posledního _ukončení"
 msgid "Status to a_pply at startup:"
 msgstr "Stav, který použít při _spouštění:"
 
+msgid "DROP"
+msgstr "DROP"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Práh ticha:"
+
+msgid "Volume:"
+msgstr "Hlasitost:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Audio"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Živé video"
+
+msgid "_Device"
+msgstr "Zaříze_ní"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Input"
+msgstr "Vstup"
+
+msgid "Output"
+msgstr "Výstup"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr "Rozhraní"
 
@@ -11350,6 +11422,10 @@ msgstr "Stav / nečinný"
 
 msgid "Themes"
 msgstr "Témata"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Hlas a video"
 
 msgid "Allow all users to contact me"
 msgstr "Povolit všem uživatelům kontaktovat mě"
@@ -11434,6 +11510,49 @@ msgstr "Zvolte nový název"
 
 msgid "Select Folder..."
 msgstr "Zvolte složku..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Sdílení obrazovky"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Chyba vytváření sezení: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Nebyly nalezeny žádné záznamy"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Vložit obrázek"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Nové okno"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Neznámý typ nódu"
 
 #. list button
 msgid "_Get List"
@@ -12792,35 +12911,14 @@ msgstr "Poskytuje integraci s Unity."
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr "Poskytuje integraci s menu zpráv a launcherem Unity."
 
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Výstup"
-
 msgid "_Plugin"
 msgstr "_Zásuvný modul"
-
-msgid "_Device"
-msgstr "Zaříze_ní"
-
-msgid "Input"
-msgstr "Vstup"
 
 msgid "P_lugin"
 msgstr "Zá_suvný modul"
 
 msgid "D_evice"
 msgstr "Z_ařízení"
-
-msgid "DROP"
-msgstr "DROP"
-
-msgid "Volume:"
-msgstr "Hlasitost:"
 
 msgid "Silence threshold:"
 msgstr "Práh ticha:"

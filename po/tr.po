@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:14-0500\n"
 "PO-Revision-Date: 2017-09-19 13:45+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/pidgin/pidgin/language/"
@@ -1837,6 +1837,10 @@ msgstr "Mesajınız çok uzun."
 msgid "Unable to send message."
 msgstr "Mesaj gönderilemedi."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "İleti Gönder"
 
@@ -2175,18 +2179,18 @@ msgstr "Konuşmanın kaydı yapılamadı."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;OTOMATIK-"
 "CEVAPLA&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;OTOMATIK-"
 "CEVAPLA&gt;:</b></font> %s<br/>\n"
@@ -2260,6 +2264,29 @@ msgstr "Konferans hatası"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "%s oturumunu başlatırken hata."
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Eklenti kaldırılamadı"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Ses Yok"
+
+msgid "Disabled"
+msgstr "Etkisizleştirildi"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4864,6 +4891,21 @@ msgstr "%s kullanıcısına dosya gönderilemedi, kullanıcı bağlı değil"
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "Lütfen bir dosya göndermek istediğiniz %s kaynağını seçin"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "XMPP akışı kimliği bulunamadı"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Liste dolu"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Korkmuş"
@@ -9630,6 +9672,9 @@ msgstr "Ölümcül Hata"
 msgid "artist"
 msgstr "sanatçı"
 
+msgid "lead developer"
+msgstr "lider geliştirici"
+
 msgid "voice and video"
 msgstr "ses ve video"
 
@@ -9665,9 +9710,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "asıl yazar"
-
-msgid "lead developer"
-msgstr "lider geliştirici"
 
 msgid "Senior Contributor/QA"
 msgstr "Kıdemli Katılımcı/QA"
@@ -11085,9 +11127,6 @@ msgstr "Vekil yapılandırma programı başlatılamadı."
 msgid "Cannot start browser configuration program."
 msgstr "Tarayıcı yapılandırma uygulaması başlatılamıyor."
 
-msgid "Disabled"
-msgstr "Etkisizleştirildi"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "_Otomatik olarak belirlenen IP adresini kullan: %s"
@@ -11353,6 +11392,39 @@ msgstr "Son çıkıştaki _durumu kullan"
 msgid "Status to a_pply at startup:"
 msgstr "Başlangıçta uy_gulanacak durum:"
 
+msgid "DROP"
+msgstr "BIRAK"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Sessiz eşik:"
+
+msgid "Volume:"
+msgstr "Ses:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Ses"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Canlı Görüntü"
+
+msgid "_Device"
+msgstr "_Aygıt"
+
+msgid "Audio"
+msgstr "Ses"
+
+msgid "Input"
+msgstr "Girdi"
+
+msgid "Output"
+msgstr "Çıkış"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr "Arayüz"
 
@@ -11364,6 +11436,10 @@ msgstr "Durum / Boşta"
 
 msgid "Themes"
 msgstr "Temalar"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Ses ve Video"
 
 msgid "Allow all users to contact me"
 msgstr "Tüm kullanıcılara izin ver"
@@ -11448,6 +11524,49 @@ msgstr "Yeni İsim Seç"
 
 msgid "Select Folder..."
 msgstr "Dizin Seç..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Ekran Paylaşımı"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "%s oturumunu başlatırken hata."
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Hiç kayıt bulunamadı"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Resim Ekle"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Yeni pencere"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Bilinmeyen düğüm tipi"
 
 #. list button
 msgid "_Get List"
@@ -12802,35 +12921,14 @@ msgstr "Unity ile entegresyonu sağlar."
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr "Unity'nin mesajlaşma menüsü ve başlatıcısı ile entegresyonu sağlar."
 
-msgid "Audio"
-msgstr "Ses"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Çıkış"
-
 msgid "_Plugin"
 msgstr "_Eklenti"
-
-msgid "_Device"
-msgstr "_Aygıt"
-
-msgid "Input"
-msgstr "Girdi"
 
 msgid "P_lugin"
 msgstr "E_klenti"
 
 msgid "D_evice"
 msgstr "Ay_gıt"
-
-msgid "DROP"
-msgstr "BIRAK"
-
-msgid "Volume:"
-msgstr "Ses:"
 
 msgid "Silence threshold:"
 msgstr "Sessiz eşik:"

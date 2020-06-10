@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:14-0500\n"
 "PO-Revision-Date: 2017-09-23 19:52+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Uzbek (http://www.transifex.com/pidgin/pidgin/language/uz/)\n"
@@ -1773,6 +1773,10 @@ msgstr "Xabar juda katta."
 msgid "Unable to send message."
 msgstr "Xabarni jo‘natib bo‘lmadi."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Xabar jo‘natish"
 
@@ -2087,14 +2091,14 @@ msgstr ""
 
 #, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 
 #, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
@@ -2156,6 +2160,28 @@ msgstr ""
 
 #, c-format
 msgid "Error creating session: %s"
+msgstr ""
+
+msgid "Could not create media pipeline"
+msgstr ""
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Ovozlarni yoqish"
+
+msgid "Disabled"
+msgstr ""
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
 msgstr ""
 
 #, c-format
@@ -4644,6 +4670,19 @@ msgstr ""
 
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
+msgstr ""
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+msgid "XMPP stream management"
+msgstr ""
+
+msgid "Stanza queue is full"
+msgstr ""
+
+msgid "No further messages will be queued"
 msgstr ""
 
 msgid "Afraid"
@@ -9131,6 +9170,9 @@ msgstr ""
 msgid "artist"
 msgstr ""
 
+msgid "lead developer"
+msgstr ""
+
 msgid "voice and video"
 msgstr ""
 
@@ -9165,9 +9207,6 @@ msgid "XMPP"
 msgstr ""
 
 msgid "original author"
-msgstr ""
-
-msgid "lead developer"
 msgstr ""
 
 msgid "Senior Contributor/QA"
@@ -10517,9 +10556,6 @@ msgstr ""
 msgid "Cannot start browser configuration program."
 msgstr ""
 
-msgid "Disabled"
-msgstr ""
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr ""
@@ -10781,6 +10817,39 @@ msgstr ""
 msgid "Status to a_pply at startup:"
 msgstr ""
 
+msgid "DROP"
+msgstr "TOMCHI"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Tinch ostona:"
+
+msgid "Volume:"
+msgstr "Tovush:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Audio"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Jonli video"
+
+msgid "_Device"
+msgstr "_Qurilma"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Input"
+msgstr "Kirish"
+
+msgid "Output"
+msgstr "Chiqish"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr ""
 
@@ -10792,6 +10861,10 @@ msgstr ""
 
 msgid "Themes"
 msgstr ""
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "Ovoz/video sozlamalari"
 
 msgid "Allow all users to contact me"
 msgstr ""
@@ -10875,6 +10948,46 @@ msgstr ""
 
 msgid "Select Folder..."
 msgstr ""
+
+msgid "Screen share error"
+msgstr ""
+
+msgid "Error creating screencast request"
+msgstr ""
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+msgid "No file descriptor found"
+msgstr ""
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Tasvirni saqlash"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Shriftni tanlash"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Noma’lum xatolik"
 
 #. list button
 msgid "_Get List"
@@ -12183,35 +12296,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Chiqish"
-
 msgid "_Plugin"
 msgstr "_Plagin"
-
-msgid "_Device"
-msgstr "_Qurilma"
-
-msgid "Input"
-msgstr "Kirish"
 
 msgid "P_lugin"
 msgstr "P_lagin"
 
 msgid "D_evice"
 msgstr "_Qurilma"
-
-msgid "DROP"
-msgstr "TOMCHI"
-
-msgid "Volume:"
-msgstr "Tovush:"
 
 msgid "Silence threshold:"
 msgstr "Tinch ostona:"

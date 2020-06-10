@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:12-0500\n"
 "PO-Revision-Date: 2017-09-19 12:43+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Burmese (Myanmar) (http://www.transifex.com/pidgin/pidgin/"
@@ -1794,6 +1794,10 @@ msgstr "စာ ရှည်လွန်းသည်။"
 msgid "Unable to send message."
 msgstr "စာ ပို့ရန် မဖြစ်နိုင်ပါ။"
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "စာပို့ရန်"
 
@@ -2125,18 +2129,18 @@ msgstr "ဤစကားပြောဆိုမှုကို မှတ်တ�
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;အလိုအလျှောက် "
 "အကြောင်းပြန်ကြားချက်&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;အလိုအလျောက်-"
 "အကြောင်းပြန်ကြားချက်&gt;:</b></font> %s<br/>\n"
@@ -2202,6 +2206,29 @@ msgstr "ဆွေးနွေးခန်းဆိုင်ရာ ချို�
 #, c-format
 msgid "Error creating session: %s"
 msgstr "ဆက်ရှင် %s ကို ပြုလုပ်ရာတွင် ချို့ယွင်းမှု"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "ပလပ်အင်ကို ပိတ်၍ မရပါ"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "အသံ မရှိပါ"
+
+msgid "Disabled"
+msgstr "ပိတ်ထားသည်"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4764,6 +4791,21 @@ msgstr "%s ထံသို့ ဖိုင်ပို့၍ မရပါ၊ လ
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "%s အရင်းအမြစ်ထံ သင် ပေးပို့လိုသော ဖိုင်တပုဒ်ကို ရွေးပါ။"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "XMPP stream ခေါင်းစဉ် ပျောက်နေသော ID"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "အစီအစဉ် ပြည့်သွားသည်"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "စိုးရိမ်သည်"
@@ -9442,6 +9484,9 @@ msgstr "ဆိုးရွားသော ချို့ယွင်းချ�
 msgid "artist"
 msgstr "အနုပညာရှင်"
 
+msgid "lead developer"
+msgstr "ဦးဆောင် စီစဉ်သူ"
+
 msgid "voice and video"
 msgstr "အသံနှင့် ဗွီဒီယို"
 
@@ -9477,9 +9522,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "မူလ ရေးသားသူ"
-
-msgid "lead developer"
-msgstr "ဦးဆောင် စီစဉ်သူ"
 
 msgid "Senior Contributor/QA"
 msgstr "အဓိက ပါဝင်ပံ့ပိုးသူ/မေးဖြေ"
@@ -10870,9 +10912,6 @@ msgstr "ပရောက်ဆီ ပုံစံချထားမှု ပရ�
 msgid "Cannot start browser configuration program."
 msgstr "ဘရောင်ဆာ ပုံစံချထားမှု ပရိုဂရမ်ကို စဖွင့်လို့ မရပါ။ "
 
-msgid "Disabled"
-msgstr "ပိတ်ထားသည်"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "_A အလိုအလျောက် ရှာဖွေသော IP လိပ်စာကို သုံးရန် - %s"
@@ -11138,6 +11177,39 @@ msgstr "_E စဖွင့်ချိန် နောက်ဆုံး အပ�
 msgid "Status to a_pply at startup:"
 msgstr "_P စဖွင့်ချင်း သုံးစွဲမည့် အနေအထား -"
 
+msgid "DROP"
+msgstr "လွှတ်ချရန်"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "တိတ်ဆိတ်မှု သတ်မှတ်အဆင့်"
+
+msgid "Volume:"
+msgstr "အသံ အတိုးအကျယ်"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "အသံ"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "ရုပ်သံ တိုက်ရိုက် ထုတ်လွှင့်မှု"
+
+msgid "_Device"
+msgstr "_D စက်ပစ္စည်း"
+
+msgid "Audio"
+msgstr "အသံ"
+
+msgid "Input"
+msgstr "ရေးသွင်းချက်"
+
+msgid "Output"
+msgstr "ထုတ်ပြန်ချက်"
+
+msgid "Video"
+msgstr "ရုပ်သံ"
+
 msgid "Interface"
 msgstr "မျက်နှာပြင်"
 
@@ -11149,6 +11221,10 @@ msgstr "အနေအထား/မလှုပ်မရှား"
 
 msgid "Themes"
 msgstr "Theme များ"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_V အသံနှင့် ဗွီဒီယို"
 
 msgid "Allow all users to contact me"
 msgstr "ကျွန်​​​တော့်ကို သုံးစွဲသူအားလုံးက ဆက်သွယ်ခွင့်ပြုရန်"
@@ -11232,6 +11308,49 @@ msgstr "အမည်သစ် ရွေးရန်"
 
 msgid "Select Folder..."
 msgstr "ဖိုင်တွဲ ရွေးရန်..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "မျက်နှာပြင် မျှဝေလုပ်ဆောင်ခြင်း"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "ဆက်ရှင် %s ကို ပြုလုပ်ရာတွင် ချို့ယွင်းမှု"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "မှတ်တမ်းများ မတွေ့ရပါ"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "ရုပ်ပုံ ထည့်သွင်းရန်"
+
+#, fuzzy
+msgid "Select window"
+msgstr "ဝင်းဒိုး အသစ်"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "အမည်မသိ node အမျိုးအစား"
 
 #. list button
 msgid "_Get List"
@@ -12565,35 +12684,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "အသံ"
-
-msgid "Video"
-msgstr "ရုပ်သံ"
-
-msgid "Output"
-msgstr "ထုတ်ပြန်ချက်"
-
 msgid "_Plugin"
 msgstr "_P ပလပ်အင်"
-
-msgid "_Device"
-msgstr "_D စက်ပစ္စည်း"
-
-msgid "Input"
-msgstr "ရေးသွင်းချက်"
 
 msgid "P_lugin"
 msgstr "_L ပလပ်အင်"
 
 msgid "D_evice"
 msgstr "_E စက်ပစ္စည်း"
-
-msgid "DROP"
-msgstr "လွှတ်ချရန်"
-
-msgid "Volume:"
-msgstr "အသံ အတိုးအကျယ်"
 
 msgid "Silence threshold:"
 msgstr "တိတ်ဆိတ်မှု သတ်မှတ်အဆင့်"

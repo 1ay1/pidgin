@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:08-0500\n"
 "PO-Revision-Date: 2017-09-19 19:20+0000\n"
 "Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
 "Language-Team: Bengali (India) (http://www.transifex.com/pidgin/pidgin/"
@@ -1808,6 +1808,10 @@ msgstr "বার্তার মাপ অত্যাধিক বড়।"
 msgid "Unable to send message."
 msgstr "বার্তা পাঠাতে ব্যর্থ।"
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "বার্তা পাঠিয়ে দিন"
 
@@ -2146,18 +2150,18 @@ msgstr "এই কথোপকথোন লগ করতে ব্যর্থ�
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "REPLY&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
 "REPLY&gt;:</b></font> %s<br/>\n"
@@ -2226,6 +2230,29 @@ msgstr "কনফারেন্স সংক্রান্ত ত্রুট�
 #, c-format
 msgid "Error creating session: %s"
 msgstr "সেশান নির্মাণ করতে ব্যর্থ: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "প্লাগ-ইন আন-লোড করা যায়নি"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "শব্দ বিহীন"
+
+msgid "Disabled"
+msgstr "নিষ্ক্রিয়"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4821,6 +4848,20 @@ msgstr "%s-কে ফাইল পাঠাতে ব্যর্থ, ব্য�
 #, c-format
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr "ফাইল পাঠানোর উদ্দেশ্যে অনুগ্রহ করে %s-র একটি রিসোর্স নির্বাচন করুন"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+msgid "XMPP stream management"
+msgstr ""
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "সারি পূর্ণ হয়ে গিয়েছে"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr ""
@@ -9604,6 +9645,9 @@ msgstr "গুরুতর ত্রুটি"
 msgid "artist"
 msgstr "শিল্পী"
 
+msgid "lead developer"
+msgstr "প্রধান ডিভেলপার"
+
 msgid "voice and video"
 msgstr "ধ্বনি ও ভিডিও"
 
@@ -9639,9 +9683,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "মূল লেখক"
-
-msgid "lead developer"
-msgstr "প্রধান ডিভেলপার"
 
 msgid "Senior Contributor/QA"
 msgstr "প্রবীণ অংশগ্রহণকারী/পরীক্ষক"
@@ -11050,9 +11091,6 @@ msgstr "প্রক্সি কনফিগারেশনের প্রো�
 msgid "Cannot start browser configuration program."
 msgstr "ব্রাউজার কনফিগারেশনের প্রোগ্রাম আরম্ভ করতে ব্যর্থ।"
 
-msgid "Disabled"
-msgstr "নিষ্ক্রিয়"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "স্বয়ংক্রিয়ভাবে সনাক্ত IP ঠিকানা ব্যবহার করা হবে: %s (_a)"
@@ -11319,6 +11357,39 @@ msgstr "সর্বশেষ প্রস্থানকালে ধার্�
 msgid "Status to a_pply at startup:"
 msgstr "প্রারম্ভকালে ব্যবহারযোগ্য অবস্থা: (_p)"
 
+msgid "DROP"
+msgstr ""
+
+#, c-format
+msgid "Silence threshold: %d%%"
+msgstr ""
+
+msgid "Volume:"
+msgstr ""
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "অডিও"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "সরাসরি ভিডিও প্রচার"
+
+msgid "_Device"
+msgstr "ডিভাইস (_D)"
+
+msgid "Audio"
+msgstr "অডিও"
+
+msgid "Input"
+msgstr "ইনপুট"
+
+msgid "Output"
+msgstr "আউটপুট"
+
+msgid "Video"
+msgstr "ভিডিও"
+
 msgid "Interface"
 msgstr "প্রেক্ষাপট"
 
@@ -11330,6 +11401,10 @@ msgstr "অবস্থা / কর্মবিহীন অবস্থা"
 
 msgid "Themes"
 msgstr "থিম"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "Voice/Video Settings"
 
 msgid "Allow all users to contact me"
 msgstr "সকল ব্যবহারকারী আমার সাথে যোগাযোগ করতে পারবেন"
@@ -11416,6 +11491,49 @@ msgstr "নতুন নাম নির্বাচন করুন"
 
 msgid "Select Folder..."
 msgstr "ফোল্ডার নির্বাচন করুন..."
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "পর্দার যৌথ ব্যবহার"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "সেশান নির্মাণ করতে ব্যর্থ: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "কোনো লগ পাওয়া যায়নি"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "ছবি সন্নিবেশ করুন"
+
+#, fuzzy
+msgid "Select window"
+msgstr "নতুন উইন্ডো"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "নোডের ধরন অজানা"
 
 #. list button
 msgid "_Get List"
@@ -12783,35 +12901,14 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
-msgid "Audio"
-msgstr "অডিও"
-
-msgid "Video"
-msgstr "ভিডিও"
-
-msgid "Output"
-msgstr "আউটপুট"
-
 msgid "_Plugin"
 msgstr "প্লাগ-ইন (_P)"
-
-msgid "_Device"
-msgstr "ডিভাইস (_D)"
-
-msgid "Input"
-msgstr "ইনপুট"
 
 msgid "P_lugin"
 msgstr "প্লাগ-ইন (_l)"
 
 msgid "D_evice"
 msgstr "ডিভাইস (_e)"
-
-msgid "DROP"
-msgstr ""
-
-msgid "Volume:"
-msgstr ""
 
 msgid "Silence threshold:"
 msgstr ""

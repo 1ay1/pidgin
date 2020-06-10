@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
+"POT-Creation-Date: 2020-06-09 22:12-0500\n"
 "PO-Revision-Date: 2018-01-17 01:37+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/pidgin/pidgin/"
@@ -1829,6 +1829,10 @@ msgstr "Meldingen er for stor."
 msgid "Unable to send message."
 msgstr "Klarte ikke å sende melding."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr ""
+
 msgid "Send Message"
 msgstr "Send melding"
 
@@ -2170,18 +2174,18 @@ msgstr "Loggføring av denne samtalen feilet."
 msgid "XML"
 msgstr "XML"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;"
 "STANDARDSVAR&gt;:</b></font> %s<br/>\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
 "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;"
 "STANDARDSVAR&gt;:</b></font> %s<br/>\n"
@@ -2258,6 +2262,29 @@ msgstr "Konferansefeil"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Klarte ikke å opprette økt: %s"
+
+#, fuzzy
+msgid "Could not create media pipeline"
+msgstr "Klarte ikke å avlesse tillegget"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+#, fuzzy
+msgid "Test Sound"
+msgstr "Ingen lyd"
+
+msgid "Disabled"
+msgstr "Deaktivert"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr ""
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4872,6 +4899,21 @@ msgstr ""
 msgid "Please select the resource of %s to which you would like to send a file"
 msgstr ""
 "Velg hvilken ressurs tilhørende %s du ønsker å sende å sende ei fil til"
+
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr ""
+
+#, fuzzy
+msgid "XMPP stream management"
+msgstr "Manglende ID i XMPP-dataflyt"
+
+#, fuzzy
+msgid "Stanza queue is full"
+msgstr "Køen er full"
+
+msgid "No further messages will be queued"
+msgstr ""
 
 msgid "Afraid"
 msgstr "Redd"
@@ -9652,6 +9694,9 @@ msgstr "Alvorlig feil"
 msgid "artist"
 msgstr "artist"
 
+msgid "lead developer"
+msgstr "hovedutvikler"
+
 msgid "voice and video"
 msgstr "lyd og video"
 
@@ -9687,9 +9732,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "opprinnelig laget av"
-
-msgid "lead developer"
-msgstr "hovedutvikler"
 
 msgid "Senior Contributor/QA"
 msgstr "Senior Contributor/QA"
@@ -11113,9 +11155,6 @@ msgstr "Klarte ikke å starte innstillingsprogrammet for mellomlageret."
 msgid "Cannot start browser configuration program."
 msgstr "Klarte ikke å starte oppsettsprogram for nettleser."
 
-msgid "Disabled"
-msgstr "Deaktivert"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Bruk _automatisk oppdaget IP-adresse: %s"
@@ -11381,6 +11420,39 @@ msgstr "Bruk status fra siste _nedstengning ved oppstart"
 msgid "Status to a_pply at startup:"
 msgstr "L_egg til status ved oppstart:"
 
+msgid "DROP"
+msgstr "Legg på"
+
+#, fuzzy, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Stillhetsavbrudds-terskel:"
+
+msgid "Volume:"
+msgstr "Lydstyrke:"
+
+#, fuzzy
+msgid "Test Audio"
+msgstr "Lyd"
+
+#, fuzzy
+msgid "Test Video"
+msgstr "Live Video"
+
+msgid "_Device"
+msgstr "_Enhet"
+
+msgid "Audio"
+msgstr "Lyd"
+
+msgid "Input"
+msgstr "Inndata"
+
+msgid "Output"
+msgstr "Utdata"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr "Grensesnitt"
 
@@ -11392,6 +11464,10 @@ msgstr "Status / inaktiv"
 
 msgid "Themes"
 msgstr "Drakter"
+
+#, fuzzy
+msgid "Voice/Video"
+msgstr "_Lydopptak og video"
 
 msgid "Allow all users to contact me"
 msgstr "Tillat alle brukere å kontakte meg"
@@ -11475,6 +11551,49 @@ msgstr "Velg nytt navn"
 
 msgid "Select Folder..."
 msgstr "Velg mappe…"
+
+#, fuzzy
+msgid "Screen share error"
+msgstr "Skjermdeling"
+
+#, fuzzy
+msgid "Error creating screencast request"
+msgstr "Klarte ikke å opprette økt: %s"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr ""
+
+#, fuzzy
+msgid "No file descriptor found"
+msgstr "Ingen logger ble funnet"
+
+msgid "Screencast \"Start\" failed"
+msgstr ""
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr ""
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr ""
+
+#, fuzzy
+msgid "Test image"
+msgstr "Sett inn bilde"
+
+#, fuzzy
+msgid "Select window"
+msgstr "Nytt vindu"
+
+msgid "Use monitor"
+msgstr ""
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown output"
+msgstr "Ukjent nodetype"
 
 #. list button
 msgid "_Get List"
@@ -12838,35 +12957,14 @@ msgstr "Besørger integrasjon med Unity."
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr "Integrasjon med Unity sin meldingsmeny og oppstarter."
 
-msgid "Audio"
-msgstr "Lyd"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Utdata"
-
 msgid "_Plugin"
 msgstr "_Tillegg"
-
-msgid "_Device"
-msgstr "_Enhet"
-
-msgid "Input"
-msgstr "Inndata"
 
 msgid "P_lugin"
 msgstr "_Tillegg"
 
 msgid "D_evice"
 msgstr "_Enhet"
-
-msgid "DROP"
-msgstr "Legg på"
-
-msgid "Volume:"
-msgstr "Lydstyrke:"
 
 msgid "Silence threshold:"
 msgstr "Stillhetsavbrudds-terskel:"
