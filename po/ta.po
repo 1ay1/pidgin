@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:14-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Tamil (http://www.transifex.com/pidgin/pidgin/language/ta/)\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
@@ -2149,21 +2149,17 @@ msgstr "இந்த உரையாடலை பதிய தவறியது
 msgid "XML"
 msgstr "எக்ஸ்எம்எல்"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2231,17 +2227,15 @@ msgstr "கலந்துரையாடல் பிழை"
 msgid "Error creating session: %s"
 msgstr "அமர்வு உருவாக்குவதில் பிழை: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "சொருகியை ஏற்ற முடியவில்லை "
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "ஒலி இல்லை"
+msgstr ""
 
 msgid "Disabled"
 msgstr "செயல்நீக்கு"
@@ -4841,9 +4835,8 @@ msgstr ""
 msgid "XMPP stream management"
 msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "கியூ வரிசை நிறைந்தது"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8439,11 +8432,8 @@ msgstr "Pidgin இணையத்தள மேலாளர்"
 msgid "Internet Messenger"
 msgstr "இணையதள தூதுவர்"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"அரட்டை IM முடிந்தது.  AIMக்கு துணைபுரிகிறது, Google Talk, Jabber/XMPP, MSN, "
-"Yahoo மற்றும் மேலும்"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11301,13 +11291,11 @@ msgstr ""
 msgid "Volume:"
 msgstr ""
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "ஆடியோ"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "நிகழ் ஒளித்தோற்றம்"
+msgstr ""
 
 msgid "_Device"
 msgstr "சாதனம் (_D)"
@@ -11336,9 +11324,8 @@ msgstr "நிலை / ஓய்வு"
 msgid "Themes"
 msgstr "குழுக்கள்"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "வாய்ஸ்/வீடியோ அமைவுகள்"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "அனைத்து பயனாளர்களும் என்னை தொடர்பு கொள்ள அனுமதி"
@@ -11423,20 +11410,17 @@ msgstr "அமர்வுக்கு புதிய பெயர் தேர
 msgid "Select Folder..."
 msgstr "அடைவை தேர்ந்தெடுக்கவும்..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "திரையை பகிருகிறது"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "அமர்வு உருவாக்குவதில் பிழை: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "எந்தப்பதிவும் காணப்படவில்லை"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11447,13 +11431,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "படத்தை நுழை"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "புதிய சாளரம்"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11462,9 +11444,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "தெரியாத முடிச்சு வகை"
+msgstr ""
 
 #. list button
 msgid "_Get List"

@@ -3,16 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Ḷḷumex03 <tornes@opmbx.org>, 2013
-# Ḷḷumex03 <tornes@opmbx.org>, 2013
-# Ḷḷumex03 <tornes@opmbx.org>, 2013
+# Ḷḷumex03, 2013
+# Ḷḷumex03, 2013
+# Ḷḷumex03, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:07-0500\n"
-"PO-Revision-Date: 2017-09-19 16:55+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Asturian (http://www.transifex.com/pidgin/pidgin/language/"
 "ast/)\n"
 "Language: ast\n"
@@ -2172,21 +2172,17 @@ msgstr "Rexistru fallíu d'esta conversación."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2262,9 +2258,8 @@ msgstr ""
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Nun hai soníu"
+msgstr ""
 
 msgid "Disabled"
 msgstr ""
@@ -11069,13 +11064,11 @@ msgstr ""
 msgid "Volume:"
 msgstr "Volume:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Soníu"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Vidéu en direutu"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Preséu"
@@ -11104,9 +11097,8 @@ msgstr ""
 msgid "Themes"
 msgstr ""
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Voz ya vidéu"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr ""
@@ -11191,20 +11183,17 @@ msgstr ""
 msgid "Select Folder..."
 msgstr ""
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Compartición de pantalla"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Erru creando sesión: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Nun s'alcontraron rexistros"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11218,9 +11207,8 @@ msgstr ""
 msgid "Test image"
 msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Esbillar color"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11229,9 +11217,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Erru desconocíu"
+msgstr ""
 
 #. list button
 msgid "_Get List"

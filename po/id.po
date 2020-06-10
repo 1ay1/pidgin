@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Mohamad Hasan Al Banna <se7entime@openmailbox.org>, 2013
+# se7entime <se7entime@disroot.org>, 2013
 # Rai S. Regawa <raireg@yahoo.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:10-0500\n"
-"PO-Revision-Date: 2017-09-19 14:02+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/pidgin/pidgin/language/"
 "id/)\n"
 "Language: id\n"
@@ -2130,21 +2130,17 @@ msgstr "Log dari percakapan ini gagal."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;JAWAB-"
-"OTOMATIS&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;JAWAB-"
-"OTOMATIS&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Tidak dapat menemukan path log!</b></font>"
@@ -2207,17 +2203,15 @@ msgstr ""
 msgid "Error creating session: %s"
 msgstr ""
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Tidak dapat mengatur ikon"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Tanpa Suara"
+msgstr ""
 
 msgid "Disabled"
 msgstr ""
@@ -4811,9 +4805,8 @@ msgstr ""
 msgid "XMPP stream management"
 msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Antrian penuh"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -11180,9 +11173,8 @@ msgstr ""
 msgid "Test Audio"
 msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Video Langsung"
+msgstr ""
 
 msgid "_Device"
 msgstr ""
@@ -11211,9 +11203,8 @@ msgstr "Status / Diam"
 msgid "Themes"
 msgstr ""
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "Video Langsung"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Ijinkan semua pengguna untuk menghubungi saya"
@@ -11298,9 +11289,8 @@ msgstr "Pilih Nama Baru"
 msgid "Select Folder..."
 msgstr "Pilih Map..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Kesalahan Parse XML"
+msgstr ""
 
 msgid "Error creating screencast request"
 msgstr ""
@@ -11308,9 +11298,8 @@ msgstr ""
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Log tidak ditemukan"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11321,13 +11310,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Masukkan Gambar"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Jendela Baru"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11336,9 +11323,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Kesalahan Tidak Dikenal"
+msgstr ""
 
 #. list button
 msgid "_Get List"

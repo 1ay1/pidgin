@@ -4,7 +4,7 @@
 #
 # Translators:
 # Alexandre Prokoudine <avp@altlinux.ru>, 2003-2004
-# AlexL <loginov.alex.valer@gmail.com>, 2016
+# AlexL <loginov.alex.valer@gmail.com>, 2016,2018
 # Arkadiy Illarionov, 2016
 # Sergey Volozhanin <svo@asplinux.ru>, 2001
 # Simple88, 2016
@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:13-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: AlexL <loginov.alex.valer@gmail.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Russian (http://www.transifex.com/pidgin/pidgin/language/"
 "ru/)\n"
 "Language: ru\n"
@@ -2189,21 +2189,17 @@ msgstr "Не удалось выполнить ведение журнала э�
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Не удаётся найти путь к журналу!</b></font>"
@@ -2275,17 +2271,15 @@ msgstr "Ошибка конференции"
 msgid "Error creating session: %s"
 msgstr "Ошибка создания сеанса: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Не удалось выгрузить модуль"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Нет звука"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Отключено"
@@ -4921,13 +4915,11 @@ msgstr "Выберите ресурс %s, которому вы хотели б�
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "ID пропуска потока XMPP"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Очередь полна"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8635,11 +8627,10 @@ msgstr "Клиент обмена мгновенными сообщениями 
 msgid "Internet Messenger"
 msgstr "Клиент обмена мгновенными сообщениями"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
 "Переписка мгновенными сообщениями.  Поддерживает AIM, Google Talk, Jabber/"
-"XMPP, MSN, Yahoo и не только"
+"XMPP и не только"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11535,20 +11526,18 @@ msgstr "_Применить при запуске статус:"
 msgid "DROP"
 msgstr "Опора"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Порог тишины:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Громкость:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Аудио"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Живое видео"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Устройство"
@@ -11577,9 +11566,8 @@ msgstr "Статус / Бездействие"
 msgid "Themes"
 msgstr "Темы"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Голос и видео"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Разрешить доступ всем пользователям"
@@ -11665,20 +11653,17 @@ msgstr "Выбрать новое имя"
 msgid "Select Folder..."
 msgstr "Выбрать папку..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Совместное пользование экраном"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Ошибка создания сеанса: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Журналы не найдены"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11689,13 +11674,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Вставить изображение"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Новое окно"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11704,9 +11687,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Неизвестный тип узла"
+msgstr ""
 
 #. list button
 msgid "_Get List"

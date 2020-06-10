@@ -3,16 +3,17 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# ЌИГЯФ <kntro@msn.com>, 2016
-# ЌИГЯФ <kntro@msn.com>, 2015-2016
-# ЌИГЯФ <kntro@msn.com>, 2014
+# ᏦᏁᎢᎵᏫ <kntro@msn.com>, 2016
+# ᏦᏁᎢᎵᏫ <kntro@msn.com>, 2015-2016
+# ᏦᏁᎢᎵᏫ <kntro@msn.com>, 2014
+# ᏦᏁᎢᎵᏫ <kntro@msn.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:09-0500\n"
-"PO-Revision-Date: 2017-09-23 19:52+0000\n"
-"Last-Translator: ЌИГЯФ <kntro@msn.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/pidgin/pidgin/"
 "language/es_AR/)\n"
 "Language: es_AR\n"
@@ -2192,21 +2193,17 @@ msgstr "Falló el registro de esta conversación."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2281,17 +2278,15 @@ msgstr "Error de conferencia"
 msgid "Error creating session: %s"
 msgstr "Error al crear la sesión: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "No se pudo deshabilitar el complemento"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Sin sonido"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Deshabilitado"
@@ -4943,13 +4938,11 @@ msgstr ""
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "Identificación faltante de transmisión XMPP"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Cola llena"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8613,11 +8606,10 @@ msgstr "Mensajero de Internet Pidgin"
 msgid "Internet Messenger"
 msgstr "Mensajero de Internet"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Chat y mensajería instantánea. Soporta Facebook, Google Talk/Hangout, ICQ, "
-"IRC, Skype, Telegram, Jabber/XMPP, Yahoo! y más"
+"Conversá usando mensajería instantánea. Soporta Google Talk, Jabber/XMPP y "
+"más"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11517,20 +11509,18 @@ msgstr "Estado para a_plicar al iniciar:"
 msgid "DROP"
 msgstr "SOLTAR"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Umbral de silencio:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Volumen:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Audio"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Video en vivo"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Dispositivo"
@@ -11559,9 +11549,8 @@ msgstr "Estado / Inactivo"
 msgid "Themes"
 msgstr "Temas"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Voz y video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Permitir que todos los usuarios me contacten"
@@ -11647,20 +11636,17 @@ msgstr "Elegir nuevo nombre"
 msgid "Select Folder..."
 msgstr "Seleccionar carpeta"
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Compartición de pantalla"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Error al crear la sesión: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "No se encontraron registros"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11671,13 +11657,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Insertar imagen"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Nueva ventana"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11686,9 +11670,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Tipo de nodo desconocido"
+msgstr ""
 
 #. list button
 msgid "_Get List"

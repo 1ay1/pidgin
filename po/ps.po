@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 22:12-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"POT-Creation-Date: 2020-06-09 22:13-0500\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Pushto (http://www.transifex.com/pidgin/pidgin/language/ps/)\n"
 "Language: ps\n"
 "MIME-Version: 1.0\n"
@@ -2122,17 +2122,15 @@ msgstr ""
 msgid "Error creating session: %s"
 msgstr ""
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "تمثال مقرر نه شو"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "غږونه غلي که"
+msgstr ""
 
 msgid "Disabled"
 msgstr ""
@@ -10949,13 +10947,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "انځور وراچول"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "نوی کړکی"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -10964,9 +10960,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "نااشنا"
+msgstr ""
 
 #. list button
 msgid "_Get List"

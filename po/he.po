@@ -11,14 +11,15 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:10-0500\n"
-"PO-Revision-Date: 2017-09-19 11:38+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Hebrew (http://www.transifex.com/pidgin/pidgin/language/he/)\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % "
+"1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
 
 #. Translators may want to transliterate the name.
 #. It is not to be translated.
@@ -641,6 +642,8 @@ msgid "List of %d user:\n"
 msgid_plural "List of %d users:\n"
 msgstr[0] "רשימה של %d משתמש:\n"
 msgstr[1] "רשימה של %d משתמשים:\n"
+msgstr[2] "רשימה של %d משתמשים:\n"
+msgstr[3] "רשימה של %d משתמשים:\n"
 
 msgid "Supported debug options are: plugins version"
 msgstr "אפשרויות ניפוי הבאגים הנתמכות הן:  plungins version"
@@ -744,6 +747,8 @@ msgid "File Transfers - %d%% of %d file"
 msgid_plural "File Transfers - %d%% of %d files"
 msgstr[0] "העברות קבצים - %d%% מתוך %d קובץ"
 msgstr[1] "העברות קבצים - %d%% מתוך %d קבצים"
+msgstr[2] "העברות קבצים - %d%% מתוך %d קבצים"
+msgstr[3] "העברות קבצים - %d%% מתוך %d קבצים"
 
 #. Create the window.
 msgid "File Transfers"
@@ -908,6 +913,8 @@ msgid "%s (%s) has %d new message."
 msgid_plural "%s (%s) has %d new messages."
 msgstr[0] "%s (%s) יש הודעה חדשה %d."
 msgstr[1] "%s (%s) יש %d הודעות חדשות."
+msgstr[2] "%s (%s) יש %d הודעות חדשות."
+msgstr[3] "%s (%s) יש %d הודעות חדשות."
 
 msgid "New Mail"
 msgstr "דוא\"ל חדש"
@@ -2115,21 +2122,17 @@ msgstr "רישום שיחה זו, נכשל."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;מענה "
-"אוטומטי&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;מענה "
-"אוטומטי&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>לא ניתן למצוא את נתיב הרישום!</b></font>"
@@ -2193,17 +2196,15 @@ msgstr "שגיאה בועידה"
 msgid "Error creating session: %s"
 msgstr "שגיאה ביצירת החיבור: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "לא ניתן להפסיק את פעולת התוסף"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "ללא צליל"
+msgstr ""
 
 msgid "Disabled"
 msgstr "כבוי"
@@ -4778,13 +4779,11 @@ msgstr "יש לבחור את המשאב של %s אליו ברצונך לשלוח
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "חסרה מספר-זיהוי של stream XMPP"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "התור מלא"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -5828,12 +5827,16 @@ msgid "You missed %hu message from %s because it was invalid."
 msgid_plural "You missed %hu messages from %s because they were invalid."
 msgstr[0] "פספסת %hu הודעה מאת %s מכיוון שהיא היתה לא תקנית."
 msgstr[1] "פספסת %hu הודעות מאת %s מכיוון שהן היו לא תקניות."
+msgstr[2] "פספסת %hu הודעות מאת %s מכיוון שהן היו לא תקניות."
+msgstr[3] "פספסת %hu הודעות מאת %s מכיוון שהן היו לא תקניות."
 
 #, c-format
 msgid "You missed %hu message from %s because it was too large."
 msgid_plural "You missed %hu messages from %s because they were too large."
 msgstr[0] "פספסת %hu הודעה מאת %s מכיוון שהיא היתה גדולה מדי."
 msgstr[1] "פספסת %hu הודעות מאת %s מכיוון שהן היו גדולות מדי."
+msgstr[2] "פספסת %hu הודעות מאת %s מכיוון שהן היו גדולות מדי."
+msgstr[3] "פספסת %hu הודעות מאת %s מכיוון שהן היו גדולות מדי."
 
 #, c-format
 msgid ""
@@ -5842,6 +5845,8 @@ msgid_plural ""
 "You missed %hu messages from %s because the rate limit has been exceeded."
 msgstr[0] "פספסת %hu הודעה מאת %s מכיוון שמהירות השליחה מופרזת."
 msgstr[1] "פספסת %hu הודעות מאת %s מכיוון שמהירות השליחה מופרזת."
+msgstr[2] "פספסת %hu הודעות מאת %s מכיוון שמהירות השליחה מופרזת."
+msgstr[3] "פספסת %hu הודעות מאת %s מכיוון שמהירות השליחה מופרזת."
 
 #, c-format
 msgid ""
@@ -5850,6 +5855,8 @@ msgid_plural ""
 "You missed %hu messages from %s because his/her warning level is too high."
 msgstr[0] "לא קיבלת %hu הודעה מאת %s בגלל שרמת האזהרה של השולח גבוהה מדי."
 msgstr[1] "לא קיבלת %hu הודעות מאת %s בגלל שרמת האזהרה של השולח גבוהה מדי."
+msgstr[2] "לא קיבלת %hu הודעות מאת %s בגלל שרמת האזהרה של השולח גבוהה מדי."
+msgstr[3] "לא קיבלת %hu הודעות מאת %s בגלל שרמת האזהרה של השולח גבוהה מדי."
 
 #, c-format
 msgid "You missed %hu message from %s because your warning level is too high."
@@ -5857,12 +5864,16 @@ msgid_plural ""
 "You missed %hu messages from %s because your warning level is too high."
 msgstr[0] "לא קיבלת %hu הודעה מאת %s בגלל שרמת-האזהרה שלך גבוהה מדי."
 msgstr[1] "לא קיבלת %hu הודעות מאת %s בגלל שרמת-האזהרה שלך גבוהה מדי."
+msgstr[2] "לא קיבלת %hu הודעות מאת %s בגלל שרמת-האזהרה שלך גבוהה מדי."
+msgstr[3] "לא קיבלת %hu הודעות מאת %s בגלל שרמת-האזהרה שלך גבוהה מדי."
 
 #, c-format
 msgid "You missed %hu message from %s for an unknown reason."
 msgid_plural "You missed %hu messages from %s for an unknown reason."
 msgstr[0] "פספסת %hu הודעה מאת %s מסיבה לא ידועה."
 msgstr[1] "פספסת %hu הודעות מאת %s מסיבה לא ידועה."
+msgstr[2] "פספסת %hu הודעות מאת %s מסיבה לא ידועה."
+msgstr[3] "פספסת %hu הודעות מאת %s מסיבה לא ידועה."
 
 msgid "Your AIM connection may be lost."
 msgstr "החיבור AIM שלך אולי יתנתק."
@@ -5885,6 +5896,8 @@ msgid "The following username is associated with %s"
 msgid_plural "The following usernames are associated with %s"
 msgstr[0] "שם המשתמש שלהלן מקושר עם %s"
 msgstr[1] "שמות המשתמשים שלהלן מקושרים עם %s"
+msgstr[2] "שמות המשתמשים שלהלן מקושרים עם %s"
+msgstr[3] "שמות המשתמשים שלהלן מקושרים עם %s"
 
 #, c-format
 msgid "No results found for email address %s"
@@ -5975,6 +5988,8 @@ msgid_plural ""
 "truncated for you."
 msgstr[0] "עברת את אורך הפרופיל המקסימלי של %d בייט. הפרופיל קוצר עבורך."
 msgstr[1] "עברת את אורך הפרופיל המקסימלי של %d בייטים. הפרופיל קוצר עבורך."
+msgstr[2] "עברת את אורך הפרופיל המקסימלי של %d בייטים. הפרופיל קוצר עבורך."
+msgstr[3] "עברת את אורך הפרופיל המקסימלי של %d בייטים. הפרופיל קוצר עבורך."
 
 msgid "Profile too long."
 msgstr "הפרופיל ארוך מדי."
@@ -5988,6 +6003,8 @@ msgid_plural ""
 "truncated for you."
 msgstr[0] "עברת את אורך הודעת הריחוק המקסימלי של %d בייט. הוא קוצר עבורך."
 msgstr[1] "עברת את אורך הודעת הריחוק המקסימלי של %d בייטים. הוא קוצר עבורך."
+msgstr[2] "עברת את אורך הודעת הריחוק המקסימלי של %d בייטים. הוא קוצר עבורך."
+msgstr[3] "עברת את אורך הודעת הריחוק המקסימלי של %d בייטים. הוא קוצר עבורך."
 
 msgid "Away message too long."
 msgstr "הודעת הריחוק מהמחשב ארוכה מדי."
@@ -8203,36 +8220,48 @@ msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d שנייה"
 msgstr[1] "%d שניות"
+msgstr[2] "%d שניות"
+msgstr[3] "%d שניות"
 
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d יום"
 msgstr[1] "%d ימים"
+msgstr[2] "%d ימים"
+msgstr[3] "%d ימים"
 
 #, c-format
 msgid "%s, %d hour"
 msgid_plural "%s, %d hours"
 msgstr[0] "%s, %d שעה"
 msgstr[1] "%s, %d שעות"
+msgstr[2] "%s, %d שעות"
+msgstr[3] "%s, %d שעות"
 
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d שעה"
 msgstr[1] "%d שעות"
+msgstr[2] "%d שעות"
+msgstr[3] "%d שעות"
 
 #, c-format
 msgid "%s, %d minute"
 msgid_plural "%s, %d minutes"
 msgstr[0] "%s, %d דקה"
 msgstr[1] "%s, %d דקות"
+msgstr[2] "%s, %d דקות"
+msgstr[3] "%s, %d דקות"
 
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d דקה"
 msgstr[1] "%d דקות"
+msgstr[2] "%d דקות"
+msgstr[3] "%d דקות"
 
 #, c-format
 msgid "Could not open %s: Redirected too many times"
@@ -8327,11 +8356,8 @@ msgstr "פידג'ין למסרים באינטרנט"
 msgid "Internet Messenger"
 msgstr "למסרים באינטרנט"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"צ'אט בעזרת הודעות-מיידיות.  תומך AIM, Google Talk, Jabber/XMPP, MSN, Yahoo "
-"ועוד"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -8599,6 +8625,8 @@ msgid_plural ""
 "You currently have %d contacts named %s. Would you like to merge them?"
 msgstr[0] "יש לך %d איש-קשר בשם %s. האם ברצונך למזג אותך?"
 msgstr[1] "יש לך כעת %d אנשי-קשר בשם %s. האם ברצונך למזג אותך?"
+msgstr[2] "יש לך כעת %d אנשי-קשר בשם %s. האם ברצונך למזג אותך?"
+msgstr[3] "יש לך כעת %d אנשי-קשר בשם %s. האם ברצונך למזג אותך?"
 
 msgid ""
 "Merging these contacts will cause them to share a single entry on the buddy "
@@ -8932,6 +8960,8 @@ msgid "%d unread message from %s\n"
 msgid_plural "%d unread messages from %s\n"
 msgstr[0] "הודעה %d שלא נקראה מאת %s\n"
 msgstr[1] "%d הודעות שלא נקראו מאת %s\n"
+msgstr[2] "%d הודעות שלא נקראו מאת %s\n"
+msgstr[3] "%d הודעות שלא נקראו מאת %s\n"
 
 msgid "Manually"
 msgstr "ידנית"
@@ -8968,6 +8998,8 @@ msgid_plural ""
 "%d accounts were disabled because you signed on from another location:"
 msgstr[0] "חשבון %d סומן כלא-פעיל כי התחברת ממיקום נוסף:"
 msgstr[1] "%d חשבונות סומנו כלא-פעילים כי התחברת ממיקום נוסף:"
+msgstr[2] "%d חשבונות סומנו כלא-פעילים כי התחברת ממיקום נוסף:"
+msgstr[3] "%d חשבונות סומנו כלא-פעילים כי התחברת ממיקום נוסף:"
 
 msgid "<b>Username:</b>"
 msgstr "<b>שם משתמש:</b>"
@@ -9356,6 +9388,8 @@ msgid "%d person in room"
 msgid_plural "%d people in room"
 msgstr[0] "איש %d בחדר זה"
 msgstr[1] "%d אנשים בחדר זה"
+msgstr[2] "%d אנשים בחדר זה"
+msgstr[3] "%d אנשים בחדר זה"
 
 msgid "Stopped Typing"
 msgstr "הפסיק/ה להקליד"
@@ -9938,6 +9972,12 @@ msgstr[0] ""
 "האם ברצונך להמשיך ולהסיר את איש הקשר המכיל את %s ועוד %d איש קשר אחר בתוכו "
 "מתוך רשימת אנשי הקשר שלך?"
 msgstr[1] ""
+"האם ברצונך להמשיך ולהסיר את איש הקשר המכיל את %s ועוד %d אנשי קשר אחרים "
+"בתוכו מתוך רשימת אנשי הקשר שלך?"
+msgstr[2] ""
+"האם ברצונך להמשיך ולהסיר את איש הקשר המכיל את %s ועוד %d אנשי קשר אחרים "
+"בתוכו מתוך רשימת אנשי הקשר שלך?"
+msgstr[3] ""
 "האם ברצונך להמשיך ולהסיר את איש הקשר המכיל את %s ועוד %d אנשי קשר אחרים "
 "בתוכו מתוך רשימת אנשי הקשר שלך?"
 
@@ -10531,12 +10571,16 @@ msgid "%s has %d new message."
 msgid_plural "%s has %d new messages."
 msgstr[0] "יש ל-%s %d הודעה חדשה."
 msgstr[1] "יש ל-%s %d הודעות חדשות."
+msgstr[2] "יש ל-%s %d הודעות חדשות."
+msgstr[3] "יש ל-%s %d הודעות חדשות."
 
 #, c-format
 msgid "<b>%d new email.</b>"
 msgid_plural "<b>%d new emails.</b>"
 msgstr[0] "<b>הודעה %d חדשה.</b>"
 msgstr[1] "<b>%d הודעות חדשות.</b>"
+msgstr[2] "<b>%d הודעות חדשות.</b>"
+msgstr[3] "<b>%d הודעות חדשות.</b>"
 
 #, c-format
 msgid "The browser command \"%s\" is invalid."
@@ -11168,20 +11212,18 @@ msgstr "סטטוס להחיל בעת איתחול:"
 msgid "DROP"
 msgstr "הפל"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "סף השקט:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "ווליום:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "או_טומטי"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "שידור חי"
+msgstr ""
 
 msgid "_Device"
 msgstr "מכ_שיר"
@@ -11210,9 +11252,8 @@ msgstr "מצב / חוסר פעילות"
 msgid "Themes"
 msgstr "מוטיבים"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_קול וחוזי"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "אפשר לכל משתמש ליצור איתי קשר"
@@ -11297,20 +11338,17 @@ msgstr "בחר שם חדש"
 msgid "Select Folder..."
 msgstr "בחירת תיקיה..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "שיתוף מסך"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "שגיאה ביצירת החיבור: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "לא נמצאו יומני רישום"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11321,13 +11359,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "הכנס תמונה"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "חלון חדש"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11336,9 +11372,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "נקודה-ברשת מסוג לא מוכר"
+msgstr ""
 
 #. list button
 msgid "_Get List"

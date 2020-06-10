@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 22:10-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"POT-Creation-Date: 2020-06-09 22:11-0500\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Khmer (http://www.transifex.com/pidgin/pidgin/language/km/)\n"
 "Language: km\n"
 "MIME-Version: 1.0\n"
@@ -2116,21 +2116,17 @@ msgstr "បាន​បរាជ័យ​ក្នុងកា​រចុះ​
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>មិនអាច​រក​ផ្លូវ​កំណត់ហេតុ​បានទេ !</b></font>"
@@ -2195,17 +2191,15 @@ msgstr "កំហុស​សន្និសីទ​"
 msgid "Error creating session: %s"
 msgstr "កំហុស​ក្នុងការ​បង្កើត​សម័យ ៖ %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "មិនអាច​ផ្ទុក​កម្មវិធី​ជំនួយ​ឡើង​បានទេ"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "គ្មាន​សំឡេង"
+msgstr ""
 
 msgid "Disabled"
 msgstr "បាន​បិទ​"
@@ -4778,9 +4772,8 @@ msgstr ""
 msgid "XMPP stream management"
 msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "ជួរ​​ពេញ"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8312,10 +8305,8 @@ msgstr "កម្មវិធី​ផ្ញើសារ​អ៊ីនធឺណ
 msgid "Internet Messenger"
 msgstr "កម្មវិធី​ផ្ញើសារ​អ៊ីនធឺណិត"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"ជជែក​កំសាន្ត​តាម​ IM ។ គាំទ្រ AIM, Google Talk, Jabber/XMPP, MSN, យ៉ាហ៊ូ​ និង​​ផ្សេងៗ​ទៀត"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11138,13 +11129,11 @@ msgstr ""
 msgid "Volume:"
 msgstr ""
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "អូឌីយ៉ូ"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "វីដេអូ​បន្តផ្ទាល់"
+msgstr ""
 
 msgid "_Device"
 msgstr "ឧបករណ៍​"
@@ -11173,9 +11162,8 @@ msgstr "ស្ថានភាព/ទំនេរ"
 msgid "Themes"
 msgstr "ស្បែក​"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "ការ​កំណត់​សំឡេង​/​វីដេអូ"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "អនុញ្ញាត​ឲ្យ​អ្នកប្រើទាំង​អស់​ទាក់ទង​ខ្ញុំ"
@@ -11260,20 +11248,17 @@ msgstr "ជ្រើស​​ឈ្មោះ​ថ្មី"
 msgid "Select Folder..."
 msgstr "ជ្រើស​ថត ។"
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "ការ​ចែករំលែក​អេក្រង់"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "កំហុស​ក្នុងការ​បង្កើត​សម័យ ៖ %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "រក​មិនឃើញ​កំណត់ហេតុ​ទេ"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11284,13 +11269,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "បញ្ចូល​​រូបភាព"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "បង្អួច​ថ្មី"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11299,9 +11282,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "មិនស្គាល់ប្រភេទ​ថ្នាំង"
+msgstr ""
 
 #. list button
 msgid "_Get List"

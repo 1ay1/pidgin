@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:10-0500\n"
-"PO-Revision-Date: 2017-09-19 13:58+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Georgian (http://www.transifex.com/pidgin/pidgin/language/"
 "ka/)\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #. Translators may want to transliterate the name.
 #. It is not to be translated.
@@ -610,6 +610,7 @@ msgstr ""
 msgid "List of %d user:\n"
 msgid_plural "List of %d users:\n"
 msgstr[0] ""
+msgstr[1] ""
 
 msgid "Supported debug options are: plugins version"
 msgstr ""
@@ -703,6 +704,7 @@ msgstr "პაუზა"
 msgid "File Transfers - %d%% of %d file"
 msgid_plural "File Transfers - %d%% of %d files"
 msgstr[0] ""
+msgstr[1] ""
 
 #. Create the window.
 msgid "File Transfers"
@@ -866,6 +868,7 @@ msgstr ""
 msgid "%s (%s) has %d new message."
 msgid_plural "%s (%s) has %d new messages."
 msgstr[0] ""
+msgstr[1] ""
 
 msgid "New Mail"
 msgstr "ახალი წერილი"
@@ -2124,9 +2127,8 @@ msgstr ""
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "/ხელსაწყოები/ხმების გაჩუმება"
+msgstr ""
 
 msgid "Disabled"
 msgstr ""
@@ -5638,11 +5640,13 @@ msgstr ""
 msgid "You missed %hu message from %s because it was invalid."
 msgid_plural "You missed %hu messages from %s because they were invalid."
 msgstr[0] ""
+msgstr[1] ""
 
 #, c-format
 msgid "You missed %hu message from %s because it was too large."
 msgid_plural "You missed %hu messages from %s because they were too large."
 msgstr[0] ""
+msgstr[1] ""
 
 #, c-format
 msgid ""
@@ -5650,6 +5654,7 @@ msgid ""
 msgid_plural ""
 "You missed %hu messages from %s because the rate limit has been exceeded."
 msgstr[0] ""
+msgstr[1] ""
 
 #, c-format
 msgid ""
@@ -5657,17 +5662,20 @@ msgid ""
 msgid_plural ""
 "You missed %hu messages from %s because his/her warning level is too high."
 msgstr[0] ""
+msgstr[1] ""
 
 #, c-format
 msgid "You missed %hu message from %s because your warning level is too high."
 msgid_plural ""
 "You missed %hu messages from %s because your warning level is too high."
 msgstr[0] ""
+msgstr[1] ""
 
 #, c-format
 msgid "You missed %hu message from %s for an unknown reason."
 msgid_plural "You missed %hu messages from %s for an unknown reason."
 msgstr[0] ""
+msgstr[1] ""
 
 msgid "Your AIM connection may be lost."
 msgstr ""
@@ -5689,6 +5697,7 @@ msgstr ""
 msgid "The following username is associated with %s"
 msgid_plural "The following usernames are associated with %s"
 msgstr[0] ""
+msgstr[1] ""
 
 #, c-format
 msgid "No results found for email address %s"
@@ -5770,6 +5779,7 @@ msgid_plural ""
 "The maximum profile length of %d bytes has been exceeded.  It has been "
 "truncated for you."
 msgstr[0] ""
+msgstr[1] ""
 
 msgid "Profile too long."
 msgstr "პროფილი ძალიან გრძელია"
@@ -5782,6 +5792,7 @@ msgid_plural ""
 "The maximum away message length of %d bytes has been exceeded.  It has been "
 "truncated for you."
 msgstr[0] ""
+msgstr[1] ""
 
 msgid "Away message too long."
 msgstr "გასულობის შეტყობინება ძალიან გრძელია."
@@ -7899,31 +7910,37 @@ msgstr "უცნობი"
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d წამი"
+msgstr[1] "%d წამი"
 
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d დღე"
+msgstr[1] "%d დღე"
 
 #, c-format
 msgid "%s, %d hour"
 msgid_plural "%s, %d hours"
 msgstr[0] "%s, %d საათი"
+msgstr[1] "%s, %d საათი"
 
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d საათი"
+msgstr[1] "%d საათი"
 
 #, c-format
 msgid "%s, %d minute"
 msgid_plural "%s, %d minutes"
 msgstr[0] "%s, %d წუთი"
+msgstr[1] "%s, %d წუთი"
 
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d წუთი"
+msgstr[1] "%d წუთი"
 
 #, c-format
 msgid "Could not open %s: Redirected too many times"
@@ -8273,6 +8290,7 @@ msgid "You have %d contact named %s. Would you like to merge them?"
 msgid_plural ""
 "You currently have %d contacts named %s. Would you like to merge them?"
 msgstr[0] ""
+msgstr[1] ""
 
 msgid ""
 "Merging these contacts will cause them to share a single entry on the buddy "
@@ -8598,6 +8616,7 @@ msgstr "/ხელსაწყოები/ოთახების სია"
 msgid "%d unread message from %s\n"
 msgid_plural "%d unread messages from %s\n"
 msgstr[0] "%d წაუკითხავი შეტყობინება %s -საგან\n"
+msgstr[1] "%d წაუკითხავი შეტყობინება %s -საგან\n"
 
 msgid "Manually"
 msgstr "მანუალურად"
@@ -8633,6 +8652,7 @@ msgid "%d account was disabled because you signed on from another location:"
 msgid_plural ""
 "%d accounts were disabled because you signed on from another location:"
 msgstr[0] ""
+msgstr[1] ""
 
 msgid "<b>Username:</b>"
 msgstr ""
@@ -9012,6 +9032,7 @@ msgstr ""
 msgid "%d person in room"
 msgid_plural "%d people in room"
 msgstr[0] "%d ადამიანი ოთახში"
+msgstr[1] "%d ადამიანი ოთახში"
 
 msgid "Stopped Typing"
 msgstr ""
@@ -9581,6 +9602,7 @@ msgid_plural ""
 "You are about to remove the contact containing %s and %d other buddies from "
 "your buddy list.  Do you want to continue?"
 msgstr[0] ""
+msgstr[1] ""
 
 msgid "Remove Contact"
 msgstr "კონტატის წაშლა"
@@ -10147,11 +10169,13 @@ msgstr "_გაჩუმება"
 msgid "%s has %d new message."
 msgid_plural "%s has %d new messages."
 msgstr[0] "%s-ს აქვს %d ახალი შეტყობინება."
+msgstr[1] "%s-ს აქვს %d ახალი შეტყობინება."
 
 #, c-format
 msgid "<b>%d new email.</b>"
 msgid_plural "<b>%d new emails.</b>"
 msgstr[0] ""
+msgstr[1] ""
 
 #, c-format
 msgid "The browser command \"%s\" is invalid."
@@ -10783,9 +10807,8 @@ msgstr ""
 msgid "Test Audio"
 msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "ცოცხალი ვიდეო"
+msgstr ""
 
 msgid "_Device"
 msgstr ""
@@ -10814,9 +10837,8 @@ msgstr ""
 msgid "Themes"
 msgstr ""
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "ცოცხალი ვიდეო"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr ""
@@ -10901,9 +10923,8 @@ msgstr ""
 msgid "Select Folder..."
 msgstr ""
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "შეცდომა XML ფაილის შეტანისას"
+msgstr ""
 
 msgid "Error creating screencast request"
 msgstr ""
@@ -10911,9 +10932,8 @@ msgstr ""
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "ვერ ვიპოვე პროტოკოლები"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -10924,13 +10944,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "გამოსახულების ჩამატება"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "ახალი ფანჯარა"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -10939,9 +10957,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "უცნობი შეცდომა"
+msgstr ""
 
 #. list button
 msgid "_Get List"

@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:14-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Swahili (http://www.transifex.com/pidgin/pidgin/language/"
 "sw/)\n"
 "Language: sw\n"
@@ -10936,13 +10936,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Hifadhi Taswira"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Dirisha jipya"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -10951,9 +10949,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Hitilafu isiyojulikana"
+msgstr ""
 
 #. list button
 msgid "_Get List"

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:15-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/pidgin/pidgin/"
 "language/zh_TW/)\n"
 "Language: zh_TW\n"
@@ -2104,21 +2104,17 @@ msgstr "無法記錄這個交談。"
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;自動回應&gt;:"
-"</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;自動回應&gt;:"
-"</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>找不到日誌檔案！</b></font>"
@@ -2182,17 +2178,15 @@ msgstr "會議室錯誤"
 msgid "Error creating session: %s"
 msgstr "建立通話工作階段失敗：%s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "無法卸載模組"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "無音效"
+msgstr ""
 
 msgid "Disabled"
 msgstr "停用"
@@ -4760,13 +4754,11 @@ msgstr "請指定檔案應該傳送至 %s 的那一個 Resource"
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "XMPP 串流中找不到識別符"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "佇列已滿"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8264,11 +8256,8 @@ msgstr "Pidgin 網路即時通"
 msgid "Internet Messenger"
 msgstr "網路即時通"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"讓您可以透過即時通訊與好友聊天，支援 AIM、Google Talk、Jabber/XMPP、MSN、"
-"Yahoo 等等"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11080,20 +11069,18 @@ msgstr "啟動時套用的狀態："
 msgid "DROP"
 msgstr "靜音"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "靜音定限："
+msgstr ""
 
 msgid "Volume:"
 msgstr "音量："
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "語音"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "動態視訊"
+msgstr ""
 
 msgid "_Device"
 msgstr "裝置(_D)"
@@ -11122,9 +11109,8 @@ msgstr "狀態／閒置"
 msgid "Themes"
 msgstr "主題"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "語音及視像功能(_V)"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "允許所有的使用者和我聯絡"
@@ -11209,20 +11195,17 @@ msgstr "選取新名稱"
 msgid "Select Folder..."
 msgstr "選擇資料匣..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "螢幕共享"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "建立通話工作階段失敗：%s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "找不到日誌"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11233,13 +11216,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "插入影像"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "新視窗"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11248,9 +11229,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "節點類別不明"
+msgstr ""
 
 #. list button
 msgid "_Get List"

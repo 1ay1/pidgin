@@ -3,18 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Besnik <besnik@programeshqip.org>, 2013-2016
-# Besnik <besnik@programeshqip.org>, 2014
-# Besnik <besnik@programeshqip.org>, 2015
-# Besnik <besnik@programeshqip.org>, 2013
-# Besnik <besnik@programeshqip.org>, 2016
+# Besnik Bleta <besnik@programeshqip.org>, 2013-2016
+# Besnik Bleta <besnik@programeshqip.org>, 2013-2016
+# Besnik Bleta <besnik@programeshqip.org>, 2015
+# Besnik Bleta <besnik@programeshqip.org>, 2013
+# Besnik Bleta <besnik@programeshqip.org>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-07 20:59-0600\n"
-"PO-Revision-Date: 2017-09-19 11:38+0000\n"
-"Last-Translator: Besnik <besnik@programeshqip.org>\n"
+"POT-Creation-Date: 2020-06-09 22:13-0500\n"
+"PO-Revision-Date: 2020-06-06 11:06+0000\n"
+"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian (http://www.transifex.com/pidgin/pidgin/language/"
 "sq/)\n"
 "Language: sq\n"
@@ -891,7 +891,7 @@ msgid "Calling..."
 msgstr "Po thirret…"
 
 msgid "Hangup"
-msgstr ""
+msgstr "Mbylle Thirrjen"
 
 #. Number of actions
 msgid "Accept"
@@ -1839,6 +1839,10 @@ msgstr "Mesazhi është shumë i madh."
 msgid "Unable to send message."
 msgstr "S’arrihet të dërgohet mesazh."
 
+#. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
+msgid "(internal) Temporary IM peers"
+msgstr "Ortakë të Përkohshëm IM (të brendshëm)"
+
 msgid "Send Message"
 msgstr "Dërgo Mesazh"
 
@@ -2188,19 +2192,19 @@ msgstr "XML"
 
 #, c-format
 msgid ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;VETË-"
-"PËRGJIGJU&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 
 #, c-format
 msgid ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;VETË-"
-"PËRGJIGJU&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2273,6 +2277,27 @@ msgstr "Gabim konference"
 #, c-format
 msgid "Error creating session: %s"
 msgstr "Gabim në gatitjen e sesionit: %s"
+
+msgid "Could not create media pipeline"
+msgstr "S'u krijua dot kanal për median"
+
+#. Translators: This is a noun that refers to one
+#. * possible audio input device. The device can help the
+#. * user to check if her speakers or headphones have been
+#. * set up correctly for voice calling.
+msgid "Test Sound"
+msgstr "Provoni Tingullin"
+
+msgid "Disabled"
+msgstr "Çaktivizuar"
+
+#. Translators: This is a noun that refers to one
+#. * possible video input device. The device produces
+#. * a test "monoscope" image that can help the user check
+#. * the video output has been set up correctly without
+#. * needing a webcam connected to the computer.
+msgid "Test Pattern"
+msgstr "Provoni Rregullsi"
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -2384,7 +2409,7 @@ msgid "Create a new directory for each user"
 msgstr "Krijo drejtori të re për secilin përdorues"
 
 msgid "Escape the filenames"
-msgstr ""
+msgstr "Parapriji emrat e kartelave"
 
 msgid "Notes"
 msgstr "Shënime"
@@ -4898,6 +4923,19 @@ msgstr ""
 "Ju lutemi, përzgjidhni burimin e %s te i cili dëshironi të dërgoni një "
 "kartelë"
 
+#, c-format
+msgid "The queue for %s has reached its maximum length of %u."
+msgstr "Radha për %s ka mbërritur në gjatësinë e vet maksimum prej %u."
+
+msgid "XMPP stream management"
+msgstr "Administrim rrëkeje XMPP"
+
+msgid "Stanza queue is full"
+msgstr ""
+
+msgid "No further messages will be queued"
+msgstr "S’do të vihen në radhë mesazhe të tjerë"
+
 msgid "Afraid"
 msgstr "I frikësuar"
 
@@ -6363,7 +6401,7 @@ msgid "Search for Buddy by Email Address..."
 msgstr "Kërkoni një Shok përmes Adresës Email…"
 
 msgid "clientLogin"
-msgstr ""
+msgstr "clientLogin"
 
 msgid "Kerberos"
 msgstr "Kerberos"
@@ -8540,11 +8578,9 @@ msgstr "Pidgin Internet Messenger"
 msgid "Internet Messenger"
 msgstr "Lajmsjellës Internet"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Fjalosje përmes IM-së.  Mbulon AIM, Google Talk, Jabber/XMPP, MSN, Yahoo dhe "
-"të tjera"
+"Fjalosje përmes IM-je.  Mbulon AIM, Google Talk, Jabber/XMPP, dhe të tjerë"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -9696,6 +9732,9 @@ msgstr "Gabim Fatal"
 msgid "artist"
 msgstr "artist"
 
+msgid "lead developer"
+msgstr "udhëheqës zhvillimi"
+
 msgid "voice and video"
 msgstr "zë dhe figurë"
 
@@ -9731,9 +9770,6 @@ msgstr "XMPP"
 
 msgid "original author"
 msgstr "autori fillestar"
-
-msgid "lead developer"
-msgstr "udhëheqës zhvillimi"
 
 msgid "Senior Contributor/QA"
 msgstr "Kontribues i Vjetër/QA"
@@ -10721,7 +10757,7 @@ msgid "_Media"
 msgstr "_Media"
 
 msgid "_Hangup"
-msgstr ""
+msgstr "_Përfundim"
 
 msgid "Media error"
 msgstr "Gabim mediash"
@@ -11160,9 +11196,6 @@ msgstr "S’niset dot programi i formësimit të ndërmjetësve."
 msgid "Cannot start browser configuration program."
 msgstr "S’niset dot programi i formësimit të shfletuesit."
 
-msgid "Disabled"
-msgstr "Çaktivizuar"
-
 #, c-format
 msgid "Use _automatically detected IP address: %s"
 msgstr "Përdor adresë IP të zbuluar _vetvetiu: %s"
@@ -11428,6 +11461,37 @@ msgstr "Përdor në nisje gjendje prej _daljes së fundit"
 msgid "Status to a_pply at startup:"
 msgstr "Gjendje për ta _zbatuar në nisje:"
 
+msgid "DROP"
+msgstr ""
+
+#, c-format
+msgid "Silence threshold: %d%%"
+msgstr "Prag heshtjeje: %d%%"
+
+msgid "Volume:"
+msgstr "Volum:"
+
+msgid "Test Audio"
+msgstr "Provë Audio"
+
+msgid "Test Video"
+msgstr "Provë Video"
+
+msgid "_Device"
+msgstr "_Pajisje"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Input"
+msgstr "Hyrje"
+
+msgid "Output"
+msgstr "Dalje"
+
+msgid "Video"
+msgstr "Video"
+
 msgid "Interface"
 msgstr "Ndërfaqe"
 
@@ -11439,6 +11503,9 @@ msgstr "Gjendje / I plogësht"
 
 msgid "Themes"
 msgstr "Tema Grafike"
+
+msgid "Voice/Video"
+msgstr "Zë/Video"
 
 msgid "Allow all users to contact me"
 msgstr "Lejo tërë përdoruesit të lidhen me mua"
@@ -11522,6 +11589,43 @@ msgstr "Zgjidhni Emër të Ri"
 
 msgid "Select Folder..."
 msgstr "Përzgjidhni Dosje…"
+
+msgid "Screen share error"
+msgstr "Gabim ndarjeje ekrani me të tjerë"
+
+msgid "Error creating screencast request"
+msgstr "Gabim në krijim kërkese për transmetim ekrani"
+
+msgid "OpenPipeWireRemote request failed"
+msgstr "Kërkesa OpenPipeWireRemote dështoi"
+
+msgid "No file descriptor found"
+msgstr "S’u gjet përshkrues kartele"
+
+msgid "Screencast \"Start\" failed"
+msgstr "Akti \"Start\" për Transmetim ekrani dështoi"
+
+msgid "Screencast \"SelectSources\" failed"
+msgstr "Akti \"SelectSources\" për Transmetim ekrani dështoi"
+
+msgid "Screencast \"CreateSession\" failed."
+msgstr "Akti \"CreateSession\" për Transmetim ekrani dështoi."
+
+msgid "Test image"
+msgstr "Provë figure"
+
+msgid "Select window"
+msgstr "Përzgjidhni dritare"
+
+msgid "Use monitor"
+msgstr "Përdor monitor"
+
+#, c-format
+msgid "%s (%d✕%d @ %d,%d)"
+msgstr "%s (%d✕%d @ %d,%d)"
+
+msgid "Unknown output"
+msgstr "Output i panjohur"
 
 #. list button
 msgid "_Get List"
@@ -11944,7 +12048,7 @@ msgid "Add to Buddy List"
 msgstr "Shtojeni te Listë Shokësh"
 
 msgid "Gateway"
-msgstr ""
+msgstr "Kanal"
 
 msgid "Directory"
 msgstr "Drejtori"
@@ -12901,35 +13005,14 @@ msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 "Furnizon integrim me nisësin dhe menunë e shkëmbimit të mesazheve te Unity."
 
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Output"
-msgstr "Dalje"
-
 msgid "_Plugin"
 msgstr "_Shtojcë"
-
-msgid "_Device"
-msgstr "_Pajisje"
-
-msgid "Input"
-msgstr "Hyrje"
 
 msgid "P_lugin"
 msgstr "Sht_ojcë"
 
 msgid "D_evice"
 msgstr "Pa_jisje"
-
-msgid "DROP"
-msgstr ""
-
-msgid "Volume:"
-msgstr "Volum:"
 
 msgid "Silence threshold:"
 msgstr "Prag heshtjeje:"

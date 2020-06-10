@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:12-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Oriya (http://www.transifex.com/pidgin/pidgin/language/or/)\n"
 "Language: or\n"
 "MIME-Version: 1.0\n"
@@ -2127,21 +2127,17 @@ msgstr "ଏହି ସଂଭାଷଣର ଲଗିଙ୍ଗ ବିଫଳ ହେ�
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<ଫଣ୍ଟ ରଙ୍ଗ=\"#16569E\"><ଫଣ୍ଟ ଆକାର=\"2\">(%s)</ଫଣ୍ଟ > <b>%s &lt;AUTO-REPLY&gt;:</"
-"b></ଫଣ୍ଟ > %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<ଫଣ୍ଟ ରଙ୍ଗ=\"#A82F2F\"><ଫଣ୍ଟ ଆକାର=\"2\">(%s)</ଫଣ୍ଟ > <b>%s &lt;AUTO-REPLY&gt;:</"
-"b></ଫଣ୍ଟ > %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<ଫଣ୍ଟ ରଙ୍ଗ=\"ଲାଲ\"><b>ଲଗ ପଥ ପାଇବାକୁ ଅସମର୍ଥ!</b></ଫଣ୍ଟ >"
@@ -2205,17 +2201,15 @@ msgstr "ଆଲୋଚନା ତ୍ରୁଟି"
 msgid "Error creating session: %s"
 msgstr "ଅଧିବେଶନ ନିର୍ମାଣ କରିବାରେ ତ୍ରୁଟି: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "ପ୍ଲଗଇନକୁ କାଢ଼ିପାରିଲା ନାହିଁ"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "ଧ୍ୱନି ନାହିଁ"
+msgstr ""
 
 msgid "Disabled"
 msgstr "ନିଷ୍କ୍ରିୟ"
@@ -4806,9 +4800,8 @@ msgstr ""
 msgid "XMPP stream management"
 msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "ଧାଡି ପୂର୍ଣ୍ଣ "
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8374,11 +8367,8 @@ msgstr "ପିଜିନ୍ ଇଣ୍ଟରନେଟ ସଂଦେଶବାହକ"
 msgid "Internet Messenger"
 msgstr "ଇଣ୍ଟରନେଟ ସଂଦେଶବାହାକ"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"IM ଉପରେ ଚାର୍ଟ।  AIM, Google Talk, Jabber/XMPP, MSN, Yahoo ଏବଂ ସେହିପରି ଅନେକକୁ "
-"ସମର୍ଥନ କରିଥାଏ"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11235,13 +11225,11 @@ msgstr ""
 msgid "Volume:"
 msgstr ""
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "ଧ୍ବନି"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "ପ୍ରତ୍ଯକ୍ଷ ଭିଡିଓ"
+msgstr ""
 
 msgid "_Device"
 msgstr "ଉପକରଣ (_D)"
@@ -11270,9 +11258,8 @@ msgstr "ସ୍ଥିତି/ ନିଷ୍କ୍ରିଯ"
 msgid "Themes"
 msgstr "ପ୍ରସଙ୍ଗ"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "ସ୍ୱର/ଭିଡିଓ ସଂରଚନାଗୁଡ଼ିକ"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "ମତେ ସଂପର୍କ କରିବାକୁ ସବୁ ଉପୟୋଗ କର୍ତ୍ତାଙ୍କୁ ସ୍ବୀକୃତି ଦିଅ"
@@ -11357,20 +11344,17 @@ msgstr "ନୂଆ ନାମ ବାଛ"
 msgid "Select Folder..."
 msgstr "ଫୋଲଡର ମନୋନୀତ କର..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "ପରଦା ସହଭାଗ"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "ଅଧିବେଶନ ନିର୍ମାଣ କରିବାରେ ତ୍ରୁଟି: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "କୌଣସି ଲଗ ମିଳିଲା ନାହିଁ"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11381,13 +11365,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "ପ୍ରତିଛବି ଭର୍ତ୍ତି କରନ୍ତୁ"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "ନୂଆ ଉଇଣ୍ଡୋ"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11396,9 +11378,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "ଅଜଣା ନୋଡ଼ ପ୍ରକାର"
+msgstr ""
 
 #. list button
 msgid "_Get List"

@@ -6,14 +6,14 @@
 # Jaakko Helleranta <jaakko@helleranta.com>, 2016
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2014-2015
 # Mikaela Suomalainen <mikaela.suomalainen@outlook.com>, 2014
-# Kasvain <kasvain@gmail.com>, 2015
+# hondakassi <kasvain@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:09-0500\n"
-"PO-Revision-Date: 2017-09-19 17:01+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/pidgin/pidgin/language/"
 "fi/)\n"
 "Language: fi\n"
@@ -2170,21 +2170,17 @@ msgstr "Tämän keskustelun kirjaaminen lokiin epäonnistui."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;"
-"AUTOMAATTIVASTAUS&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;"
-"AUTOMAATTIVASTAUS&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Lokin hakemistopolkua ei löydy!</b></font>"
@@ -2251,17 +2247,15 @@ msgstr "Virhe neuvottelussa"
 msgid "Error creating session: %s"
 msgstr "Virhe luotaessa istuntoa: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Liitännäistä ei voi poistaa käytöstä"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Ei ääntä"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Poissa käytöstä"
@@ -4882,9 +4876,8 @@ msgstr ""
 msgid "XMPP stream management"
 msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Jono täynnä"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8490,11 +8483,8 @@ msgstr "Pidgin-pikaviestin"
 msgid "Internet Messenger"
 msgstr "Pikaviestin"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Keskustele pikaviestinverkoissa. Tuki muun muassa seuraaville palveluille: "
-"AIM, Google Talk, Jabber/XMPP, MSN, Yahoo jne."
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11353,20 +11343,18 @@ msgstr "Tila jota _käytetään käynnistettäessä:"
 msgid "DROP"
 msgstr "DROP"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Hiljaisuuden kynnys:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Äänenvoimakkuus:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Ääni"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Live-video"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Laite"
@@ -11395,9 +11383,8 @@ msgstr "Tila / jouten"
 msgid "Themes"
 msgstr "Teemat"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "Ääni ja _video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Salli kaikkien käyttäjien ottaa minuun yhteyttä"
@@ -11482,20 +11469,17 @@ msgstr "Valitse uusi nimi"
 msgid "Select Folder..."
 msgstr "Valitse kansio..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Näytön jakaminen"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Virhe luotaessa istuntoa: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Lokeja ei löytynyt"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11506,13 +11490,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Liitä kuva"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Uusi ikkuna"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11521,9 +11503,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Tuntematon solmutyyppi"
+msgstr ""
 
 #. list button
 msgid "_Get List"

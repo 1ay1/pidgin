@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:12-0500\n"
-"PO-Revision-Date: 2018-01-17 01:37+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/pidgin/pidgin/"
 "language/nb/)\n"
 "Language: nb\n"
@@ -2174,21 +2174,17 @@ msgstr "Loggføring av denne samtalen feilet."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;"
-"STANDARDSVAR&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;"
-"STANDARDSVAR&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2263,17 +2259,15 @@ msgstr "Konferansefeil"
 msgid "Error creating session: %s"
 msgstr "Klarte ikke å opprette økt: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Klarte ikke å avlesse tillegget"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Ingen lyd"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Deaktivert"
@@ -4904,13 +4898,11 @@ msgstr ""
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "Manglende ID i XMPP-dataflyt"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Køen er full"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8547,10 +8539,8 @@ msgstr "Pidgin lynmeldingsklient"
 msgid "Internet Messenger"
 msgstr "Lynmeldingsklient"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr ""
-"Samtale over IM. Støtter AIM, Google Talk, Jabber/XMPP, MSN, Yahoo! med mer"
+msgstr "Sludre med lynmeldinger. Støtter AIM, Google Talk, XMPP, med mer"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -10074,11 +10064,11 @@ msgid ""
 msgstr ""
 "<font size=\"4\"><b>Brukerstøtte fra andre Pidgin-brukere</b></font> er "
 "tilgjengelig ved å sende en e-post til <a href=\"mailto:support@pidgin.im"
-"\">support@pidgin.im</a><br/>Dette er en <b>offentlig</b> epost-liste! (<a "
+"\">support@pidgin.im</a><br/>Dette er en <b>offentlig</b> e-postliste! (<a "
 "href=\"https://pidgin.im/pipermail/support/\">arkiv</a>)<br/>Vi kan ikke "
-"bistå problemer med tredjeparts-protokoller eller programtillegg!<br/"
-">Listens primære språk er <b>Engelsk</b>. Du er velkommen til å bruke et "
-"annet språk, men svarene kan utebli eller være mindre hjelpsomme.<br/>"
+"bistå problemer med tredjepartsprotokoller eller programtillegg!<br/>Listens "
+"primære språk er <b>Engelsk</b>. Du er velkommen til å bruke et annet språk, "
+"men svarene kan utebli eller være mindre hjelpsomme.<br/>"
 
 #, c-format
 msgid "About %s"
@@ -10402,7 +10392,7 @@ msgid "The font to use for the typing notification"
 msgstr "Skrifttypen som skal brukes ved skrivevarsling"
 
 msgid "Enable typing notification"
-msgstr "Aktiver varsling om skriving"
+msgstr "Aktiver skrivevarsling"
 
 msgid ""
 "<span size='larger' weight='bold'>Unrecognized file type</span>\n"
@@ -11423,20 +11413,18 @@ msgstr "L_egg til status ved oppstart:"
 msgid "DROP"
 msgstr "Legg på"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Stillhetsavbrudds-terskel:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Lydstyrke:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Lyd"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Live Video"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Enhet"
@@ -11465,9 +11453,8 @@ msgstr "Status / inaktiv"
 msgid "Themes"
 msgstr "Drakter"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Lydopptak og video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Tillat alle brukere å kontakte meg"
@@ -11552,20 +11539,17 @@ msgstr "Velg nytt navn"
 msgid "Select Folder..."
 msgstr "Velg mappe…"
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Skjermdeling"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Klarte ikke å opprette økt: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Ingen logger ble funnet"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11576,13 +11560,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Sett inn bilde"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Nytt vindu"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11591,9 +11573,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Ukjent nodetype"
+msgstr ""
 
 #. list button
 msgid "_Get List"

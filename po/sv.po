@@ -6,13 +6,14 @@
 # Anders Jonsson <transifex@norsjovallen.se>, 2016
 # Josef Andersson <josef.andersson@fripost.org>, 2014-2016
 # Linus Malmgren <linus@malmgren.nu>, 2015
+# Sebastian Rasmussen <sebras@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 22:13-0500\n"
-"PO-Revision-Date: 2017-09-23 19:10+0000\n"
-"Last-Translator: Josef Andersson <josef.andersson@fripost.org>\n"
+"POT-Creation-Date: 2020-06-09 22:14-0500\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/pidgin/pidgin/language/"
 "sv/)\n"
 "Language: sv\n"
@@ -2164,21 +2165,17 @@ msgstr "Loggning av denna konversationen misslyckades."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-SVAR&gt;:"
-"</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-SVAR&gt;:"
-"</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Kunde inte hitta loggens sökväg!</b></font>"
@@ -2251,17 +2248,15 @@ msgstr "Konferensfel"
 msgid "Error creating session: %s"
 msgstr "Problem att skapa session: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Kunde inte stoppa insticksmodulen"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Inga ljud"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Avaktiverad"
@@ -4887,13 +4882,11 @@ msgstr "Var god välj vilken tillflykt för %s du vill sända filen till"
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "XMPP-strömmen saknar ID"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Kö full"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8535,11 +8528,8 @@ msgstr "Pidgin meddelandeklient"
 msgid "Internet Messenger"
 msgstr "Meddelandeklient"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr ""
-"Skicka snabbmeddelanden.  Stödjer AIM, Google Talk, Jabber/XMPP, MSN, Yahoo "
-"med fler"
+msgstr "Chatt över IM. Stöd för AIM, GoogleTalk, Jabber/XMPP med flera."
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11422,20 +11412,18 @@ msgstr "Status att använda vid u_ppstart:"
 msgid "DROP"
 msgstr "DROP"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Tystnadströskel:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Volym:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Ljud"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Live-video"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Enhet"
@@ -11464,9 +11452,8 @@ msgstr "Status / Inaktiv"
 msgid "Themes"
 msgstr "Teman"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Röst och video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Tillåt alla användare att kontakta mig"
@@ -11551,20 +11538,17 @@ msgstr "Välj nytt namn"
 msgid "Select Folder..."
 msgstr "Välj katalog…"
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Skärmdelning"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Problem att skapa session: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Inga loggar hittades"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11575,13 +11559,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Infoga bild"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Nytt fönster"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11590,9 +11572,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Okänd nodtyp"
+msgstr ""
 
 #. list button
 msgid "_Get List"

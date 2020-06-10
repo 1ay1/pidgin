@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:14-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Thai (http://www.transifex.com/pidgin/pidgin/language/th/)\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
@@ -2118,9 +2118,8 @@ msgstr ""
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "เสียง"
+msgstr ""
 
 msgid "Disabled"
 msgstr ""
@@ -10906,9 +10905,8 @@ msgstr ""
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "ไม่มีบันทึก"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -10919,13 +10917,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "แทรกรูป"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "หน้าต่างใหม่"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -10934,9 +10930,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "เกิดข้อผิดพลาดไม่ทราบสาเหตุ"
+msgstr ""
 
 #. list button
 msgid "_Get List"

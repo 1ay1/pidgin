@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:09-0500\n"
-"PO-Revision-Date: 2017-09-23 19:10+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: English (Australia) (http://www.transifex.com/pidgin/pidgin/"
 "language/en_AU/)\n"
 "Language: en_AU\n"
@@ -2170,21 +2170,17 @@ msgstr "Logging of this conversation failed."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Unable to find log path!</b></font>"
@@ -2257,17 +2253,15 @@ msgstr "Conference error"
 msgid "Error creating session: %s"
 msgstr "Error creating session: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Could not unload plugin"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "No Sound"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Disabled"
@@ -4876,13 +4870,11 @@ msgstr ""
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "XMPP stream missing ID"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Queue full"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8489,10 +8481,8 @@ msgstr "Pidgin Internet Messenger"
 msgid "Internet Messenger"
 msgstr "Internet Messenger"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, MSN, Yahoo and more"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11367,20 +11357,18 @@ msgstr "Status to a_pply at startup:"
 msgid "DROP"
 msgstr "DROP"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Silence threshold:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Volume:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Audio"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Live Video"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Device"
@@ -11409,9 +11397,8 @@ msgstr "Status / Idle"
 msgid "Themes"
 msgstr "Themes"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Voice and Video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Allow all users to contact me"
@@ -11496,20 +11483,17 @@ msgstr "Choose New Name"
 msgid "Select Folder..."
 msgstr "Select Folder..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Screen Sharing"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Error creating session: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "No logs were found"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11520,13 +11504,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Insert Image"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "New window"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11535,9 +11517,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Unknown node type"
+msgstr ""
 
 #. list button
 msgid "_Get List"

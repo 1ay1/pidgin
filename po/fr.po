@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:09-0500\n"
-"PO-Revision-Date: 2017-09-19 19:20+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: French (http://www.transifex.com/pidgin/pidgin/language/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2176,21 +2176,17 @@ msgstr "Échec de l'archivage de cette conversation."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;Réponse "
-"automatique&gt;&nbsp;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;Réponse "
-"automatique&gt;&nbsp;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2259,17 +2255,15 @@ msgstr "Erreur de conférence"
 msgid "Error creating session: %s"
 msgstr "Erreur à la création de la session : %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Impossible de décharger le plugin"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Pas de son"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Désactivé"
@@ -4929,13 +4923,11 @@ msgstr ""
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "ID de flux XMPP manquant"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "File d'attente pleine"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8590,11 +8582,8 @@ msgstr "Messagerie internet Pidgin"
 msgid "Internet Messenger"
 msgstr "Messagerie internet"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Conversation par messages instantanés. Supporte AIM, Google Talk, Jabber/"
-"XMPP, MSN, Yahoo et d'autres"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11477,20 +11466,18 @@ msgstr "État _utilisé au démarrage :"
 msgid "DROP"
 msgstr "Couper"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Seuil du silence :"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Volume :"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Audio"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Live Video"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Appareil"
@@ -11519,9 +11506,8 @@ msgstr "État / Inactivité"
 msgid "Themes"
 msgstr "Thèmes"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Voix et vidéo"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Permettre à tous les utilisateurs de me contacter"
@@ -11606,20 +11592,17 @@ msgstr "Choisir un nouveau nom"
 msgid "Select Folder..."
 msgstr "Choisir un dossier..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Partage d'écran"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Erreur à la création de la session : %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Aucune archive n'a été trouvée."
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11630,13 +11613,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Insérer une image"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Nouvelle fenêtre"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11645,9 +11626,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Type de noeud inconnu"
+msgstr ""
 
 #. list button
 msgid "_Get List"

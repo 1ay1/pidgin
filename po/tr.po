@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:14-0500\n"
-"PO-Revision-Date: 2017-09-19 13:45+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/pidgin/pidgin/language/"
 "tr/)\n"
 "Language: tr\n"
@@ -2179,21 +2179,17 @@ msgstr "Konuşmanın kaydı yapılamadı."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;OTOMATIK-"
-"CEVAPLA&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;OTOMATIK-"
-"CEVAPLA&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Kayıt dosyası yolu bulunamadı!</b></font>"
@@ -2265,17 +2261,15 @@ msgstr "Konferans hatası"
 msgid "Error creating session: %s"
 msgstr "%s oturumunu başlatırken hata."
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Eklenti kaldırılamadı"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Ses Yok"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Etkisizleştirildi"
@@ -4896,13 +4890,11 @@ msgstr "Lütfen bir dosya göndermek istediğiniz %s kaynağını seçin"
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "XMPP akışı kimliği bulunamadı"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Liste dolu"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8517,11 +8509,8 @@ msgstr "Pidgin İnternet Mesajlaşma Aracı"
 msgid "Internet Messenger"
 msgstr "İnternet Mesajlaşma Aracı"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Anında Sohbet. AIM, Google Talk, Jabber/XMPP, MSN, Yahoo ve daha fazlasını "
-"destekler"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11395,20 +11384,18 @@ msgstr "Başlangıçta uy_gulanacak durum:"
 msgid "DROP"
 msgstr "BIRAK"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Sessiz eşik:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Ses:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Ses"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Canlı Görüntü"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Aygıt"
@@ -11437,9 +11424,8 @@ msgstr "Durum / Boşta"
 msgid "Themes"
 msgstr "Temalar"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Ses ve Video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Tüm kullanıcılara izin ver"
@@ -11525,20 +11511,17 @@ msgstr "Yeni İsim Seç"
 msgid "Select Folder..."
 msgstr "Dizin Seç..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Ekran Paylaşımı"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "%s oturumunu başlatırken hata."
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Hiç kayıt bulunamadı"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11549,13 +11532,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Resim Ekle"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Yeni pencere"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11564,9 +11545,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Bilinmeyen düğüm tipi"
+msgstr ""
 
 #. list button
 msgid "_Get List"

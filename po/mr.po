@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:12-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Marathi (http://www.transifex.com/pidgin/pidgin/language/"
 "mr/)\n"
 "Language: mr\n"
@@ -2131,21 +2131,17 @@ msgstr "या संवादाचे लॉगिंग अपयशी झ�
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<फॉन्ट रंग=\"#16569E\"><फॉन्ट आकार=\"2\">(%s)</फॉन्ट> <b>%s &lt;AUTO-REPLY&gt;:</"
-"b></फॉन्ट> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"REPLY&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>लॉग मार्ग शोधण्यात असमर्थ!</b></font>"
@@ -2210,17 +2206,15 @@ msgstr "सभा त्रुटी"
 msgid "Error creating session: %s"
 msgstr "सत्र निर्माण करतेवेळी त्रुटी: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "प्लगइन लोड करणे अशक्य"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "आवाज नाही"
+msgstr ""
 
 msgid "Disabled"
 msgstr "अकार्यान्वीत"
@@ -4809,13 +4803,11 @@ msgstr "फाइल ज्या %s वापरकर्त्याकडे 
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "XMPP सट्रीमचे ID आढळले नाही"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "रांग पूर्ण आहे"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8389,11 +8381,8 @@ msgstr "Pidgin इंटरनेट संदेशवाहक"
 msgid "Internet Messenger"
 msgstr "इंटरनेट मेसेंजर"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"IM वरील संभाषण. AIM, Google Talk, Jabber/XMPP, MSN, Yahoo व आणखीकरीता समर्थन "
-"पुरवतो"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11244,20 +11233,18 @@ msgstr "सुरू होताना लागू करण्याची �
 msgid "DROP"
 msgstr "DROP"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "शांतता मर्यादा:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "आवाज/ग्रंथखंड:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "ऑडिओ"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "प्रत्यक्ष व्हिडीओ"
+msgstr ""
 
 msgid "_Device"
 msgstr "साधण (_D)"
@@ -11286,9 +11273,8 @@ msgstr "सद्यःस्थिती/निष्क्रिय"
 msgid "Themes"
 msgstr "दृष्य कल्पना"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_आवाज आणि व्हिडिओ"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "सर्व वापरकर्त्यांनी मला संर्पक करण्याची परवानगी द्या"
@@ -11373,20 +11359,17 @@ msgstr "नवीन नाव निवडा"
 msgid "Select Folder..."
 msgstr "धारक निवडा..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "स्क्रिन शेअरींग"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "सत्र निर्माण करतेवेळी त्रुटी: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "लॉग्ज सापडले नाहीत"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11397,13 +11380,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "प्रतिमा अंतर्भूत करा"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "नवीन विन्डो "
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11412,9 +11393,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "अपरिचीत नोडचे प्रकार"
+msgstr ""
 
 #. list button
 msgid "_Get List"

@@ -4,13 +4,14 @@
 #
 # Translators:
 # Vladimir "Kaladan" Petkov <kaladan@gmail.com>, 2004,2006-2007
+# Любомир Василев, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 22:07-0500\n"
-"PO-Revision-Date: 2017-09-19 19:20+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"POT-Creation-Date: 2020-06-09 22:08-0500\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/pidgin/pidgin/language/"
 "bg/)\n"
 "Language: bg\n"
@@ -51,21 +52,25 @@ msgid "Error"
 msgstr "Грешка"
 
 msgid "Account was not modified"
-msgstr ""
+msgstr "Акаунтът не беше променен"
 
 msgid "Account was not added"
-msgstr ""
+msgstr "Акаунтът не беше добавен"
 
 msgid "Username of an account must be non-empty."
-msgstr ""
+msgstr "Потребителското име за акаунта не трябва да е празно."
 
 msgid ""
 "The account's protocol cannot be changed while it is connected to the server."
 msgstr ""
+"Протоколът на акаунта не може да бъде променян, докато той е свързан със "
+"сървъра."
 
 msgid ""
 "The account's username cannot be changed while it is connected to the server."
 msgstr ""
+"Потребителското има на акаунта не може да бъде променяно, докато той е "
+"свързан със сървъра."
 
 msgid "New mail notifications"
 msgstr "Известяване за нова е-поща"
@@ -77,7 +82,7 @@ msgid "There are no protocol plugins installed."
 msgstr ""
 
 msgid "(You probably forgot to 'make install'.)"
-msgstr ""
+msgstr "(Сигурно сте забравили да изпълните командата „make install“.)"
 
 msgid "Modify Account"
 msgstr "Промяна на акаунт"
@@ -89,7 +94,7 @@ msgid "Protocol:"
 msgstr "Протокол:"
 
 msgid "Username:"
-msgstr ""
+msgstr "Потребителско име:"
 
 msgid "Password:"
 msgstr "Парола:"
@@ -99,12 +104,12 @@ msgstr "Псевдоним:"
 
 #. Register checkbox
 msgid "Create this account on the server"
-msgstr ""
+msgstr "Създаване на този акаунт на сървъра"
 
 #. Cancel button
 #. Cancel
 msgid "Cancel"
-msgstr "Отказване"
+msgstr "Отказ"
 
 #. Save button
 #. Save
@@ -113,10 +118,10 @@ msgstr "Запазване"
 
 #, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr "Сигурни ли сте, че искате да изтриете %s?"
+msgstr "Наистина ли искате да изтриете %s?"
 
 msgid "Delete Account"
-msgstr ""
+msgstr "Изтриване на акаунта"
 
 #. Delete button
 msgid "Delete"
@@ -126,7 +131,7 @@ msgid "Accounts"
 msgstr "Акаунти"
 
 msgid "You can enable/disable accounts from the following list."
-msgstr ""
+msgstr "Можете да включвате/изключвате акаунтите от следния списък."
 
 #. Add button
 msgid "Add"
@@ -134,7 +139,7 @@ msgstr "Добавяне"
 
 #. Modify button
 msgid "Modify"
-msgstr ""
+msgstr "Промяна"
 
 #, c-format
 msgid "%s%s%s%s has made %s his or her buddy%s%s"
@@ -145,7 +150,7 @@ msgstr "Да се добави ли потребителят в списъка �
 
 #, c-format
 msgid "%s%s%s%s wants to add %s to his or her buddy list%s%s"
-msgstr ""
+msgstr "%s%s%s%s иска да добави %s в своя списък от приятели%s%s"
 
 msgid "Authorize buddy?"
 msgstr ""
@@ -161,46 +166,50 @@ msgid ""
 "Online: %d\n"
 "Total: %d"
 msgstr ""
+"На линия: %d\n"
+"Общо: %d"
 
 #, c-format
 msgid "Account: %s (%s)"
-msgstr ""
+msgstr "Акаунт: %s (%s)"
 
 #, c-format
 msgid ""
 "\n"
 "Last Seen: %s ago"
 msgstr ""
+"\n"
+"Последно на линия: преди%s"
 
 msgid "Default"
-msgstr ""
+msgstr "По подразбиране"
 
 msgid "You must provide a username for the buddy."
-msgstr ""
+msgstr "Трябва да посочите потребителско име за приятеля."
 
 msgid "You must provide a group."
-msgstr ""
+msgstr "Трябва да посочите група."
 
 msgid "You must select an account."
-msgstr ""
+msgstr "Трябва да изберете акаунт."
 
 msgid "The selected account is not online."
-msgstr ""
+msgstr "Избраният акаунт не е на линия."
 
 msgid "Error adding buddy"
-msgstr ""
+msgstr "Грешка при добавянето на приятел"
 
 msgid "Username"
 msgstr "Потребителско име"
 
 msgid "Alias (optional)"
-msgstr ""
+msgstr "Псевдоним (незадължително)"
 
 msgid "Invite message (optional)"
-msgstr ""
+msgstr "Съобщение за покана (незадължително)"
 
 msgid "Add in group"
-msgstr ""
+msgstr "Добавяне в групата"
 
 msgid "Account"
 msgstr "Акаунт"
@@ -209,7 +218,7 @@ msgid "Add Buddy"
 msgstr "Добавяне на приятел"
 
 msgid "Please enter buddy information."
-msgstr ""
+msgstr "Въведете информация за приятеля."
 
 msgid "Chats"
 msgstr "Разговори"
@@ -221,49 +230,49 @@ msgid "Alias"
 msgstr "Псевдоним"
 
 msgid "Group"
-msgstr ""
+msgstr "Група"
 
 msgid "Auto-join"
-msgstr ""
+msgstr "Авт. присъединяване"
 
 msgid "Add Chat"
 msgstr "Добавяне на разговор"
 
 msgid "You can edit more information from the context menu later."
-msgstr ""
+msgstr "По-късно ще можете да редактирате информацията от контекстното меню."
 
 msgid "Error adding group"
-msgstr ""
+msgstr "Грешка при добавянето на група"
 
 msgid "You must give a name for the group to add."
-msgstr ""
+msgstr "Трябва да въведете име на групата, която искате да добавите."
 
 msgid "Add Group"
 msgstr "Добавяне на група"
 
 msgid "Enter the name of the group"
-msgstr ""
+msgstr "Въведете име за групата"
 
 msgid "Edit Chat"
-msgstr ""
+msgstr "Редактиране на разговора"
 
 msgid "Please Update the necessary fields."
 msgstr ""
 
 msgid "Edit"
-msgstr ""
+msgstr "Редактиране"
 
 msgid "Edit Settings"
-msgstr ""
+msgstr "Редактиране на настройките"
 
 msgid "Information"
-msgstr ""
+msgstr "Информация"
 
 msgid "Retrieving..."
-msgstr ""
+msgstr "Получаване…"
 
 msgid "Get Info"
-msgstr "Показване на данни"
+msgstr "Показване на данните"
 
 msgid "Add Buddy Pounce"
 msgstr ""
@@ -2128,9 +2137,8 @@ msgstr ""
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "/Инструменти/Изключване на звуците"
+msgstr ""
 
 msgid "Disabled"
 msgstr ""
@@ -4643,9 +4651,8 @@ msgstr ""
 msgid "XMPP stream management"
 msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Опашката е запълнена"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -10860,9 +10867,8 @@ msgstr ""
 msgid "Test Audio"
 msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Живо видео"
+msgstr ""
 
 msgid "_Device"
 msgstr ""
@@ -10891,9 +10897,8 @@ msgstr ""
 msgid "Themes"
 msgstr ""
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "Живо видео"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Разрешавам на всички потребители да се свързват с мен"
@@ -10981,9 +10986,8 @@ msgstr ""
 msgid "Select Folder..."
 msgstr ""
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Грешка при обработката на XML"
+msgstr ""
 
 msgid "Error creating screencast request"
 msgstr ""
@@ -10991,9 +10995,8 @@ msgstr ""
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Няма намерени дневници"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11004,13 +11007,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Добавяне на изображение"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Нов прозорец"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11019,9 +11020,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Непозната грешка"
+msgstr ""
 
 #. list button
 msgid "_Get List"

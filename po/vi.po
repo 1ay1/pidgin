@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:14-0500\n"
-"PO-Revision-Date: 2017-09-19 19:26+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/pidgin/pidgin/language/"
 "vi/)\n"
 "Language: vi\n"
@@ -2163,21 +2163,17 @@ msgstr "Không thể theo dõi được cuộc trao đổi này."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;Trả-Lời-Tự-"
-"Động&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;Trả-Lời-Tự-"
-"Động&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2245,17 +2241,15 @@ msgstr "Lỗi hội thảo"
 msgid "Error creating session: %s"
 msgstr "Gặp lỗi khi tạo buổi hợp: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Không thể bỏ nạp phần bổ sung"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Không có âm thanh"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Bị tắt"
@@ -4892,13 +4886,11 @@ msgstr "Hãy chọn tài nguyên nào của %s cho đó bạn muốn gửi tập
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "Dòng XMPP thiếu ID "
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Hàng đợi đã đầy"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8495,11 +8487,8 @@ msgstr "Tin Nhắn Pidgin"
 msgid "Internet Messenger"
 msgstr "Tin Nhắn"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Trò chuyện qua mạng tin nhắn tức khắc: hỗ trợ AIM, Google Talk, Jabber/XMPP, "
-"MSN, Yahoo và nhiều mạng khác"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11354,20 +11343,18 @@ msgstr "Trạng thái cần dùng khi _khởi chạy:"
 msgid "DROP"
 msgstr "DROP"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Ngưỡng yên tĩnh:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Â_m lượng:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Âm thanh"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Ảnh động trực tiếp"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Thiết bị"
@@ -11396,9 +11383,8 @@ msgstr "Trạng thái / Nghỉ"
 msgid "Themes"
 msgstr "Sắc thái"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "Â_m thanh và video "
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Cho phép mọi người dùng liên lạc với bạn"
@@ -11483,20 +11469,17 @@ msgstr "Chọn tên mới"
 msgid "Select Folder..."
 msgstr "Chọn thư mục..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Chia sẻ màn hình"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Gặp lỗi khi tạo buổi hợp: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Không tìm thấy sổ theo dõi"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11507,13 +11490,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Chèn ảnh"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Cửa sổ mới"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11522,9 +11503,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Mã nút thông tin không rõ"
+msgstr ""
 
 #. list button
 msgid "_Get List"

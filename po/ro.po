@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:13-0500\n"
-"PO-Revision-Date: 2017-09-19 11:39+0000\n"
-"Last-Translator: drazvan\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/pidgin/pidgin/language/"
 "ro/)\n"
 "Language: ro\n"
@@ -2188,21 +2188,17 @@ msgstr "Înregistrarea acestei discuții a eșuat."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;Răspuns "
-"automat&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;Răspuns "
-"automat&gt;>:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Nu s-a găsit calea înregistrărilor!</b></font>"
@@ -2269,17 +2265,15 @@ msgstr "Eroare de conferință"
 msgid "Error creating session: %s"
 msgstr "Eroare la crearea sesiunii: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Nu s-a putut descărca modulul"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Fără audio"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Dezactivat"
@@ -4909,13 +4903,11 @@ msgstr ""
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "Lipsește ID-ul fluxului XMPP"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Coadă plină"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8592,11 +8584,8 @@ msgstr "Mesagerul Pidgin"
 msgid "Internet Messenger"
 msgstr "Mesagerie instant"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Chat prin mesaje instant. Suportă rețelele AIM, Google Talk, Jabber/XMPP, "
-"MSN, Yahoo și altele."
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11481,20 +11470,18 @@ msgstr "Status de utili_zat la pornire:"
 msgid "DROP"
 msgstr "Liniște"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Prag de detectare a liniștii:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Volum:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Audio"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Video în direct"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Dispozitiv"
@@ -11523,9 +11510,8 @@ msgstr "Statusuri"
 msgid "Themes"
 msgstr "Teme"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Voce și video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Permite tuturor să mă contacteze"
@@ -11610,20 +11596,17 @@ msgstr "Nume nou"
 msgid "Select Folder..."
 msgstr "Alegeți un director..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Partajare ecran"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Eroare la crearea sesiunii: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Nu s-au găsit înregistrări."
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11634,13 +11617,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Inserare imagine"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "În ferestre noi"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11649,9 +11630,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Tip necunoscut de nod"
+msgstr ""
 
 #. list button
 msgid "_Get List"

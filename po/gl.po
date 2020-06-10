@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:10-0500\n"
-"PO-Revision-Date: 2017-09-19 19:20+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Galician (http://www.transifex.com/pidgin/pidgin/language/"
 "gl/)\n"
 "Language: gl\n"
@@ -2187,21 +2187,17 @@ msgstr "O rexistro desta conversa fallou."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;RESPOSTA "
-"AUTOMÁTICA&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;RESPOSTA "
-"AUTOMÁTICA&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2276,17 +2272,15 @@ msgstr "Erro de conferencia"
 msgid "Error creating session: %s"
 msgstr "Produciuse un erro ao crear a sesión: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Non foi posíbel desactivar o complemento"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Sen son"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Desactivado"
@@ -4931,13 +4925,11 @@ msgstr "Seleccione o recurso de %s ao que quere enviar o ficheiro"
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "Falta o ID do fluxo XMPP"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Fila chea"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8583,11 +8575,8 @@ msgstr "Mensaxería na Internet de Pidgin"
 msgid "Internet Messenger"
 msgstr "Mensaxería na Internet"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Conversar mediante IM. Permite usar AIM, Google Talk, Jabber/XMPP, MSN, "
-"Yahoo e outros"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11464,20 +11453,18 @@ msgstr "Estado para _aplicar ao iniciar:"
 msgid "DROP"
 msgstr "SOLTAR"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Limiar de silencio:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Volume:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Audio"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Vídeo en directo"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Dispositivo"
@@ -11506,9 +11493,8 @@ msgstr "Estado / Inactivo"
 msgid "Themes"
 msgstr "Temas"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Voz e vídeo"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Permitir que todos os usuarios contacten comigo"
@@ -11595,20 +11581,17 @@ msgstr "Escoller un nome novo"
 msgid "Select Folder..."
 msgstr "Seleccionar cartafol..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Pantalla compartida"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Produciuse un erro ao crear a sesión: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Non se atoparon rexistros"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11619,13 +11602,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Inserir imaxe"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Nova xanela"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11634,9 +11615,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Tipo de nodo descoñecido"
+msgstr ""
 
 #. list button
 msgid "_Get List"

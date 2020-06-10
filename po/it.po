@@ -3,17 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Giuseppe Pignataro (Fasbyte01) <rogepix@gmail.com>, 2015
-# Giuseppe Pignataro (Fasbyte01) <rogepix@gmail.com>, 2015
+# Giuseppe Pignataro <rogepix@gmail.com>, 2015
+# Giuseppe Pignataro <rogepix@gmail.com>, 2015
+# Giuseppe Pignataro <rogepix@gmail.com>, 2015
 # Saverio <saverio.brancaccio@gmail.com>, 2015
-# Sebastiano Pistore <SebastianoPistore.info@protonmail.ch>, 2016-2017
+# SebastianoPistore <SebastianoPistore.info@protonmail.ch>, 2016-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:10-0500\n"
-"PO-Revision-Date: 2017-09-19 19:20+0000\n"
-"Last-Translator: Sebastiano Pistore <SebastianoPistore.info@protonmail.ch>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Italian (http://www.transifex.com/pidgin/pidgin/language/"
 "it/)\n"
 "Language: it\n"
@@ -657,7 +658,7 @@ msgid "You are not connected."
 msgstr "Non sei connesso."
 
 msgid "<AUTO-REPLY> "
-msgstr "<RISPOSTA AUTOMATICA>"
+msgstr "<RISPOSTA AUTOMATICA> "
 
 #, c-format
 msgid "List of %d user:\n"
@@ -880,7 +881,7 @@ msgstr "Dimensione totale del log:"
 
 #. Search box *********
 msgid "Scroll/Search: "
-msgstr "Scorri/cerca:"
+msgstr "Scorri/cerca: "
 
 #, c-format
 msgid "Conversations in %s"
@@ -1213,7 +1214,7 @@ msgid "Change status when idle"
 msgstr "Modifica lo stato quando sei inattivo"
 
 msgid "Minutes before changing status"
-msgstr "Minuti prima di modificare lo stato:"
+msgstr "Minuti prima di modificare lo stato"
 
 msgid "Change status to"
 msgstr "Cambia lo stato in"
@@ -1319,7 +1320,7 @@ msgid "Sound Method"
 msgstr "Metodo del suono"
 
 msgid "Method: "
-msgstr "Metodo:"
+msgstr "Metodo: "
 
 #, c-format
 msgid ""
@@ -1385,7 +1386,7 @@ msgid "Type"
 msgstr "Tipo"
 
 msgid "Message"
-msgstr "Messaggio:"
+msgstr "Messaggio"
 
 #. Use
 msgid "Use"
@@ -1586,7 +1587,7 @@ msgid "Offline Buddies"
 msgstr "Contatti non in linea"
 
 msgid "Online/Offline"
-msgstr " In linea/Non in linea"
+msgstr "In linea/Non in linea"
 
 msgid "Meebo"
 msgstr "Meebo"
@@ -1615,7 +1616,7 @@ msgid "GntLastlog"
 msgstr "Lastlog gnt"
 
 msgid "Lastlog plugin."
-msgstr "Plugin Lastlog"
+msgstr "Plugin Lastlog."
 
 msgid "accounts"
 msgstr "account"
@@ -2205,21 +2206,17 @@ msgstr "Il log di questa conversazione non è riuscito."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;RISPOSTA "
-"AUTOMATICA&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;RISPOSTA "
-"AUTOMATICA&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2295,17 +2292,15 @@ msgstr "Errore nella conferenza"
 msgid "Error creating session: %s"
 msgstr "Errore nella creazione della sessione: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Impossibile rimuovere il plugin"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Nessun suono"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Disabilitato"
@@ -2541,7 +2536,7 @@ msgstr "Rimuovi il tempo di inattività per tutti gli account"
 
 msgid "Allows you to hand-configure how long you've been idle"
 msgstr ""
-"Consente di configurare manualmente per quanto tempo sei stato inattivo."
+"Consente di configurare manualmente per quanto tempo sei stato inattivo"
 
 #. *< type
 #. *< ui_requirement
@@ -2611,7 +2606,7 @@ msgstr "Nascondi join/part"
 #. *< version
 #. *  summary
 msgid "Hides extraneous join/part messages."
-msgstr "Nasconde i messaggi estranei di join/part"
+msgstr "Nasconde i messaggi estranei di join/part."
 
 #. *  description
 msgid ""
@@ -2772,7 +2767,7 @@ msgstr "A capo"
 #. *< name
 #. *< version
 msgid "Prepends a newline to displayed message."
-msgstr "Manda a capo ogni messaggio mostrato"
+msgstr "Manda a capo ogni messaggio mostrato."
 
 #. *< summary
 msgid ""
@@ -4681,8 +4676,7 @@ msgstr "Impossibile richiamare %s con un buzz: non conosco nulla dell'utente."
 #, c-format
 msgid "Unable to buzz, because %s might be offline."
 msgstr ""
-"Impossibile richiamare %s con un buzz: l'utente potrebbe non essere in "
-"linea. "
+"Impossibile richiamare %s con un buzz: l'utente potrebbe non essere in linea."
 
 #, c-format
 msgid ""
@@ -4872,7 +4866,7 @@ msgstr "Errore messaggio XMPP"
 
 #, c-format
 msgid "(Code %s)"
-msgstr " (Codice %s)"
+msgstr "(Codice %s)"
 
 msgid "A custom smiley in the message is too large to send."
 msgstr ""
@@ -4958,13 +4952,11 @@ msgstr "Scegli a quale risorsa di %s vuoi inviare un file"
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "ID dello stream XMPP mancante"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Coda piena"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -5266,7 +5258,7 @@ msgid "Conference does not exist"
 msgstr "La conferenza non esiste"
 
 msgid "A folder with that name already exists"
-msgstr "Esiste già una cartella con quel nome."
+msgstr "Esiste già una cartella con quel nome"
 
 msgid "Not supported"
 msgstr "Non supportato"
@@ -6812,7 +6804,7 @@ msgid "Conference Closed"
 msgstr "Conferenza chiusa"
 
 msgid "Unable to send message: "
-msgstr "Impossibile inviare il messaggio:"
+msgstr "Impossibile inviare il messaggio: "
 
 #, c-format
 msgid "Unable to send message to %s:"
@@ -6953,7 +6945,7 @@ msgid "Merge List from Server"
 msgstr "Unisci la lista dal server"
 
 msgid "Merge and Save List to Server"
-msgstr "Unisci e salva la lista sul server "
+msgstr "Unisci e salva la lista sul server"
 
 msgid "Synchronize List with Server"
 msgstr "Sincronizza la lista con il server"
@@ -8573,11 +8565,11 @@ msgstr "Impossibile connettersi a %s: %s"
 
 #, c-format
 msgid " - %s"
-msgstr "- %s"
+msgstr " - %s"
 
 #, c-format
 msgid " (%s)"
-msgstr "(%s)"
+msgstr " (%s)"
 
 #. 10053
 msgid "Connection interrupted by other software on your computer."
@@ -8638,11 +8630,8 @@ msgstr "Pidgin Internet Messenger"
 msgid "Internet Messenger"
 msgstr "Internet Messenger"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr ""
-"Chat attraverso MI. Supporta AIM, Google Talk, Jabber/XMPP, MSN, Yahoo ed "
-"altri ancora"
+msgstr "Chat su MI.  Supporta AIM, Google Talk, Jabber/XMPP ed altri ancora"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -9772,7 +9761,7 @@ msgid "Right click for more options."
 msgstr "Fai clic col tasto destro per altre opzioni."
 
 msgid "Level "
-msgstr "Livello"
+msgstr "Livello "
 
 msgid "Select the debug filter level."
 msgstr "Seleziona il livello del filtro di debug."
@@ -9787,7 +9776,7 @@ msgid "Warning"
 msgstr "Avviso"
 
 msgid "Error "
-msgstr "Errore"
+msgstr "Errore "
 
 msgid "Fatal Error"
 msgstr "Errore fatale"
@@ -10885,8 +10874,8 @@ msgstr "_Muto"
 #, c-format
 msgid "%s has %d new message."
 msgid_plural "%s has %d new messages."
-msgstr[0] "%s ha %d nuovo messaggio"
-msgstr[1] "%s ha %d nuovi messaggi"
+msgstr[0] "%s ha %d nuovo messaggio."
+msgstr[1] "%s ha %d nuovi messaggi."
 
 #, c-format
 msgid "<b>%d new email.</b>"
@@ -11534,20 +11523,18 @@ msgstr "Stato da _utilizzare all'avvio:"
 msgid "DROP"
 msgstr "Disconnessione"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Soglia del silenzio:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Volume:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Audio"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Video live"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Dispositivo"
@@ -11576,9 +11563,8 @@ msgstr "Stato / Inattività"
 msgid "Themes"
 msgstr "Temi"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Voce e Video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Consenti a tutti di contattarmi"
@@ -11649,7 +11635,7 @@ msgid "Apply"
 msgstr "Applica"
 
 msgid "That file already exists"
-msgstr "Il file esiste già."
+msgstr "Il file esiste già"
 
 msgid "Would you like to overwrite it?"
 msgstr "Vuoi sovrascriverlo?"
@@ -11663,20 +11649,17 @@ msgstr "Scegli un nuovo nome"
 msgid "Select Folder..."
 msgstr "Scegli cartella..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Condivisone dello schermo"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Errore nella creazione della sessione: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Nessun log trovato"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11687,13 +11670,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Inserisci un'immagine"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Nuova finestra"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11702,9 +11683,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Tipo di nodo sconosciuto"
+msgstr ""
 
 #. list button
 msgid "_Get List"
@@ -12146,7 +12126,7 @@ msgid ""
 "<b>Description:</b> "
 msgstr ""
 "\n"
-"<b>Descrizione:</b>"
+"<b>Descrizione:</b> "
 
 #. Create the window.
 msgid "Service Discovery"
@@ -12999,7 +12979,7 @@ msgid "_IM window transparency"
 msgstr "_Rendi trasparente la finestra"
 
 msgid "_Show slider bar in IM window"
-msgstr "_Mostra la barra di scorrimento nella finestra "
+msgstr "_Mostra la barra di scorrimento nella finestra"
 
 msgid "Remove IM window transparency on focus"
 msgstr "Rimuovi la trasparenza della finestra dei MI quando va in primo piano"
@@ -13190,7 +13170,7 @@ msgstr "<font color='#777777'>Non connesso a XMPP</font>"
 #. *< version
 #. *  summary
 msgid "Send and receive raw XMPP stanzas."
-msgstr "Invia e riceve blocchi XMPP"
+msgstr "Invia e riceve blocchi XMPP raw."
 
 #. *  description
 msgid "This plugin is useful for debugging XMPP servers or clients."
@@ -13198,7 +13178,7 @@ msgstr ""
 "Questo plugin è utile per effettuare il debug dei server o dei client XMPP."
 
 msgid "The installer is already running."
-msgstr "Il programma di installazione è già in esecuzione"
+msgstr "Il programma di installazione è già in esecuzione."
 
 msgid ""
 "An instance of Pidgin is currently running.  Please exit Pidgin and try "

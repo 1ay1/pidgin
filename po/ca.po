@@ -4,13 +4,14 @@
 #
 # Translators:
 # Copyright (c) 2004, 2005-2011
+# Jordi Mas <jmas@softcatala.org>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:08-0500\n"
-"PO-Revision-Date: 2017-09-19 11:38+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/pidgin/pidgin/language/"
 "ca/)\n"
 "Language: ca\n"
@@ -2171,21 +2172,17 @@ msgstr "Ha fallat el registre d'aquesta conversa."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"RESPOSTA&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-"
-"RESPOSTA&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2253,17 +2250,15 @@ msgstr "Error en la conferència"
 msgid "Error creating session: %s"
 msgstr "S'ha produït un error en crear la sessió: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "No s'ha pogut descarregar el connector"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Sense so"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Inhabilitat"
@@ -4893,13 +4888,11 @@ msgstr "Escolliu a quin recurs de %s voleu enviar un fitxer"
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "Manca l'identificador del fluxe XMPP"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Cua plena"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8550,11 +8543,8 @@ msgstr "Missatger d'Internet Pidgin"
 msgid "Internet Messenger"
 msgstr "Missatger d'Internet"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Xategeu amb missatgeria instantània, amb AIM, Google Talk, Jabber/XMPP, MSN, "
-"Yahoo i més"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11093,10 +11083,10 @@ msgid "Bottom"
 msgstr "A baix"
 
 msgid "Left"
-msgstr "A la dreta"
+msgstr "A l'esquerra"
 
 msgid "Right"
-msgstr "A l'esquerra"
+msgstr "A la dreta"
 
 msgid "Left Vertical"
 msgstr "Vertical esquerre"
@@ -11437,20 +11427,18 @@ msgstr "Estat a _utilitzar en iniciar:"
 msgid "DROP"
 msgstr "DROP"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Llindar per al silenci:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Volum:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Àudio"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Vídeo en directe"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Dispositiu"
@@ -11479,9 +11467,8 @@ msgstr "Estat / Inactiu"
 msgid "Themes"
 msgstr "Temes"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Veu i vídeo"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Permet a tots els usuaris contactar amb mi"
@@ -11566,20 +11553,17 @@ msgstr "Trieu un nom nou"
 msgid "Select Folder..."
 msgstr "Selecciona una carpeta..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Compartició de pantalla"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "S'ha produït un error en crear la sessió: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "No s'ha trobat cap registre"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11590,13 +11574,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Insereix una imatge"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Finestra nova"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11605,9 +11587,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Codi d'error desconegut"
+msgstr ""
 
 #. list button
 msgid "_Get List"

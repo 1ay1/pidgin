@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:08-0500\n"
-"PO-Revision-Date: 2017-09-19 19:20+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Dzongkha (http://www.transifex.com/pidgin/pidgin/language/"
 "dz/)\n"
 "Language: dz\n"
@@ -2106,21 +2106,17 @@ msgstr "འ་ནི་གྲོས་གླེང་ནང་བསྐྱོད
 msgid "XML"
 msgstr "ཨེགསི་ཨེམ་ཨེལ"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;རང་བཞིན - "
-"ལན&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;རང་བཞིན-ལན&gt;:"
-"</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>དྲན་དེབ་ཀྱི་འགྲུལ་ལམ་འཚོལ་མ་ཐོབ!</b></font>"
@@ -2183,17 +2179,15 @@ msgstr ""
 msgid "Error creating session: %s"
 msgstr ""
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "མི་མང་གི་ལྡེ་མིག་ མངོན་གསལ་འབད་མ་ཚུགས།"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "/ལག་ཆས་ཚུ་/སྐད་མེད་སྒར་སྐད།"
+msgstr ""
 
 msgid "Disabled"
 msgstr ""
@@ -4762,9 +4756,8 @@ msgstr ""
 msgid "XMPP stream management"
 msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "གྲལ་རིམ་གང་།"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -11093,9 +11086,8 @@ msgstr ""
 msgid "Test Audio"
 msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "མངོན་མཐོང་ ཝི་ཌིའོ།"
+msgstr ""
 
 msgid "_Device"
 msgstr ""
@@ -11124,9 +11116,8 @@ msgstr ""
 msgid "Themes"
 msgstr ""
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "མངོན་མཐོང་ ཝི་ཌིའོ།"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "ལག་ལེན་པ་ཚུ་གེ་ར་ང་དང་འབྲེལ་བ་འཐབ་བཅུག"
@@ -11211,9 +11202,8 @@ msgstr "མིང་གསརཔ་གཅིག་གདམ།"
 msgid "Select Folder..."
 msgstr "སྣོད་འཛིན་སེལ་འཐུ་འབད།..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "ཨེགསི་ཨེམ་ཨེལ་ འཛོལ་བ་མིང་དཔྱད་འབད་ནི།"
+msgstr ""
 
 msgid "Error creating screencast request"
 msgstr ""
@@ -11221,9 +11211,8 @@ msgstr ""
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "དྲན་དེབ་ཅི་ཡང་མ་ཐོབ།"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11234,13 +11223,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "གཟུགས་བརྙན་བཙུགས།"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "སྒོ་སྒྲིག་གསརཔ།"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11249,9 +11236,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "ངོ་མ་ཤེས་པའི་འཛོལ་བ།"
+msgstr ""
 
 #. list button
 msgid "_Get List"

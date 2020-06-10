@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Balázs Meskó <meskobalazs@gmail.com>, 2015,2017
+# Balázs Meskó <meskobalazs@mailbox.org>, 2015,2017,2020
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2014
 # kelemeng <kelemeng@ubuntu.com>, 2011
 # kelemeng <kelemeng@ubuntu.com>, 2011,2014
@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:10-0500\n"
-"PO-Revision-Date: 2017-09-19 11:38+0000\n"
-"Last-Translator: Balázs Meskó <meskobalazs@gmail.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/pidgin/pidgin/language/"
 "hu/)\n"
 "Language: hu\n"
@@ -47,11 +47,11 @@ msgstr ""
 "Használat: %s [KAPCSOLÓ]…\n"
 "\n"
 "  -c, --config=KÖNYVTÁR  A KÖNYVTÁR használata a beállítófájlokhoz\n"
-"  -d, --debug         hibakereső üzenetek kiírása a szabványos "
+"  -d, --debug            hibakereső üzenetek kiírása a szabványos "
 "hibakimenetre\n"
-"  -h, --help          ezen súgó megjelenítése és kilépés\n"
-"  -n, --nologin       ne jelentkezzen be automatikusan\n"
-"  -v, --version       az aktuális verzió megjelenítése és kilépés\n"
+"  -h, --help             ezen súgó megjelenítése és kilépés\n"
+"  -n, --nologin          ne jelentkezzen be automatikusan\n"
+"  -v, --version          az aktuális verzió megjelenítése és kilépés\n"
 
 #, c-format
 msgid ""
@@ -2182,21 +2182,17 @@ msgstr "Ezen társalgás naplózása meghiúsult."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTOMATIKUS "
-"VÁLASZ&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTOMATIKUS "
-"VÁLASZ&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>A naplófájl útvonala nem található!</b></font>"
@@ -2270,17 +2266,15 @@ msgstr "Konferenciahiba"
 msgid "Error creating session: %s"
 msgstr "Hiba a munkamenet létrehozásakor: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Nem sikerült eltávolítani a bővítményt"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Nincsenek hangok"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Tiltva"
@@ -4927,13 +4921,11 @@ msgstr "Válassza ki %s azon erőforrását, ahová fájlt kíván küldeni"
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "Az XMPP adatfolyam-azonosító hiányzik"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "A sor tele"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8604,11 +8596,10 @@ msgstr "Pidgin üzenetküldő"
 msgid "Internet Messenger"
 msgstr "Azonnali üzenetküldés"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Azonnali üzenetküldés AIM, Google Talk, Jabber/XMPP, MSN, Yahoo és más "
-"protokollok támogatásával"
+"Azonnali üzenetküldés AIM, Google Talk, Jabber/XMPP és más protokollok "
+"támogatásával"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11489,20 +11480,18 @@ msgstr "In_dításkor alkalmazandó állapot:"
 msgid "DROP"
 msgstr "DROP"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Csendküszöb:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Hangerő:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Hang"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Élő videó"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Eszköz"
@@ -11531,9 +11520,8 @@ msgstr "Állapot / Inaktív"
 msgid "Themes"
 msgstr "Témák"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "_Hang és videó"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Mindenki kapcsolatba léphet velem"
@@ -11620,20 +11608,17 @@ msgstr "Új név választása"
 msgid "Select Folder..."
 msgstr "Válasszon mappát…"
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Képernyőmegosztás"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Hiba a munkamenet létrehozásakor: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Nem találhatók naplók"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11644,13 +11629,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Kép beszúrása"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Új ablak"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11659,9 +11642,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Ismeretlen csomóponttípus"
+msgstr ""
 
 #. list button
 msgid "_Get List"

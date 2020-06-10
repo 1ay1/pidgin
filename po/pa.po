@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# A S Alam <alam.yellow@gmail.com>, 2018
 # A S Alam <alam.yellow@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:12-0500\n"
-"PO-Revision-Date: 2017-09-19 11:38+0000\n"
-"Last-Translator: Richard Laager <rlaager@wiktel.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Panjabi (Punjabi) (http://www.transifex.com/pidgin/pidgin/"
 "language/pa/)\n"
 "Language: pa\n"
@@ -1254,7 +1255,7 @@ msgid "(default)"
 msgstr "(ਡਿਫਾਲਟ)"
 
 msgid "Select Sound File..."
-msgstr ""
+msgstr "...ਆਵਾਜ਼ ਫਾਇਲ ਚੁਣੋ"
 
 msgid "Sound Preferences"
 msgstr "ਸਾਊਂਡ ਪਸੰਦ"
@@ -1374,11 +1375,11 @@ msgid "Edit Status"
 msgstr "ਹਾਲਤ ਸੋਧ"
 
 msgid "Use a different status for some accounts"
-msgstr ""
+msgstr "ਕੁਝ ਖਾਤਿਆਂ ਲਈ ਵੱਖਰਾ ਹਾਲਤ ਦੇਣ ਲਈ ਵਰਤੋਂ"
 
 #. Save and Use
 msgid "Save and Use"
-msgstr ""
+msgstr "ਸੰਭਾਲੋ ਅਤੇ ਵਰਤੋ"
 
 msgid "Certificates"
 msgstr "ਸਰਟੀਫਿਕੇਟ"
@@ -2114,21 +2115,17 @@ msgstr "ਇਸ ਗੱਲਾਂ ਲਈ ਲਾਗ ਰੱਖਣਾ ਫੇਲ੍ਹ 
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;ਸਵੈ-ਜਵਾਬ&gt;:</"
-"b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;ਸਵੈ-ਜਵਾਬ&gt;:</"
-"b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>ਲਾਗ ਮਾਰਗ ਖੋਜਣ ਲਈ ਅਸਫਲ!</b></font>"
@@ -2191,17 +2188,15 @@ msgstr "ਕਾਨਫਰੰਸ ਗਲਤੀ"
 msgid "Error creating session: %s"
 msgstr "ਸ਼ੈਸ਼ਨ ਬਣਾਉਣ ਦੌਰਾਨ ਗਲਤੀ: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "ਪਲੱਗਇਨ ਅਣਲੋਡ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "ਸਾਊਂਡ ਨਹੀਂ"
+msgstr ""
 
 msgid "Disabled"
 msgstr "ਆਯੋਗ ਹੈ"
@@ -2809,13 +2804,13 @@ msgid "Maximum Version"
 msgstr ""
 
 msgid "SSL 2"
-msgstr ""
+msgstr "SSL 2"
 
 msgid "SSL 3"
-msgstr ""
+msgstr "SSL 3"
 
 msgid "TLS 1.0"
-msgstr ""
+msgstr "TLS 1.0"
 
 msgid "TLS 1.1"
 msgstr ""
@@ -3377,10 +3372,10 @@ msgid "Nick"
 msgstr "ਨਾਂ"
 
 msgid "Login name"
-msgstr ""
+msgstr "ਲਾਗਇਨ ਨਾਂ"
 
 msgid "Host name"
-msgstr ""
+msgstr "ਹੋਸਟ ਨਾਂ"
 
 msgid "Currently on"
 msgstr "ਇਸ ਸਮੇਂ"
@@ -3542,7 +3537,7 @@ msgid "SASL authentication failed: Initializing SASL failed."
 msgstr ""
 
 msgid "Incorrect Password"
-msgstr ""
+msgstr "ਗ਼ਲਤ ਪਾਸਵਰਡ"
 
 msgid "SASL authentication failed: No worthy mechanisms found"
 msgstr ""
@@ -4780,13 +4775,11 @@ msgstr "ਚੁਣੋ ਕਿ ਕਿਹੜੇ %s ਦੇ ਸਰੋਤ ਤੁਸੀ�
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "XMPP ਸਟੀਰਮ ID ਗੁੰਮ ਹੈ"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "ਕਤਾਰ ਭਰੀ ਹੈ"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -8338,9 +8331,8 @@ msgstr "ਪਿਡਗਿਨ ਇੰਟਰਨੈਟ ਮੈਸੰਜ਼ਰ"
 msgid "Internet Messenger"
 msgstr "ਇੰਟਰਨੈਟ ਮੈਸੰਜ਼ਰ"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr "IM ਰਾਹੀਂ ਗੱਲਬਾਤ। AIM, ਗੂਗਲ ਟਾਕ, ਜੱਬਰ/XMPP, MSN, ਯਾਹੂ ਅਤੇ ਹੋਰ ਲਈ ਸਹਾਇਕ।"
+msgstr ""
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11178,13 +11170,11 @@ msgstr ""
 msgid "Volume:"
 msgstr "ਵਾਲੀਅਮ"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "ਆਡੀਓ"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "ਸਿੱਧੀ ਵੀਡਿਓ"
+msgstr ""
 
 msgid "_Device"
 msgstr "ਜੰਤਰ(_D)"
@@ -11213,9 +11203,8 @@ msgstr "ਹਾਲਤ / ਵੇਹਲਾ"
 msgid "Themes"
 msgstr "ਥੀਮ"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "ਆਵਾਜ਼ ਅਤੇ ਵਿਡੀਓ(_V)"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "ਸਭ ਵਿਅਕਤੀਆਂ ਨੂੰ ਮੈਨੂੰ ਸੰਪਰਕ ਕਰਨ ਦਿਓ"
@@ -11300,20 +11289,17 @@ msgstr "ਨਵਾਂ ਨਾਂ ਚੁਣੋ"
 msgid "Select Folder..."
 msgstr "ਫੋਲਡਰ ਚੁਣੋ..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "ਸਕਰੀਨ ਸਾਂਝੀ"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "ਸ਼ੈਸ਼ਨ ਬਣਾਉਣ ਦੌਰਾਨ ਗਲਤੀ: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "ਕੋਈ ਲਾਗ ਨਹੀਂ ਮਿਲਿਆ"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11324,13 +11310,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "ਚਿੱਤਰ ਸ਼ਾਮਿਲ"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "ਨਵੀਂ ਵਿੰਡੋ"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11339,9 +11323,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "ਅਣਜਾਣ ਨੋਡ ਟਾਈਪ"
+msgstr ""
 
 #. list button
 msgid "_Get List"
@@ -11376,7 +11359,7 @@ msgstr "ਕੁਝ ਅਕਾਊਂਟਾਂ ਲਈ ਵੱਖਰੀ ਹਾਲਤ �
 
 #. Save and Use button
 msgid "Sa_ve and Use"
-msgstr ""
+msgstr "ਸੰਭਾਲੋ ਅਤੇ ਵਰਤੋਂ(_v)"
 
 #, c-format
 msgid "Status for %s"
@@ -12098,7 +12081,7 @@ msgid "Notify For"
 msgstr "ਸੂਚਨਾ ਦਿਓ"
 
 msgid "\tS_ystem messages"
-msgstr ""
+msgstr "\tਸਿਸਟਮ ਸੁਨੇਹੇ(_y)"
 
 msgid "\t_Only when someone says your username"
 msgstr "\tਜਦੋਂ ਕੋਈ ਤੁਹਾਡਾ ਯੂਜ਼ਰ ਨਾਂ ਲਵੇ(_O)"
@@ -12637,7 +12620,7 @@ msgstr ""
 
 #. Launcher integration
 msgid "Launcher Icon"
-msgstr ""
+msgstr "ਲਾਂਚਰ ਆਈਕਾਨ"
 
 msgid "_Disable launcher integration"
 msgstr ""

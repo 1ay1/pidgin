@@ -4,8 +4,7 @@
 # TODO: Is there a way we can ignore files with only fuzzy-string changes?
 
 # These are the languages which are maintained in Transifex.
-transifex_languages="sq ar ar_SA hy hy_AM ast be brx br my_MM ca cs nl en_AU en_GB et fi gl ka de el he hi hu id ga it ja ks kk km ku_IQ lv lt mai ms_MY mr ne nqo nb nn oc pa fa pl pt pt_BR ro ru szl sd sl es es_AR sv tt te tr uk uz cy
-"
+transifex_languages=$(ls *.po | cut -d. -f1 | xargs echo)
 
 if ! which tx > /dev/null
 then

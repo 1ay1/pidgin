@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:11-0500\n"
-"PO-Revision-Date: 2018-03-07 17:42+0000\n"
-"Last-Translator: Ingmārs Dīriņš <melhiors14@gmail.com>\n"
+"PO-Revision-Date: 2020-06-06 08:16+0000\n"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
 "Language-Team: Latvian (http://www.transifex.com/pidgin/pidgin/language/"
 "lv/)\n"
 "Language: lv\n"
@@ -1384,7 +1384,7 @@ msgid "Invalid title"
 msgstr "Nederīgs nosaukums"
 
 msgid "Please enter a non-empty title for the status."
-msgstr "Lūdzu, ievadiet ne-tukšu nosaukumu statusam."
+msgstr "Lūdzu, ievadiet netukšu nosaukumu statusam."
 
 msgid "Duplicate title"
 msgstr "Dublēt nosaukumu"
@@ -1739,7 +1739,7 @@ msgstr "Sertificēšanas institūcijas"
 #. Scheme name
 #. Pool name
 msgid "SSL Peers Cache"
-msgstr "SSL vienādrangu kešs"
+msgstr "SSL vienādranga kešatmiņa"
 
 #. Make messages
 #, c-format
@@ -2187,21 +2187,17 @@ msgstr "Šīs sarunas reģistrēšana žurnālā neizdevās."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTOMĀTISKĀ-"
-"ATBILDE&gt;:</b></font> %s<br/>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTOMĀTISKĀ-"
-"ATBILDE&gt;:</b></font> %s<br/>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Nespēj atrast žurnāla ceļu!</b></font>"
@@ -2275,17 +2271,15 @@ msgstr "Konferences kļūda"
 msgid "Error creating session: %s"
 msgstr "Kļūda, veidojot sesiju: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Nevarēja izlādēt spraudni"
+msgstr ""
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Nav skaņas"
+msgstr ""
 
 msgid "Disabled"
 msgstr "Izslēgts"
@@ -3943,8 +3937,8 @@ msgid ""
 "The server does support channel binding, but did not appear to advertise "
 "it.  This indicates a likely MITM attack"
 msgstr ""
-"Serveris atbalsta kanālu saistīšanu, bet tas, šķiet, to neizreklamē. Tas "
-"norāda visdrīzākais uz MITM uzbrukumu"
+"Serveris atbalsta kanālu saistīšanu, bet tas, šķiet, to neizreklamē.  Tas "
+"norāda uz iespējamu MITM uzbrukumu"
 
 msgid "Server does not support channel binding"
 msgstr "Serveris neatbalsta kanālu saistīšanu"
@@ -4112,7 +4106,7 @@ msgid "Cancel Presence Notification"
 msgstr "Atcelt klātbūtnes paziņošanu"
 
 msgid "Un-hide From"
-msgstr "At-slēpt no"
+msgstr "Atsaukt slēpšanu no"
 
 msgid "Temporarily Hide From"
 msgstr "Īslaicīgi slēpt no"
@@ -4516,7 +4510,7 @@ msgid "Remote Server Not Found"
 msgstr "Attālinātais serveris nav atrasts"
 
 msgid "Remote Server Timeout"
-msgstr "Attālinātā servera noilgums"
+msgstr "Attālinātā servera noildze"
 
 msgid "Server Overloaded"
 msgstr "Serveris pārslogots"
@@ -4561,7 +4555,7 @@ msgid "Resource Conflict"
 msgstr "Resursa konflikts"
 
 msgid "Connection Timeout"
-msgstr "Savienojuma noilgums"
+msgstr "Savienojuma noildze"
 
 msgid "Host Gone"
 msgstr "Resursdators aizgājis"
@@ -4582,7 +4576,7 @@ msgid "Invalid XML"
 msgstr "Nederīgs XML"
 
 msgid "Non-matching Hosts"
-msgstr "Ne-atbilstoši resursdatori"
+msgstr "Neatbilstoši resursdatori"
 
 msgid "Policy Violation"
 msgstr "Politikas pārkāpums"
@@ -4915,13 +4909,11 @@ msgstr "Lūdzu, atlasiet %s resursu, uz kuru jūs vēlētos nosūtīt datni"
 msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "XMPP straumei trūkst ID"
+msgstr ""
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Rinda pilna"
+msgstr ""
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -7048,7 +7040,7 @@ msgid "Key Agreement failed"
 msgstr "Atslēgu vienošanās neizdevās"
 
 msgid "Timeout during key agreement"
-msgstr "Noilgums atslēgu vienošanās laikā"
+msgstr "Noildze atslēgu vienošanās laikā"
 
 msgid "Key agreement was aborted"
 msgstr "Atslēgu vienošanās tika pārtraukta"
@@ -8591,11 +8583,8 @@ msgstr "Pidgin Interneta ziņnesis"
 msgid "Internet Messenger"
 msgstr "Interneta ziņnesis"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr ""
-"Tērzēšana pāri TZ.  Atbalsta AIM, Google Talk, Jabber/XMPP, MSN, Yahoo un "
-"vairāk"
+msgstr "Tērzēšana pāri TZ.  Atbalsta AIM, Google Talk, Jabber/XMPP un vairāk"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -9408,7 +9397,7 @@ msgid "Save Conversation"
 msgstr "Saglabāt sarunu"
 
 msgid "Un-Ignore"
-msgstr "At-ignorēt"
+msgstr "Atsaukt ignorēšanu"
 
 msgid "Ignore"
 msgstr "Ignorēt"
@@ -11496,20 +11485,18 @@ msgstr "Statuss, kuru _pielietot pie sāknēšanas:"
 msgid "DROP"
 msgstr "DROP"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Klusuma slieksnis:"
+msgstr ""
 
 msgid "Volume:"
 msgstr "Skaļums:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Audio"
+msgstr ""
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Dzīvais video"
+msgstr ""
 
 msgid "_Device"
 msgstr "_Ierīce"
@@ -11538,9 +11525,8 @@ msgstr "Statuss / dīkstāve"
 msgid "Themes"
 msgstr "Motīvi"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "Balss un _video"
+msgstr ""
 
 msgid "Allow all users to contact me"
 msgstr "Atļaut visiem lietotājiem sazināties ar mani"
@@ -11627,20 +11613,17 @@ msgstr "Izvēlieties jaunu nosaukumu"
 msgid "Select Folder..."
 msgstr "Atlasiet mapi..."
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Ekrāna koplietošana"
+msgstr ""
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Kļūda, veidojot sesiju: %s"
+msgstr ""
 
 msgid "OpenPipeWireRemote request failed"
 msgstr ""
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Nav atrastu žurnālu"
+msgstr ""
 
 msgid "Screencast \"Start\" failed"
 msgstr ""
@@ -11651,13 +11634,11 @@ msgstr ""
 msgid "Screencast \"CreateSession\" failed."
 msgstr ""
 
-#, fuzzy
 msgid "Test image"
-msgstr "Ievietot attēlu"
+msgstr ""
 
-#, fuzzy
 msgid "Select window"
-msgstr "Jauns logs"
+msgstr ""
 
 msgid "Use monitor"
 msgstr ""
@@ -11666,9 +11647,8 @@ msgstr ""
 msgid "%s (%d✕%d @ %d,%d)"
 msgstr ""
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Nezināms mezgla tips"
+msgstr ""
 
 #. list button
 msgid "_Get List"
@@ -11838,7 +11818,7 @@ msgid ""
 "You dragged a desktop launcher. Most likely you wanted to send the target of "
 "this launcher instead of this launcher itself."
 msgstr ""
-"Jūs pavilkāt darbvirsmas palaidēju. Visdrīzākais jūs vēlējāties nosūtīt šī "
+"Jūs pavilkāt darbvirsmas palaidēju. Visticamāk, jūs vēlējāties nosūtīt šī "
 "palaidēja mērķi, nevis pašu palaidēju."
 
 #, c-format

@@ -4,10 +4,10 @@
 #
 # Translators:
 # Adrian Heine <mail@adrianheine.de>, 2017
-# Andy Kleinert <Wawuschel@erweiterungen.de>, 2014-2017
+# Andy Kleinert <Wawuschel@erweiterungen.de>, 2014-2017,2020
 # Björn Voigt <bjoernv@arcor.de>, 2014,2016-2018
 # Eion Robb <eion@robbmob.com>, 2017
-# Mario Siegmann <mario_siegmann@web.de>, 2014-2015
+# Mario Siegmann <mario_siegmann@web.de>, 2014-2015,2018
 # Tobias Bannert <tobannert@gmail.com>, 2014-2016
 # try once, 2015
 # Andy Kleinert <Wawuschel@erweiterungen.de>, 2014
@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-09 22:08-0500\n"
-"PO-Revision-Date: 2018-01-30 19:08+0000\n"
-"Last-Translator: Björn Voigt <bjoernv@arcor.de>\n"
+"PO-Revision-Date: 2020-06-06 10:58+0000\n"
+"Last-Translator: Andy Kleinert <Wawuschel@erweiterungen.de>\n"
 "Language-Team: German (http://www.transifex.com/pidgin/pidgin/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1870,7 +1870,7 @@ msgstr "Nachricht konnte nicht gesendet werden."
 
 #. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
 msgid "(internal) Temporary IM peers"
-msgstr ""
+msgstr "(interne) Temporäre IM-Peers"
 
 msgid "Send Message"
 msgstr "Nachricht senden"
@@ -2215,21 +2215,21 @@ msgstr "Mitschneiden der Unterhaltung fehlgeschlagen."
 msgid "XML"
 msgstr "XML"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;Automatisch "
-"antworten&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;Automatisch antworten&gt;:</b></span> %s<br>\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
-"<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;Automatisch "
-"Antworten&gt;:</b></font> %s<br/>\n"
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;Automatisch antworten&gt;:</b></span> %s<br>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2307,17 +2307,15 @@ msgstr "Konferenzfehler"
 msgid "Error creating session: %s"
 msgstr "Fehler beim Herstellen der Sitzung: %s"
 
-#, fuzzy
 msgid "Could not create media pipeline"
-msgstr "Plugin konnte nict entladen werden"
+msgstr "Medien-Pipeline konnte nicht erstellt werden"
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
-#, fuzzy
 msgid "Test Sound"
-msgstr "Kein Klang"
+msgstr "Audiowiedergabe testen"
 
 msgid "Disabled"
 msgstr "Deaktiviert"
@@ -2328,7 +2326,7 @@ msgstr "Deaktiviert"
 #. * the video output has been set up correctly without
 #. * needing a webcam connected to the computer.
 msgid "Test Pattern"
-msgstr ""
+msgstr "Testbild"
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -4995,18 +4993,16 @@ msgstr ""
 
 #, c-format
 msgid "The queue for %s has reached its maximum length of %u."
-msgstr ""
+msgstr "Die Warteschlange für %s hat ihre maximale Länge von %u überschritten."
 
-#, fuzzy
 msgid "XMPP stream management"
-msgstr "Fehlende ID im XMPP-Datenstrom"
+msgstr "XMPP-Streams verwalten"
 
-#, fuzzy
 msgid "Stanza queue is full"
-msgstr "Warteschlange voll"
+msgstr "Stanza-Warteschlange ist voll"
 
 msgid "No further messages will be queued"
-msgstr ""
+msgstr "Es werden keine weiteren Nachrichten in die Warteschlange gestellt."
 
 msgid "Afraid"
 msgstr "Ängstlich, besorgt"
@@ -8721,11 +8717,10 @@ msgstr "Pidgin Internet-Sofortnachrichtendienst"
 msgid "Internet Messenger"
 msgstr "Internet-Sofortnachrichtendienst"
 
-#, fuzzy
 msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
 msgstr ""
-"Chatten mit Kurznachrichten.  Unterstützt AIM, Google Talk, Jabber/XMPP, "
-"MSN, Yahoo und weitere"
+"Chatten mit Kurznachrichten.  Unterstützt AIM, Google Talk, Jabber/XMPP und "
+"weitere"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -11642,20 +11637,18 @@ msgstr "Beim Starten folgenden Status _verwenden:"
 msgid "DROP"
 msgstr "Stille, da unterhalb des Schwellwerts"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Silence threshold: %d%%"
-msgstr "Schwellwert für Stille:"
+msgstr "Schwellwert für Stille: %d%%"
 
 msgid "Volume:"
 msgstr "Lautstärke:"
 
-#, fuzzy
 msgid "Test Audio"
-msgstr "Audio"
+msgstr "Audiowiedergabe testen"
 
-#, fuzzy
 msgid "Test Video"
-msgstr "Live-Video"
+msgstr "Videowiedergabe testen"
 
 msgid "_Device"
 msgstr "_Gerät"
@@ -11684,9 +11677,8 @@ msgstr "Status / Untätig"
 msgid "Themes"
 msgstr "Themen"
 
-#, fuzzy
 msgid "Voice/Video"
-msgstr "Sprache und _Video"
+msgstr "Sprache/Video"
 
 msgid "Allow all users to contact me"
 msgstr "Allen Benutzern erlauben, mich zu kontaktieren"
@@ -11775,48 +11767,43 @@ msgstr "Einen neuen Namen wählen"
 msgid "Select Folder..."
 msgstr "Ordner auswählen…"
 
-#, fuzzy
 msgid "Screen share error"
-msgstr "Gemeinsamer Bildschirm"
+msgstr "Bildschirmfreigabefehler"
 
-#, fuzzy
 msgid "Error creating screencast request"
-msgstr "Fehler beim Herstellen der Sitzung: %s"
+msgstr ""
+"Fehler beim Erstellen einer Anfrage zur Bildschirmübertragung (Screencast)"
 
 msgid "OpenPipeWireRemote request failed"
-msgstr ""
+msgstr "OpenPipeWireRemote-Anfrage fehlgeschlagen"
 
-#, fuzzy
 msgid "No file descriptor found"
-msgstr "Keine Mitschnitte verfügbar"
+msgstr "Keine Dateibeschreibung gefunden"
 
 msgid "Screencast \"Start\" failed"
-msgstr ""
+msgstr "Bildschirmübertragung „Start” fehlgeschlagen"
 
 msgid "Screencast \"SelectSources\" failed"
-msgstr ""
+msgstr "Bildschirmübertragung „SelectSources” fehlgeschlagen"
 
 msgid "Screencast \"CreateSession\" failed."
-msgstr ""
+msgstr "Bildschirmübertragung „CreateSession” fehlgeschlagen"
 
-#, fuzzy
 msgid "Test image"
-msgstr "Grafik einfügen"
+msgstr "Testbild"
 
-#, fuzzy
 msgid "Select window"
-msgstr "Neues Fenster"
+msgstr "Fenster wählen"
 
 msgid "Use monitor"
-msgstr ""
+msgstr "Bildschirm verwenden"
 
 #, c-format
 msgid "%s (%d✕%d @ %d,%d)"
-msgstr ""
+msgstr "%s (%d✕%d @ %d,%d)"
 
-#, fuzzy
 msgid "Unknown output"
-msgstr "Unbekannter Knotentyp"
+msgstr "Unbekannte Ausgabe"
 
 #. list button
 msgid "_Get List"
