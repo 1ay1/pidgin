@@ -50,7 +50,7 @@ version-check:
 	head ChangeLog.API | grep "^version $(PACKAGE_VERSION):$$" >/dev/null
 
 # Ensure we're working from a tag...
-	test x`hg log -r "tag($(PACKAGE_VERSION))" --template "{node}"` = x`hg log -r . -T '{node}'`
+	test x`hg log -r "tag(v$(PACKAGE_VERSION))" --template "{node}"` = x`hg log -r . -T '{node}'`
 # ... and have no changes in the working copy.
 	test "x`hg st -mard`" = x
 
