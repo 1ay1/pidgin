@@ -29,6 +29,7 @@ ShowInstDetails show
 ShowUninstDetails show
 SetDateSave on
 RequestExecutionLevel highest
+Unicode true
 
 ; $name and $INSTDIR are set in .onInit function..
 
@@ -418,7 +419,7 @@ ${MementoSectionDone}
   SectionEnd
 !macroend
 SectionGroup $(PIDGINSPELLCHECKSECTIONTITLE) SecSpellCheck
-  !include "pidgin-spellcheck.nsh"
+  !include /CHARSET=ACP "pidgin-spellcheck.nsh"
 SectionGroupEnd
 
 Section /o $(DEBUGSYMBOLSSECTIONTITLE) SecDebugSymbols
@@ -980,7 +981,7 @@ Function ${UN}RunCheck
   ; Close the Handle (needed if we're retrying)
   IntCmp $R1 0 +2
     System::Call 'kernel32::CloseHandle(i $R1) i .R1'
-  System::Call 'kernel32::CreateMutexA(i 0, i 0, t "pidgin_is_running") i .R1 ?e'
+  System::Call 'kernel32::CreateMutexW(i 0, i 0, t "pidgin_is_running") i .R1 ?e'
   Pop $R0
   IntCmp $R0 0 +3 ;This could check for ERROR_ALREADY_EXISTS(183), but lets just assume
     MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION $(PIDGINISRUNNING) /SD IDCANCEL IDRETRY retry_runcheck
@@ -1010,7 +1011,7 @@ Function .onInit
   ; Close the Handle (needed if we're retrying)
   IntCmp $R1 0 +2
     System::Call 'kernel32::CloseHandle(i $R1) i .R1'
-  System::Call 'kernel32::CreateMutexA(i 0, i 0, t "pidgin_installer_running") i .R1 ?e'
+  System::Call 'kernel32::CreateMutexW(i 0, i 0, t "pidgin_installer_running") i .R1 ?e'
   Pop $R0
   IntCmp $R0 0 +3 ;This could check for ERROR_ALREADY_EXISTS(183), but lets just assume
     MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION $(INSTALLERISRUNNING) /SD IDCANCEL IDRETRY retry_runcheck
@@ -1301,12 +1302,12 @@ Function CheckSHA1Sum
   Pop $R2 ;SHA1sum
   Push $R1
 
-  SHA1Plugin::FileSum "$R0"
-  Pop $R1
+  ClearErrors
+  Crypto::HashFile "SHA1" "$R0"
   Pop $R0
 
-  StrCmp "$R1" "0" +4
-    DetailPrint "SHA1Sum calculation error: $R0"
+  IfErrors 0 +4
+    DetailPrint "SHA1Sum calculation error"
     IntOp $R1 0 + 1
     Goto done
 
