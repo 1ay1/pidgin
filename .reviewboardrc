@@ -1,0 +1,5 @@
+REVIEWBOARD_URL = "https://reviews.imfreedom.org/"
+REPOSITORY = "pidgin/pidgin"
+REPOSITORY_TYPE = "mercurial"
+LAND_DEST_BRANCH = "release-2.x.y"
+LAND_PUSH = False
