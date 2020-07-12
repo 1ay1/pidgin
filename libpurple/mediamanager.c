@@ -2231,6 +2231,7 @@ static void
 purple_media_manager_unregister_gst_device(PurpleMediaManager *manager,
 		GstDevice *device)
 {
+#ifdef USE_VV
 	GList *i;
 	gchar *name;
 	gchar *device_class;
@@ -2277,6 +2278,7 @@ purple_media_manager_unregister_gst_device(PurpleMediaManager *manager,
 
 	g_free(name);
 	g_free(device_class);
+#endif /* USE_VV */
 }
 
 static gboolean
@@ -2304,7 +2306,7 @@ device_monitor_bus_cb(GstBus *bus, GstMessage *message, gpointer user_data)
 static void
 purple_media_manager_init_device_monitor(PurpleMediaManager *manager)
 {
-#if GST_CHECK_VERSION(1, 4, 0)
+#if GST_CHECK_VERSION(1, 4, 0) && defined(USE_VV)
 	GstBus *bus;
 	GList *i;
 
@@ -2334,6 +2336,7 @@ purple_media_manager_enumerate_elements(PurpleMediaManager *manager,
 		PurpleMediaElementType type)
 {
 	GList *result = NULL;
+#ifdef USE_VV
 	GList *i;
 
 	for (i = manager->priv->elements; i; i = i->next) {
@@ -2347,6 +2350,7 @@ purple_media_manager_enumerate_elements(PurpleMediaManager *manager,
 			result = g_list_prepend(result, info);
 		}
 	}
+#endif /* USE_VV */
 
 	return result;
 }
