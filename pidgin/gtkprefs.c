@@ -262,7 +262,7 @@ pidgin_prefs_dropdown_from_list(GtkWidget *box, const gchar *title,
 		menuitems = g_list_next(menuitems);
 		g_return_val_if_fail(menuitems != NULL, NULL);
 
-		opt = gtk_menu_item_new_with_label(text);
+		opt = gtk_menu_item_new_with_label(_(text));
 
 		g_object_set_data(G_OBJECT(opt), "type", GINT_TO_POINTER(type));
 
