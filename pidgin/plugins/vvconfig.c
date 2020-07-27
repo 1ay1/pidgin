@@ -39,43 +39,43 @@ static PurpleMediaElementInfo *old_video_src = NULL, *old_video_sink = NULL,
 		*old_audio_src = NULL, *old_audio_sink = NULL;
 
 static const gchar *AUDIO_SRC_PLUGINS[] = {
-	"alsasrc",	"ALSA",
+	"alsasrc", N_("ALSA"),
 	/* "esdmon",	"ESD", ? */
-	"osssrc",	"OSS",
-	"pulsesrc",	"PulseAudio",
-	"sndiosrc",	"sndio",
+	"osssrc", N_("OSS"),
+	"pulsesrc", N_("PulseAudio"),
+	"sndiosrc", N_("sndio"),
 	/* "audiotestsrc wave=silence", "Silence", */
-	"audiotestsrc",	"Test Sound",
+	"audiotestsrc", N_("Test Sound"),
 	NULL
 };
 
 static const gchar *AUDIO_SINK_PLUGINS[] = {
-	"alsasink",	"ALSA",
-	"artsdsink",	"aRts",
-	"esdsink",	"ESD",
-	"osssink",	"OSS",
-	"pulsesink",	"PulseAudio",
-	"sndiosink",	"sndio",
+	"alsasink", N_("ALSA"),
+	"artsdsink", N_("aRts"),
+	"esdsink", N_("ESD"),
+	"osssink", N_("OSS"),
+	"pulsesink", N_("PulseAudio"),
+	"sndiosink", N_("sndio"),
 	NULL
 };
 
 static const gchar *VIDEO_SRC_PLUGINS[] = {
-	"videotestsrc",	"Test Input",
-	"dshowvideosrc","DirectDraw",
-	"ksvideosrc",	"KS Video",
-	"qcamsrc",	"Quickcam",
-	"v4lsrc",	"Video4Linux",
-	"v4l2src",	"Video4Linux2",
-	"v4lmjpegsrc",	"Video4Linux MJPEG",
+	"videotestsrc", N_("Test Input"),
+	"dshowvideosrc", N_("DirectDraw"),
+	"ksvideosrc", N_("KS Video"),
+	"qcamsrc", N_("Quickcam"),
+	"v4lsrc", N_("Video4Linux"),
+	"v4l2src", N_("Video4Linux2"),
+	"v4lmjpegsrc", N_("Video4Linux MJPEG"),
 	NULL
 };
 
 static const gchar *VIDEO_SINK_PLUGINS[] = {
 	/* "aasink",	"AALib", Didn't work for me */
-	"directdrawsink","DirectDraw",
-	"glimagesink",	"OpenGL",
-	"ximagesink",	"X Window System",
-	"xvimagesink",	"X Window System (Xv)",
+	"directdrawsink", N_("DirectDraw"),
+	"glimagesink",	N_("OpenGL"),
+	"ximagesink",	N_("X Window System"),
+	"xvimagesink",	N_("X Window System (Xv)"),
 	NULL
 };
 

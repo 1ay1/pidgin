@@ -2418,10 +2418,10 @@ purple_media_manager_register_static_elements(PurpleMediaManager *manager)
 {
 	static const gchar *VIDEO_SINK_PLUGINS[] = {
 		/* "aasink", "AALib", Didn't work for me */
-		"directdrawsink", "DirectDraw",
-		"glimagesink", "OpenGL",
-		"ximagesink", "X Window System",
-		"xvimagesink", "X Window System (Xv)",
+		"directdrawsink", N_("DirectDraw"),
+		"glimagesink", N_("OpenGL"),
+		"ximagesink", N_("X Window System"),
+		"xvimagesink", N_("X Window System (Xv)"),
 		NULL
 	};
 	const gchar **sinks = VIDEO_SINK_PLUGINS;
