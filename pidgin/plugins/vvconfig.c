@@ -110,7 +110,7 @@ get_element_devices(const gchar *element_name)
 	}
 
 #if GST_CHECK_VERSION(1,0,0)
-	purple_debug_info("vvconfig", "'%s' - gstreamer-1.0 doesn't suport "
+	purple_debug_info("vvconfig", "'%s' - gstreamer-1.0 doesn't support "
 		"property probing\n", element_name);
 #else
 	if (!g_object_class_find_property(klass, "device") ||

@@ -291,7 +291,7 @@ q =
 .br
 
 .SH Widget Actions
-You can specifiy key-bindings for specific widgets. The following entries in
+You can specify key-bindings for specific widgets. The following entries in
 \fI~/.gntrc\fR correspond to the default keybindings for the actions:
 
 .br

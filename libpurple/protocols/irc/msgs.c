@@ -1716,7 +1716,7 @@ irc_msg_authok(struct irc_conn *irc, const char *name, const char *from, char **
 
 	sasl_dispose(&irc->sasl_conn);
 	irc->sasl_conn = NULL;
-	purple_debug_info("irc", "Succesfully authenticated using SASL.\n");
+	purple_debug_info("irc", "Successfully authenticated using SASL.\n");
 
 	/* Finish auth session */
 	buf = irc_format(irc, "vv", "CAP", "END");
