@@ -26,6 +26,7 @@
 #include "internal.h"
 #include "dbus-maybe.h"
 #include "ft.h"
+#include "glibcompat.h"
 #include "network.h"
 #include "notify.h"
 #include "prefs.h"
@@ -302,7 +303,7 @@ purple_xfer_conversation_write_internal(PurpleXfer *xfer,
 
 	if (print_thumbnail && thumbnail_data) {
 		gchar *message_with_img;
-		gpointer data = g_memdup(thumbnail_data, size);
+		gpointer data = g_memdup2(thumbnail_data, size);
 		int id = purple_imgstore_add_with_id(data, size, NULL);
 
 		message_with_img =
@@ -1791,7 +1792,7 @@ purple_xfer_set_thumbnail(PurpleXfer *xfer, gconstpointer thumbnail,
 	gchar *old_mimetype = priv->thumbnail_mimetype;
 
 	if (thumbnail && size > 0) {
-		priv->thumbnail_data = g_memdup(thumbnail, size);
+		priv->thumbnail_data = g_memdup2(thumbnail, size);
 		priv->thumbnail_size = size;
 		priv->thumbnail_mimetype = g_strdup(mimetype);
 	} else {

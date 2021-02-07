@@ -42,6 +42,7 @@
 #include "cmds.h"
 #include "core.h"
 #include "debug.h"
+#include "glibcompat.h"
 #include "idle.h"
 #include "imgstore.h"
 #include "log.h"
@@ -5964,7 +5965,7 @@ pidgin_conv_write_conv(PurpleConversation *conv, const char *name, const char *a
 
 		gtk_imhtml_append_text(GTK_IMHTML(gtkconv->imhtml), buf2, gtk_font_options_all);
 	} else {
-		char *new_message = g_memdup(displaying, length);
+		char *new_message = g_memdup2(displaying, length);
 		char *alias_escaped = (alias ? g_markup_escape_text(alias, strlen(alias)) : g_strdup(""));
 		/* The initial offset is to deal with
 		 * escaped entities making the string longer */
@@ -6085,7 +6086,7 @@ pidgin_conv_write_conv(PurpleConversation *conv, const char *name, const char *a
 			length += pre_len + post_len;
 			g_free(pre);
 		} else
-			with_font_tag = g_memdup(new_message, length);
+			with_font_tag = g_memdup2(new_message, length);
 
 		gtk_imhtml_append_text(GTK_IMHTML(gtkconv->imhtml),
 							 with_font_tag, gtk_font_options | gtk_font_options_all);
@@ -10312,7 +10313,7 @@ generate_nick_colors(guint *color_count, GdkColor background)
 	if (i < numcolors) {
 		GdkColor *c = colors;
 		purple_debug_warning("gtkconv", "Unable to generate enough random colors before timeout. %u colors found.\n", i);
-		colors = g_memdup(c, i * sizeof(GdkColor));
+		colors = g_memdup2(c, i * sizeof(GdkColor));
 		g_free(c);
 		*color_count = i;
 	}

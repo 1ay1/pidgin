@@ -52,5 +52,23 @@ gboolean g_hash_table_contains (GHashTable *hash_table, gconstpointer key);
 
 #endif /* __clang__ */
 
+/* Backport the static inline version of g_memdup2 if we don't have g_memdup2.
+ * see https://mail.gnome.org/archives/desktop-devel-list/2021-February/msg00000.html
+ * for more information.
+ */
+#if !GLIB_CHECK_VERSION(2, 67, 3)
+static inline gpointer
+g_memdup2(gconstpointer mem, gsize byte_size) {
+	gpointer new_mem = NULL;
+
+	if(mem && byte_size != 0) {
+		new_mem = g_malloc (byte_size);
+		memcpy (new_mem, mem, byte_size);
+	}
+
+	return new_mem;
+}
+#endif /* !GLIB_CHECK_VERSION(2, 67, 3) */
+
 #endif /* PURPLE_GLIBCOMPAT_H */
 

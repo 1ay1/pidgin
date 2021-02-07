@@ -25,6 +25,7 @@
 #include "irc.h"
 #include "debug.h"
 #include "ft.h"
+#include "glibcompat.h"
 #include "notify.h"
 #include "network.h"
 
@@ -207,7 +208,7 @@ static void irc_dccsend_send_read(gpointer data, int source, PurpleInputConditio
 
 		xd->rxlen -= 4;
 		if (xd->rxlen) {
-			unsigned char *tmp = g_memdup(xd->rxqueue + 4, xd->rxlen);
+			unsigned char *tmp = g_memdup2(xd->rxqueue + 4, xd->rxlen);
 			g_free(xd->rxqueue);
 			xd->rxqueue = tmp;
 		} else {

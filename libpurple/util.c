@@ -27,6 +27,7 @@
 #include "conversation.h"
 #include "core.h"
 #include "debug.h"
+#include "glibcompat.h"
 #include "notify.h"
 #include "ntlm.h"
 #include "prpl.h"
@@ -4229,7 +4230,7 @@ purple_util_fetch_url_request_data_len_with_account(PurpleAccount *account,
 	gfud->user_agent = g_strdup(user_agent);
 	gfud->http11 = http11;
 	gfud->full = full;
-	gfud->request = request_len ? g_memdup(request, request_len) : NULL;
+	gfud->request = request_len ? g_memdup2(request, request_len) : NULL;
 	gfud->request_len = request_len;
 	gfud->include_headers = include_headers;
 	gfud->fd = -1;

@@ -35,6 +35,7 @@
 #include "cipher.h"
 #include "debug.h"
 #include "dnsquery.h"
+#include "glibcompat.h"
 #include "notify.h"
 #include "ntlm.h"
 #include "prefs.h"
@@ -1350,7 +1351,7 @@ s4_host_resolved(GSList *hosts, gpointer data, const char *error_message)
 		hosts = g_slist_delete_link(hosts, hosts);
 	}
 
-	connect_data->write_buffer = g_memdup(packet, sizeof(packet));
+	connect_data->write_buffer = g_memdup2(packet, sizeof(packet));
 	connect_data->write_buf_len = sizeof(packet);
 	connect_data->written_len = 0;
 	connect_data->read_cb = s4_canread;

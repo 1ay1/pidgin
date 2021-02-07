@@ -31,6 +31,7 @@
 #include "accountopt.h"
 #include "core.h"
 #include "debug.h"
+#include "glibcompat.h"
 #include "notify.h"
 #include "plugin.h"
 #include "prefs.h"
@@ -748,7 +749,7 @@ add_user_options(AccountPrefsDialog *dialog, GtkWidget *parent)
 		if (img)
 		{
 			len = purple_imgstore_get_size(img);
-			data = g_memdup(purple_imgstore_get_data(img), len);
+			data = g_memdup2(purple_imgstore_get_data(img), len);
 		}
 		set_dialog_icon(dialog, data, len,
 		                g_strdup(purple_account_get_buddy_icon_path(dialog->account)));
@@ -1343,7 +1344,7 @@ ok_account_prefs_cb(GtkWidget *w, AccountPrefsDialog *dialog)
 			{
 				size_t len = purple_imgstore_get_size(dialog->icon_img);
 				purple_buddy_icons_set_account_icon(account,
-				                                    g_memdup(purple_imgstore_get_data(dialog->icon_img), len),
+				                                    g_memdup2(purple_imgstore_get_data(dialog->icon_img), len),
 				                                    len);
 				purple_account_set_buddy_icon_path(account, purple_imgstore_get_filename(dialog->icon_img));
 			}
