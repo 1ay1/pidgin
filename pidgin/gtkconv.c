@@ -10239,16 +10239,17 @@ color_is_visible(GdkColor foreground, GdkColor background, guint color_contrast,
 	fgreen = foreground.green >> 8 ;
 	fblue = foreground.blue >> 8 ;
 
-
 	bred = background.red >> 8 ;
 	bgreen = background.green >> 8 ;
 	bblue = background.blue >> 8 ;
 
 	fg_brightness = (fred * 299 + fgreen * 587 + fblue * 114) / 1000;
 	bg_brightness = (bred * 299 + bgreen * 587 + bblue * 114) / 1000;
-	br_diff = abs(fg_brightness - bg_brightness);
+	br_diff = MAX(fg_brightness, bg_brightness) - MIN(fg_brightness, bg_brightness);
 
-	col_diff = abs(fred - bred) + abs(fgreen - bgreen) + abs(fblue - bblue);
+	col_diff = (MAX(fred, bred) - MIN(fred, bred)) +
+	           (MAX(fgreen, bgreen) - MIN(fgreen, bgreen)) +
+	           (MAX(fblue, bblue) - MIN(fblue, bblue));
 
 	return ((col_diff > color_contrast) && (br_diff > brightness_contrast));
 }
