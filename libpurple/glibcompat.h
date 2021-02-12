@@ -33,9 +33,21 @@
 # define G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 # define G_GNUC_END_IGNORE_DEPRECATIONS
 
-void g_queue_free_full(GQueue *queue, GDestroyNotify free_func);
+static inline void
+g_queue_free_full(GQueue *queue, GDestroyNotify free_func) {
+	GList *l = NULL;
 
-gboolean g_hash_table_contains (GHashTable *hash_table, gconstpointer key);
+	for(l = queue->head; l != NULL; l = l->next) {
+		free_func(l->data);
+	}
+
+	g_queue_free(queue);
+}
+
+static inline gboolean
+g_hash_table_contains(GHashTable *hash_table, gconstpointer key) {
+	return g_hash_table_lookup_extended(hash_table, key, NULL, NULL);
+}
 
 #endif /* !GLIB_CHECK_VERSION(2,32,0) */
 
