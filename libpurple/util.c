@@ -2010,7 +2010,7 @@ purple_markup_strip_html(const char *str)
 					{
 						str2[j++] = ' ';
 						str2[j++] = '(';
-						g_memmove(str2 + j, href, hrlen);
+						memmove(str2 + j, href, hrlen);
 						j += hrlen;
 						str2[j++] = ')';
 						g_free(href);
@@ -3816,7 +3816,7 @@ process_chunked_data(char *data, gsize *len)
 		}
 
 		/* Move all data overtop of the chunk length that we read in earlier */
-		g_memmove(p, s, sz);
+		memmove(p, s, sz);
 		p += sz;
 		s += sz;
 		newlen += sz;
