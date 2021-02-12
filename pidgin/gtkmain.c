@@ -31,6 +31,7 @@
 #include "debug.h"
 #include "eventloop.h"
 #include "ft.h"
+#include "glibcompat.h"
 #include "log.h"
 #include "network.h"
 #include "notify.h"
@@ -287,8 +288,7 @@ ui_main(void)
 	} else {
 		gtk_window_set_default_icon_list(icons);
 
-		g_list_foreach(icons, (GFunc)g_object_unref, NULL);
-		g_list_free(icons);
+		g_list_free_full(icons, (GDestroyNotify)g_object_unref);
 	}
 #endif
 

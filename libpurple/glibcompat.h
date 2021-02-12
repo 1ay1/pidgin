@@ -29,6 +29,30 @@
 
 #include <glib.h>
 
+#if !GLIB_CHECK_VERSION(2,28,0)
+static inline void
+g_list_free_full(GList *l, GDestroyNotify free_func) {
+	GList *ll = NULL;
+
+	for(ll = l; ll != NULL; ll = ll->next) {
+		free_func(ll->data);
+	}
+
+	g_list_free(l);
+}
+
+static inline void
+g_slist_free_full(GSList *l, GDestroyNotify free_func) {
+	GSList *ll = NULL;
+
+	for(ll = l; ll != NULL; ll = ll->next) {
+		free_func(ll->data);
+	}
+
+	g_slist_free(l);
+}
+#endif /* !GLIB_CHECK_VERSION(2,23,0) */
+
 #if !GLIB_CHECK_VERSION(2,32,0)
 # define G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 # define G_GNUC_END_IGNORE_DEPRECATIONS

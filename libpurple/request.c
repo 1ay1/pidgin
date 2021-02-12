@@ -62,8 +62,8 @@ purple_request_fields_destroy(PurpleRequestFields *fields)
 {
 	g_return_if_fail(fields != NULL);
 
-	g_list_foreach(fields->groups, (GFunc)purple_request_field_group_destroy, NULL);
-	g_list_free(fields->groups);
+	g_list_free_full(fields->groups,
+	                 (GDestroyNotify)purple_request_field_group_destroy);
 	g_list_free(fields->required_fields);
 	g_hash_table_destroy(fields->fields);
 	g_free(fields);
@@ -291,8 +291,8 @@ purple_request_field_group_destroy(PurpleRequestFieldGroup *group)
 
 	g_free(group->title);
 
-	g_list_foreach(group->fields, (GFunc)purple_request_field_destroy, NULL);
-	g_list_free(group->fields);
+	g_list_free_full(group->fields,
+	                 (GDestroyNotify)purple_request_field_destroy);
 
 	g_free(group);
 }
@@ -376,22 +376,19 @@ purple_request_field_destroy(PurpleRequestField *field)
 	{
 		if (field->u.choice.labels != NULL)
 		{
-			g_list_foreach(field->u.choice.labels, (GFunc)g_free, NULL);
-			g_list_free(field->u.choice.labels);
+			g_list_free_full(field->u.choice.labels, (GDestroyNotify)g_free);
 		}
 	}
 	else if (field->type == PURPLE_REQUEST_FIELD_LIST)
 	{
 		if (field->u.list.items != NULL)
 		{
-			g_list_foreach(field->u.list.items, (GFunc)g_free, NULL);
-			g_list_free(field->u.list.items);
+			g_list_free_full(field->u.list.items, (GDestroyNotify)g_free);
 		}
 
 		if (field->u.list.selected != NULL)
 		{
-			g_list_foreach(field->u.list.selected, (GFunc)g_free, NULL);
-			g_list_free(field->u.list.selected);
+			g_list_free_full(field->u.list.selected, (GDestroyNotify)g_free);
 		}
 
 		g_hash_table_destroy(field->u.list.item_data);
@@ -919,8 +916,7 @@ purple_request_field_list_clear_selected(PurpleRequestField *field)
 
 	if (field->u.list.selected != NULL)
 	{
-		g_list_foreach(field->u.list.selected, (GFunc)g_free, NULL);
-		g_list_free(field->u.list.selected);
+		g_list_free_full(field->u.list.selected, (GDestroyNotify)g_free);
 		field->u.list.selected = NULL;
 	}
 

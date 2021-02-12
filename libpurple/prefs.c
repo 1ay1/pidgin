@@ -32,8 +32,9 @@
 #include <sys/types.h>
 #include <glib.h>
 #include "internal.h"
-#include "prefs.h"
 #include "debug.h"
+#include "glibcompat.h"
+#include "prefs.h"
 #include "util.h"
 
 #ifdef _WIN32
@@ -587,10 +588,8 @@ free_pref_value(struct purple_pref *pref)
 			break;
 		case PURPLE_PREF_STRING_LIST:
 		case PURPLE_PREF_PATH_LIST:
-			{
-				g_list_foreach(pref->value.stringlist, (GFunc)g_free, NULL);
-				g_list_free(pref->value.stringlist);
-			} break;
+			g_list_free_full(pref->value.stringlist, (GDestroyNotify)g_free);
+			break;
 		case PURPLE_PREF_NONE:
 			break;
 	}
@@ -997,8 +996,7 @@ purple_prefs_set_string_list(const char *name, GList *value)
 			return;
 		}
 
-		g_list_foreach(pref->value.stringlist, (GFunc)g_free, NULL);
-		g_list_free(pref->value.stringlist);
+		g_list_free_full(pref->value.stringlist, (GDestroyNotify)g_free);
 		pref->value.stringlist = NULL;
 
 		for(tmp = value; tmp; tmp = tmp->next) {
@@ -1063,8 +1061,7 @@ purple_prefs_set_path_list(const char *name, GList *value)
 			return;
 		}
 
-		g_list_foreach(pref->value.stringlist, (GFunc)g_free, NULL);
-		g_list_free(pref->value.stringlist);
+		g_list_free_full(pref->value.stringlist, (GDestroyNotify)g_free);
 		pref->value.stringlist = NULL;
 
 		for(tmp = value; tmp; tmp = tmp->next)

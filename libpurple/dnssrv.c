@@ -22,6 +22,7 @@
  */
 #define _PURPLE_DNSSRV_C_
 
+#include "glibcompat.h"
 #include "internal.h"
 #include "util.h"
 
@@ -539,16 +540,16 @@ resolved(gpointer data, gint source, PurpleInputCondition cond)
 							purple_debug_error("dnssrv","unable to read txt "
 									"response length: %s\n", g_strerror(errno));
 							size = 0;
-							g_list_foreach(responses, (GFunc)purple_txt_response_destroy, NULL);
-							g_list_free(responses);
+							g_list_free_full(responses,
+							                 (GDestroyNotify)purple_txt_response_destroy);
 							responses = NULL;
 							break;
 						}
 						if (len > MAX_ADDR_RESPONSE_LEN) {
 							purple_debug_error("dnssrv", "we've read invalid number\n");
 							size = 0;
-							g_list_foreach(responses, (GFunc)purple_txt_response_destroy, NULL);
-							g_list_free(responses);
+							g_list_free_full(responses,
+							                 (GDestroyNotify)purple_txt_response_destroy);
 							responses = NULL;
 							break;
 						}
@@ -562,8 +563,8 @@ resolved(gpointer data, gint source, PurpleInputCondition cond)
 									"response: %s\n", g_strerror(errno));
 							size = 0;
 							purple_txt_response_destroy(res);
-							g_list_foreach(responses, (GFunc)purple_txt_response_destroy, NULL);
-							g_list_free(responses);
+							g_list_free_full(responses,
+							                 (GDestroyNotify)purple_txt_response_destroy);
 							responses = NULL;
 							break;
 						}

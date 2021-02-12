@@ -25,6 +25,7 @@
 #include "account.h"
 #include "conversation.h"
 #include "debug.h"
+#include "glibcompat.h"
 #include "notify.h"
 #include "request.h"
 #include "server.h"
@@ -491,16 +492,14 @@ jabber_presence_set_capabilities(JabberCapsClientInfo *info, GList *exts,
 		g_free(userdata->from);
 		g_free(userdata);
 		if (exts) {
-			g_list_foreach(exts, (GFunc)g_free, NULL);
-			g_list_free(exts);
+			g_list_free_full(exts, g_free);
 		}
 		return;
 	}
 
 	/* Any old jbr->caps.info is owned by the caps code */
 	if (jbr->caps.exts) {
-		g_list_foreach(jbr->caps.exts, (GFunc)g_free, NULL);
-		g_list_free(jbr->caps.exts);
+		g_list_free_full(jbr->caps.exts, g_free);
 	}
 
 	jbr->caps.info = info;

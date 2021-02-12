@@ -25,6 +25,7 @@
 #include "conversation.h"
 #include "dbus-maybe.h"
 #include "debug.h"
+#include "glibcompat.h"
 #include "imgstore.h"
 #include "notify.h"
 #include "prefs.h"
@@ -286,13 +287,6 @@ free_conv_message(PurpleConvMessage *msg)
 	g_free(msg->what);
 	PURPLE_DBUS_UNREGISTER_POINTER(msg);
 	g_free(msg);
-}
-
-static void
-message_history_free(GList *list)
-{
-	g_list_foreach(list, (GFunc)free_conv_message, NULL);
-	g_list_free(list);
 }
 
 /**************************************************************************
@@ -622,11 +616,10 @@ purple_conversation_destroy(PurpleConversation *conv)
 		g_hash_table_destroy(conv->u.chat->users);
 		conv->u.chat->users = NULL;
 
-		g_list_foreach(conv->u.chat->in_room, (GFunc)purple_conv_chat_cb_destroy, NULL);
-		g_list_free(conv->u.chat->in_room);
+		g_list_free_full(conv->u.chat->in_room,
+		                 (GDestroyNotify)purple_conv_chat_cb_destroy);
 
-		g_list_foreach(conv->u.chat->ignored, (GFunc)g_free, NULL);
-		g_list_free(conv->u.chat->ignored);
+		g_list_free_full(conv->u.chat->ignored, (GDestroyNotify)g_free);
 
 		conv->u.chat->in_room = NULL;
 		conv->u.chat->ignored = NULL;
@@ -878,8 +871,7 @@ purple_conversation_close_logs(PurpleConversation *conv)
 {
 	g_return_if_fail(conv != NULL);
 
-	g_list_foreach(conv->logs, (GFunc)purple_log_free, NULL);
-	g_list_free(conv->logs);
+	g_list_free_full(conv->logs, (GDestroyNotify)purple_log_free);
 	conv->logs = NULL;
 }
 
@@ -2384,7 +2376,7 @@ purple_conversation_get_extended_menu(PurpleConversation *conv)
 void purple_conversation_clear_message_history(PurpleConversation *conv)
 {
 	GList *list = conv->message_history;
-	message_history_free(list);
+	g_list_free_full(list, (GDestroyNotify)free_conv_message);
 	conv->message_history = NULL;
 
 	purple_signal_emit(purple_conversations_get_handle(),

@@ -31,6 +31,7 @@
 #include "conversation.h"
 #include "debug.h"
 #include "dnssrv.h"
+#include "glibcompat.h"
 #include "imgstore.h"
 #include "message.h"
 #include "notify.h"
@@ -831,8 +832,7 @@ txt_resolved_cb(GList *responses, gpointer data)
 	}
 
 	if (responses) {
-		g_list_foreach(responses, (GFunc)purple_txt_response_destroy, NULL);
-		g_list_free(responses);
+		g_list_free_full(responses, (GDestroyNotify)purple_txt_response_destroy);
 	}
 }
 

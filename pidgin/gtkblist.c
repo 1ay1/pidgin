@@ -31,6 +31,7 @@
 #include "connection.h"
 #include "core.h"
 #include "debug.h"
+#include "glibcompat.h"
 #include "notify.h"
 #include "prpl.h"
 #include "prefs.h"
@@ -2130,8 +2131,7 @@ add_buddies_from_vcard(const char *prpl_id, PurpleGroup *group, GList *list,
 		}
 	}
 
-	g_list_foreach(list, (GFunc)g_free, NULL);
-	g_list_free(list);
+	g_list_free_full(list, (GDestroyNotify)g_free);
 }
 
 static gboolean

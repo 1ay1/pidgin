@@ -31,6 +31,7 @@
 #endif
 
 #include "internal.h"
+#include "glibcompat.h"
 #include "pidgin.h"
 #include "pidginstock.h"
 #include "gtkutils.h"
@@ -5692,8 +5693,7 @@ static void gtk_custom_smiley_closed(GdkPixbufLoader *loader, gpointer user_data
 			if (smiley->imhtml) {
 				if (wids) {
 					GList *children = gtk_container_get_children(GTK_CONTAINER(wids->data));
-					g_list_foreach(children, (GFunc)gtk_widget_destroy, NULL);
-					g_list_free(children);
+					g_list_free_full(children, (GDestroyNotify)gtk_widget_destroy);
 					gtk_container_add(GTK_CONTAINER(wids->data), icon);
 				} else
 					gtk_text_view_add_child_at_anchor(GTK_TEXT_VIEW(smiley->imhtml), icon, anchor);
