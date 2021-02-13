@@ -1348,9 +1348,16 @@ pidgin_notify_uri(const char *uri)
 		 * Does Konqueror have options to open in new tab
 		 * and/or current window?
 		 */
+	} else if (purple_strequal(web_browser, "firefox")) {
+		argv = g_slist_append(argv, "firefox");
+		if (place == PIDGIN_BROWSER_NEW_WINDOW) {
+			argv = g_slist_append(argv, "--new-window");
+		} else if (place == PIDGIN_BROWSER_NEW_TAB) {
+			argv = g_slist_append(argv, "--new-tab");
+		}
+		argv = g_slist_append(argv, uri_escaped);
 	} else if (purple_strequal(web_browser, "mozilla") ||
 		purple_strequal(web_browser, "mozilla-firebird") ||
-		purple_strequal(web_browser, "firefox") ||
 		purple_strequal(web_browser, "seamonkey"))
 	{
 		argv = g_slist_append(argv, (gpointer)web_browser);
@@ -1371,20 +1378,6 @@ pidgin_notify_uri(const char *uri)
 		if (uri_custom != NULL) {
 			argv_remote = g_slist_append(argv_remote,
 				(gpointer)web_browser);
-
-			/* Firefox 0.9 and higher require a "-a firefox" option
-			 * when using -remote commands. This breaks older
-			 * versions of mozilla. So we include this other handly
-			 * little string when calling firefox. If the API for
-			 * remote calls changes any more in firefox then firefox
-			 * should probably be split apart from mozilla-firebird
-			 * and mozilla... but this is good for now.
-			 */
-			if (purple_strequal(web_browser, "firefox")) {
-				argv_remote = g_slist_append(argv_remote, "-a");
-				argv_remote = g_slist_append(argv_remote,
-					"firefox");
-			}
 
 			argv_remote = g_slist_append(argv_remote, "-remote");
 			argv_remote = g_slist_append(argv_remote, uri_custom);
