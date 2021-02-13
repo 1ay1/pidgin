@@ -2782,7 +2782,7 @@ char *jabber_parse_error(JabberStream *js,
 			/* Clear the pasword if it isn't being saved */
 			if (!purple_account_get_remember_password(js->gc->account))
 				purple_account_set_password(js->gc->account, NULL);
-			text = _("Not Authorized");
+			text = _("Incorrect username or password");
 		} else if(xmlnode_get_child(packet, "temporary-auth-failure")) {
 			text = _("Temporary Authentication Failure");
 		} else {
