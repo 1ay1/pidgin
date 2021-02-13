@@ -27,6 +27,8 @@
 #ifndef PURPLE_GLIBCOMPAT_H
 #define PURPLE_GLIBCOMPAT_H
 
+#include <string.h>
+
 #include <glib.h>
 
 #if !GLIB_CHECK_VERSION(2,28,0)
