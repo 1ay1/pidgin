@@ -64,7 +64,6 @@ C_SRC =	\
 			dnssrv.c \
 			eventloop.c \
 			ft.c \
-			glibcompat.c \
 			idle.c \
 			imgstore.c \
 			log.c \
