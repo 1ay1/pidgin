@@ -2859,11 +2859,16 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 25:	/* BR */
 				case 58:	/* BR/ */
 				case 61:	/* BR (opt) */
-				case 29:	/* P */
-				case 30:	/* /P */
 					ws[wpos] = '\n';
 					wpos++;
 					br = TRUE;
+					break;
+				case 29:	/* P */
+					if(wpos > 0) {
+						ws[wpos] = '\n';
+						wpos++;
+						br = TRUE;
+					}
 					break;
 				case 26:        /* HR */
 				case 42:        /* HR (opt) */
@@ -2934,6 +2939,7 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 					ws[0] = '\0'; wpos = 0;
 					break;
 
+				case 30:	/* /P */
 				case 31:	/* H3 */
 				case 32:	/* /H3 */
 				case 33:	/* HTML */
