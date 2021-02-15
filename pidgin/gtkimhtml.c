@@ -3547,9 +3547,7 @@ gtk_imhtml_set_protocol_name(GtkIMHtml *imhtml, const gchar *protocol_name) {
 
 void
 gtk_imhtml_delete(GtkIMHtml *imhtml, GtkTextIter *start, GtkTextIter *end) {
-	GList *l;
-	GSList *sl;
-	GtkTextIter i, i_s, i_e;
+	GtkTextIter i_s, i_e;
 	GObject *object = g_object_ref(G_OBJECT(imhtml));
 
 	if (start == NULL) {
@@ -3562,37 +3560,11 @@ gtk_imhtml_delete(GtkIMHtml *imhtml, GtkTextIter *start, GtkTextIter *end) {
 		end = &i_e;
 	}
 
-	l = imhtml->scalables;
-	while (l) {
-		GList *next = l->next;
-		struct scalable_data *sd = l->data;
-		gtk_text_buffer_get_iter_at_mark(imhtml->text_buffer,
-			&i, sd->mark);
-		if (gtk_text_iter_in_range(&i, start, end)) {
-			GtkIMHtmlScalable *scale = GTK_IMHTML_SCALABLE(sd->scalable);
-			scale->free(scale);
-			g_free(sd);
-			imhtml->scalables = g_list_delete_link(imhtml->scalables, l);
-		}
-		l = next;
-	}
-
-	sl = imhtml->im_images;
-	while (sl) {
-		GSList *next = sl->next;
-		struct im_image_data *img_data = sl->data;
-		gtk_text_buffer_get_iter_at_mark(imhtml->text_buffer,
-			&i, img_data->mark);
-		if (gtk_text_iter_in_range(&i, start, end)) {
-			if (imhtml->funcs->image_unref)
-				imhtml->funcs->image_unref(img_data->id);
-			imhtml->im_images = g_slist_delete_link(imhtml->im_images, sl);
-			g_free(img_data);
-		}
-		sl = next;
-	}
+	/* This will cause the signal handler to get called which will call
+	 * delete_cb and clean up everything else. */
 	gtk_text_buffer_delete(imhtml->text_buffer, start, end);
 
+	/* This is wrong, but i'm not trying to total what we actually removed. */
 	g_object_set_data(G_OBJECT(imhtml), "gtkimhtml_numsmileys_total", GINT_TO_POINTER(0));
 
 	g_object_unref(object);
@@ -4373,11 +4345,14 @@ static void insert_cb(GtkTextBuffer *buffer, GtkTextIter *end, gchar *text, gint
 
 static void delete_cb(GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *end, GtkIMHtml *imhtml)
 {
-	GSList *tags, *l;
+	GList *l;
+	GSList *tags, *sl;
+	GtkTextIter i;
 
+	/* clean up tags */
 	tags = gtk_text_iter_get_tags(start);
-	for (l = tags; l != NULL; l = l->next) {
-		GtkTextTag *tag = GTK_TEXT_TAG(l->data);
+	for (sl = tags; sl != NULL; sl = sl->next) {
+		GtkTextTag *tag = GTK_TEXT_TAG(sl->data);
 
 		if (tag &&							/* Remove the formatting only if */
 				gtk_text_iter_starts_word(start) &&				/* beginning of a word */
@@ -4392,6 +4367,38 @@ static void delete_cb(GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *en
 		}
 	}
 	g_slist_free(tags);
+
+	/* remove scalables */
+	l = imhtml->scalables;
+	while (l) {
+		GList *next = l->next;
+		struct scalable_data *sd = l->data;
+
+		gtk_text_buffer_get_iter_at_mark(imhtml->text_buffer, &i, sd->mark);
+		if (gtk_text_iter_in_range(&i, start, end)) {
+			GtkIMHtmlScalable *scale = GTK_IMHTML_SCALABLE(sd->scalable);
+			scale->free(scale);
+			g_free(sd);
+			imhtml->scalables = g_list_delete_link(imhtml->scalables, l);
+		}
+		l = next;
+	}
+
+	/* remove images */
+	sl = imhtml->im_images;
+	while (sl) {
+		GSList *next = sl->next;
+		struct im_image_data *img_data = sl->data;
+		gtk_text_buffer_get_iter_at_mark(imhtml->text_buffer,
+			&i, img_data->mark);
+		if (gtk_text_iter_in_range(&i, start, end)) {
+			if (imhtml->funcs->image_unref)
+				imhtml->funcs->image_unref(img_data->id);
+			imhtml->im_images = g_slist_delete_link(imhtml->im_images, sl);
+			g_free(img_data);
+		}
+		sl = next;
+	}
 }
 
 static void gtk_imhtml_apply_tags_on_insert(GtkIMHtml *imhtml, GtkTextIter *start, GtkTextIter *end)
