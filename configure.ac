@@ -1458,23 +1458,18 @@ dnl auto-generated stuff to the repository is inelegant.
 dnl Alternatively, these python scripts could be rewritten
 dnl in C (brrrr ...).
 
-AC_ARG_WITH([python],
-			AC_HELP_STRING([--with-python=PATH],
+AC_ARG_WITH([python3],
+			AC_HELP_STRING([--with-python3=PATH],
 						   [which python interpreter to use for dbus code generation]),
-			PYTHON=$withval)
+			PYTHON3=$withval)
 
 if test "x$enable_dbus" = "xyes" ; then
-	if test -z "$PYTHON" -o "x$PYTHON" = "xyes"; then
-		AC_PATH_PROG([PYTHON], [python], [no])
+	if test -z "$PYTHON3" -o "x$PYTHON3" = "xyes"; then
+		AC_PATH_PROG([PYTHON3], [python3], [no])
 	fi
 
-	if test x"$PYTHON" = x"no" ; then
-		AC_MSG_WARN([python interpreter not found in your path])
-		enable_dbus=no
-	fi
-
-	if $PYTHON -c "import sys; sys.exit(sys.version[[:3]] >= '2.4')" ; then
-		AC_MSG_WARN([python version >= 2.4 required])
+	if test x"$PYTHON3" = x"no" ; then
+		AC_MSG_WARN([python3 interpreter not found in your path])
 		enable_dbus=no
 	fi
 fi
