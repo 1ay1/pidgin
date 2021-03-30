@@ -41,12 +41,25 @@ authenticode_sign = $(SIGNTOOL) sign \
 		    /tr "http://timestamp.comodoca.com/rfc3161" /td SHA256 \
 		    $(1)
 else
+ifdef OSSLSIGNCODE
+osslsigncode_sign = $(OSSLSIGNCODE) sign \
+		    -spc "$(SIGNCODE_SPC)" -key "$(SIGNCODE_PVK)" \
+		    -h $(3) -comm \
+		    -n $(2) -i "https://pidgin.im" \
+		    -t http://timestamp.digicert.com \
+                    -in $(1) -out $(1).signed \
+		    && mv $(1).signed $(1)
+# osslsigncode apparently only allows one nested signature
+authenticode_sign = $(call osslsigncode_sign,$(1),$(2),sha1) && \
+		    $(call osslsigncode_sign,$(1),$(2),sha256 -nest)
+else
 authenticode_sign = $(MONO_SIGNCODE) \
 		    -spc "$(SIGNCODE_SPC)" -v "$(SIGNCODE_PVK)" \
 		    -a sha1 -$$ commercial \
 		    -n "$(2)" -i "https://pidgin.im" \
 		    -t "http://timestamp.verisign.com/scripts/timstamp.dll" -tr 10 \
 		    $(1) && rm -f $(1).bak
+endif
 endif
 
 gpg_sign = $(GPG_SIGN) -ab $(1) && $(GPG_SIGN) --verify $(1).asc
