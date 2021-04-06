@@ -10,6 +10,16 @@ include $(PIDGIN_TREE_TOP)/libpurple/win32/global.mak
 TARGET = libpurple
 NEEDED_DLLS = $(LIBXML2_TOP)/bin/libxml2-2.dll
 
+# gcc 4.8 on windows moved to dynamically linking libgcc. So if we're building
+# under msys2 we assume we're using gcc >= 4.8 and need to copy libgcc and
+# libwinpthread from the system into our install bundle.
+#
+# See https://gcc.gnu.org/gcc-4.8/changes.html#windows for more info.
+ifeq ($(MSYSTEM),MINGW32)
+NEEDED_DLLS += $(MSYSTEM_PREFIX)/bin/libgcc_s_dw2-1.dll \
+               $(MSYSTEM_PREFIX)/bin/libwinpthread-1.dll
+endif
+
 ifeq ($(CYRUS_SASL), 1)
 NEEDED_DLLS += $(CYRUS_SASL_TOP)/bin/libsasl2-3.dll
 
