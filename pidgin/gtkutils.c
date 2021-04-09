@@ -1142,49 +1142,6 @@ pidgin_parse_x_im_contact(const char *msg, gboolean all_accounts,
 				account = NULL;
 			}
 
-			/* Special case for AIM and ICQ */
-			if (account == NULL && (purple_strequal(protocol, "aim") ||
-									purple_strequal(protocol, "icq")))
-			{
-				for (l = list; l != NULL; l = l->next)
-				{
-					PurpleConnection *gc;
-					PurplePluginProtocolInfo *prpl_info = NULL;
-					PurplePlugin *plugin;
-
-					if (all_accounts)
-					{
-						account = (PurpleAccount *)l->data;
-
-						plugin = purple_plugins_find_with_id(
-							purple_account_get_protocol_id(account));
-
-						if (plugin == NULL)
-						{
-							account = NULL;
-
-							continue;
-						}
-
-						prpl_info = PURPLE_PLUGIN_PROTOCOL_INFO(plugin);
-					}
-					else
-					{
-						gc = (PurpleConnection *)l->data;
-						account = purple_connection_get_account(gc);
-
-						prpl_info = PURPLE_PLUGIN_PROTOCOL_INFO(gc->prpl);
-					}
-
-					protoname = prpl_info->list_icon(account, NULL);
-
-					if (purple_strequal(protoname, "aim") || purple_strequal(protoname, "icq"))
-						break;
-
-					account = NULL;
-				}
-			}
-
 			*ret_account = account;
 		}
 	}

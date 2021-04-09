@@ -387,7 +387,6 @@ SectionGroupEnd
   SectionEnd
 !macroend
 SectionGroup /e $(URIHANDLERSSECTIONTITLE) SecURIHandlers
-  !insertmacro URI_SECTION "aim"
   !insertmacro URI_SECTION "xmpp"
 SectionGroupEnd
 
