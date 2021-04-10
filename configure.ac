@@ -355,7 +355,7 @@ AC_ARG_ENABLE(gtkspell,
 AC_ARG_ENABLE(gevolution,
 	[AC_HELP_STRING([--enable-gevolution],
 		[compile with the Evolution plugin])],
-	enable_gevolution="$enableval", enable_gevolution="no")
+	enable_gevolution="$enableval", enable_gevolution="yes")
 AC_ARG_ENABLE(cap,
 	[AC_HELP_STRING([--enable-cap],
 		[compile with Contact Availability Prediction plugin])],
@@ -529,18 +529,10 @@ Use --disable-gtkspell if you do not need it.
 	dnl # Check for stuff needed by the Evolution integration plugin.
 	dnl #######################################################################
 	if test "x$enable_gevolution" = "xyes"; then
-		evo_deps="libebook-1.2 libedata-book-1.2 evolution-data-server-1.2 < 3.6"
+		evo_deps="libebook-1.2 libedata-book-1.2 evolution-data-server-1.2 >= 3.6"
 		PKG_CHECK_MODULES(EVOLUTION_ADDRESSBOOK, $evo_deps, , [
 			enable_gevolution="no"
 		])
-		if test "x$enable_gevolution" = "xno"; then
-			evo_deps="libebook-1.0 libedata-book-1.0"
-			PKG_CHECK_MODULES(EVOLUTION_ADDRESSBOOK, $evo_deps, [
-				enable_gevolution="yes"
-			], [
-				enable_gevolution="no"
-			])
-		fi
 		if test "x$enable_gevolution" = "xyes"; then
 			AC_DEFINE(HAVE_EVOLUTION_ADDRESSBOOK, 1, [Define if we're using evolution addressbook.])
 			AC_SUBST(EVOLUTION_ADDRESSBOOK_CFLAGS)
@@ -548,7 +540,7 @@ Use --disable-gtkspell if you do not need it.
 		else
 			if test "x$force_deps" = "xyes" ; then
 				AC_MSG_ERROR([
-Evolution development headers not found (libebook, libedata-book, evolution-data-server < 3.6).
+Evolution development headers not found (libebook, libedata-book, evolution-data-server >= 3.6).
 Use --disable-gevolution if you do not need it.
 ])
 			fi
