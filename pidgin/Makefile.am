@@ -162,6 +162,8 @@ pidgin_LDADD = \
 	$(LIBXML_LIBS) \
 	$(GTK_LIBS) \
 	$(GIO_UNIX_LIBS) \
+	$(X11_LIBS) \
+	$(LIBM) \
 	$(top_builddir)/libpurple/libpurple.la
 
 AM_CPPFLAGS = \

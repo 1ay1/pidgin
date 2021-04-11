@@ -313,8 +313,8 @@ libpurple_la_LIBADD = \
 	$(GSTAPP_LIBS) \
 	$(GSTINTERFACES_LIBS) \
 	$(IDN_LIBS) \
-	ciphers/libpurple-ciphers.la \
-	-lm
+	$(LIBM) \
+	ciphers/libpurple-ciphers.la
 
 AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)\" \

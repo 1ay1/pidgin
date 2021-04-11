@@ -91,6 +91,9 @@ AC_CHECK_SIZEOF(time_t, ,[
 
 AC_C_BIGENDIAN
 
+LT_LIB_M
+AC_SUBST(LIBM)
+
 dnl Checks for library functions.
 AC_TYPE_SIGNAL
 AC_FUNC_STRFTIME
