@@ -8,6 +8,10 @@
 #include optional $(PIDGIN_TREE_TOP)/local.mak to allow overriding of any definitions
 -include $(PIDGIN_TREE_TOP)/local.mak
 
+ABS_TOP_SRCDIR := $(shell realpath $(PIDGIN_TREE_TOP))
+# in case we ever do separate build directories
+ABS_TOP_BUILDDIR := $(ABS_TOP_SRCDIR)
+
 # Locations of our various dependencies
 WIN32_DEV_TOP ?= $(PIDGIN_TREE_TOP)/../win32-dev
 GTKSPELL_TOP ?= $(WIN32_DEV_TOP)/gtkspell-2.0.16
@@ -74,6 +78,8 @@ PIDGIN_VERSION := $(shell \
   cat $(PIDGIN_TREE_TOP)/VERSION \
 )
 PURPLE_VERSION := $(PIDGIN_VERSION)
+PURPLE_MAJOR_VERSION := $(firstword $(subst ., ,$(PURPLE_VERSION)))
+
 ifdef EXTRAVERSION
 DISPLAY_VERSION := $(PIDGIN_VERSION)-$(EXTRAVERSION)
 else
