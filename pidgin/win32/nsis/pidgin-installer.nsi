@@ -257,7 +257,7 @@ Section $(GTKSECTIONTITLE) SecGtk
   retry:
   StrCpy $R2 "${DOWNLOADER_URL}&gtk_version=${GTK_INSTALL_VERSION}&dl_pkg=gtk"
   DetailPrint "Downloading GTK+ Runtime ... ($R2)"
-  inetc::get /TIMEOUT=10000 "$R2" "$R1"
+  inetc::get /CONNECTTIMEOUT=10 "$R2" "$R1"
   Pop $R0
   StrCmp $R0 "OK" 0 prompt_retry
 
@@ -435,10 +435,10 @@ Section /o $(DEBUGSYMBOLSSECTIONTITLE) SecDebugSymbols
   retry:
   StrCpy $R2 "${DOWNLOADER_URL}&dl_pkg=dbgsym"
   DetailPrint "Downloading Debug Symbols... ($R2)"
-  NSISdl::download /TIMEOUT=10000 "$R2" "$R1"
+  inetc::get /CONNECTTIMEOUT=10 "$R2" "$R1"
   Pop $R0
-  StrCmp $R0 "cancel" done
-  StrCmp $R0 "success" 0 prompt_retry
+  StrCmp $R0 "Cancelled" done
+  StrCmp $R0 "OK" 0 prompt_retry
 
   Push "${DEBUG_SYMBOLS_SHA1SUM}"
   Push "$R1" ; Filename
