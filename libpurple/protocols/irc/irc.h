@@ -34,7 +34,7 @@
 #include "roomlist.h"
 #include "sslconn.h"
 
-#define IRC_DEFAULT_SERVER "irc.freenode.net"
+#define IRC_DEFAULT_SERVER "irc.libera.chat"
 #define IRC_DEFAULT_PORT 6667
 #define IRC_DEFAULT_SSL_PORT 994
 
