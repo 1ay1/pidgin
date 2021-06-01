@@ -746,17 +746,21 @@ purple_notify_close(PurpleNotifyType type, void *ui_handle)
 void
 purple_notify_close_with_handle(void *handle)
 {
-	GList *l, *prev = NULL;
+	GList *l;
 	PurpleNotifyUiOps *ops;
 
 	g_return_if_fail(handle != NULL);
 
 	ops = purple_notify_get_ui_ops();
 
-	for (l = handles; l != NULL; l = prev ? prev->next : handles) {
-		PurpleNotifyInfo *info = l->data;
+	l = handles;
+	while(l != NULL) {
+		PurpleNotifyInfo *info = (PurpleNotifyInfo *)l->data;
 
-		if (info->handle == handle) {
+		if(info != NULL && info->handle == handle) {
+			/* Move to the next item before we remove our current item. */
+			l = l->next;
+
 			handles = g_list_remove(handles, info);
 
 			if (ops != NULL && ops->close_notify != NULL)
@@ -766,8 +770,9 @@ purple_notify_close_with_handle(void *handle)
 				info->cb(info->cb_user_data);
 
 			g_free(info);
-		} else
-			prev = l;
+		} else {
+			l = l->next;
+		}
 	}
 }
 
