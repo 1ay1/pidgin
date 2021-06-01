@@ -110,12 +110,17 @@ purple_dnsquery_resolved(PurpleDnsQueryData *query_data, GSList *hosts)
 		 * Callback is a required parameter, but it can get set to
 		 * NULL if we cancel a thread-based DNS lookup.  So we need
 		 * to free hosts.
+		 *
+		 * The host's list is pairs of file descriptors and sockaddr_in's.
 		 */
 		while (hosts != NULL)
 		{
+			gpointer data;
 			hosts = g_slist_remove(hosts, hosts->data);
-			g_free(hosts->data);
+
+			data = hosts->data;
 			hosts = g_slist_remove(hosts, hosts->data);
+			g_free(data);
 		}
 	}
 
@@ -472,8 +477,7 @@ purple_dnsquery_resolver_new(gboolean show_debug)
 		return NULL;
 	}
 
-	resolver = g_new(PurpleDnsQueryResolverProcess, 1);
-	resolver->inpa = 0;
+	resolver = g_new0(PurpleDnsQueryResolverProcess, 1);
 
 	cope_with_gdb_brokenness();
 

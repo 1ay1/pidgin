@@ -160,11 +160,15 @@ select_random_response(GList *list, PurpleSrvResponseContainer **container_ptr)
 	r = runningtotal ? g_random_int_range(1, runningtotal + 1) : 0;
 	cur = list;
 	while (r > ((PurpleSrvResponseContainer *)cur->data)->sum) {
+		if(cur->next == NULL) {
+			break;
+		}
+
 		cur = cur->next;
 	}
 
 	/* Set the return parameter and remove cur from the list */
-	*container_ptr =  cur->data;
+	*container_ptr = cur->data;
 	return g_list_delete_link(list, cur);
 }
 
@@ -198,9 +202,18 @@ srv_reorder(GList *list, int num)
 	cur = list;
 	while (container_list) {
 		container_list = select_random_response(container_list, &container);
+
+		if(container == NULL) {
+			break;
+		}
+
 		cur->data = container->response;
 		g_free(container);
 		cur = cur->next;
+
+		if(cur == NULL) {
+			break;
+		}
 	}
 }
 
@@ -214,7 +227,7 @@ srv_reorder(GList *list, int num)
 static GList *
 purple_srv_sort(GList *list)
 {
-	int pref, count;
+	int count;
 	GList *cur, *start;
 
 	if (!list || !list->next) {
@@ -228,9 +241,14 @@ purple_srv_sort(GList *list)
 	count = 1;
 	while (cur) {
 		PurpleSrvResponse *next_response;
-		pref = ((PurpleSrvResponse *)cur->data)->pref;
+		PurpleSrvResponse *resp = (PurpleSrvResponse *)cur->data;
 		next_response = cur->next ? cur->next->data : NULL;
-		if (!next_response || next_response->pref != pref) {
+
+		if(resp == NULL) {
+			continue;
+		}
+
+		if (!next_response || next_response->pref != resp->pref) {
 			/*
 			 * The 'count' records starting at 'start' all have the same
 			 * priority.  Sort them by weight.
@@ -454,6 +472,8 @@ end:
 	write_to_parent(in, out, &size, sizeof(size));
 	while (ret != NULL)
 	{
+		gpointer data;
+
 		if (query.type == T_SRV)
 			write_to_parent(in, out, ret->data, sizeof(PurpleSrvResponse));
 		if (query.type == T_TXT) {
@@ -463,8 +483,9 @@ end:
 			write_to_parent(in, out, response->content, l);
 		}
 
-		g_free(ret->data);
+		data = ret->data;
 		ret = g_list_remove(ret, ret->data);
+		g_free(data);
 	}
 
 	close(out);
