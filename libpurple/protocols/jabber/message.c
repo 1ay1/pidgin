@@ -203,7 +203,7 @@ static void handle_chat(JabberMessage *jm)
 
 			if(jbr->thread_id)
 				g_free(jbr->thread_id);
-			jbr->thread_id = g_strdup(jbr->thread_id);
+			jbr->thread_id = g_strdup(jm->thread_id);
 		}
 
 		serv_got_im(gc, jm->from, body->str, 0, jm->sent);
