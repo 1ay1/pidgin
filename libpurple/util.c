@@ -1479,6 +1479,7 @@ purple_markup_html_to_xhtml(const char *html, char **xhtml_out,
 					tag = tag->next;
 				}
 				if(tag) {
+					gpointer data;
 					while(tags) {
 						struct purple_parse_tag *pt = tags->data;
 						if(xhtml && !pt->ignore)
@@ -1500,8 +1501,9 @@ purple_markup_html_to_xhtml(const char *html, char **xhtml_out,
 						tags = g_list_remove(tags, pt);
 						g_free(pt);
 					}
-					g_free(tag->data);
+					data = tag->data;
 					tags = g_list_remove(tags, tag->data);
+					g_free(data);
 				} else {
 					/* a closing tag we weren't expecting...
 					 * we'll let it slide, if it's really a tag...if it's
@@ -3345,7 +3347,8 @@ purple_str_seconds_to_string(guint secs)
 	hrs  = secs / (60 * 60);
 	secs = secs % (60 * 60);
 	mins = secs / 60;
-	secs = secs % 60;
+	/* this is no longer used, but in case you need it it's here.. */
+	/* secs = secs % 60; */
 
 	if (days > 0)
 	{
