@@ -3976,7 +3976,6 @@ add_chat_buddy_common(PurpleConversation *conv, PurpleConvChatBuddy *cb, const c
 	PidginChatPane *gtkchat;
 	PurpleConvChat *chat;
 	PurpleConnection *gc;
-	PurplePluginProtocolInfo *prpl_info;
 	GtkTreeModel *tm;
 	GtkListStore *ls;
 	GtkTreePath *newpath;
@@ -3997,7 +3996,7 @@ add_chat_buddy_common(PurpleConversation *conv, PurpleConvChatBuddy *cb, const c
 	gtkchat = gtkconv->u.chat;
 	gc      = purple_conversation_get_gc(conv);
 
-	if (!gc || !(prpl_info = PURPLE_PLUGIN_PROTOCOL_INFO(gc->prpl)))
+	if (!gc || !(PURPLE_PLUGIN_PROTOCOL_INFO(gc->prpl)))
 		return;
 
 	tm = gtk_tree_view_get_model(GTK_TREE_VIEW(gtkchat->list));
@@ -4275,10 +4274,15 @@ tab_complete(PurpleConversation *conv)
 
 		while (matches) {
 			char *tmp = addthis;
+			gpointer data;
+
 			addthis = g_strconcat(tmp, matches->data, " ", NULL);
+
 			g_free(tmp);
-			g_free(matches->data);
+
+			data = matches->data;
 			matches = g_list_remove(matches, matches->data);
+			g_free(data);
 		}
 
 		purple_conversation_write(conv, NULL, addthis, PURPLE_MESSAGE_NO_LOG,
@@ -5967,7 +5971,6 @@ pidgin_conv_write_conv(PurpleConversation *conv, const char *name, const char *a
 		char *alias_escaped = (alias ? g_markup_escape_text(alias, strlen(alias)) : g_strdup(""));
 		/* The initial offset is to deal with
 		 * escaped entities making the string longer */
-		int tag_start_offset = 0;
 		const char *tagname = NULL;
 
 		GtkTextIter start, end;
@@ -5984,25 +5987,18 @@ pidgin_conv_write_conv(PurpleConversation *conv, const char *name, const char *a
 			/* If we're whispering, it's not an autoresponse. */
 			if (purple_message_meify(new_message, -1 )) {
 				g_snprintf(str, 1024, "***%s", alias_escaped);
-				tag_start_offset += 3;
 				tagname = "whisper-action-name";
 			}
 			else {
 				g_snprintf(str, 1024, "*%s*:", alias_escaped);
-				tag_start_offset += 1;
-#if 0
-				tag_end_offset = 2;
-#endif
 				tagname = "whisper-name";
 			}
 		} else {
 			if (purple_message_meify(new_message, -1)) {
 				if (flags & PURPLE_MESSAGE_AUTO_RESP) {
 					g_snprintf(str, 1024, "%s ***%s", AUTO_RESPONSE, alias_escaped);
-					tag_start_offset += strlen(AUTO_RESPONSE) - 6 + 4;
 				} else {
 					g_snprintf(str, 1024, "***%s", alias_escaped);
-					tag_start_offset += 3;
 				}
 
 				if (flags & PURPLE_MESSAGE_NICK)
@@ -6012,12 +6008,8 @@ pidgin_conv_write_conv(PurpleConversation *conv, const char *name, const char *a
 			} else {
 				if (flags & PURPLE_MESSAGE_AUTO_RESP) {
 					g_snprintf(str, 1024, "%s %s", alias_escaped, AUTO_RESPONSE);
-					tag_start_offset += strlen(AUTO_RESPONSE) - 6 + 1;
 				} else {
 					g_snprintf(str, 1024, "%s:", alias_escaped);
-#if 0
-					tag_end_offset = 1;
-#endif
 				}
 
 				if (flags & PURPLE_MESSAGE_NICK) {
@@ -6081,7 +6073,11 @@ pidgin_conv_write_conv(PurpleConversation *conv, const char *name, const char *a
 			memcpy(with_font_tag + pre_len, new_message, length);
 			strcpy(with_font_tag + pre_len + length, post);
 
-			length += pre_len + post_len;
+			/* Previously this might have been used later in the fuction, so
+			 * I'm just commenting it for now. -- GK 2021-06-01
+			 */
+			/* length += pre_len + post_len; */
+
 			g_free(pre);
 		} else
 			with_font_tag = g_memdup2(new_message, length);
