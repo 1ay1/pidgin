@@ -1494,7 +1494,10 @@ irc_auth_start_cyrus(struct irc_conn *irc)
 	} else {
 		secprops.max_ssf = 0;
 		secprops.maxbufsize = 0;
-		plaintext = TRUE;
+		/* this isn't checked anywhere else, but I'm going to guess it's because
+		 * something is incomplete?.
+		 */
+		/* plaintext = TRUE; */
 	}
 
 	secprops.property_names = 0;
@@ -1592,7 +1595,7 @@ irc_msg_cap(struct irc_conn *irc, const char *name, const char *from, char **arg
 		return;
 	}
 
-	if ((ret = sasl_client_init(NULL)) != SASL_OK) {
+	if (sasl_client_init(NULL) != SASL_OK) {
 		const char *tmp = _("SASL authentication failed: Initializing SASL failed.");
 		purple_connection_error_reason (gc,
 			PURPLE_CONNECTION_ERROR_OTHER_ERROR, tmp);
