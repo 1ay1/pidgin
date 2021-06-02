@@ -339,7 +339,7 @@ xmlnode *jabber_presence_create_js(JabberStream *js, JabberBuddyState state, con
 	}
 
 	/* if we are idle and not offline, include idle */
-	if (js->idle && state != JABBER_BUDDY_STATE_UNAVAILABLE) {
+	if (js != NULL && js->idle && state != JABBER_BUDDY_STATE_UNAVAILABLE) {
 		xmlnode *query = xmlnode_new_child(presence, "query");
 		gchar seconds[10];
 		g_snprintf(seconds, 10, "%d", (int) (time(NULL) - js->idle));
@@ -350,7 +350,10 @@ xmlnode *jabber_presence_create_js(JabberStream *js, JabberBuddyState state, con
 
 	/* JEP-0115 */
 	/* calculate hash */
-	jabber_caps_calculate_own_hash(js);
+	if(js != NULL) {
+		jabber_caps_calculate_own_hash(js);
+	}
+
 	/* create xml */
 	c = xmlnode_new_child(presence, "c");
 	xmlnode_set_namespace(c, "http://jabber.org/protocol/caps");
