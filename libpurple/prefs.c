@@ -756,14 +756,17 @@ purple_prefs_add_path_list(const char *name, GList *value)
 static void
 remove_pref(struct purple_pref *pref)
 {
+	struct purple_pref *child = NULL, *next = NULL;
 	char *name;
 	GSList *l;
 
 	if(!pref)
 		return;
 
-	while(pref->first_child)
-		remove_pref(pref->first_child);
+	for(child = pref->first_child; child != NULL; child = next) {
+		next = child->sibling;
+		remove_pref(child);
+	}
 
 	if(pref == &prefs)
 		return;
@@ -1581,7 +1584,6 @@ disco_ui_callback_helper_handle(void *handle)
 	GSList *cbs;
 	PurplePrefsUiOps *uiop = purple_prefs_get_ui_ops();
 
-	cbs = ui_callbacks;
 	for (cbs = ui_callbacks; cbs; cbs = cbs->next) {
 		PurplePrefCallbackData *cb = cbs->data;
 		if (cb->handle != handle) {
