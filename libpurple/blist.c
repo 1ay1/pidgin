@@ -1417,14 +1417,16 @@ purple_buddy_destroy(PurpleBuddy *buddy)
 	g_free(buddy->server_alias);
 
 	PURPLE_DBUS_UNREGISTER_POINTER(buddy);
-	g_free(buddy);
 
 	/* FIXME: Once PurpleBuddy is a GObject, timeout callbacks can
 	 * g_object_ref() it when connecting the callback and
 	 * g_object_unref() it in the handler.  That way, it won't
 	 * get freed while the timeout is pending and this line can
 	 * be removed. */
-	while (g_source_remove_by_user_data((gpointer *)buddy));
+	while (g_source_remove_by_user_data((gpointer *)buddy)) {
+	}
+
+	g_free(buddy);
 }
 
 void
