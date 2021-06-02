@@ -472,8 +472,6 @@ end:
 	write_to_parent(in, out, &size, sizeof(size));
 	while (ret != NULL)
 	{
-		gpointer data;
-
 		if (query.type == T_SRV)
 			write_to_parent(in, out, ret->data, sizeof(PurpleSrvResponse));
 		if (query.type == T_TXT) {
@@ -483,9 +481,8 @@ end:
 			write_to_parent(in, out, response->content, l);
 		}
 
-		data = ret->data;
-		ret = g_list_remove(ret, ret->data);
-		g_free(data);
+		g_free(ret->data);
+		ret = g_list_delete_link(ret, ret);
 	}
 
 	close(out);

@@ -1803,7 +1803,6 @@ static void simple_udp_host_resolved_listen_cb(int listenfd, gpointer data) {
 static void simple_udp_host_resolved(GSList *hosts, gpointer data, const char *error_message) {
 	struct simple_account_data *sip = (struct simple_account_data*) data;
 	int addr_size;
-	gpointer hosts_data;
 
 	sip->query_data = NULL;
 
@@ -1815,16 +1814,14 @@ static void simple_udp_host_resolved(GSList *hosts, gpointer data, const char *e
 	}
 
 	addr_size = GPOINTER_TO_INT(hosts->data);
-	hosts = g_slist_remove(hosts, hosts->data);
+	hosts = g_slist_delete_link(hosts, hosts);
 	memcpy(&(sip->serveraddr), hosts->data, addr_size);
-	hosts_data = hosts->data;
-	hosts = g_slist_remove(hosts, hosts->data);
-	g_free(hosts_data);
+	g_free(hosts->data);
+	hosts = g_slist_delete_link(hosts, hosts);
 	while(hosts) {
-		hosts = g_slist_remove(hosts, hosts->data);
-		hosts_data = hosts->data;
-		hosts = g_slist_remove(hosts, hosts->data);
-		g_free(hosts_data);
+		hosts = g_slist_delete_link(hosts, hosts);
+		g_free(hosts->data);
+		hosts = g_slist_delete_link(hosts, hosts);
 	}
 
 	/* create socket for incoming connections */

@@ -115,12 +115,9 @@ purple_dnsquery_resolved(PurpleDnsQueryData *query_data, GSList *hosts)
 		 */
 		while (hosts != NULL)
 		{
-			gpointer data;
-			hosts = g_slist_remove(hosts, hosts->data);
-
-			data = hosts->data;
-			hosts = g_slist_remove(hosts, hosts->data);
-			g_free(data);
+			hosts = g_slist_delete_link(hosts, hosts);
+			g_free(hosts->data);
+			hosts = g_slist_delete_link(hosts, hosts);
 		}
 	}
 

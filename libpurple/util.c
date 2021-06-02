@@ -1479,7 +1479,6 @@ purple_markup_html_to_xhtml(const char *html, char **xhtml_out,
 					tag = tag->next;
 				}
 				if(tag) {
-					gpointer data;
 					while(tags) {
 						struct purple_parse_tag *pt = tags->data;
 						if(xhtml && !pt->ignore)
@@ -1501,9 +1500,8 @@ purple_markup_html_to_xhtml(const char *html, char **xhtml_out,
 						tags = g_list_remove(tags, pt);
 						g_free(pt);
 					}
-					data = tag->data;
-					tags = g_list_remove(tags, tag->data);
-					g_free(data);
+					g_free(tag->data);
+					tags = g_list_delete_link(tags, tag);
 				} else {
 					/* a closing tag we weren't expecting...
 					 * we'll let it slide, if it's really a tag...if it's

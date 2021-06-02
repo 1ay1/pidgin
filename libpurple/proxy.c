@@ -579,14 +579,13 @@ purple_proxy_connect_data_destroy(PurpleProxyConnectData *connect_data)
 
 	while (connect_data->hosts != NULL)
 	{
-		gpointer data;
-
 		/* Discard the length... */
-		connect_data->hosts = g_slist_remove(connect_data->hosts, connect_data->hosts->data);
+		connect_data->hosts = g_slist_delete_link(connect_data->hosts,
+		                                          connect_data->hosts);
 		/* Free the address... */
-		data = connect_data->hosts->data;
-		connect_data->hosts = g_slist_remove(connect_data->hosts, connect_data->hosts->data);
-		g_free(data);
+		g_free(connect_data->hosts->data);
+		connect_data->hosts = g_slist_delete_link(connect_data->hosts,
+		                                          connect_data->hosts);
 	}
 
 	g_free(connect_data->host);

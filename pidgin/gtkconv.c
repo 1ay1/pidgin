@@ -4274,15 +4274,13 @@ tab_complete(PurpleConversation *conv)
 
 		while (matches) {
 			char *tmp = addthis;
-			gpointer data;
 
 			addthis = g_strconcat(tmp, matches->data, " ", NULL);
 
 			g_free(tmp);
+			g_free(matches->data);
 
-			data = matches->data;
-			matches = g_list_remove(matches, matches->data);
-			g_free(data);
+			matches = g_list_delete_link(matches, matches);
 		}
 
 		purple_conversation_write(conv, NULL, addthis, PURPLE_MESSAGE_NO_LOG,
