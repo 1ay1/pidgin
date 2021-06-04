@@ -1390,7 +1390,7 @@ static gsize html_logger_write(PurpleLog *log, PurpleMessageFlags type,
 		data = log->logger_data;
 
 		/* if we can't write to the file, give up before we hurt ourselves */
-		if(!data->file)
+		if(data == NULL || data->file == NULL)
 			return 0;
 
 		date = purple_date_format_full(localtime(&log->time));
@@ -1550,7 +1550,7 @@ static gsize txt_logger_write(PurpleLog *log,
 		data = log->logger_data;
 
 		/* if we can't write to the file, give up before we hurt ourselves */
-		if(!data->file)
+		if(data == NULL || data->file == NULL)
 			return 0;
 
 		if (log->type == PURPLE_LOG_SYSTEM)

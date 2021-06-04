@@ -1111,9 +1111,13 @@ static char * msn_logger_read (PurpleLog *log, PurpleLogReadFlags *flags)
 		}
 
 		msn_logger_parse_timestamp(message, &tm);
+		if(tm != NULL) {
+			timestamp = g_strdup_printf("<font size=\"2\">(%02u:%02u:%02u)</font> ",
+					tm->tm_hour, tm->tm_min, tm->tm_sec);
+		} else {
+			timestamp = g_strdup_printf("<font size=\"2\">(00:00:00)</font> ");
+		}
 
-		timestamp = g_strdup_printf("<font size=\"2\">(%02u:%02u:%02u)</font> ",
-				tm->tm_hour, tm->tm_min, tm->tm_sec);
 		text = g_string_append(text, timestamp);
 		g_free(timestamp);
 
@@ -2233,7 +2237,6 @@ static GList *amsn_logger_parse_file(char *filename, const char *sn, PurpleAccou
 			log->logger = amsn_logger;
 			log->logger_data = data;
 			list = g_list_prepend(list, log);
-			found_start = FALSE;
 
 			purple_debug_info("aMSN logger",
 			                  "Found log for %s:"

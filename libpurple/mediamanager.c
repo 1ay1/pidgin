@@ -726,8 +726,9 @@ request_pad_unlinked_cb(GstPad *pad, GstPad *peer, gpointer user_data)
 	GstIterator *iter;
 #if GST_CHECK_VERSION(1,0,0)
 	GValue tmp = G_VALUE_INIT;
-#endif
+#else
 	GstPad *remaining_pad;
+#endif
 	GstIteratorResult result;
 
 	gst_element_release_request_pad(parent, pad);
@@ -746,7 +747,6 @@ request_pad_unlinked_cb(GstPad *pad, GstPad *peer, gpointer user_data)
 		gst_bin_remove(GST_BIN(GST_ELEMENT_PARENT(parent)), parent);
 	} else if (result == GST_ITERATOR_OK) {
 #if GST_CHECK_VERSION(1,0,0)
-		remaining_pad = g_value_get_object(&tmp);
 		g_value_reset(&tmp);
 #else
 		gst_object_unref(remaining_pad);
