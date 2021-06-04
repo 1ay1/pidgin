@@ -354,7 +354,9 @@ gtk_smiley_tree_insert (GtkSmileyTree *tree,
 		} else
 			index = GPOINTER_TO_INT(pos) - GPOINTER_TO_INT(t->values->str);
 
-		t = t->children [index];
+		if(t->children != NULL) {
+			t = t->children [index];
+		}
 
 		x++;
 	} while (*x);
@@ -544,7 +546,7 @@ gtk_imhtml_tip (gpointer data)
 	PangoLayout *layout;
 	PangoFont *font;
 
-	gint gap, x, y, h, w, scr_w, baseline_skip;
+	gint x, y, h, w, scr_w, baseline_skip;
 
 	g_return_val_if_fail(GTK_IS_IMHTML(imhtml), FALSE);
 
@@ -598,11 +600,7 @@ gtk_imhtml_tip (gpointer data)
 	font_metrics = pango_font_get_metrics(font, NULL);
 
 	pango_layout_get_pixel_size(layout, &scr_w, NULL);
-	gap = PANGO_PIXELS((pango_font_metrics_get_ascent(font_metrics) +
-					   pango_font_metrics_get_descent(font_metrics))/ 4);
 
-	if (gap < 2)
-		gap = 2;
 	baseline_skip = PANGO_PIXELS(pango_font_metrics_get_ascent(font_metrics) +
 								pango_font_metrics_get_descent(font_metrics));
 	w = 8 + scr_w;
@@ -2735,7 +2733,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 						if ((bold == 0) && (imhtml->format_functions & GTK_IMHTML_BOLD))
 							gtk_imhtml_toggle_bold(imhtml);
 						bold++;
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 					}
 					break;
 				case 3:		/* /B */
@@ -2743,7 +2742,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 55:	/* /STRONG */
 					if (!(options & GTK_IMHTML_NO_FORMATTING)) {
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 
 						if (bold) {
 							bold--;
@@ -2757,7 +2757,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 52:	/* EM */
 					if (!(options & GTK_IMHTML_NO_FORMATTING)) {
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 						if ((italics == 0) && (imhtml->format_functions & GTK_IMHTML_ITALIC))
 							gtk_imhtml_toggle_italic(imhtml);
 						italics++;
@@ -2768,7 +2769,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 53:	/* /EM */
 					if (!(options & GTK_IMHTML_NO_FORMATTING)) {
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 						if (italics) {
 							italics--;
 							if ((italics == 0) && (imhtml->format_functions & GTK_IMHTML_ITALIC) && !imhtml->wbfo)
@@ -2780,7 +2782,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 10:	/* UNDERLINE */
 					if (!(options & GTK_IMHTML_NO_FORMATTING)) {
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 						if ((underline == 0) && (imhtml->format_functions & GTK_IMHTML_UNDERLINE))
 							gtk_imhtml_toggle_underline(imhtml);
 						underline++;
@@ -2790,7 +2793,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 12:	/* /UNDERLINE */
 					if (!(options & GTK_IMHTML_NO_FORMATTING)) {
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 						if (underline) {
 							underline--;
 							if ((underline == 0) && (imhtml->format_functions & GTK_IMHTML_UNDERLINE) && !imhtml->wbfo)
@@ -2801,7 +2805,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 13:	/* S */
 				case 14:	/* STRIKE */
 					gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-					ws[0] = '\0'; wpos = 0;
+					ws[0] = '\0';
+					wpos = 0;
 					if ((strike == 0) && (imhtml->format_functions & GTK_IMHTML_STRIKE))
 						gtk_imhtml_toggle_strike(imhtml);
 					strike++;
@@ -2809,7 +2814,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 15:	/* /S */
 				case 16:	/* /STRIKE */
 					gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-					ws[0] = '\0'; wpos = 0;
+					ws[0] = '\0';
+					wpos = 0;
 					if (strike)
 						strike--;
 					if ((strike == 0) && (imhtml->format_functions & GTK_IMHTML_STRIKE) && !imhtml->wbfo)
@@ -2887,7 +2893,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 					        gtk_text_view_get_right_margin(GTK_TEXT_VIEW(imhtml));
 					scalable->scale(scalable, rect.width - minus, rect.height);
 					imhtml->scalables = g_list_append(imhtml->scalables, sd);
-					ws[0] = '\0'; wpos = 0;
+					ws[0] = '\0';
+					wpos = 0;
 					ws[wpos++] = '\n';
 
 					break;
@@ -2896,7 +2903,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 					if (fonts && !imhtml->wbfo) {
 						GtkIMHtmlFontDetail *font = fonts->data;
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 						/* NEW_BIT (NEW_TEXT_BIT); */
 
 						if (font->face && (imhtml->format_functions & GTK_IMHTML_FACE)) {
@@ -2936,7 +2944,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				case 28:        /* /A    */
 					gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
 					gtk_imhtml_toggle_link(imhtml, NULL);
-					ws[0] = '\0'; wpos = 0;
+					ws[0] = '\0';
+					wpos = 0;
 					break;
 
 				case 30:	/* /P */
@@ -2948,7 +2957,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 					break;
 				case 36:	/* /BODY */
 					gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-					ws[0] = '\0'; wpos = 0;
+					ws[0] = '\0';
+					wpos = 0;
 					gtk_imhtml_toggle_background(imhtml, NULL);
 					break;
 				case 37:	/* FONT */
@@ -2970,7 +2980,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 							break;
 
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 
 						font = g_new0 (GtkIMHtmlFontDetail, 1);
 						if (fonts)
@@ -3029,7 +3040,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 						char *bgcolor = gtk_imhtml_get_html_opt (tag, "BGCOLOR=");
 						if (bgcolor && (imhtml->format_functions & GTK_IMHTML_BACKCOLOR)) {
 							gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-							ws[0] = '\0'; wpos = 0;
+							ws[0] = '\0';
+							wpos = 0;
 							/* NEW_BIT(NEW_TEXT_BIT); */
 							g_free(bg);
 							bg = bgcolor;
@@ -3043,7 +3055,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 						gchar *href = gtk_imhtml_get_html_opt (tag, "HREF=");
 						if (href && (imhtml->format_functions & GTK_IMHTML_LINK)) {
 							gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-							ws[0] = '\0'; wpos = 0;
+							ws[0] = '\0';
+							wpos = 0;
 							gtk_imhtml_toggle_link(imhtml, href);
 						}
 						g_free(href);
@@ -3055,7 +3068,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 						char *id;
 
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 
 						if (!(imhtml->format_functions & GTK_IMHTML_IMAGE))
 							break;
@@ -3124,7 +3138,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 
 
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 						/* NEW_BIT (NEW_TEXT_BIT); */
 
 						/* Bi-Directional text support */
@@ -3136,7 +3151,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 							ws[wpos++]  = 0xAB;
 							ws[wpos]  = '\0';
 							gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-							ws[0] = '\0'; wpos = 0;
+							ws[0] = '\0';
+							wpos = 0;
 						}
 						g_free(direction);
 
@@ -3285,7 +3301,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 						GtkIMHtmlFontDetail *oldfont = NULL;
 						GtkIMHtmlFontDetail *font = fonts->data;
 						gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-						ws[0] = '\0'; wpos = 0;
+						ws[0] = '\0';
+						wpos = 0;
 						/* NEW_BIT (NEW_TEXT_BIT); */
 						fonts = g_slist_remove (fonts, font);
 						if (fonts)
@@ -3356,7 +3373,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 						gtk_text_buffer_insert_with_tags_by_name(imhtml->text_buffer, iter, ws, wpos, "comment", NULL);
 					}
 #endif
-					ws[0] = '\0'; wpos = 0;
+					ws[0] = '\0';
+					wpos = 0;
 
 					/* NEW_BIT (NEW_COMMENT_BIT); */
 					break;
@@ -3382,7 +3400,7 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				sml = imhtml->protocol_name;
 
 			gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-			wpos = g_snprintf (ws, smilelen + 1, "%s", c);
+			g_snprintf (ws, smilelen + 1, "%s", c);
 
 			gtk_imhtml_insert_smiley_at_iter(imhtml, sml, ws, iter);
 
@@ -3402,7 +3420,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				ws[wpos] = '\n';
 				wpos++;
 				gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-				ws[0] = '\0'; wpos = 0;
+				ws[0] = '\0';
+				wpos = 0;
 				/* NEW_BIT (NEW_TEXT_BIT); */
 			} else if (!br) {  /* Don't insert a space immediately after an HTML break */
 				/* A newline is defined by HTML as whitespace, which means we have to replace it with a word boundary.
@@ -3413,7 +3432,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				ws[wpos] = ' ';
 				wpos++;
 				gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-				ws[0] = '\0'; wpos = 0;
+				ws[0] = '\0';
+				wpos = 0;
 			}
 			c++;
 			pos++;
@@ -3424,7 +3444,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 			br = FALSE;
 			if (wpos > 0) {
 				gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-				ws[0] = '\0'; wpos = 0;
+				ws[0] = '\0';
+				wpos = 0;
 			}
 			while (len_protocol--) {
 				/* Skip the next len_protocol characters, but
@@ -3449,7 +3470,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				ws[wpos] = '\0';
 				gtk_imhtml_toggle_link(imhtml, ws);
 				gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-				ws[0] = '\0'; wpos = 0;
+				ws[0] = '\0';
+				wpos = 0;
 				gtk_imhtml_toggle_link(imhtml, NULL);
 			}
 		} else if (*c) {
@@ -3461,7 +3483,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 		}
 	}
 	gtk_text_buffer_insert(imhtml->text_buffer, iter, ws, wpos);
-	ws[0] = '\0'; wpos = 0;
+	ws[0] = '\0';
+	wpos = 0;
 
 	/* NEW_BIT(NEW_TEXT_BIT); */
 
@@ -3487,7 +3510,7 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 		ws[wpos]  = '\0';
 		gtk_text_buffer_insert(imhtml->text_buffer, &line_iter, ws, wpos);
 		gtk_text_buffer_get_end_iter(gtk_text_iter_get_buffer(&line_iter), iter);
-		ws[0] = '\0'; wpos = 0;
+		ws[0] = '\0';
 	}
 
 	while (fonts) {

@@ -133,7 +133,6 @@ static void
 populate_treeview(GevoAssociateBuddyDialog *dialog, const gchar *uid) {
 	EBook *book;
 	EBookQuery *query;
-	const char *prpl_id;
 	gboolean status;
 	GList *cards, *c;
 	GError *err = NULL;
@@ -185,8 +184,6 @@ populate_treeview(GevoAssociateBuddyDialog *dialog, const gchar *uid) {
 
 		return;
 	}
-
-	prpl_id = purple_account_get_protocol_id(dialog->buddy->account);
 
 	for (c = cards; c != NULL; c = c->next)
 	{

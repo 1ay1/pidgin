@@ -3138,7 +3138,7 @@ pidgin_blist_create_tooltip_for_node(GtkWidget *widget, gpointer data, int *w, i
 		return FALSE;
 	}
 
-	height = width = 0;
+	height = 0;
 	for (list = gtkblist->tooltipdata; list; list = list->next) {
 		struct tooltip_data *td = list->data;
 		max_text_width = MAX(max_text_width, MAX(td->width, td->name_width));
@@ -6451,7 +6451,7 @@ static char *pidgin_get_group_title(PurpleBlistNode *gnode, gboolean expanded)
 	PurpleGroup *group;
 	gboolean selected;
 	char group_count[12] = "";
-	char *mark, *esc;
+	char *mark, *esc = NULL;
 	PurpleBlistNode *selected_node = NULL;
 	GtkTreeIter iter;
 	PidginThemeFont *pair;
@@ -6484,7 +6484,10 @@ static char *pidgin_get_group_title(PurpleBlistNode *gnode, gboolean expanded)
 	text_color = selected ? NULL : theme_font_get_color_default(pair, NULL);
 	text_font = theme_font_get_face_default(pair, "");
 
-	esc = g_markup_escape_text(group->name, -1);
+	if(group != NULL) {
+		esc = g_markup_escape_text(group->name, -1);
+	}
+
 	if (text_color) {
 		mark = g_strdup_printf("<span foreground='%s' font_desc='%s'><b>%s</b>%s%s%s</span>",
 		                       text_color, text_font,

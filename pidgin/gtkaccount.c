@@ -553,7 +553,7 @@ add_login_options(AccountPrefsDialog *dialog, GtkWidget *parent)
 		const char *value = NULL;
 		char *c;
 
-		if (dialog->account != NULL) {
+		if (username != NULL && dialog->account != NULL) {
 			if(purple_account_user_split_get_reverse(split))
 				c = strrchr(username,
 						purple_account_user_split_get_separator(split));

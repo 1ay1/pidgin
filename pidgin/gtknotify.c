@@ -724,7 +724,10 @@ pidgin_notify_emails(PurpleConnection *gc, size_t count, gboolean detailed,
 				tmp = g_markup_escape_text(*subjects, -1);
 				subject_text = g_strdup_printf("%s<b>%s</b>: %s", first ? "<br>" : "", _("Subject"), tmp);
 				g_free(tmp);
-				first = FALSE;
+				/* this is a dead assignment, but if you add another row you'll
+				 * need it, so I commented it out for now.
+				 */
+				/* first = FALSE; */
 				subjects++;
 			}
 #define SAFE(x) ((x) ? (x) : "")
@@ -751,7 +754,7 @@ pidgin_notify_emails(PurpleConnection *gc, size_t count, gboolean detailed,
 			notification = g_strdup_printf(ngettext("%s has %d new message.",
 							   "%s has %d new messages.",
 							   (int)count),
-							   *tos, (int)count);
+							   tos != NULL ? *tos : NULL, (int)count);
 			data2 = pidgin_notify_add_mail(mail_dialog->treemodel, account, notification, urls ? *urls : NULL, count, FALSE, &new_data);
 			if (data2 && new_data) {
 				if (data)

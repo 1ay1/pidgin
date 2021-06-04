@@ -254,7 +254,13 @@ device_changed_cb(const gchar *name, PurplePrefType type,
 	devices = get_element_devices(value);
 	if (g_list_find_custom(devices, purple_prefs_get_string(pref),
 			(GCompareFunc)strcmp) == NULL)
-		purple_prefs_set_string(pref, g_list_next(devices)->data);
+	{
+		GList *next = g_list_next(devices);
+
+		if(next != NULL) {
+			purple_prefs_set_string(pref, next->data);
+		}
+	}
 	widget = pidgin_prefs_dropdown_from_list(parent,
 			label, PURPLE_PREF_STRING,
 			pref, devices);
@@ -292,7 +298,12 @@ get_plugin_frame(GtkWidget *parent, GtkSizeGroup *sg,
 	devices = get_element_devices(purple_prefs_get_string(plugin_pref));
 	if (g_list_find_custom(devices, purple_prefs_get_string(device_pref),
 			(GCompareFunc) strcmp) == NULL)
-		purple_prefs_set_string(device_pref, g_list_next(devices)->data);
+	{
+		GList *next = g_list_next(devices);
+		if(next != NULL) {
+			purple_prefs_set_string(device_pref, next->data);
+		}
+	}
 	widget = pidgin_prefs_dropdown_from_list(vbox, device_label,
 			PURPLE_PREF_STRING, device_pref, devices);
 	g_list_free(devices);
