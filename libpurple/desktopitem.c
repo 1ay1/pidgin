@@ -340,7 +340,7 @@ static Encoding
 get_encoding (FILE *df)
 {
 	gboolean old_kde = FALSE;
-	char     buf [BUFSIZ];
+	char     buf [BUFSIZ] = { 0 };
 	gboolean all_valid_utf8 = TRUE;
 
 	while (my_fgets (buf, sizeof (buf), df) != NULL) {
