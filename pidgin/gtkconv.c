@@ -6748,11 +6748,22 @@ pidgin_conv_update_fields(PurpleConversation *conv, PidginConvFields fields)
 
 		if (gtkchat->topic_text != NULL)
 		{
+			gchar *tmp1 = NULL, *tmp2 = NULL;
+
 			topic = purple_conv_chat_get_topic(chat);
 
-			gtk_entry_set_text(GTK_ENTRY(gtkchat->topic_text), topic ? topic : "");
+			/* replace \r\n with a space */
+			tmp1 = purple_strreplace(topic, "\r\n", " ");
+
+			/* replace \n with a space */
+			tmp2 = purple_strreplace(tmp1, "\n", " ");
+			g_free(tmp1);
+
+			gtk_entry_set_text(GTK_ENTRY(gtkchat->topic_text), tmp2 ? tmp2 : "");
 			gtk_tooltips_set_tip(gtkconv->tooltips, gtkchat->topic_text,
-			                     topic ? topic : "", NULL);
+			                     tmp2 ? tmp2 : "", NULL);
+
+			g_free(tmp2);
 		}
 	}
 
