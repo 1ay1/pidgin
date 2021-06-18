@@ -184,7 +184,8 @@ jabber_sm_enable(JabberStream *js)
 void
 jabber_sm_outbound(JabberStream *js, xmlnode *packet)
 {
-	if (jabber_is_stanza(packet) && js->sm_state != SM_DISABLED) {
+	if (jabber_is_stanza(packet)
+	    && (js->sm_state == SM_REQUESTED || js->sm_state == SM_ENABLED)) {
 		/* Counting stanzas even if there's no confirmation that SM is
 		   enabled yet, so that we won't miss any. */
 

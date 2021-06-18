@@ -100,6 +100,7 @@ typedef enum {
 
 typedef enum {
 	SM_DISABLED,
+	SM_PLANNED,
 	SM_REQUESTED,
 	SM_ENABLED
 } JabberStreamManagementState;

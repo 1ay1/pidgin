@@ -178,6 +178,9 @@ static void jabber_bind_result_cb(JabberStream *js, const char *from,
 		return;
 	}
 
+	if (js->sm_state == SM_PLANNED) {
+		jabber_sm_enable(js);
+	}
 	jabber_session_init(js);
 }
 
@@ -319,7 +322,7 @@ void jabber_stream_features_parse(JabberStream *js, xmlnode *packet)
 	if (xmlnode_get_child_with_namespace(packet, "sm", NS_STREAM_MANAGEMENT)
 	    && (js->sm_state == SM_DISABLED) )
 	{
-		jabber_sm_enable(js);
+		js->sm_state = SM_PLANNED;
 	}
 }
 
