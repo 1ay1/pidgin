@@ -6,7 +6,6 @@ EXTRA_DIST = \
 		HACKING \
 		Makefile.mingw \
 		PLUGIN_HOWTO \
-		README.hg \
 		README.mingw \
 		config.h.mingw \
 		doxy2devhelp.xsl \

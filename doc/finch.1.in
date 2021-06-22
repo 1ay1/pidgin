@@ -581,7 +581,7 @@ If you fix a bug in \fBfinch\fR (or otherwise enhance it), please submit a
 patch (using \fBmtn diff > my.diff\fR against the latest version from the
 Monotone repository) at \fIhttp://developer.pidgin.im/simpleticket\fR
 
-You are also encouraged to drop by at \fB#pidgin\fR on \fIirc.freenode.net\fR
+You are also encouraged to drop by at \fB#pidgin\fR on \fIirc.libera.chat\fR
 to discuss development.
 
 .SH SEE ALSO

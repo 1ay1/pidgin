@@ -538,7 +538,7 @@ void pidgin_dialogs_about(void)
 	g_string_append_printf(str,
 			_("<FONT SIZE=\"4\"><B>Helpful Resources</B></FONT><BR>\t<A "
 			  "HREF=\"%s\">Website</A><BR>\t<A HREF=\"%s\">Frequently Asked "
-			  "Questions</A><BR>\tIRC Channel: #pidgin on irc.freenode.net<BR>"
+			  "Questions</A><BR>\tIRC Channel: #pidgin on irc.libera.chat<BR>"
 			  "\tXMPP MUC: devel@conference.pidgin.im<BR><BR>"), PURPLE_WEBSITE,
 			"http://developer.pidgin.im/wiki/FAQ");
 
