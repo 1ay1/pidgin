@@ -22,6 +22,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1301  USA
  */
 
+#ifndef PURPLE_JABBER_STREAM_MANAGEMENT_H
+#define PURPLE_JABBER_STREAM_MANAGEMENT_H
 
 void jabber_sm_init(void);
 void jabber_sm_uninit(void);
@@ -34,3 +36,5 @@ void jabber_sm_ack_read(JabberStream *js, xmlnode *packet);
 
 void jabber_sm_outbound(JabberStream *js, xmlnode *packet);
 void jabber_sm_inbound(JabberStream *js, xmlnode *packet);
+
+#endif /* PURPLE_JABBER_STREAM_MANAGEMENT_H */
