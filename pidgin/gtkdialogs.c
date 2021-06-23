@@ -72,36 +72,26 @@ struct artist {
 
 /* Order: Alphabetical by Last Name */
 static const struct developer developers[] = {
-	{"Daniel 'datallah' Atallah",          NULL,                  NULL},
-	{"Paul 'darkrain42' Aurich",           NULL,                  NULL},
 	{"John 'rekkanoryo' Bailey",           NULL,                  NULL},
 	{"Ethan 'Paco-Paco' Blanton",          NULL,                  NULL},
-	{"Hylke Bons",                         N_("artist"),          "hylkebons@gmail.com"},
 	{"Gary 'grim' Kramlich",               N_("lead developer"),  "grim@pidgin.im"},
 	{"Richard 'rlaager' Laager",           NULL,                  "rlaager@pidgin.im"},
-	{"Marcus 'malu' Lundblad",             NULL,                  NULL},
-	{"Etan 'deryni' Reisner",              NULL,                  NULL},
-	{"Michael 'Maiku' Ruprecht",           N_("voice and video"), NULL},
+	{"Eion Robb",                          NULL,                  NULL},
 	{"Elliott 'QuLogic' Sales de Andrade", NULL,                  NULL},
-	{"Luke 'LSchiere' Schierer",           N_("support"),         "lschiere@users.sf.net"},
-	{"Evan Schoenberg",                    NULL,                  NULL},
-	{"Kevin 'SimGuy' Stange",              N_("webmaster"),       NULL},
-	{"Jorge 'Masca' Villaseñor",           NULL,                  NULL},
-	{"Tomasz Wasilczyk",                   NULL,                  "https://www.wasilczyk.pl"},
 	{NULL, NULL, NULL}
 };
 
 /* Order: Alphabetical by Last Name */
 static const struct developer patch_writers[] = {
-	{"Jakub 'haakon' Adam",            NULL,                        NULL},
-	{"Krzysztof Klinikowski",          NULL,                        NULL},
-	{"Eion Robb",                      NULL,                        NULL},
 	{NULL, NULL, NULL}
 };
 
 /* Order: Alphabetical by Last Name */
 static const struct developer retired_developers[] = {
+	{"Daniel 'datallah' Atallah",   NULL,                      NULL},
+	{"Paul 'darkrain42' Aurich",    NULL,                      NULL},
 	{"Herman Bloggs",               N_("win32 port"),          "herman@bluedigits.com"},
+	{"Hylke Bons",                  N_("artist"),              "hylkebons@gmail.com"},
 	{"Thomas Butter",               NULL,                      NULL},
 	/* Translators: This is a person's name. For most languages we recommend
 	   not translating it. */
@@ -117,25 +107,35 @@ static const struct developer retired_developers[] = {
 	{"Ivan Komarov",                NULL,                      "ivan.komarov@pidgin.im"},
 	/* If "lazy bum" translates literally into a serious insult, use something else or omit it. */
 	{"Syd Logan",                   N_("hacker and designated driver [lazy bum]"), NULL},
+	{"Marcus 'malu' Lundblad",      NULL,                      NULL},
 	{"Sulabh 'sulabh_m' Mahajan",   NULL,                      NULL},
 	{"Richard 'wabz' Nelson",       NULL,                      NULL},
 	{"Christopher 'siege' O'Brien", NULL,                      "taliesein@users.sf.net"},
 	{"Bartosz Oler",                NULL,                      NULL},
+	{"Etan 'deryni' Reisner",       NULL,                      NULL},
 	{"Tim 'marv' Ringenbach",       NULL,                      NULL},
+	{"Michael 'Maiku' Ruprecht",    N_("voice and video"),     NULL},
+	{"Luke 'LSchiere' Schierer",    N_("support"),            "lschiere@users.sf.net"},
 	{"Megan 'Cae' Schneider",       N_("support/QA"),          NULL},
+	{"Evan Schoenberg",             NULL,                      NULL},
 	{"Jim Seymour",                 N_("XMPP"),                NULL},
 	{"Mark Spencer",                N_("original author"),     "markster@marko.net"},
+	{"Kevin 'SimGuy' Stange",       N_("webmaster"),           NULL},
 	{"Will 'resiak' Thompson",      NULL,                      NULL},
 	{"Stu 'nosnilmot' Tomlinson",   NULL,                      NULL},
+	{"Jorge 'Masca' Villaseñor",    NULL,                      NULL},
 	{"Nathan 'faceprint' Walp",     NULL,                      NULL},
 	{"Eric Warmenhoven",            N_("lead developer"),      "warmenhoven@yahoo.com"},
+	{"Tomasz Wasilczyk",            NULL,                      "https://www.wasilczyk.pl"},
 	{NULL, NULL, NULL}
 };
 
 /* Order: Alphabetical by Last Name */
 static const struct developer retired_patch_writers[] = {
+	{"Jakub 'haakon' Adam",       NULL, NULL},
 	{"Felipe 'shx' Contreras",    NULL, NULL},
 	{"Decklin Foster",            NULL, NULL},
+	{"Krzysztof Klinikowski",     NULL, NULL},
 	{"Peter 'Bleeter' Lawler",    NULL, NULL},
 	{"Robert 'Robot101' McQueen", NULL, NULL},
 	{"Benjamin Miller",           NULL, NULL},
