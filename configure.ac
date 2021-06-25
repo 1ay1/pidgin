@@ -2532,6 +2532,18 @@ AC_SUBST(enable_devhelp)
 AM_CONDITIONAL(HAVE_DOXYGEN, test "x$enable_doxygen" = "xyes")
 AM_CONDITIONAL(HAVE_XSLTPROC, test "x$enable_devhelp" = "xyes")
 
+
+AC_ARG_ENABLE([fuzzing], [--enable-fuzzing    Turn on fuzzing],
+	      [case "${enableval}" in yes) fuzzing=true ;; no)  fuzzing=false ;; *) AC_MSG_ERROR([bad value ${enableval} for --enable-fuzzing]) ;; esac],[fuzzing=false])
+AM_CONDITIONAL([FUZZ], [test x$fuzzing = xtrue])
+
+if test "x$enable_fuzzing" = "xyes" ; then
+	if ! test "x$CC" = "xclang" ; then
+		AC_MSG_ERROR(["You need to set CC=clang to use --enable-fuzzing, used $CC"])
+	fi
+fi
+
+
 AC_ARG_ENABLE(debug, [AC_HELP_STRING([--enable-debug],
 	[compile with debugging support])], , enable_debug=no)
 
