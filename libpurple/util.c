@@ -2286,8 +2286,9 @@ purple_markup_linkify(const char *text)
 
 					/* strip off trailing periods */
 					if (strlen(url_buf) > 0) {
-						for (d = url_buf + strlen(url_buf) - 1; *d == '.'; d--, t--)
+						for (d = url_buf + strlen(url_buf) - 1; (d >= url_buf) && (*d == '.'); d--, t--) {
 							*d = '\0';
+						}
 					}
 
 					tmpurlbuf = purple_unescape_html(url_buf);
