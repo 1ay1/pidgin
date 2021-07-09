@@ -2586,6 +2586,7 @@ AC_CONFIG_FILES([Makefile
 		   libpurple/data/purple-2-uninstalled.pc
 		   libpurple/ciphers/Makefile
 		   libpurple/example/Makefile
+		   libpurple/fuzzers/Makefile
 		   libpurple/plugins/Makefile
 		   libpurple/plugins/mono/Makefile
 		   libpurple/plugins/mono/api/Makefile

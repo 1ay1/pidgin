@@ -1,84 +1,92 @@
 # Introduction and setup
-Pidgin has fuzzing support for libpurple. Libfuzzer (https://llvm.org/docs/LibFuzzer.html) is used for this.
 
-There are currently a few fuzzers mentioned in libpurple/tests/fuzz *.c. You can build the fuzzers by following the usual build process and adding `--enable-fuzzing` to `./configure`, for this you'll need to set CC to `clang`, once you've done this you can go to `libpurple/tests` and run `make check` this will build the fuzzers for you.
+Pidgin has fuzzing support for libpurple via
+[Libfuzzer](https://llvm.org/docs/LibFuzzer.html). If you're new to fuzzing with
+libfuzzer, there is a fantastic tutorial available
+[here](https://github.com/google/fuzzing/blob/master/tutorial/libFuzzerTutorial.md).
+
+The fuzzers reside in libpurples/fuzzers. To build them, you'll need to specify
+`clang` as your C compiler as well as pass `--enable-fuzzing` to `./configure`.
+Once this is done you can `cd libpurple/fuzzers` and run `make check` to build
+the fuzzers.
 
 Example:
 ```bash
 $ CC=clang ./configure --enable-fuzzing --disable-cyrus-sasl --disable-gtkui --disable-gstreamer --disable-vv --disable-idn --disable-meanwhile --disable-avahi --disable-libgadu --disable-dbus --disable-libsecret --disable-gnome-keyring --disable-kwallet --disable-plugin
+```
 
-# This will configure build system
-# The next step would be actually building pidgin and it's libraries.
-# -j $(nproc) is optional, this build it with all available cores
+Now that the build system has been configured, you need to build everything,
+including the fuzzers. You can do this with the following command. Note that the
+`-j $(nproc)` tells make to build with all available cores and is recommended
+but optional.
 
+```bash
 $ make -j $(nproc)
+```
 
-# Now pidgin is actually built, we can build the fuzzers
+Now that the fuzzers are built, you can run them directly. There is also an
+optional `-dict` parameter that can be used to specify a dictionary to be used
+during the process.
 
-$ cd libpurple/tests
-$ make check
-
-# Now the fuzzers should be built and can be run
-# The -dict= paramater can be used to define a dictionary to be used by fuzzing
-# For fuzzing common formats like xml you could for example use the xml dict, this is optional
-
-$ ./fuzz_xmlnode -dict=dictionaries/xml.dict 
-``` 
+```bash
+$ ./fuzz_xmlnode -dict=dictionaries/xml.dict
+```
 
 # Useful options
 
-Because Libfuzzer is a sophisticated program, here are some handy options:
+Because Libfuzzer is a sophisticated program, here are some handy options that
+are available in all fuzzers.
 
-```
-help    ->  Print help.
-jobs    ->  Number of jobs to run. If jobs >= 1 we spawn this number of jobs in separate worker processes with stdout/stderr redirected to fuzz-JOB.log.
-workers ->  Number of simultaneous worker processes to run the jobs. If zero, "min(jobs,NumberOfCpuCores()/2)" is used.
-max_len ->  Maximum length of the test input. If 0, libFuzzer tries to guess a good value based on the corpus and reports it.
-```
-
-You can also show the help with:
-
-`./fuzz_html_to_xhtml -help=1`
-
-This will show you all the options you can give to your fuzzer.
-
-In addition, if you're new to fuzzing with libfuzzer, https://github.com/google/fuzzing/blob/master/tutorial/libFuzzerTutorial.md is a fantastic place to start.
+ * **-help=1** Print help.
+ * **-jobs=1** Number of jobs to run. If jobs >= 1 this will spawn that many jobs in separate worker processes with stdout/stderr redirected to fuzz-JOB.log.
+ * **-workers=0** Number of simultaneous worker processes to run the jobs. If zero, `min(jobs,NumberOfCpuCores()/2)` is used.
+ * **-max_len=0** Maximum length of the test input. If 0, libFuzzer tries to guess a good value based on the corpus and reports it.
 
 # Adding more fuzzers
 
-Of course, having more fuzzers and covering more areas of the code used in libpurple is always a good thing. It's simple to incorporate a fuzzer into the current build system!
-If you open the `Makefile.am` file in `libpurple/tests` you'll see a `fuzz_programs` variable, you have to add the name to your new fuzzing harness in there.
+Of course, having more fuzzers and covering more areas of the code base is
+always a good thing. It's simple to incorporate a fuzzer into the current build
+system! If you open the `Makefile.am` file in `libpurple/fuzzers` you'll see a
+`check_PROGRAMS` variable, you have to add the name to your new fuzzing harness
+in there.
 
 Example:
 
 ```
 fuzz_programs=\
-        fuzz_html_to_xhtml \
-        fuzz_jabber_caps \
-        fuzz_jabber_id_new \
-        fuzz_markup_strip_html \
-        fuzz_mime \
-        fuzz_xmlnode \
+	fuzz_html_to_xhtml \
+	fuzz_jabber_caps \
+	fuzz_jabber_id_new \
+	fuzz_markup_strip_html \
+	fuzz_mime \
+	fuzz_xmlnode \
 	fuzz_newfuzzer # This is the newly added fuzzer
 ```
 
-We'll also need to define the sources, which we can do by copying and changing the lines from an existing fuzzer.
+You'll also need to define the sources, which we can do by copying and changing
+the lines from an existing fuzzer.
 
-For example we have a `fuzz_xmlnode.c` fuzzer, these are the lines that define the sources and the flags: 
+For example we have a `fuzz_xmlnode.c` fuzzer, these are the lines that define
+the sources and the flags:
+
 ```
 fuzz_xmlnode_SOURCES=fuzz_xmlnode.c
 fuzz_xmlnode_LDADD=$(check_libpurple_LDADD)
 fuzz_xmlnode_CFLAGS=-fsanitize=fuzzer,address $(check_libpurple_CFLAGS)
 ```
 
-We'll need to change the names of these to match the name of our new fuzzer and add any necessary flags:
+You'll need to change the names of these to match the name of our new fuzzer and
+add any necessary flags:
+
 ```
 fuzz_new_SOURCES=fuzz_new.c
-fuzz_new_LDADD=$(check_libpurple_LDADD)
-fuzz_new_CFLAGS=-fsanitize=fuzzer,address $(check_libpurple_CFLAGS)
+fuzz_new_LDADD=$(common_LDADD)
+fuzz_new_CFLAGS=-fsanitize=fuzzer,address $(common_CFLAGS)
 ```
 
-Now you must include your harness in `fuzz_new.c`, an example of a new harness could be as follows:
+Now you must include your harness in `fuzz_new.c`, an example of a new harness
+could be as follows:
+
 ```C
 #include <glib.h>
 #include <stdlib.h>
@@ -91,8 +99,9 @@ Now you must include your harness in `fuzz_new.c`, an example of a new harness c
 
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-        char *malicious_input = g_new0(char, size + 1);
+int
+LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+        gchar *malicious_input = g_new0(gchar, size + 1);
 
         memcpy(malicious_input, data, size);
         malicious_input[size] = '\0';
@@ -105,4 +114,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 }
 ```
 
-Make sure to include the relevant includes, and then run `./configure` again in the repository's root directory, after that run `make check` in `libpurple/tests` to create your new fuzzer. Then, by executing this binary, you can run it.
+Make sure to include the relevant headers and then run `make`. This will force
+an update of the build system and build everything that needs to be rebuilt. If
+there were no issues, you should now be able to run your new fuzzer from the
+`libpurple/fuzzers` directory.
+

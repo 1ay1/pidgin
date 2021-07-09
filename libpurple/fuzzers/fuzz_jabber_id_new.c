@@ -25,45 +25,26 @@
 #include <string.h>
 #include <glib.h>
 
+#include "../account.h"
+#include "../conversation.h"
 #include "../xmlnode.h"
+#include "../protocols/jabber/jutil.h"
 
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-	char *malicious_xml = g_new0(char, size + 1);
-	char *str;
-	xmlnode *xml;
+int
+LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+	JabberID *jid = NULL;
+	gchar *malicious_jid = g_new0(gchar, size + 1);
 
-	memcpy(malicious_xml, data, size);
-	malicious_xml[size] = '\0';
+	memcpy(malicious_jid, data, size);
+	malicious_jid[size] = '\0';
 
-	xml = xmlnode_from_str(malicious_xml, -1);
+	jid = jabber_id_new(malicious_jid);
 
-	if (xml == NULL) {
-		g_free(malicious_xml);
-		return 0;
-	}
+	jabber_id_free(jid);
 
-	str = xmlnode_to_str(xml, NULL);
-
-	if (str == NULL) {
-		xmlnode_free(xml);
-		free(malicious_xml);
-		return 0;
-	}
-
-	if (strcmp(malicious_xml, str) != 0) {
-		g_free(str);
-		xmlnode_free(xml);
-		free(malicious_xml);
-		__builtin_trap();
-	}
-
-	g_free(str);
-
-	xmlnode_free(xml);
-
-	g_free(malicious_xml);
+	g_free(malicious_jid);
 
 	return 0;
 }

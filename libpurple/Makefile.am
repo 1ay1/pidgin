@@ -29,7 +29,7 @@ if USE_GCONFTOOL
 GCONF_DIR=data/gconf
 endif
 
-SUBDIRS = $(GCONF_DIR) plugins protocols ciphers . tests example
+SUBDIRS = $(GCONF_DIR) plugins protocols ciphers . fuzzers tests example
 
 purple_coresources = \
 	account.c \

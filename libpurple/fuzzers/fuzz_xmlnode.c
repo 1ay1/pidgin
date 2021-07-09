@@ -19,31 +19,52 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1301  USA
  */
 
-#include <glib.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <purple.h>
+#include <glib.h>
 
-#include "../util.h"
+#include "../xmlnode.h"
 
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-	char *malicious_html = g_new0(char, size + 1);
+int
+LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+	gchar *malicious_xml = g_new0(gchar, size + 1);
+	gchar *str;
+	xmlnode *xml;
 
-	memcpy(malicious_html, data, size);
-	malicious_html[size] = '\0';
+	memcpy(malicious_xml, data, size);
+	malicious_xml[size] = '\0';
 
-	gchar *xhtml = NULL, *plaintext = NULL;
+	xml = xmlnode_from_str(malicious_xml, -1);
+	if(xml == NULL) {
+		g_free(malicious_xml);
 
-	purple_markup_html_to_xhtml(malicious_html, &xhtml, &plaintext);
+		return 0;
+	}
 
-	g_free(xhtml);
-	g_free(plaintext);
+	str = xmlnode_to_str(xml, NULL);
+	if(str == NULL) {
+		xmlnode_free(xml);
+		free(malicious_xml);
 
-	g_free(malicious_html);
+		return 0;
+	}
+
+	if(strcmp(malicious_xml, str) != 0) {
+		g_free(str);
+		xmlnode_free(xml);
+		free(malicious_xml);
+		__builtin_trap();
+	}
+
+	g_free(str);
+
+	xmlnode_free(xml);
+
+	g_free(malicious_xml);
 
 	return 0;
 }

@@ -19,28 +19,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1301  USA
  */
 
-#include <glib.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <purple.h>
+#include <glib.h>
 
-#include "../util.h"
+#include "../xmlnode.h"
+#include "../protocols/jabber/caps.h"
 
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-	char *malicious_mime = g_new0(char, size + 1);
+int
+LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+	gchar *malicious_xml = g_new0(gchar, size + 1);
+	xmlnode *query;
 
-	memcpy(malicious_mime, data, size);
-	malicious_mime[size] = '\0';
+	memcpy(malicious_xml, data, size);
+	malicious_xml[size] = '\0';
 
-	gchar *result = purple_mime_decode_field(malicious_mime);
-	g_free(result);
+	if (*malicious_xml == '\0') {
+		g_free(malicious_xml);
+		return 0;
+	}
 
+	query = xmlnode_new(malicious_xml);
 
-	g_free(malicious_mime);
+	if (query == NULL) {
+		g_free(malicious_xml);
+		return 0;
+	}
+
+	jabber_caps_parse_client_info(query);
+
+	xmlnode_free(query);
+
+	g_free(malicious_xml);
 
 	return 0;
 }

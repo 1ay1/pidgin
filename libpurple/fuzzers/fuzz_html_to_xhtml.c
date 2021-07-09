@@ -30,18 +30,21 @@
 
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-	char *malicious_html = g_new0(char, size + 1);
-	char *stripped;
+int
+LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+	gchar *xhtml = NULL, *plaintext = NULL;
+	gchar *malicious_html = g_new0(gchar, size + 1);
 
 	memcpy(malicious_html, data, size);
 	malicious_html[size] = '\0';
 
-	stripped = purple_markup_strip_html(malicious_html);
+	purple_markup_html_to_xhtml(malicious_html, &xhtml, &plaintext);
 
-	g_free(stripped);
+	g_free(xhtml);
+	g_free(plaintext);
 
 	g_free(malicious_html);
 
 	return 0;
 }
+
