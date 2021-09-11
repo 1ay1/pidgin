@@ -57,6 +57,12 @@
 #include <idna.h>
 #endif
 
+#ifdef __HAIKU__
+#  ifndef SIOCGIFCONF
+#    include <sys/sockio.h>
+#  endif
+#endif
+
 /*
  * Calling sizeof(struct ifreq) isn't always correct on
  * Mac OS X (and maybe others).
