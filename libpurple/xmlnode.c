@@ -725,8 +725,15 @@ xmlnode_from_str(const char *str, gssize size)
 	ret = xpd->current;
 	if (xpd->error) {
 		ret = NULL;
-		if (xpd->current)
+		if (xpd->current) {
+			/* If an error occurred while parsing, we may be
+			 * pointing at some random child, so walk back up the
+			 * tree in order to free everything. */
+			while (xpd->current->parent != NULL) {
+				xpd->current = xpd->current->parent;
+			}
 			xmlnode_free(xpd->current);
+		}
 	}
 
 	g_free(xpd);
