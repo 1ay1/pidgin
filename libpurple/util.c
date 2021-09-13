@@ -1865,12 +1865,12 @@ purple_markup_html_to_xhtml(const char *html, char **xhtml_out,
 			c++;
 		}
 	}
-	if(xhtml) {
-		for (tag = tags; tag ; tag = tag->next) {
-			struct purple_parse_tag *pt = tag->data;
-			if(!pt->ignore)
-				g_string_append_printf(xhtml, "</%s>", pt->dest_tag);
+	for (tag = tags; tag ; tag = tag->next) {
+		struct purple_parse_tag *pt = tag->data;
+		if (xhtml && !pt->ignore) {
+			g_string_append_printf(xhtml, "</%s>", pt->dest_tag);
 		}
+		g_free(pt);
 	}
 	g_list_free(tags);
 	if(xhtml_out)
