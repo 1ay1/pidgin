@@ -1249,6 +1249,7 @@ purple_markup_find_tag(const char *needle, const char *haystack,
 		*start = NULL;
 		*end = NULL;
 		*attributes = NULL;
+		g_datalist_clear(&attribs);
 	}
 
 	return found;
