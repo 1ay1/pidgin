@@ -1652,8 +1652,12 @@ purple_markup_html_to_xhtml(const char *html, char **xhtml_out,
 					else
 						c = p;
 					/* src and alt are required! */
-					if(src && xhtml)
-						g_string_append_printf(xhtml, "<img src='%s' alt='%s' />", g_strstrip(src->str), alt ? alt->str : "");
+					if (src) {
+						if (xhtml) {
+							g_string_append_printf(xhtml, "<img src='%s' alt='%s' />", g_strstrip(src->str), alt ? alt->str : "");
+						}
+						g_string_free(src, TRUE);
+					}
 					if(alt) {
 						if(plain)
 							plain = g_string_append(plain, alt->str);
@@ -1661,7 +1665,6 @@ purple_markup_html_to_xhtml(const char *html, char **xhtml_out,
 							xhtml = g_string_append(xhtml, alt->str);
 						g_string_free(alt, TRUE);
 					}
-					g_string_free(src, TRUE);
 					continue;
 				}
 				if (!g_ascii_strncasecmp(c, "<a", 2) && (*(c+2) == '>' || *(c+2) == ' ')) {
