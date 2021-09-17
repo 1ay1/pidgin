@@ -19,22 +19,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1301  USA
  */
 
-#include <glib.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <string.h>
+
+#include <glib.h>
+
 #include <purple.h>
 
 #include "../util.h"
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
+gint LLVMFuzzerTestOneInput(const guint8 *data, size_t size);
 
-int
-LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-	gchar *malicious_html = g_new0(gchar, size + 1);
+gint
+LLVMFuzzerTestOneInput(const guint8 *data, size_t size) {
+	gchar *malicious_html = NULL;
 	gchar *stripped;
 
+	if(!g_utf8_validate_len((const gchar *)data, size, NULL)) {
+		return 0;
+	}
+
+	malicious_html = g_new0(gchar, size + 1);
 	memcpy(malicious_html, data, size);
 	malicious_html[size] = '\0';
 

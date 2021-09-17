@@ -12,7 +12,7 @@ the fuzzers.
 
 Example:
 ```bash
-$ CC=clang ./configure --enable-fuzzing --disable-cyrus-sasl --disable-gtkui --disable-gstreamer --disable-vv --disable-idn --disable-meanwhile --disable-avahi --disable-libgadu --disable-dbus --disable-libsecret --disable-gnome-keyring --disable-kwallet --disable-plugin
+$ CC=clang ./configure --enable-fuzzing --disable-cyrus-sasl --disable-gtkui --disable-gstreamer --disable-vv --disable-idn --disable-meanwhile --disable-avahi --disable-libgadu --disable-dbus --disable-libsecret --disable-gnome-keyring --disable-kwallet --disable-plugins
 ```
 
 Now that the build system has been configured, you need to build everything,
@@ -21,15 +21,17 @@ including the fuzzers. You can do this with the following command. Note that the
 but optional.
 
 ```bash
-$ make -j $(nproc)
+$ make -j $(nproc) check
 ```
 
 Now that the fuzzers are built, you can run them directly. There is also an
 optional `-dict` parameter that can be used to specify a dictionary to be used
-during the process.
+during the process. Also all fuzzers must have a basic corpus to help the
+fuzzer find values and should be located in the fuzzers/corpus/<fuzzer-name>
+directory.
 
 ```bash
-$ ./fuzz_xmlnode -dict=dictionaries/xml.dict
+$ ./fuzz_xmlnode -dict=dictionaries/xml.dict corpus/xmlnode
 ```
 
 # Useful options
@@ -89,18 +91,14 @@ could be as follows:
 
 ```C
 #include <glib.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <string.h>
+
 #include <purple.h>
 
-#include "../util.h"
+gint LLVMFuzzerTestOneInput(const guint8 *data, size_t size);
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
-
-int
-LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+gint
+LLVMFuzzerTestOneInput(const guint8 *data, size_t size) {
         gchar *malicious_input = g_new0(gchar, size + 1);
 
         memcpy(malicious_input, data, size);
@@ -114,8 +112,8 @@ LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 }
 ```
 
-Make sure to include the relevant headers and then run `make`. This will force
-an update of the build system and build everything that needs to be rebuilt. If
-there were no issues, you should now be able to run your new fuzzer from the
-`libpurple/fuzzers` directory.
+Make sure to include the relevant headers and then run `make check`. This will
+force an update of the build system and build everything that needs to be
+rebuilt. If there were no issues, you should now be able to run your new fuzzer
+from the `libpurple/fuzzers` directory.
 

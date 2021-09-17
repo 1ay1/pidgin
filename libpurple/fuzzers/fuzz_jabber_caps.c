@@ -19,22 +19,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1301  USA
  */
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <string.h>
+
 #include <glib.h>
 
 #include "../xmlnode.h"
 #include "../protocols/jabber/caps.h"
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
+gint LLVMFuzzerTestOneInput(const guint8 *data, size_t size);
 
-int
-LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-	gchar *malicious_xml = g_new0(gchar, size + 1);
+gint
+LLVMFuzzerTestOneInput(const guint8 *data, size_t size) {
+	gchar *malicious_xml = NULL;
 	xmlnode *query;
 
+	if(!g_utf8_validate_len((const gchar *)data, size, NULL)) {
+		return 0;
+	}
+
+	malicious_xml = g_new0(gchar, size + 1);
 	memcpy(malicious_xml, data, size);
 	malicious_xml[size] = '\0';
 

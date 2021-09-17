@@ -19,22 +19,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1301  USA
  */
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <string.h>
+
 #include <glib.h>
 
 #include "../xmlnode.h"
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
+gint LLVMFuzzerTestOneInput(const guint8 *data, size_t size);
 
-int
-LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-	gchar *malicious_xml = g_new0(gchar, size + 1);
+gint
+LLVMFuzzerTestOneInput(const guint8 *data, size_t size) {
+	gchar *malicious_xml = NULL;
 	gchar *str;
 	xmlnode *xml;
 
+	if(!g_utf8_validate_len((const gchar *)data, size, NULL)) {
+		return 0;
+	}
+
+	malicious_xml = g_new0(gchar, size + 1);
 	memcpy(malicious_xml, data, size);
 	malicious_xml[size] = '\0';
 
@@ -51,13 +54,6 @@ LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 		free(malicious_xml);
 
 		return 0;
-	}
-
-	if(strcmp(malicious_xml, str) != 0) {
-		g_free(str);
-		xmlnode_free(xml);
-		free(malicious_xml);
-		__builtin_trap();
 	}
 
 	g_free(str);

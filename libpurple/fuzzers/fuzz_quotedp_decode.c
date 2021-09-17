@@ -19,29 +19,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1301  USA
  */
 
-#include <glib.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
+#include "glib.h"
+
 #include <purple.h>
 
-#include "../util.h"
+gint LLVMFuzzerTestOneInput(const guint8 *data, size_t size);
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
+gint
+LLVMFuzzerTestOneInput(const guint8 *data, size_t size) {
+	gchar *buf = NULL;
+	guchar *tmp = NULL;
 
-int
-LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-	gchar *malicious_mime = g_new0(gchar, size + 1);
-	gchar *result = NULL;
+	buf = g_new0(gchar, size + 1);
+	memcpy(buf, data, size);
 
-	memcpy(malicious_mime, data, size);
-	malicious_mime[size] = '\0';
+	tmp = purple_quotedp_decode(buf, NULL);
 
-	result = purple_mime_decode_field(malicious_mime);
-	g_free(result);
-
-	g_free(malicious_mime);
+	g_free(buf);
+	g_free(tmp);
 
 	return 0;
 }

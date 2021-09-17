@@ -19,24 +19,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1301  USA
  */
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <string.h>
+
 #include <glib.h>
 
-#include "../account.h"
-#include "../conversation.h"
-#include "../xmlnode.h"
+#include <purple.h>
+
 #include "../protocols/jabber/jutil.h"
 
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
+gint LLVMFuzzerTestOneInput(const guint8 *data, size_t size);
 
-int
-LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+gint
+LLVMFuzzerTestOneInput(const guint8 *data, size_t size) {
 	JabberID *jid = NULL;
-	gchar *malicious_jid = g_new0(gchar, size + 1);
+	gchar *malicious_jid = NULL;
 
+	if(!g_utf8_validate_len((const gchar *)data, size, NULL)) {
+		return 0;
+	}
+
+	malicious_jid = g_new0(gchar, size + 1);
 	memcpy(malicious_jid, data, size);
 	malicious_jid[size] = '\0';
 
@@ -48,3 +50,4 @@ LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 
 	return 0;
 }
+
