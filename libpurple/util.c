@@ -84,6 +84,40 @@ struct _PurpleUtilFetchUrlData
 static char *custom_user_dir = NULL;
 static char *user_dir = NULL;
 
+static GRegex *str_to_time_regex = NULL;
+static const gchar *str_to_time_pattern =
+	"^\\s*"
+	"(?P<year>\\d{4})? # look for a leading year\n"
+	"(?:[-\\/]?) # an optional separator of - or /\n"
+	"(?P<month>\\d{2}) # the two digit month\n"
+	"(?:[-\\/]?) # another optional separator of - or /\n"
+	"(?P<day>\\d{2}) # the two digit day\n"
+	"# we now have an optional trailing year or seconds\n"
+	"(?:\n"
+	"  (?:[-\\/]?(?P<trailingyear>\\d{4})) # the trailing year may have a - or / separator\n"
+	"|\n"
+	" [T.] # T signifies that this is an iso8601 time\n"
+	"  (?:\n"
+	"    (?P<hours>\\d{2}) # two digit hour\n"
+	"    :? # optional : separator\n"
+	"    (?P<minutes>\\d{2}) # two digit minutes\n"
+	"    :? # optional : separator\n"
+	"    (?P<seconds>\\d{2}) # two digit seconds\n"
+	"    (?:\\.(?P<microseconds>\\d+))? # optional microseconds\n"
+	"    (?:\n"
+	"      (?:\n"
+	"        (?P<tzsign>[+-]) # required tz sign\n"
+	"        (?P<tzhour>\\d{2}) # required tz hour\n"
+	"        (?:\n"
+	"          :? # optional : separator\n"
+	"          (?<tzminute>\\d{2}))? # optional tz minutes\n"
+	"        )\n"
+	"    |\n"
+	"      (?P<utc>Z) # utc time\n"
+	"    )?\n"
+	"  )?\n"
+	")\n"
+	"\\s* # remove trailing whitespace\n";
 
 PurpleMenuAction *
 purple_menu_action_new(const char *label, PurpleCallback callback, gpointer data,
@@ -109,8 +143,19 @@ purple_menu_action_free(PurpleMenuAction *act)
 void
 purple_util_init(void)
 {
-	/* This does nothing right now.  It exists for symmetry with
-	 * purple_util_uninit() and forwards compatibility. */
+	GError *error = NULL;
+
+	str_to_time_regex = g_regex_new(str_to_time_pattern,
+	                                G_REGEX_EXTENDED | G_REGEX_RAW, 0,
+	                                &error);
+
+	if(error != NULL) {
+		purple_debug_fatal("util",
+		                   "Failed to compile the regex for purple_str_to_time"
+		                   ": %s",
+		                   error->message ? error->message : "unknown");
+		g_clear_error(&error);
+	}
 }
 
 void
@@ -123,6 +168,9 @@ purple_util_uninit(void)
 
 	g_free(user_dir);
 	user_dir = NULL;
+
+	g_regex_unref(str_to_time_regex);
+	str_to_time_regex = NULL;
 }
 
 /**************************************************************************
@@ -705,169 +753,167 @@ time_t
 purple_str_to_time(const char *timestamp, gboolean utc,
 	struct tm *tm, long *tz_off, const char **rest)
 {
+	GMatchInfo *info = NULL;
+	gboolean mktime_with_utc = FALSE, matched = FALSE;
+	gchar *match = NULL;
 	struct tm t;
-	const gchar *str;
-	gint year = 0;
 	long tzoff = PURPLE_NO_TZ_OFF;
 	time_t retval;
-	gboolean mktime_with_utc = FALSE;
+	gint end = 0;
 
-	if (rest != NULL)
+	if(rest != NULL) {
 		*rest = NULL;
+	}
 
 	g_return_val_if_fail(timestamp != NULL, 0);
 
 	memset(&t, 0, sizeof(struct tm));
 
-	str = timestamp;
-
-	/* Strip leading whitespace */
-	while (g_ascii_isspace(*str))
-		str++;
-
-	if (*str == '\0') {
-		if (rest != NULL && *str != '\0')
-			*rest = str;
-
-		return 0;
-	}
-
-	if (!g_ascii_isdigit(*str) && *str != '-' && *str != '+') {
-		if (rest != NULL && *str != '\0')
-			*rest = str;
-
-		return 0;
-	}
-
-	/* 4 digit year */
-	if (sscanf(str, "%04d", &year) && year >= 1900) {
-		str += 4;
-
-		if (*str == '-' || *str == '/')
-			str++;
-
-		t.tm_year = year - 1900;
-	}
-
-	/* 2 digit month */
-	if (!sscanf(str, "%02d", &t.tm_mon)) {
-		if (rest != NULL && *str != '\0')
-			*rest = str;
-
-		return 0;
-	}
-
-	str += 2;
-	t.tm_mon -= 1;
-
-	if (*str == '-' || *str == '/')
-		str++;
-
-	/* 2 digit day */
-	if (!sscanf(str, "%02d", &t.tm_mday)) {
-		if (rest != NULL && *str != '\0')
-			*rest = str;
-
-		return 0;
-	}
-
-	str += 2;
-
-	/* Grab the year off the end if there's still stuff */
-	if (*str == '/' || *str == '-') {
-		/* But make sure we don't read the year twice */
-		if (year >= 1900) {
-			if (rest != NULL && *str != '\0')
-				*rest = str;
-
-			return 0;
+	matched = g_regex_match(str_to_time_regex, timestamp, 0, &info);
+	if(!matched) {
+		if(rest != NULL) {
+			*rest = timestamp;
 		}
 
-		str++;
+		g_match_info_free(info);
 
-		if (!sscanf(str, "%04d", &t.tm_year)) {
-			if (rest != NULL && *str != '\0')
-				*rest = str;
+		return 0;
+	}
 
-			return 0;
+	/* Set rest to the end of the match in timestamp. */
+	if(rest != NULL) {
+		if(g_match_info_fetch_pos(info, 0, NULL, &end)) {
+			*rest = timestamp + end;
 		}
+	}
 
-		t.tm_year -= 1900;
-	} else if (*str == 'T' || *str == '.') {
-		str++;
+	/* check the year or the trailingyear if year is not set */
+	match = g_match_info_fetch_named(info, "year");
+	if(match != NULL && *match != '\0') {
+		gint year = atoi(match);
+		if(year >= 1900) {
+			t.tm_year = year - 1900;
+		}
+	} else {
+		g_free(match);
+		match = g_match_info_fetch_named(info, "trailingyear");
+		if(match != NULL && *match != '\0') {
+			t.tm_year = atoi(match) - 1900;
+		}
+	}
+	g_free(match);
 
-		/* Continue grabbing the hours/minutes/seconds */
-		if ((sscanf(str, "%02d:%02d:%02d", &t.tm_hour, &t.tm_min, &t.tm_sec) == 3 &&
-				(str += 8)) ||
-		    (sscanf(str, "%02d%02d%02d", &t.tm_hour, &t.tm_min, &t.tm_sec) == 3 &&
-				(str += 6)))
-		{
-			gint sign, tzhrs, tzmins;
+	/* get the month */
+	match = g_match_info_fetch_named(info, "month");
+	if(match != NULL && *match != '\0') {
+		t.tm_mon = atoi(match) - 1;
+	}
+	g_free(match);
 
-			if (*str == '.') {
-				/* Cut off those pesky micro-seconds */
-				do {
-					str++;
-				} while (*str >= '0' && *str <= '9');
+	/* get the day */
+	match = g_match_info_fetch_named(info, "day");
+	if(match != NULL && *match != '\0') {
+		t.tm_mday = atoi(match);
+	}
+	g_free(match);
+
+	/* get the hour */
+	match = g_match_info_fetch_named(info, "hours");
+	if(match != NULL && *match != '\0') {
+		t.tm_hour = atoi(match);
+	}
+	g_free(match);
+
+	/* get the minutes */
+	match = g_match_info_fetch_named(info, "minutes");
+	if(match != NULL && *match != '\0') {
+		t.tm_min = atoi(match);
+	}
+	g_free(match);
+
+	/* get the seconds */
+	match = g_match_info_fetch_named(info, "seconds");
+	if(match != NULL && *match != '\0') {
+		t.tm_sec = atoi(match);
+	}
+	g_free(match);
+
+	/* check if this is utc time */
+	match = g_match_info_fetch_named(info, "utc");
+	if(match != NULL && *match != '\0') {
+		tzoff = 0;
+		g_free(match);
+	} else {
+		/* free match if it was just an empty string */
+		g_free(match);
+
+		/* if match is null, check if we have tzsign which is required */
+		match = g_match_info_fetch_named(info, "tzsign");
+		if(match != NULL) {
+			gint tzsign = -1, tzhour = 0, tzminute = 0;
+
+			/* Figure out if we're ahead or behind of utc, assuming ahead by
+			 * default.
+			 */
+			if(*match == '+') {
+				tzsign = -1;
 			}
+			g_free(match);
 
-			sign = (*str == '+') ? 1 : -1;
+			/* get the tz hour */
+			match = g_match_info_fetch_named(info, "tzhour");
+			if(match != NULL && *match != '\0') {
+				tzhour = atoi(match);
+			}
+			g_free(match);
 
-			/* Process the timezone */
-			if (*str == '+' || *str == '-') {
-				str++;
+			/* get the tz minute */
+			match = g_match_info_fetch_named(info, "tzminute");
+			if(match != NULL && *match != '\0') {
+				tzminute = atoi(match);
+			}
+			g_free(match);
 
-				if (((sscanf(str, "%02d:%02d", &tzhrs, &tzmins) == 2 && (str += 5)) ||
-					(sscanf(str, "%02d%02d", &tzhrs, &tzmins) == 2 && (str += 4))))
-				{
-					mktime_with_utc = TRUE;
-					tzoff = tzhrs * 60 * 60 + tzmins * 60;
-					tzoff *= sign;
-				}
-			} else if (*str == 'Z') {
-				/* 'Z' = Zulu = UTC */
-				str++;
+			/* we need at least either an hour or minute to offset the timezone */
+			if(tzhour > 0 || tzminute > 0) {
+				mktime_with_utc = TRUE;
+				tzoff = tzsign * ((tzhour * 3600) + (tzminute * 60));
+			}
+		}
+	}
+
+	/* If we have a time, figure out if we need to adjust our tz offset. */
+	if(t.tm_hour > 0 || t.tm_min > 0 || t.tm_sec > 0) {
+		if(!mktime_with_utc) {
+			if(utc) {
 				mktime_with_utc = TRUE;
 				tzoff = 0;
-			}
-
-			if (!mktime_with_utc)
-			{
-				/* No timezone specified. */
-
-				if (utc) {
-					mktime_with_utc = TRUE;
-					tzoff = 0;
-				} else {
-					/* Local Time */
-					t.tm_isdst = -1;
-				}
+			} else {
+				/* Local Time */
+				t.tm_isdst = -1;
 			}
 		}
 	}
 
-	if (rest != NULL && *str != '\0') {
-		/* Strip trailing whitespace */
-		while (g_ascii_isspace(*str))
-			str++;
-
-		if (*str != '\0')
-			*rest = str;
+	if(mktime_with_utc) {
+		retval = mktime_utc(&t);
+	} else {
+		retval = mktime(&t);
 	}
 
-	if (mktime_with_utc)
-		retval = mktime_utc(&t);
-	else
-		retval = mktime(&t);
-
-	if (tm != NULL)
+	if(tm != NULL) {
 		*tm = t;
+	}
 
-	if (tzoff != PURPLE_NO_TZ_OFF)
+	if(tzoff != PURPLE_NO_TZ_OFF) {
 		retval -= tzoff;
+	}
 
-	if (tz_off != NULL)
+	if(tz_off != NULL) {
 		*tz_off = tzoff;
+	}
+
+	g_match_info_free(info);
 
 	return retval;
 }

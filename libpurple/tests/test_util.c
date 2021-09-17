@@ -162,13 +162,21 @@ START_TEST(test_util_str_to_time)
 	time_t timestamp;
 
 	fail_unless(377182200 == purple_str_to_time("19811214T12:50:00", TRUE, NULL, NULL, NULL));
+	fail_unless(377203800 == purple_str_to_time("19811214T12:50:00-06", FALSE, NULL, NULL, NULL));
 	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21", TRUE, NULL, NULL, NULL));
 	fail_unless(1282941722 == purple_str_to_time("2010-08-27.204202", TRUE, NULL, NULL, NULL));
+	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21.3234", TRUE, NULL, NULL, NULL));
+	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21Z", TRUE, NULL, NULL, NULL));
+	fail_unless(1631512800 == purple_str_to_time("09-13-2021", TRUE, NULL, NULL, NULL));
 
 	timestamp = purple_str_to_time("2010-08-27.134202-0700PDT", FALSE, &tm, &tz_off, &rest);
 	fail_unless(1282941722 == timestamp);
 	fail_unless((-7 * 60 * 60) == tz_off);
 	assert_string_equal("PDT", rest);
+
+	timestamp = purple_str_to_time("09/13/202115:34:34", TRUE, NULL, NULL, &rest);
+	fail_unless(1631512800 == timestamp);
+	assert_string_equal("15:34:34", rest);
 }
 END_TEST
 
@@ -253,6 +261,8 @@ END_TEST
 Suite *
 util_suite(void)
 {
+	purple_util_init();
+
 	Suite *s = suite_create("Utility Functions");
 
 	TCase *tc = tcase_create("Base16");
@@ -305,6 +315,8 @@ util_suite(void)
 	tc = tcase_create("escape_uri_for_open");
 	tcase_add_test(tc, test_uri_escape_for_open);
 	suite_add_tcase(s, tc);
+
+	purple_util_uninit();
 
 	return s;
 }
