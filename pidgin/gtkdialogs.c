@@ -554,7 +554,7 @@ void pidgin_dialogs_about(void)
 			  "available by emailing <a "
 			  "href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>"
 			  "This is a <b>public</b> mailing list! "
-			  "(<a href=\"http://pidgin.im/pipermail/support/\">archive</a>)<br/>"
+			  "(<a href=\"https://lists.pidgin.im/pipermail/support/\">archive</a>)<br/>"
 			  "We can't help with third-party protocols or plugins!<br/>"
 			  "This list's primary language is <b>English</b>.  You are "
 			  "welcome to post in another language, but the responses may "
