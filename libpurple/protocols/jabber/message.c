@@ -798,7 +798,7 @@ void jabber_message_parse(JabberStream *js, xmlnode *packet)
 		case JABBER_MESSAGE_OTHER:
 			purple_debug_info("jabber",
 					"Received message of unknown type: %s\n", type);
-			/* Fall-through is intentional */
+			/* FALL-THROUGH */
 		case JABBER_MESSAGE_NORMAL:
 		case JABBER_MESSAGE_CHAT:
 			handle_chat(jm);
@@ -1179,12 +1179,13 @@ int jabber_message_send_im(PurpleConnection *gc, const char *who, const char *ms
 	jm->id = jabber_get_next_id(jm->js);
 
 	if(jbr) {
-		if(jbr->thread_id)
-			jm->thread_id = jbr->thread_id;
+		if(jbr->thread_id) {
+			jm->thread_id = g_strdup(jbr->thread_id);
+		}
 
-		if (jbr->chat_states == JABBER_CHAT_STATES_UNSUPPORTED)
+		if (jbr->chat_states == JABBER_CHAT_STATES_UNSUPPORTED) {
 			jm->chat_state = JM_STATE_NONE;
-		else {
+		} else {
 			/* if(JABBER_CHAT_STATES_UNKNOWN == jbr->chat_states)
 			   jbr->chat_states = JABBER_CHAT_STATES_UNSUPPORTED; */
 		}
