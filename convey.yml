@@ -1,43 +1,40 @@
 environment:
-  - REPO=pidgin/pidgin2-docs
-  - TAG=latest
-  - REGISTRY=docker.io
-  - REGISTRY_USERNAME
-  - REGISTRY_PASSWORD
+  - DOCS_BUILD_IMAGE=pidgin/2.x.y-builders:debian-bookworm-amd64
 
 tasks:
+  clean:
+    type: convey/clean
+    files:
+      - pidgin2-docs
+
+  docs-build:
+    type: docker/run
+    image: ${DOCS_BUILD_IMAGE}
+    workdir: ${CONVEY_WORKSPACE}
+    script:
+      - set -ex
+      - ./autogen.sh --disable-gevolution
+      - make -s -j$(nproc) docs
+
+  docs-clean:
+    type: convey/clean
+    files:
+      - pidgin2-docs
+
+  docs-export:
+    type: docker/export
+    files:
+      - doc/html:pidgin2-docs
+
   import:
     type: docker/import
     files: .:.
 
-  build:
-    type: docker/build
-    dockerfile: Dockerfile.doxygen
-    tag: ${REGISTRY}/${REPO}:${TAG}
-    files: .:.
-
-  login:
-    type: docker/login
-    username: ${REGISTRY_USERNAME}
-    password: ${REGISTRY_PASSWORD}
-    server: ${REGISTRY}
-
-  logout:
-    type: docker/logout
-    server: ${REGISTRY}
-
-  push:
-    type: docker/push
-    images: ${REGISTRY}/${REPO}:${TAG}
-
 plans:
-  default:
+  clean:
     stages:
-      - tasks: [import, build]
+      - tasks: [clean]
 
-  ci:
+  docs:
     stages:
-      - tasks: [import, build, login, push]
-      - tasks: [logout]
-        run: always
-
+      - tasks: [docs-clean, import, docs-build, docs-export]
