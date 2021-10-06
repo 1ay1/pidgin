@@ -160,23 +160,51 @@ START_TEST(test_util_str_to_time)
 	long tz_off;
 	const char *rest;
 	time_t timestamp;
-
-	fail_unless(377182200 == purple_str_to_time("19811214T12:50:00", TRUE, NULL, NULL, NULL));
-	fail_unless(377203800 == purple_str_to_time("19811214T12:50:00-06", FALSE, NULL, NULL, NULL));
-	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21", TRUE, NULL, NULL, NULL));
-	fail_unless(1282941722 == purple_str_to_time("2010-08-27.204202", TRUE, NULL, NULL, NULL));
-	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21.3234", TRUE, NULL, NULL, NULL));
-	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21Z", TRUE, NULL, NULL, NULL));
-	fail_unless(1631512800 == purple_str_to_time("09-13-2021", TRUE, NULL, NULL, NULL));
+	gchar *oldtz = g_strdup(g_getenv("TZ"));
 
 	timestamp = purple_str_to_time("2010-08-27.134202-0700PDT", FALSE, &tm, &tz_off, &rest);
 	fail_unless(1282941722 == timestamp);
 	fail_unless((-7 * 60 * 60) == tz_off);
 	assert_string_equal("PDT", rest);
 
+	fail_unless(377182200 == purple_str_to_time("19811214T12:50:00", TRUE, NULL, NULL, NULL));
+	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21", TRUE, NULL, NULL, NULL));
+	fail_unless(1282941722 == purple_str_to_time("2010-08-27.204202", TRUE, NULL, NULL, NULL));
+	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21.3234", TRUE, NULL, NULL, NULL));
+	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21Z", TRUE, NULL, NULL, NULL));
+	fail_unless(1631512800 == purple_str_to_time("09-13-2021", TRUE, NULL, NULL, NULL));
+
+	/* For testing local time we use Asia/Kathmandu because it's +05:45 and
+	 * doesn't have DST which means the test should always pass regardless of
+	 * the time of year, at least until Kathmandu changes something.
+	 */
+	g_setenv("TZ", "Asia/Kathmandu", TRUE);
+
+	/* There's a timezone in this timestamp, so the returned value will be in
+	 * UTC with the offset added/subtracted.
+	 */
+	fail_unless(377203800 == purple_str_to_time("19811214T12:50:00-06", FALSE, NULL, NULL, NULL));
+
+	/* This also has a tz, so the returned value will be utc with the given
+	 * offset.
+	 */
+	fail_unless(1569746481 == purple_str_to_time("2019-09-29T08:41:21.401000+00:00", FALSE, NULL, NULL, NULL));
+
+	/* while it looks like the time is specified, this time is not valid
+	 * according to our parser, so it's just the date which will be handled by
+	 * localtime.
+	 */
 	timestamp = purple_str_to_time("09/13/202115:34:34", TRUE, NULL, NULL, &rest);
-	fail_unless(1631512800 == timestamp);
+	fail_unless(1631470500 == timestamp);
 	assert_string_equal("15:34:34", rest);
+
+	/* finally revert the TZ environment variable */
+	if(oldtz != NULL) {
+		g_setenv("TZ", oldtz, TRUE);
+		g_free(oldtz);
+	} else {
+		g_unsetenv("TZ");
+	}
 }
 END_TEST
 

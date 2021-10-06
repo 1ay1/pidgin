@@ -756,6 +756,7 @@ purple_str_to_time(const char *timestamp, gboolean utc,
 	GMatchInfo *info = NULL;
 	gboolean mktime_with_utc = FALSE, matched = FALSE;
 	gchar *match = NULL;
+	gchar *hours = NULL, *minutes = NULL, *seconds = NULL;
 	struct tm t;
 	long tzoff = PURPLE_NO_TZ_OFF;
 	time_t retval;
@@ -818,82 +819,79 @@ purple_str_to_time(const char *timestamp, gboolean utc,
 	g_free(match);
 
 	/* get the hour */
-	match = g_match_info_fetch_named(info, "hours");
-	if(match != NULL && *match != '\0') {
-		t.tm_hour = atoi(match);
-	}
-	g_free(match);
+	hours = g_match_info_fetch_named(info, "hours");
+	minutes = g_match_info_fetch_named(info, "minutes");
+	seconds = g_match_info_fetch_named(info, "seconds");
 
-	/* get the minutes */
-	match = g_match_info_fetch_named(info, "minutes");
-	if(match != NULL && *match != '\0') {
-		t.tm_min = atoi(match);
-	}
-	g_free(match);
+	if(hours != NULL && *hours != '\0' &&
+		minutes != NULL && *minutes != '\0' &&
+		seconds != NULL && *seconds != '\0')
+	{
+		t.tm_hour = atoi(hours);
+		t.tm_min = atoi(minutes);
+		t.tm_sec = atoi(seconds);
 
-	/* get the seconds */
-	match = g_match_info_fetch_named(info, "seconds");
-	if(match != NULL && *match != '\0') {
-		t.tm_sec = atoi(match);
-	}
-	g_free(match);
-
-	/* check if this is utc time */
-	match = g_match_info_fetch_named(info, "utc");
-	if(match != NULL && *match != '\0') {
-		tzoff = 0;
-		g_free(match);
-	} else {
-		/* free match if it was just an empty string */
-		g_free(match);
-
-		/* if match is null, check if we have tzsign which is required */
-		match = g_match_info_fetch_named(info, "tzsign");
-		if(match != NULL) {
-			gint tzsign = -1, tzhour = 0, tzminute = 0;
-
-			/* Figure out if we're ahead or behind of utc, assuming ahead by
-			 * default.
-			 */
-			if(*match == '+') {
-				tzsign = -1;
-			}
+		/* check if this is utc time */
+		match = g_match_info_fetch_named(info, "utc");
+		if(match != NULL && *match != '\0') {
 			g_free(match);
 
-			/* get the tz hour */
-			match = g_match_info_fetch_named(info, "tzhour");
-			if(match != NULL && *match != '\0') {
-				tzhour = atoi(match);
-			}
+			tzoff = 0;
+			mktime_with_utc = TRUE;
+		} else {
+			/* free match if it was just an empty string */
 			g_free(match);
 
-			/* get the tz minute */
-			match = g_match_info_fetch_named(info, "tzminute");
-			if(match != NULL && *match != '\0') {
-				tzminute = atoi(match);
-			}
-			g_free(match);
+			/* if match is null, check if we have tzsign which is required */
+			match = g_match_info_fetch_named(info, "tzsign");
+			if(match != NULL) {
+				gint tzsign = -1, tzhour = 0, tzminute = 0;
 
-			/* we need at least either an hour or minute to offset the timezone */
-			if(tzhour > 0 || tzminute > 0) {
+				/* Figure out if we're ahead or behind of utc, assuming ahead by
+				 * default.
+				 */
+				if(*match == '+') {
+					tzsign = 1;
+				}
+				g_free(match);
+
+				/* get the tz hour */
+				match = g_match_info_fetch_named(info, "tzhour");
+				if(match != NULL && *match != '\0') {
+					tzhour = atoi(match);
+				}
+				g_free(match);
+
+				/* get the tz minute */
+				match = g_match_info_fetch_named(info, "tzminute");
+				if(match != NULL && *match != '\0') {
+					tzminute = atoi(match);
+				}
+				g_free(match);
+
+				/* if the timezone is utc +00:00 or -00:00 tzoff will multiple out to
+				 * be zero like it should be.
+				 */
 				mktime_with_utc = TRUE;
 				tzoff = tzsign * ((tzhour * 3600) + (tzminute * 60));
 			}
 		}
-	}
 
-	/* If we have a time, figure out if we need to adjust our tz offset. */
-	if(t.tm_hour > 0 || t.tm_min > 0 || t.tm_sec > 0) {
+		/* If we have a time, figure out if we need to adjust our tz offset. */
 		if(!mktime_with_utc) {
 			if(utc) {
 				mktime_with_utc = TRUE;
 				tzoff = 0;
 			} else {
 				/* Local Time */
-				t.tm_isdst = -1;
+				t.tm_isdst = -1; /* -1 means dst info is not available */
 			}
 		}
 	}
+
+	g_free(hours);
+	g_free(minutes);
+	g_free(seconds);
 
 	if(mktime_with_utc) {
 		retval = mktime_utc(&t);
