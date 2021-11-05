@@ -102,8 +102,8 @@ reset_typing_cb(gpointer data)
 
 	im = PURPLE_CONV_IM(c);
 
+	im->typing_timeout = 0;
 	purple_conv_im_set_typing_state(im, PURPLE_NOT_TYPING);
-	purple_conv_im_stop_typing_timeout(im);
 
 	return FALSE;
 }
@@ -113,10 +113,14 @@ send_typed_cb(gpointer data)
 {
 	PurpleConversation *conv = (PurpleConversation *)data;
 	PurpleConnection *gc;
+	PurpleConvIm *im;
 	const char *name;
 
 	g_return_val_if_fail(conv != NULL, FALSE);
 
+	im = PURPLE_CONV_IM(conv);
+
+	im->send_typed_timeout = 0;
 	gc   = purple_conversation_get_gc(conv);
 	name = purple_conversation_get_name(conv);
 
