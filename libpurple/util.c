@@ -887,6 +887,17 @@ purple_str_to_time(const char *timestamp, gboolean utc,
 				t.tm_isdst = -1; /* -1 means dst info is not available */
 			}
 		}
+	} else {
+		/* If we have a time, figure out if we need to adjust our tz offset. */
+		if(!mktime_with_utc) {
+			if(utc) {
+				mktime_with_utc = TRUE;
+				tzoff = 0;
+			} else {
+				/* Local Time */
+				t.tm_isdst = -1; /* -1 means dst info is not available */
+			}
+		}
 	}
 
 	g_free(hours);
