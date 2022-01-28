@@ -8211,16 +8211,19 @@ pidgin_conversations_set_tab_colors(void)
 		if (parent == now ||
 				(parent && now && parent->rc_style == now->rc_style)) {
 			GdkColor color;
+			gchar *color_str;
 			gdk_color_parse(styles[iter].color, &color);
 			pidgin_style_adjust_contrast(gtk_widget_get_default_style(), &color);
+			color_str = gdk_color_to_string(&color);
 
 			g_string_append_printf(str, "style \"%s\" {\n"
 					"fg[ACTIVE] = \"%s\"\n"
 					"}\n"
 					"widget \"*%s\" style \"%s\"\n",
 					styles[iter].stylename,
-					gdk_color_to_string(&color),
+					color_str,
 					styles[iter].labelname, styles[iter].stylename);
+			g_free(color_str);
 		}
 	}
 	gtk_rc_parse_string(str->str);
