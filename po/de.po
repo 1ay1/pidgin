@@ -5334,7 +5334,7 @@ msgid "Master archive is misconfigured"
 msgstr "Master-Archiv ist fehlerhaft konfiguriert"
 
 msgid "Incorrect username or password"
-msgstr "Benutzername oder Passwort ungülzig"
+msgstr "Benutzername oder Passwort ungültig"
 
 msgid "Could not recognize the host of the username you entered"
 msgstr ""
