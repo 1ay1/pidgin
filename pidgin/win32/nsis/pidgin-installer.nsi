@@ -70,6 +70,7 @@ Unicode true
 !define GTK_MIN_VERSION				"2.14.0"
 
 !define DOWNLOADER_URL				"https://pidgin.im/win32/download_redir.php?version=${PIDGIN_VERSION}"
+!define DICTIONARY_URL        "https://downloads.sourceforge.net/project/pidgin/dictionaries/${DICTIONARY_TIMESTAMP}"
 
 !define MEMENTO_REGISTRY_ROOT			HKLM
 !define MEMENTO_REGISTRY_KEY			"${PIDGIN_UNINSTALL_KEY}"
@@ -257,7 +258,7 @@ Section $(GTKSECTIONTITLE) SecGtk
   retry:
   StrCpy $R2 "${DOWNLOADER_URL}&gtk_version=${GTK_INSTALL_VERSION}&dl_pkg=gtk"
   DetailPrint "Downloading GTK+ Runtime ... ($R2)"
-  inetc::get /CONNECTTIMEOUT=10 "$R2" "$R1"
+  inetc::get /CONNECTTIMEOUT=10 "$R2" "$R1" /END
   Pop $R0
   StrCmp $R0 "OK" 0 prompt_retry
 
@@ -409,9 +410,8 @@ ${MementoSectionDone}
 ;--------------------------------
 ;Spell Checking
 
-!macro SPELLCHECK_SECTION lang lang_name lang_file
+!macro SPELLCHECK_SECTION lang lang_name
   Section /o "${lang_name}" SecSpell_${lang}
-    Push ${lang_file}
     Push ${lang}
     Call InstallDict
   SectionEnd
@@ -435,7 +435,7 @@ Section /o $(DEBUGSYMBOLSSECTIONTITLE) SecDebugSymbols
   retry:
   StrCpy $R2 "${DOWNLOADER_URL}&dl_pkg=dbgsym"
   DetailPrint "Downloading Debug Symbols... ($R2)"
-  inetc::get /CONNECTTIMEOUT=10 "$R2" "$R1"
+  inetc::get /CONNECTTIMEOUT=10 "$R2" "$R1" /END
   Pop $R0
   StrCmp $R0 "Cancelled" done
   StrCmp $R0 "OK" 0 prompt_retry
@@ -1248,13 +1248,10 @@ FunctionEnd
 Function InstallDict
   Push $R0
   Exch
-  Pop $R0 ;This is the language code
+  Pop $R4 ;This is the language code
   Push $R1
-  Exch 2
-  Pop $R1 ;This is the language file
   Push $R2
   Push $R3
-  Push $R4
 
   ClearErrors
   IfFileExists "$INSTDIR\spellcheck\share\enchant\myspell\$R0.dic" installed
@@ -1262,33 +1259,34 @@ Function InstallDict
   InitPluginsDir
 
   ; We need to download and install dictionary
-  StrCpy $R2 "$PLUGINSDIR\$R1"
-  StrCpy $R3 "${DOWNLOADER_URL}&dl_pkg=oo_dict&lang=$R1&lang_file=$R1"
-  DetailPrint "Downloading the $R0 Dictionary... ($R3)"
+  StrCpy $R1 "$PLUGINSDIR\$R4.zip"
+  StrCpy $R2 "${DICTIONARY_URL}/$R4.zip"
   retry:
-  NSISdl::download /TIMEOUT=10000 "$R3" "$R2"
-  Pop $R4
-  StrCmp $R4 "cancel" done
-  StrCmp $R4 "success" +3
-    MessageBox MB_RETRYCANCEL "$(PIDGINSPELLCHECKERROR)" /SD IDCANCEL IDRETRY retry IDCANCEL done
-    Goto done
+  DetailPrint "Downloading the $R4 Dictionary... ($R2)"
+  inetc::get /CONNECTTIMEOUT=10 "$R2" "$R1" /END
+  Pop $R0
+  StrCmp $R0 "OK" 0 prompt_retry
+
   SetOutPath "$INSTDIR\spellcheck\share\enchant\myspell"
-  nsisunz::UnzipToLog "$R2" "$OUTDIR"
+  nsisunz::UnzipToLog "$R1" "$OUTDIR"
   SetOutPath "$INSTDIR"
-  Pop $R3
-  StrCmp $R3 "success" installed
-    DetailPrint "$R3" ;print error message to log
+  Pop $R0
+  StrCmp $R0 "success" installed
+    DetailPrint "$R2" ;print error message to log
     Goto done
 
   installed: ;The dictionary is currently installed, no error message
-    DetailPrint "$R0 Dictionary is installed"
+    DetailPrint "$R4 Dictionary is installed"
+  goto done
+
+  prompt_retry:
+    MessageBox MB_RETRYCANCEL "$(PIDGINSPELLCHECKERROR)" /SD IDCANCEL IDRETRY retry IDCANCEL done
 
   done:
-  Pop $R4
   Pop $R3
   Pop $R2
+  Pop $R1
   Pop $R0
-  Exch $R1
 FunctionEnd
 
 !ifndef OFFLINE_INSTALLER
