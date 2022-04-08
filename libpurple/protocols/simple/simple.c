@@ -620,6 +620,11 @@ static struct transaction *transactions_find(struct simple_account_data *sip, st
 	if (cseq) {
 		while(transactions) {
 			trans = transactions->data;
+
+			purple_debug_info("simple",
+			                  "received CSeq %s vs known transaction CSeq %s\n",
+			                  cseq, trans->cseq);
+
 			if(purple_strequal(trans->cseq, cseq)) {
 				return trans;
 			}
@@ -1570,7 +1575,7 @@ static void process_input_message(struct simple_account_data *sip, struct sipmsg
 							/* This is encountered when a generic (MESSAGE, NOTIFY, etc)
 							 * was denied until further authorization is provided.
 							 */
-							gchar *resend, *auth;
+							gchar *resend, *auth, *cseq;
 							const gchar *ptmp;
 
 							if(sip->registrar.retries > SIMPLE_REGISTER_RETRY_MAX) return;
@@ -1583,10 +1588,22 @@ static void process_input_message(struct simple_account_data *sip, struct sipmsg
 							sipmsg_remove_header(trans->msg, "Authorization");
 							sipmsg_add_header(trans->msg, "Authorization", auth);
 							g_free(auth);
+
+							/* bump cseq */
+							sipmsg_remove_header(trans->msg, "CSeq");
+							sip->cseq++;
+							cseq = g_strdup_printf("%d %s", sip->cseq, trans->msg->method);
+							sipmsg_add_header(trans->msg, "CSeq", cseq);
+							g_free(cseq);
+							trans->cseq = sipmsg_find_header(trans->msg, "CSeq");
+
 							resend = sipmsg_to_string(trans->msg);
 							/* resend request */
 							sendout_pkt(sip->gc, resend);
 							g_free(resend);
+
+							/* exit here - no need to call callback, don't remove trans */
+							return;
 						} else {
 							/* Reset any count of retries that may have
 							 * accumulated in the above branch.
