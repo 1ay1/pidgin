@@ -2333,6 +2333,7 @@ pidgin_conv_switch_active_conversation(PurpleConversation *conv)
 
 	gray_stuff_out(gtkconv);
 	update_typing_icon(gtkconv);
+	g_object_set_data(G_OBJECT(entry), "transient_buddy", NULL);
 	regenerate_options_items(gtkconv->win);
 
 	gtk_window_set_title(GTK_WINDOW(gtkconv->win->window),
@@ -3223,6 +3224,22 @@ populate_menu_with_options(GtkWidget *menu, PidginConversation *gtkconv, gboolea
 			return FALSE;
 
 		buddy = purple_find_buddy(conv->account, conv->name);
+
+		/* gotta remain bug-compatible :( libpurple < 2.0.2 didn't handle
+                 * removing "isolated" buddy nodes well */
+                if (purple_version_check(2, 0, 2) == NULL) {
+                        if ((buddy == NULL) && (gtkconv->imhtml != NULL)) {
+                                buddy = g_object_get_data(G_OBJECT(gtkconv->imhtml), "transient_buddy");
+                        }
+
+                        if ((buddy == NULL) && (gtkconv->imhtml != NULL)) {
+                                buddy = purple_buddy_new(conv->account, conv->name, NULL);
+                                purple_blist_node_set_flags((PurpleBlistNode *)buddy,
+                                                PURPLE_BLIST_NODE_FLAG_NO_SAVE);
+                                g_object_set_data_full(G_OBJECT(gtkconv->imhtml), "transient_buddy",
+                                                buddy, (GDestroyNotify)purple_buddy_destroy);
+                        }
+                }
 	}
 
 	if (chat)
