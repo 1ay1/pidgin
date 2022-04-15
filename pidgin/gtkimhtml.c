@@ -67,6 +67,9 @@
 
 #define TOOLTIP_TIMEOUT 500
 
+/* GTK_IMHTML_MAX_CONSEC_RESIZES is also defined in gtkconv.c */
+#define GTK_IMHTML_MAX_CONSEC_RESIZES 6
+
 static GtkTextViewClass *parent_class = NULL;
 
 struct scalable_data {
@@ -395,6 +398,59 @@ static void gtk_imhtml_size_allocate(GtkWidget *widget, GtkAllocation *alloc)
 	int height = 0, y = 0;
 	GtkTextIter iter;
 	gboolean scroll = TRUE;
+	PidginConversation *gtkconv;
+	GtkIMHtml *entry, *messages;
+	int resize_count;
+	int entry_rc;
+	int messages_rc;
+
+	gtkconv = g_object_get_data(G_OBJECT(imhtml), "gtkconv");
+
+	if(gtkconv != NULL) {
+		entry = GTK_IMHTML(gtkconv->entry);
+		messages = GTK_IMHTML(gtkconv->imhtml);
+
+		entry_rc = GPOINTER_TO_INT(
+			g_object_get_data(
+				G_OBJECT(entry), "resize-count"));
+
+		messages_rc = GPOINTER_TO_INT(
+			g_object_get_data(
+				G_OBJECT(messages), "resize-count"));
+
+		resize_count = GPOINTER_TO_INT(
+			g_object_get_data(
+				G_OBJECT(imhtml), "resize-count"));
+
+		if(imhtml == entry) {
+			if(entry_rc >= GTK_IMHTML_MAX_CONSEC_RESIZES ||
+			   messages_rc >= GTK_IMHTML_MAX_CONSEC_RESIZES) {
+				return;
+			}
+		} else if(imhtml == messages) {
+			if(resize_count >= GTK_IMHTML_MAX_CONSEC_RESIZES) {
+				g_object_set_data(
+					G_OBJECT(entry), "resize-count",
+					GINT_TO_POINTER(
+						GTK_IMHTML_MAX_CONSEC_RESIZES + 1));
+
+				return;
+			}
+
+			if(entry_rc == GTK_IMHTML_MAX_CONSEC_RESIZES + 1) {
+				g_object_set_data(G_OBJECT(messages), "resize-count",
+						  GINT_TO_POINTER(0));
+				return;
+			}
+
+			g_object_set_data(G_OBJECT(entry), "resize-count",
+					  GINT_TO_POINTER(0));
+		}
+
+		resize_count++;
+		g_object_set_data(G_OBJECT(imhtml), "resize-count",
+				  GINT_TO_POINTER(resize_count));
+	}
 
 	gtk_text_buffer_get_end_iter(imhtml->text_buffer, &iter);
 
@@ -1167,6 +1223,8 @@ static void imhtml_paste_insert(GtkIMHtml *imhtml, const char *text, gboolean pl
 	if (!imhtml->wbfo && !plaintext)
 		gtk_imhtml_close_tags(imhtml, &iter);
 
+	g_object_set_data(G_OBJECT(imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
 }
 
 static void paste_plaintext_received_cb (GtkClipboard *clipboard, const gchar *text, gpointer data)
@@ -1185,6 +1243,9 @@ static void paste_received_cb (GtkClipboard *clipboard, GtkSelectionData *select
 {
 	char *text;
 	GtkIMHtml *imhtml = data;
+
+	g_object_set_data(G_OBJECT(imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
 
 	if (!gtk_text_view_get_editable(GTK_TEXT_VIEW(imhtml)))
 		return;
@@ -1282,6 +1343,9 @@ static void smart_backspace_cb(GtkIMHtml *imhtml, gpointer blah)
 
 	/* ok, then we need to insert the image buffer text before the anchor */
 	gtk_text_buffer_insert(imhtml->text_buffer, &iter, text, -1);
+
+	g_object_set_data(G_OBJECT(imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
 }
 
 static void paste_clipboard_cb(GtkIMHtml *imhtml, gpointer blah)
@@ -1307,6 +1371,8 @@ static void imhtml_realized_remove_primary(GtkIMHtml *imhtml, gpointer unused)
 	gtk_text_buffer_remove_selection_clipboard(GTK_IMHTML(imhtml)->text_buffer,
 	                                            gtk_widget_get_clipboard(GTK_WIDGET(imhtml), GDK_SELECTION_PRIMARY));
 
+	g_object_set_data(G_OBJECT(imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
 }
 
 static void imhtml_destroy_add_primary(GtkIMHtml *imhtml, gpointer unused)
@@ -1387,6 +1453,9 @@ imhtml_paste_cb(GtkIMHtml *imhtml, const char *str)
 		g_signal_emit_by_name(imhtml, "paste_clipboard");
 	else if (purple_strequal(str, "text"))
 		paste_unformatted_cb(NULL, imhtml);
+
+	g_object_set_data(G_OBJECT(imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
 }
 
 static void imhtml_toggle_format(GtkIMHtml *imhtml, GtkIMHtmlButtons buttons)
@@ -4355,6 +4424,7 @@ static void insert_ca_cb(GtkTextBuffer *buffer, GtkTextIter *arg1, GtkTextChildA
 
 static void insert_cb(GtkTextBuffer *buffer, GtkTextIter *end, gchar *text, gint len, GtkIMHtml *imhtml)
 {
+	PidginConversation *gtkconv;
 	GtkTextIter start;
 
 	if (!len)
@@ -4364,10 +4434,19 @@ static void insert_cb(GtkTextBuffer *buffer, GtkTextIter *end, gchar *text, gint
 	gtk_text_iter_set_offset(&start, imhtml->insert_offset);
 
 	gtk_imhtml_apply_tags_on_insert(imhtml, &start, end);
+
+	gtkconv = g_object_get_data(G_OBJECT(imhtml), "gtkconv");
+	if(gtkconv != NULL) {
+		g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+				  GINT_TO_POINTER(0));
+		g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+				  GINT_TO_POINTER(0));
+	}
 }
 
 static void delete_cb(GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *end, GtkIMHtml *imhtml)
 {
+	PidginConversation *gtkconv;
 	GList *l;
 	GSList *tags, *sl;
 	GtkTextIter i;
@@ -4421,6 +4500,14 @@ static void delete_cb(GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *en
 			g_free(img_data);
 		}
 		sl = next;
+	}
+
+	gtkconv = g_object_get_data(G_OBJECT(imhtml), "gtkconv");
+	if(gtkconv != NULL) {
+		g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+				  GINT_TO_POINTER(0));
+		g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+				  GINT_TO_POINTER(0));
 	}
 }
 

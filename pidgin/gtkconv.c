@@ -118,6 +118,9 @@ enum {
 static GdkColor *nick_colors = NULL;
 static guint nbr_nick_colors;
 
+/* GTK_IMHTML_MAX_CONSEC_RESIZES is also defined in gtkimhtml.c */
+#define GTK_IMHTML_MAX_CONSEC_RESIZES 6
+
 typedef struct {
 	GtkWidget *window;
 
@@ -264,7 +267,16 @@ close_conv_cb(GtkButton *button, PidginConversation *gtkconv)
 static gboolean
 lbox_size_allocate_cb(GtkWidget *w, GtkAllocation *allocation, gpointer data)
 {
+	PidginConversation *gtkconv = data;
+
 	purple_prefs_set_int(PIDGIN_PREFS_ROOT "/conversations/chat/userlist_width", allocation->width == 1 ? 0 : allocation->width);
+
+	if(gtkconv != NULL) {
+		g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+				  GINT_TO_POINTER(0));
+		g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+				  GINT_TO_POINTER(0));
+	}
 
 	return FALSE;
 }
@@ -2362,6 +2374,9 @@ insert_text_cb(GtkTextBuffer *textbuffer, GtkTextIter *position,
 
 	g_return_if_fail(gtkconv != NULL);
 
+	g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
+
 	if (!purple_prefs_get_bool("/purple/conversations/im/send_typing"))
 		return;
 
@@ -2378,6 +2393,9 @@ delete_text_cb(GtkTextBuffer *textbuffer, GtkTextIter *start_pos,
 	PurpleConvIm *im;
 
 	g_return_if_fail(gtkconv != NULL);
+
+	g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
 
 	conv = gtkconv->active_conv;
 
@@ -2807,6 +2825,9 @@ change_size_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		PurpleContact *contact = purple_buddy_get_contact(buddy);
 		purple_blist_node_set_int((PurpleBlistNode*)contact, "pidgin-infopane-iconsize", size);
 	}
+
+	g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
 }
 
 static void
@@ -4348,6 +4369,11 @@ static void topic_callback(GtkWidget *w, PidginConversation *gtkconv)
 			new_topic);
 
 	g_free(new_topic);
+
+	g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+			  GINT_TO_POINTER(0));
 }
 
 static gint
@@ -4613,6 +4639,17 @@ static gboolean resize_imhtml_cb(PidginConversation *gtkconv)
 	gboolean interior_focus;
 	int focus_width;
 
+	if(GPOINTER_TO_INT(
+		   g_object_get_data(
+			   G_OBJECT(gtkconv->entry), "resize-count")) ==
+	   GTK_IMHTML_MAX_CONSEC_RESIZES + 1) {
+		g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+				  GINT_TO_POINTER(0));
+		g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+				  GINT_TO_POINTER(0));
+		return;
+	}
+
 	pad_top = gtk_text_view_get_pixels_above_lines(GTK_TEXT_VIEW(gtkconv->entry));
 	pad_bottom = gtk_text_view_get_pixels_below_lines(GTK_TEXT_VIEW(gtkconv->entry));
 	pad_inside = gtk_text_view_get_pixels_inside_wrap(GTK_TEXT_VIEW(gtkconv->entry));
@@ -4647,7 +4684,7 @@ static gboolean resize_imhtml_cb(PidginConversation *gtkconv)
 
 	diff = height - gtkconv->entry->allocation.height;
 	if (ABS(diff) < oneline.height / 2)
-		return FALSE;
+		diff = 0;
 
 	gtk_widget_set_size_request(gtkconv->lower_hbox, -1,
 		diff + gtkconv->lower_hbox->allocation.height);
@@ -5073,6 +5110,7 @@ setup_common_pane(PidginConversation *gtkconv)
 	gtk_widget_set_name(gtkconv->entry, "pidgin_conv_entry");
 	gtk_imhtml_set_protocol_name(GTK_IMHTML(gtkconv->entry),
 			purple_account_get_protocol_name(conv->account));
+	g_object_set_data(G_OBJECT(gtkconv->entry), "gtkconv", gtkconv);
 
 	g_signal_connect(G_OBJECT(gtkconv->entry), "populate-popup",
 	                 G_CALLBACK(entry_popup_menu_cb), gtkconv);
@@ -7397,6 +7435,11 @@ show_formatting_toolbar_pref_cb(const char *name, PurplePrefType type,
 			gtk_widget_hide(gtkconv->toolbar);
 
 		g_idle_add((GSourceFunc)resize_imhtml_cb,gtkconv);
+
+		g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+				  GINT_TO_POINTER(0));
+		g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+				  GINT_TO_POINTER(0));
 	}
 }
 
@@ -9094,6 +9137,12 @@ infopane_entry_activate(PidginConversation *gtkconv)
 	PurpleConversation *conv = gtkconv->active_conv;
 	const char *text = NULL;
 
+	g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
+
+	g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+			  GINT_TO_POINTER(0));
+
 	if (!GTK_WIDGET_VISIBLE(gtkconv->infopane)) {
 		/* There's already an entry for alias. Let's not create another one. */
 		return FALSE;
@@ -9253,6 +9302,21 @@ plugin_changed_cb(PurplePlugin *p, gpointer data)
 
 static gboolean gtk_conv_configure_cb(GtkWidget *w, GdkEventConfigure *event, gpointer data) {
 	int x, y;
+	GList *gtkconvs;
+	PidginWindow *win = data;
+	PidginConversation *gtkconv;
+
+	if(win != NULL) {
+		for (gtkconvs = win->gtkconvs; gtkconvs != NULL; gtkconvs = gtkconvs->next) {
+			gtkconv = gtkconvs->data;
+			if(gtkconv != NULL) {
+				g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+						  GINT_TO_POINTER(0));
+				g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+						  GINT_TO_POINTER(0));
+			}
+		}
+	}
 
 	if (GTK_WIDGET_VISIBLE(w))
 		gtk_window_get_position(GTK_WINDOW(w), &x, &y);
@@ -9286,6 +9350,9 @@ static void
 pidgin_conv_set_position_size(PidginWindow *win, int conv_x, int conv_y,
 		int conv_width, int conv_height)
 {
+	GList *gtkconvs;
+	PidginConversation *gtkconvs_data;
+
 	 /* if the window exists, is hidden, we're saving positions, and the
           * position is sane... */
 	if (win && win->window &&
@@ -9307,6 +9374,18 @@ pidgin_conv_set_position_size(PidginWindow *win, int conv_x, int conv_y,
 		gtk_window_move(GTK_WINDOW(win->window), conv_x, conv_y);
 #endif
 		gtk_window_resize(GTK_WINDOW(win->window), conv_width, conv_height);
+	}
+
+	if(win != NULL) {
+		for (gtkconvs = win->gtkconvs; gtkconvs != NULL; gtkconvs = gtkconvs->next) {
+			gtkconvs_data = gtkconvs->data;
+			if(gtkconvs_data != NULL) {
+				g_object_set_data(G_OBJECT(gtkconvs_data->imhtml), "resize-count",
+						  GINT_TO_POINTER(0));
+				g_object_set_data(G_OBJECT(gtkconvs_data->entry), "resize-count",
+						  GINT_TO_POINTER(0));
+			}
+		}
 	}
 }
 
@@ -9515,6 +9594,8 @@ pidgin_conv_window_add_gtkconv(PidginWindow *win, PidginConversation *gtkconv)
 	GtkWidget *tab_cont = gtkconv->tab_cont;
 	PurpleConversationType conv_type;
 	const gchar *tmp_lab;
+	GList *gtkconvs;
+	PidginConversation *gtkconvs_data;
 
 	conv_type = purple_conversation_get_type(conv);
 
@@ -9583,6 +9664,21 @@ pidgin_conv_window_add_gtkconv(PidginWindow *win, PidginConversation *gtkconv)
 
 	if (pidgin_conv_window_get_gtkconv_count(win) == 1)
 		update_send_to_selection(win);
+
+	for (gtkconvs = win->gtkconvs; gtkconvs != NULL; gtkconvs = gtkconvs->next) {
+		gtkconvs_data = gtkconvs->data;
+		if(gtkconvs_data != NULL) {
+			g_object_set_data(G_OBJECT(gtkconvs_data->imhtml), "resize-count",
+					  GINT_TO_POINTER(0));
+			g_object_set_data(G_OBJECT(gtkconvs_data->entry), "resize-count",
+					  GINT_TO_POINTER(0));
+		}
+	}
+
+	g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+			  GINT_TO_POINTER(0));
 }
 
 static void
@@ -9591,6 +9687,11 @@ pidgin_conv_tab_pack(PidginWindow *win, PidginConversation *gtkconv)
 	gboolean tabs_side = FALSE;
 	gint angle = 0;
 	GtkWidget *first, *third, *ebox;
+
+	g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
+			  GINT_TO_POINTER(0));
 
 	if (purple_prefs_get_int(PIDGIN_PREFS_ROOT "/conversations/tab_side") == GTK_POS_LEFT ||
 	    purple_prefs_get_int(PIDGIN_PREFS_ROOT "/conversations/tab_side") == GTK_POS_RIGHT)
@@ -9687,6 +9788,8 @@ void
 pidgin_conv_window_remove_gtkconv(PidginWindow *win, PidginConversation *gtkconv)
 {
 	unsigned int index;
+	GList *gtkconvs;
+	PidginConversation *gtkconvs_data;
 
 	index = gtk_notebook_page_num(GTK_NOTEBOOK(win->notebook), gtkconv->tab_cont);
 
@@ -9705,6 +9808,14 @@ pidgin_conv_window_remove_gtkconv(PidginWindow *win, PidginConversation *gtkconv
 
 	if (!win->gtkconvs && win != hidden_convwin)
 		pidgin_conv_window_destroy(win);
+
+	for (gtkconvs = win->gtkconvs; gtkconvs != NULL; gtkconvs = gtkconvs->next) {
+		gtkconvs_data = gtkconvs->data;
+		if(gtkconvs_data != NULL) {
+			g_object_set_data(G_OBJECT(gtkconvs_data->imhtml), "resize-count",
+					  GINT_TO_POINTER(0));
+		}
+	}
 }
 
 PidginConversation *
@@ -9878,7 +9989,7 @@ conv_placement_last_created_win(PidginConversation *conv)
 		win = pidgin_conv_window_new();
 
 		g_signal_connect(G_OBJECT(win->window), "configure_event",
-				G_CALLBACK(gtk_conv_configure_cb), NULL);
+				G_CALLBACK(gtk_conv_configure_cb), win);
 
 		pidgin_conv_window_add_gtkconv(win, conv);
 		pidgin_conv_window_show(win);
@@ -9895,6 +10006,11 @@ conv_placement_last_created_win_type_configured_cb(GtkWidget *w,
 	int x, y;
 	PurpleConversationType type = purple_conversation_get_type(conv->active_conv);
 	GList *all;
+
+	g_object_set_data(G_OBJECT(conv->imhtml), "resize-count",
+			  GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(conv->entry), "resize-count",
+			  GINT_TO_POINTER(0));
 
 	if (GTK_WIDGET_VISIBLE(w))
 		gtk_window_get_position(GTK_WINDOW(w), &x, &y);
@@ -9978,7 +10094,7 @@ conv_placement_new_window(PidginConversation *conv)
 	win = pidgin_conv_window_new();
 
 	g_signal_connect(G_OBJECT(win->window), "configure_event",
-			G_CALLBACK(gtk_conv_configure_cb), NULL);
+			G_CALLBACK(gtk_conv_configure_cb), win);
 
 	pidgin_conv_window_add_gtkconv(win, conv);
 
