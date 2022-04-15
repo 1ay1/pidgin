@@ -441,6 +441,14 @@ purple_network_do_listen(unsigned short port, int socket_family, int socket_type
 	 * XXX - Try IPv6 addresses first?
 	 */
 	for (next = res; next != NULL; next = next->ai_next) {
+#if _WIN32
+		/*
+		 * On Windows, the address family for the transport
+		 * address should always be set to AF_INET.
+		 */
+		if(next->ai_family != AF_INET)
+			continue;
+#endif
 		listenfd = socket(next->ai_family, next->ai_socktype, next->ai_protocol);
 		if (listenfd < 0)
 			continue;
@@ -598,7 +606,7 @@ void purple_network_listen_cancel(PurpleNetworkListenData *listen_data)
 unsigned short
 purple_network_get_port_from_fd(int fd)
 {
-	struct sockaddr_in addr;
+	common_sockaddr_t addr;
 	socklen_t len;
 
 	g_return_val_if_fail(fd >= 0, 0);
@@ -609,7 +617,7 @@ purple_network_get_port_from_fd(int fd)
 		return 0;
 	}
 
-	return ntohs(addr.sin_port);
+	return ntohs(addr.in.sin_port);
 }
 
 #ifdef _WIN32
