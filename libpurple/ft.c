@@ -1545,6 +1545,19 @@ purple_xfer_start(PurpleXfer *xfer, int fd, const char *ip,
 	begin_transfer(xfer, cond);
 }
 
+static void
+purple_xfer_drain_socket(int sock)
+{
+	int ret;
+	char buffer[64];
+
+	do {
+		ret = read(sock, buffer, sizeof(buffer));
+	} while(ret > 0 ||
+		(ret == -1 &&
+		 (errno == EAGAIN || errno == EWOULDBLOCK)));
+}
+
 void
 purple_xfer_end(PurpleXfer *xfer)
 {
@@ -1565,8 +1578,10 @@ purple_xfer_end(PurpleXfer *xfer)
 		xfer->watcher = 0;
 	}
 
-	if (xfer->fd != -1)
+	if (xfer->fd != -1) {
+		purple_xfer_drain_socket(xfer->fd);
 		close(xfer->fd);
+	}
 
 	if (xfer->dest_fp != NULL) {
 		fclose(xfer->dest_fp);
