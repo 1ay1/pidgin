@@ -3179,7 +3179,12 @@ static gboolean _jabber_send_buzz(JabberStream *js, const char *username, char *
 		xmlnode *buzz, *msg = xmlnode_new("message");
 		gchar *to;
 
-		to = g_strdup_printf("%s/%s", username, jbr->name);
+		if((strchr(username, '/') == NULL) && jbr && (jbr->name != NULL)) {
+			to = g_strdup_printf("%s/%s", username, jbr->name);
+		} else {
+			to = g_strdup(username);
+		}
+
 		xmlnode_set_attrib(msg, "to", to);
 		g_free(to);
 
