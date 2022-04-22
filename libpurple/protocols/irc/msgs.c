@@ -1454,10 +1454,20 @@ irc_sasl_cb_simple(void *ctx, int id, const char **res, unsigned *len)
 {
 	struct irc_conn *irc = ctx;
 	PurpleConnection *gc = purple_account_get_connection(irc->account);
+	const char *saslname =
+		purple_account_get_string(irc->account, "saslname", NULL);
+
+	if(saslname == NULL || *saslname == '\0') {
+		saslname = purple_account_get_string(irc->account, "realname", "");
+	}
+
+	if(saslname == NULL || *saslname == '\0') {
+		saslname = purple_connection_get_display_name(gc);
+	}
 
 	switch(id) {
 		case SASL_CB_AUTHNAME:
-			*res = purple_connection_get_display_name(gc);
+			*res = saslname;
 			break;
 		case SASL_CB_USER:
 			*res = "";

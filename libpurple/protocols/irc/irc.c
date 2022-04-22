@@ -1099,6 +1099,9 @@ static void _init_plugin(PurplePlugin *plugin)
 	option = purple_account_option_bool_new(_("Authenticate with SASL"), "sasl", FALSE);
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
+	option = purple_account_option_string_new(_("SASL login name"), "saslname", "");
+	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
+
 	option = purple_account_option_bool_new(
 						_("Allow plaintext SASL auth over unencrypted connection"),
 						"auth_plain_in_clear", FALSE);
