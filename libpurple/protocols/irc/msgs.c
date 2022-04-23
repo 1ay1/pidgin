@@ -1256,7 +1256,7 @@ void irc_msg_ping(struct irc_conn *irc, const char *name, const char *from, char
 	char *buf;
 
 	buf = irc_format(irc, "v:", "PONG", args[0]);
-	irc_send(irc, buf);
+	irc_priority_send(irc, buf);
 	g_free(buf);
 }
 
