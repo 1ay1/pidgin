@@ -798,48 +798,6 @@ jabber_login_callback_ssl(gpointer data, PurpleSslConnection *gsc,
 }
 
 static void
-txt_resolved_cb(GList *responses, gpointer data)
-{
-	JabberStream *js = data;
-	gboolean found = FALSE;
-
-	js->srv_query_data = NULL;
-
-	while (responses) {
-		PurpleTxtResponse *resp = responses->data;
-		gchar **token;
-		token = g_strsplit(purple_txt_response_get_content(resp), "=", 2);
-		if (purple_strequal(token[0], "_xmpp-client-xbosh")) {
-			purple_debug_info("jabber","Found alternative connection method using %s at %s.\n", token[0], token[1]);
-			js->bosh = jabber_bosh_connection_init(js, token[1]);
-			g_strfreev(token);
-			break;
-		}
-		g_strfreev(token);
-		purple_txt_response_destroy(resp);
-		responses = g_list_delete_link(responses, responses);
-	}
-
-	if (js->bosh) {
-		found = TRUE;
-		jabber_bosh_connection_connect(js->bosh);
-	}
-
-	if (!found) {
-		purple_debug_warning("jabber", "Unable to find alternative XMPP connection "
-				  "methods after failing to connect directly.\n");
-		purple_connection_error_reason(js->gc,
-				PURPLE_CONNECTION_ERROR_NETWORK_ERROR,
-				_("Unable to connect"));
-		return;
-	}
-
-	if (responses) {
-		g_list_free_full(responses, (GDestroyNotify)purple_txt_response_destroy);
-	}
-}
-
-static void
 jabber_login_callback(gpointer data, gint source, const gchar *error)
 {
 	PurpleConnection *gc = data;
@@ -849,11 +807,6 @@ jabber_login_callback(gpointer data, gint source, const gchar *error)
 		if (js->srv_rec != NULL) {
 			purple_debug_error("jabber", "Unable to connect to server: %s.  Trying next SRV record or connecting directly.\n", error);
 			try_srv_connect(js);
-		} else {
-			purple_debug_info("jabber","Couldn't connect directly to %s.  Trying to find alternative connection methods, like BOSH.\n", js->user->domain);
-			js->srv_query_data = purple_txt_resolve_account(
-					purple_connection_get_account(gc), "_xmppconnect",
-					js->user->domain, txt_resolved_cb, js);
 		}
 		return;
 	}
