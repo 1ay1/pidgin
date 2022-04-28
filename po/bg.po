@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 22:08-0500\n"
-"PO-Revision-Date: 2020-06-06 08:16+0000\n"
-"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
+"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"PO-Revision-Date: 2012-02-20 18:15+0000\n"
+"Last-Translator: Любомир Василев, 2018\n"
 "Language-Team: Bulgarian (http://www.transifex.com/pidgin/pidgin/language/"
 "bg/)\n"
 "Language: bg\n"
@@ -1718,7 +1718,6 @@ msgstr ""
 msgid "+++ %s signed off"
 msgstr ""
 
-#. Undocumented
 msgid "Unknown error"
 msgstr "Непозната грешка"
 
@@ -2133,10 +2132,25 @@ msgstr ""
 msgid "Could not create media pipeline"
 msgstr ""
 
+#. "aasink", "AALib", Didn't work for me
+#. "aasink",	"AALib", Didn't work for me
+msgid "DirectDraw"
+msgstr ""
+
+msgid "OpenGL"
+msgstr ""
+
+msgid "X Window System"
+msgstr ""
+
+msgid "X Window System (Xv)"
+msgstr ""
+
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
+#. "audiotestsrc wave=silence", "Silence",
 msgid "Test Sound"
 msgstr ""
 
@@ -2667,7 +2681,7 @@ msgstr ""
 
 msgid ""
 "Causes conversation windows to appear as other users begin to message you.  "
-"This works for AIM, ICQ, XMPP, and Sametime"
+"This works for XMPP and Sametime"
 msgstr ""
 
 msgid "You feel a disturbance in the force..."
@@ -3257,7 +3271,17 @@ msgstr "Използване на SSL"
 msgid "Authenticate with SASL"
 msgstr ""
 
+msgid "SASL login name"
+msgstr ""
+
 msgid "Allow plaintext SASL auth over unencrypted connection"
+msgstr ""
+
+#, fuzzy
+msgid "Seconds between sending messages"
+msgstr "Съобщението не може да бъде изпратено."
+
+msgid "Maximum messages to send at once"
 msgstr ""
 
 msgid "Bad mode"
@@ -3680,37 +3704,6 @@ msgstr ""
 
 #, c-format
 msgid "SASL error: %s"
-msgstr ""
-
-msgid "Invalid Encoding"
-msgstr ""
-
-msgid "Unsupported Extension"
-msgstr ""
-
-msgid ""
-"Unexpected response from the server.  This may indicate a possible MITM "
-"attack"
-msgstr ""
-
-msgid ""
-"The server does support channel binding, but did not appear to advertise "
-"it.  This indicates a likely MITM attack"
-msgstr ""
-
-msgid "Server does not support channel binding"
-msgstr ""
-
-msgid "Unsupported channel binding method"
-msgstr ""
-
-msgid "User not found"
-msgstr "Потребителят не е намерен"
-
-msgid "Invalid Username Encoding"
-msgstr ""
-
-msgid "Resource Constraint"
 msgstr ""
 
 msgid "Unable to canonicalize username"
@@ -4287,6 +4280,9 @@ msgstr ""
 msgid "Authorization mechanism too weak"
 msgstr ""
 
+msgid "Incorrect username or password"
+msgstr ""
+
 msgid "Temporary Authentication Failure"
 msgstr "Временна грешка при идентификацията"
 
@@ -4330,6 +4326,9 @@ msgid "Policy Violation"
 msgstr "Нарушение на условията"
 
 msgid "Remote Connection Failed"
+msgstr ""
+
+msgid "Resource Constraint"
 msgstr ""
 
 msgid "Restricted XML"
@@ -4876,7 +4875,6 @@ msgstr ""
 msgid "Sick"
 msgstr ""
 
-#. Sleepy / Tired
 msgid "Sleepy"
 msgstr "Сънлив"
 
@@ -4963,6 +4961,9 @@ msgstr "Паролата изтече"
 msgid "Incorrect password"
 msgstr ""
 
+msgid "User not found"
+msgstr "Потребителят не е намерен"
+
 msgid "Account has been disabled"
 msgstr "Акаунтът е деактивиран"
 
@@ -4982,9 +4983,6 @@ msgid "Cannot add yourself"
 msgstr "Не можете да се добавите"
 
 msgid "Master archive is misconfigured"
-msgstr ""
-
-msgid "Incorrect username or password"
 msgstr ""
 
 msgid "Could not recognize the host of the username you entered"
@@ -5188,1131 +5186,6 @@ msgstr "Сървър"
 
 msgid "Server port"
 msgstr "Порт"
-
-msgid "Please authorize me so I can add you to my buddy list."
-msgstr "Моля да получа разрешение да ви добавя в списъка си с познати."
-
-msgid "No reason given."
-msgstr "Няма посочена причина."
-
-msgid "Authorization Denied Message:"
-msgstr "Съобщение за отказано разрешение:"
-
-#. *
-#. * A wrapper for purple_request_action() that uses @c OK and @c Cancel buttons.
-#.
-msgid "_OK"
-msgstr ""
-
-#, c-format
-msgid "Received unexpected response from %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Received unexpected response from %s"
-msgstr ""
-
-msgid ""
-"You have been connecting and disconnecting too frequently. Wait ten minutes "
-"and try again. If you continue to try, you will need to wait even longer."
-msgstr ""
-"Влизахте и излизахте твърде често. Изчакайте десет минути и опитайте  "
-"отново. Ако продължите с опитите си да влезете сега, ще трябва да чакате още "
-"по-дълго."
-
-msgid ""
-"You required encryption in your account settings, but one of the servers "
-"doesn't support it."
-msgstr ""
-
-#. Note to translators: The first %s is a URL, the second is an
-#. error message.
-#, c-format
-msgid "Error requesting %s: %s"
-msgstr ""
-
-msgid "The server returned an empty response"
-msgstr ""
-
-msgid ""
-"Server requested that you fill out a CAPTCHA in order to sign in, but this "
-"client does not currently support CAPTCHAs."
-msgstr ""
-
-msgid "AOL does not allow your screen name to authenticate here"
-msgstr ""
-
-msgid ""
-"(There was an error receiving this message.  The buddy you are speaking with "
-"is probably using a different encoding than expected.  If you know what "
-"encoding he is using, you can specify it in the advanced account options for "
-"your AIM/ICQ account.)"
-msgstr ""
-
-#, c-format
-msgid ""
-"(There was an error receiving this message.  Either you and %s have "
-"different encodings selected, or %s has a buggy client.)"
-msgstr ""
-
-msgid "Could not join chat room"
-msgstr ""
-
-msgid "Invalid chat room name"
-msgstr ""
-
-msgid "Invalid error"
-msgstr "Невалидна грешка"
-
-msgid "Not logged in"
-msgstr "Не сте свързан с"
-
-msgid "Cannot receive IM due to parental controls"
-msgstr ""
-
-msgid "Cannot send SMS without accepting terms"
-msgstr ""
-
-msgid "Cannot send SMS"
-msgstr ""
-
-#. SMS_WITHOUT_DISCLAIMER is weird
-msgid "Cannot send SMS to this country"
-msgstr ""
-
-#. Undocumented
-msgid "Cannot send SMS to unknown country"
-msgstr ""
-
-msgid "Bot accounts cannot initiate IMs"
-msgstr ""
-
-msgid "Bot account cannot IM this user"
-msgstr ""
-
-msgid "Bot account reached IM limit"
-msgstr ""
-
-msgid "Bot account reached daily IM limit"
-msgstr ""
-
-msgid "Bot account reached monthly IM limit"
-msgstr ""
-
-msgid "Unable to receive offline messages"
-msgstr ""
-
-msgid "Offline message store full"
-msgstr ""
-
-#, c-format
-msgid "Unable to send message: %s (%s)"
-msgstr ""
-
-#, c-format
-msgid "Unable to send message: %s"
-msgstr "Съобщението не може да бъде изпратено: %s"
-
-#, c-format
-msgid "Unable to send message to %s: %s (%s)"
-msgstr ""
-
-#, c-format
-msgid "Unable to send message to %s: %s"
-msgstr ""
-
-msgid "Thinking"
-msgstr ""
-
-msgid "Shopping"
-msgstr ""
-
-msgid "Questioning"
-msgstr ""
-
-msgid "Eating"
-msgstr ""
-
-msgid "Watching a movie"
-msgstr ""
-
-msgid "Typing"
-msgstr "Пише"
-
-msgid "At the office"
-msgstr ""
-
-msgid "Taking a bath"
-msgstr ""
-
-msgid "Watching TV"
-msgstr ""
-
-msgid "Having fun"
-msgstr ""
-
-msgid "Sleeping"
-msgstr ""
-
-msgid "Using a PDA"
-msgstr ""
-
-msgid "Meeting friends"
-msgstr ""
-
-msgid "On the phone"
-msgstr ""
-
-msgid "Surfing"
-msgstr ""
-
-#. "I am mobile." / "John is mobile."
-msgid "Mobile"
-msgstr ""
-
-msgid "Searching the web"
-msgstr ""
-
-msgid "At a party"
-msgstr ""
-
-msgid "Having Coffee"
-msgstr ""
-
-#. Playing video games
-msgid "Gaming"
-msgstr ""
-
-msgid "Browsing the web"
-msgstr ""
-
-msgid "Smoking"
-msgstr ""
-
-msgid "Writing"
-msgstr ""
-
-#. Drinking [Alcohol]
-msgid "Drinking"
-msgstr ""
-
-msgid "Listening to music"
-msgstr ""
-
-msgid "Studying"
-msgstr ""
-
-msgid "Working"
-msgstr ""
-
-msgid "In the restroom"
-msgstr ""
-
-msgid "Received invalid data on connection with server"
-msgstr ""
-
-msgid "Error parsing response from authentication server"
-msgstr ""
-
-msgid "Unknown error during authentication"
-msgstr ""
-
-#. *< type
-#. *< ui_requirement
-#. *< flags
-#. *< dependencies
-#. *< priority
-#. *< id
-#. *< name
-#. *< version
-#. *  summary
-#. *  description
-msgid "AIM Protocol Plugin"
-msgstr ""
-
-msgid "ICQ UIN..."
-msgstr ""
-
-#. *< type
-#. *< ui_requirement
-#. *< flags
-#. *< dependencies
-#. *< priority
-#. *< id
-#. *< name
-#. *< version
-#. *  summary
-#. *  description
-msgid "ICQ Protocol Plugin"
-msgstr ""
-
-msgid "Encoding"
-msgstr "Кодова таблица"
-
-msgid "The remote user has closed the connection."
-msgstr ""
-
-msgid "The remote user has declined your request."
-msgstr ""
-
-#, c-format
-msgid "Lost connection with the remote user:<br>%s"
-msgstr ""
-
-msgid "Received invalid data on connection with remote user."
-msgstr ""
-
-msgid "Unable to establish a connection with the remote user."
-msgstr ""
-
-msgid "Direct IM established"
-msgstr ""
-
-#, c-format
-msgid ""
-"%s tried to send you a %s file, but we only allow files up to %s over Direct "
-"IM.  Try using file transfer instead.\n"
-msgstr ""
-
-#, c-format
-msgid "File %s is %s, which is larger than the maximum size of %s."
-msgstr ""
-
-msgid "Free For Chat"
-msgstr "Свободен за разговор"
-
-msgid "Not Available"
-msgstr "Не съм свободен"
-
-msgid "Occupied"
-msgstr "Зает"
-
-msgid "Web Aware"
-msgstr ""
-
-msgid "Invisible"
-msgstr "Невидим"
-
-msgid "Evil"
-msgstr ""
-
-msgid "Depression"
-msgstr ""
-
-msgid "At home"
-msgstr ""
-
-msgid "At work"
-msgstr ""
-
-msgid "At lunch"
-msgstr ""
-
-#, c-format
-msgid "Unable to connect to authentication server: %s"
-msgstr ""
-
-#, c-format
-msgid "Unable to connect to BOS server: %s"
-msgstr ""
-
-msgid "Username sent"
-msgstr ""
-
-msgid "Connection established, cookie sent"
-msgstr "Връзката е установена, бисквитката е изпратена"
-
-#. TODO: Don't call this with ssi
-msgid "Finalizing connection"
-msgstr "Приключване на връзката"
-
-#, c-format
-msgid ""
-"Unable to sign on as %s because the username is invalid.  Usernames must be "
-"a valid email address, or start with a letter and contain only letters, "
-"numbers and spaces, or contain only numbers."
-msgstr ""
-
-msgid ""
-"You required encryption in your account settings, but encryption is not "
-"supported by your system."
-msgstr ""
-
-msgid ""
-"You required Kerberos authentication but encryption is disabled in your "
-"account settings."
-msgstr ""
-
-#, c-format
-msgid "You may be disconnected shortly.  If so, check %s for updates."
-msgstr ""
-
-msgid "Unable to get a valid AIM login hash."
-msgstr ""
-
-msgid "Unable to get a valid login hash."
-msgstr ""
-
-msgid "Received authorization"
-msgstr "Получено е разрешение"
-
-#. Unregistered username
-msgid "Username does not exist"
-msgstr ""
-
-#. Suspended account
-msgid "Your account is currently suspended"
-msgstr ""
-
-#. service temporarily unavailable
-msgid "The AOL Instant Messenger service is temporarily unavailable."
-msgstr ""
-
-#. username connecting too frequently
-msgid ""
-"Your username has been connecting and disconnecting too frequently. Wait ten "
-"minutes and try again. If you continue to try, you will need to wait even "
-"longer."
-msgstr ""
-
-#. client too old
-#, c-format
-msgid "The client version you are using is too old. Please upgrade at %s"
-msgstr ""
-"Версията на програмата, която използвате е твърде стара. Актуализирайте я от "
-"%s"
-
-#. IP address connecting too frequently
-msgid ""
-"Your IP address has been connecting and disconnecting too frequently. Wait a "
-"minute and try again. If you continue to try, you will need to wait even "
-"longer."
-msgstr ""
-
-msgid "The SecurID key entered is invalid"
-msgstr ""
-
-msgid "Enter SecurID"
-msgstr ""
-
-msgid "Enter the 6 digit number from the digital display."
-msgstr ""
-
-msgid "Password sent"
-msgstr "Паролата е изпратена"
-
-msgid "Unable to initialize connection"
-msgstr ""
-
-#, c-format
-msgid ""
-"The user %u has denied your request to add them to your buddy list for the "
-"following reason:\n"
-"%s"
-msgstr ""
-
-msgid "ICQ authorization denied."
-msgstr "Влизането в системата на ICQ е отказано."
-
-#. Someone has granted you authorization
-#, c-format
-msgid "The user %u has granted your request to add them to your buddy list."
-msgstr ""
-
-#, c-format
-msgid ""
-"You have received a special message\n"
-"\n"
-"From: %s [%s]\n"
-"%s"
-msgstr ""
-"Получихте специално съобщение от\n"
-"\n"
-"От: %s [%s]\n"
-"%s"
-
-#, c-format
-msgid ""
-"You have received an ICQ page\n"
-"\n"
-"From: %s [%s]\n"
-"%s"
-msgstr ""
-
-#, c-format
-msgid ""
-"You have received an ICQ email from %s [%s]\n"
-"\n"
-"Message is:\n"
-"%s"
-msgstr ""
-"Получихте електронна поща по ICQ от %s [%s]\n"
-"\n"
-"Съобщението е:\n"
-"%s"
-
-#, c-format
-msgid "ICQ user %u has sent you a buddy: %s (%s)"
-msgstr "%u ви е изпратил познат: %s (%s)"
-
-msgid "Do you want to add this buddy to your buddy list?"
-msgstr "Искате ли да добавите този потребител към списъка с познатите си?"
-
-msgid "_Add"
-msgstr "Доб_авяне"
-
-msgid "_Decline"
-msgstr "_Отказ"
-
-#, c-format
-msgid "You missed %hu message from %s because it was invalid."
-msgid_plural "You missed %hu messages from %s because they were invalid."
-msgstr[0] "Вие пропуснахте %hu съобщение от %s, тъй като то беше невалидно."
-msgstr[1] "Вие пропуснахте %hu съобщения от %s, тъй като те бяха невалидни."
-
-#, c-format
-msgid "You missed %hu message from %s because it was too large."
-msgid_plural "You missed %hu messages from %s because they were too large."
-msgstr[0] "Вие пропуснахте %hu съобщение от %s, тъй като то беше много голямо."
-msgstr[1] ""
-"Вие пропуснахте %hu съобщения от %s, тъй като те бяха твърде големи."
-
-#, c-format
-msgid ""
-"You missed %hu message from %s because the rate limit has been exceeded."
-msgid_plural ""
-"You missed %hu messages from %s because the rate limit has been exceeded."
-msgstr[0] ""
-msgstr[1] ""
-
-#, c-format
-msgid ""
-"You missed %hu message from %s because his/her warning level is too high."
-msgid_plural ""
-"You missed %hu messages from %s because his/her warning level is too high."
-msgstr[0] ""
-msgstr[1] ""
-
-#, c-format
-msgid "You missed %hu message from %s because your warning level is too high."
-msgid_plural ""
-"You missed %hu messages from %s because your warning level is too high."
-msgstr[0] ""
-msgstr[1] ""
-
-#, c-format
-msgid "You missed %hu message from %s for an unknown reason."
-msgid_plural "You missed %hu messages from %s for an unknown reason."
-msgstr[0] "Вие пропуснахте %hu от %s съобщение по неизвестни причини."
-msgstr[1] "Вие пропуснахте %hu от %s съобщения по неизвестни причини."
-
-msgid "Your AIM connection may be lost."
-msgstr "Връзката ви с AIM по всяка вероятност прекъсна."
-
-#, c-format
-msgid "You have been disconnected from chat room %s."
-msgstr ""
-
-msgid "The new formatting is invalid."
-msgstr "Новото форматиране е неправилно."
-
-msgid "Username formatting can change only capitalization and whitespace."
-msgstr ""
-
-msgid "Pop-Up Message"
-msgstr "Изскачащо съобщение"
-
-#, c-format
-msgid "The following username is associated with %s"
-msgid_plural "The following usernames are associated with %s"
-msgstr[0] ""
-msgstr[1] ""
-
-#, c-format
-msgid "No results found for email address %s"
-msgstr "Няма резултати за електронен адрес %s"
-
-#, c-format
-msgid "You should receive an email asking to confirm %s."
-msgstr ""
-"Трябва да получите електронно съобщение, в което се иска да потвърдите %s."
-
-msgid "Account Confirmation Requested"
-msgstr ""
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to format username because the requested name differs "
-"from the original."
-msgstr ""
-
-#, c-format
-msgid "Error 0x%04x: Unable to format username because it is invalid."
-msgstr ""
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to format username because the requested name is too "
-"long."
-msgstr ""
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because there is already a "
-"request pending for this username."
-msgstr ""
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because the given address has "
-"too many usernames associated with it."
-msgstr ""
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because the given address is "
-"invalid."
-msgstr ""
-"Грешка 0x%04x: Електронният адрес не може да бъде сменен, тъй като "
-"зададеният адрес е грешен."
-
-#, c-format
-msgid "Error 0x%04x: Unknown error."
-msgstr "Грешка 0x%04x: Непозната грешка."
-
-msgid "Error Changing Account Info"
-msgstr "Грешка при промяна данните абонамента"
-
-#, c-format
-msgid "The email address for %s is %s"
-msgstr "Е-пощата на %s е %s"
-
-msgid "Account Info"
-msgstr "Данни за абонамента"
-
-msgid ""
-"Your IM Image was not sent. You must be Direct Connected to send IM Images."
-msgstr ""
-
-msgid "Unable to set AIM profile."
-msgstr ""
-
-msgid ""
-"You have probably requested to set your profile before the login procedure "
-"completed.  Your profile remains unset; try setting it again when you are "
-"fully connected."
-msgstr ""
-"Вероятно сте се опитали да редактирате профила си преди да е приключила "
-"напълно процедурата по свързване. Профилът ви остава нередактиран; опитайте "
-"да го редактирате след като сте се свързали окончателно."
-
-#, c-format
-msgid ""
-"The maximum profile length of %d byte has been exceeded.  It has been "
-"truncated for you."
-msgid_plural ""
-"The maximum profile length of %d bytes has been exceeded.  It has been "
-"truncated for you."
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Profile too long."
-msgstr "Профилът е твърде дълъг."
-
-#, c-format
-msgid ""
-"The maximum away message length of %d byte has been exceeded.  It has been "
-"truncated for you."
-msgid_plural ""
-"The maximum away message length of %d bytes has been exceeded.  It has been "
-"truncated for you."
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Away message too long."
-msgstr "Съобщението за състояние е твърде дълго."
-
-#, c-format
-msgid ""
-"Unable to add the buddy %s because the username is invalid.  Usernames must "
-"be a valid email address, or start with a letter and contain only letters, "
-"numbers and spaces, or contain only numbers."
-msgstr ""
-
-msgid "Unable to Add"
-msgstr ""
-
-msgid "Unable to Retrieve Buddy List"
-msgstr ""
-
-msgid ""
-"The AIM servers were temporarily unable to send your buddy list.  Your buddy "
-"list is not lost, and will probably become available in a few minutes."
-msgstr ""
-
-msgid "Orphans"
-msgstr "Сираци"
-
-#, c-format
-msgid ""
-"Unable to add the buddy %s because you have too many buddies in your buddy "
-"list.  Please remove one and try again."
-msgstr ""
-
-msgid "(no name)"
-msgstr "(без име)"
-
-#, c-format
-msgid "Unable to add the buddy %s for an unknown reason."
-msgstr ""
-
-#, c-format
-msgid ""
-"The user %s has given you permission to add him or her to your buddy list.  "
-"Do you want to add this user?"
-msgstr ""
-
-msgid "Authorization Given"
-msgstr "Получихте разрешение"
-
-#. Granted
-#, c-format
-msgid "The user %s has granted your request to add them to your buddy list."
-msgstr ""
-
-msgid "Authorization Granted"
-msgstr ""
-
-#. Denied
-#, c-format
-msgid ""
-"The user %s has denied your request to add them to your buddy list for the "
-"following reason:\n"
-"%s"
-msgstr ""
-
-msgid "Authorization Denied"
-msgstr "Разрешението е отказано"
-
-msgid "_Exchange:"
-msgstr "_Размяна:"
-
-msgid "Your IM Image was not sent. You cannot send IM Images in AIM chats."
-msgstr ""
-
-msgid "iTunes Music Store Link"
-msgstr ""
-
-msgid "Lunch"
-msgstr ""
-
-#, c-format
-msgid "Buddy Comment for %s"
-msgstr ""
-
-msgid "Buddy Comment:"
-msgstr "Коментар:"
-
-#, c-format
-msgid "You have selected to open a Direct IM connection with %s."
-msgstr "Избрали сте да установите директна връзка с %s."
-
-msgid ""
-"Because this reveals your IP address, it may be considered a security risk.  "
-"Do you wish to continue?"
-msgstr ""
-
-msgid "C_onnect"
-msgstr ""
-
-msgid "You closed the connection."
-msgstr ""
-
-msgid "Get AIM Info"
-msgstr ""
-
-#. We only do this if the user is in our buddy list
-msgid "Edit Buddy Comment"
-msgstr "Редактиране на коментар"
-
-msgid "Get X-Status Msg"
-msgstr ""
-
-msgid "End Direct IM Session"
-msgstr ""
-
-msgid "Direct IM"
-msgstr ""
-
-msgid "Re-request Authorization"
-msgstr "Повторно искане на разрешение"
-
-msgid "Require authorization"
-msgstr ""
-
-msgid "Web aware (enabling this will cause you to receive SPAM!)"
-msgstr ""
-
-msgid "ICQ Privacy Options"
-msgstr ""
-
-msgid "Change Address To:"
-msgstr "Промяна адреса на:"
-
-msgid "you are not waiting for authorization"
-msgstr ""
-
-msgid "You are awaiting authorization from the following buddies"
-msgstr "Очаквате разрешение от следните потребители"
-
-msgid ""
-"You can re-request authorization from these buddies by right-clicking on "
-"them and selecting \"Re-request Authorization.\""
-msgstr ""
-
-msgid "Find Buddy by Email"
-msgstr "Търсене потребител по електронен адрес"
-
-msgid "Search for a buddy by email address"
-msgstr "Търсене на потребител по електронен адрес"
-
-msgid "Type the email address of the buddy you are searching for."
-msgstr "Задаване електронен адрес на потребителя, когото търсите."
-
-msgid "_Search"
-msgstr ""
-
-msgid "Set User Info (web)..."
-msgstr ""
-
-#. This only happens when connecting with the old-style BUCP login
-msgid "Change Password (web)"
-msgstr ""
-
-msgid "Configure IM Forwarding (web)"
-msgstr ""
-
-#. ICQ actions
-msgid "Set Privacy Options..."
-msgstr ""
-
-msgid "Show Visible List"
-msgstr ""
-
-msgid "Show Invisible List"
-msgstr ""
-
-#. AIM actions
-msgid "Confirm Account"
-msgstr "Потвърждение за абонамент"
-
-msgid "Display Currently Registered Email Address"
-msgstr ""
-
-msgid "Change Currently Registered Email Address..."
-msgstr ""
-
-msgid "Show Buddies Awaiting Authorization"
-msgstr ""
-
-msgid "Search for Buddy by Email Address..."
-msgstr ""
-
-msgid "clientLogin"
-msgstr ""
-
-msgid "Kerberos"
-msgstr ""
-
-msgid "MD5-based"
-msgstr ""
-
-msgid "Authentication method"
-msgstr ""
-
-msgid ""
-"Always use AIM/ICQ proxy server for\n"
-"file transfers and direct IM (slower,\n"
-"but does not reveal your IP address)"
-msgstr ""
-
-msgid "Allow multiple simultaneous logins"
-msgstr ""
-
-#, c-format
-msgid "Asking %s to connect to us at %s:%hu for Direct IM."
-msgstr ""
-
-#, c-format
-msgid "Attempting to connect to %s:%hu."
-msgstr ""
-
-msgid "Attempting to connect via proxy server."
-msgstr ""
-
-#, c-format
-msgid "%s has just asked to directly connect to %s"
-msgstr "%s иска да установи директна връзка с %s"
-
-msgid ""
-"This requires a direct connection between the two computers and is necessary "
-"for IM Images.  Because your IP address will be revealed, this may be "
-"considered a privacy risk."
-msgstr ""
-"Тази операция изисква директна връзка между двата компютъра и е необходима "
-"за IM-изображения. Тъй като вашето IP ще бъде разкрито, операцията може да "
-"бъде разглеждана като рискова."
-
-#. Label
-msgid "Buddy Icon"
-msgstr "Икона на познат"
-
-msgid "Voice"
-msgstr "Глас"
-
-msgid "AIM Direct IM"
-msgstr ""
-
-msgid "Get File"
-msgstr "Приемане на файл"
-
-msgid "Games"
-msgstr "Игри"
-
-msgid "ICQ Xtraz"
-msgstr ""
-
-msgid "Add-Ins"
-msgstr ""
-
-msgid "Send Buddy List"
-msgstr "Изпращане на списъка с познати"
-
-msgid "ICQ Direct Connect"
-msgstr "Директна връзка с ICQ"
-
-msgid "AP User"
-msgstr ""
-
-msgid "ICQ RTF"
-msgstr ""
-
-msgid "Nihilist"
-msgstr "Нихилист"
-
-msgid "ICQ Server Relay"
-msgstr ""
-
-msgid "Old ICQ UTF8"
-msgstr ""
-
-msgid "Trillian Encryption"
-msgstr "Криптиране на Trillian"
-
-msgid "ICQ UTF8"
-msgstr "ICQ UTF8"
-
-msgid "Hiptop"
-msgstr ""
-
-msgid "Security Enabled"
-msgstr "Активиране на защитата"
-
-msgid "Video Chat"
-msgstr "Видео разговор"
-
-msgid "iChat AV"
-msgstr ""
-
-msgid "Live Video"
-msgstr "Живо видео"
-
-msgid "Camera"
-msgstr "Камера"
-
-msgid "Screen Sharing"
-msgstr ""
-
-msgid "IP Address"
-msgstr "IP адрес"
-
-msgid "Warning Level"
-msgstr "Нива на предупреждение"
-
-msgid "Buddy Comment"
-msgstr "Коментар за приятел"
-
-#, c-format
-msgid "User information not available: %s"
-msgstr "Няма налични данни за потребителя: %s"
-
-msgid "Mobile Phone"
-msgstr "Мобилен телефон"
-
-msgid "Age"
-msgstr "Възраст"
-
-msgid "Personal Web Page"
-msgstr "Лична страница в Интернет"
-
-#. aim_userinfo_t
-#. use_html_status
-msgid "Additional Information"
-msgstr "Допълнителни данни"
-
-msgid "Home Address"
-msgstr "Домашен адрес"
-
-msgid "Zip Code"
-msgstr "Пощенски код"
-
-msgid "Work Address"
-msgstr "Работен адрес"
-
-msgid "Work Information"
-msgstr "Служебна информация"
-
-msgid "Company"
-msgstr "Фирма"
-
-msgid "Division"
-msgstr "Отдел"
-
-msgid "Position"
-msgstr "Позиция"
-
-msgid "Web Page"
-msgstr "Интернет адрес"
-
-msgid "Online Since"
-msgstr "Включен от"
-
-msgid "Member Since"
-msgstr "Член от"
-
-msgid "Capabilities"
-msgstr "Възможности"
-
-msgid "Profile"
-msgstr ""
-
-msgid "View web profile"
-msgstr ""
-
-msgid "Invalid SNAC"
-msgstr ""
-
-msgid "Server rate limit exceeded"
-msgstr ""
-
-msgid "Client rate limit exceeded"
-msgstr ""
-
-msgid "Service unavailable"
-msgstr "Услугата не е налична"
-
-msgid "Service not defined"
-msgstr "Услугата не е определена"
-
-msgid "Obsolete SNAC"
-msgstr ""
-
-msgid "Not supported by host"
-msgstr "Не се поддържа от хоста"
-
-msgid "Not supported by client"
-msgstr "Не се поддържа от клиента"
-
-msgid "Refused by client"
-msgstr "Отказан от клиента"
-
-msgid "Reply too big"
-msgstr "Отговорът е твърде голям"
-
-msgid "Responses lost"
-msgstr "Отговорите са загубени"
-
-msgid "Request denied"
-msgstr "Отговорът е отказан"
-
-msgid "Busted SNAC payload"
-msgstr ""
-
-msgid "Insufficient rights"
-msgstr ""
-
-msgid "In local permit/deny"
-msgstr ""
-
-msgid "Warning level too high (sender)"
-msgstr ""
-
-msgid "Warning level too high (receiver)"
-msgstr ""
-
-msgid "User temporarily unavailable"
-msgstr "Потребителят е временно недостъпен"
-
-msgid "No match"
-msgstr "Няма съвпадение"
-
-msgid "List overflow"
-msgstr "Списъкът е препълнен"
-
-msgid "Request ambiguous"
-msgstr ""
-
-msgid "Queue full"
-msgstr "Опашката е запълнена"
-
-msgid "Not while on AOL"
-msgstr ""
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear online to the chosen user even when your status is set to
-#. Invisible.
-msgid "Appear Online"
-msgstr ""
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear offline to the chosen user when your status is set to
-#. Invisible (this is the default).
-msgid "Don't Appear Online"
-msgstr ""
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to always appear offline to the chosen user (even when your status
-#. isn't Invisible).
-msgid "Appear Offline"
-msgstr ""
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear offline to the chosen user if you are invisible, and
-#. appear online to the chosen user if you are not invisible (this is the
-#. default).
-msgid "Don't Appear Offline"
-msgstr ""
-
-msgid "you have no buddies on this list"
-msgstr ""
-
-#, c-format
-msgid ""
-"You can add a buddy to this list by right-clicking on them and selecting \"%s"
-"\""
-msgstr ""
-
-msgid "Visible List"
-msgstr ""
-
-msgid "These buddies will see your status when you switch to \"Invisible\""
-msgstr ""
-
-msgid "Invisible List"
-msgstr ""
-
-msgid "These buddies will always see you as offline"
-msgstr ""
 
 #, c-format
 msgid "<b>Group Title:</b> %s<br>"
@@ -7545,6 +6418,9 @@ msgstr "Видео конферентна връзка"
 msgid "Computer"
 msgstr "Компютър"
 
+msgid "Mobile Phone"
+msgstr "Мобилен телефон"
+
 msgid "PDA"
 msgstr "PDA"
 
@@ -7792,6 +6668,9 @@ msgstr ""
 msgid "Exposure"
 msgstr ""
 
+msgid "Encoding"
+msgstr "Кодова таблица"
+
 #, c-format
 msgid "Unable to create socket: %s"
 msgstr ""
@@ -7812,6 +6691,9 @@ msgstr ""
 msgid "Error resolving %s"
 msgstr ""
 
+msgid "Received invalid data on connection with server"
+msgstr ""
+
 #, c-format
 msgid "Requesting %s's attention..."
 msgstr ""
@@ -7827,6 +6709,12 @@ msgid "_Yes"
 msgstr ""
 
 msgid "_No"
+msgstr ""
+
+#. *
+#. * A wrapper for purple_request_action() that uses @c OK and @c Cancel buttons.
+#.
+msgid "_OK"
 msgstr ""
 
 #. *
@@ -7897,7 +6785,16 @@ msgstr ""
 msgid "Do not disturb"
 msgstr ""
 
+msgid "Invisible"
+msgstr "Невидим"
+
 msgid "Extended away"
+msgstr ""
+
+msgid "Mobile"
+msgstr ""
+
+msgid "Listening to music"
 msgstr ""
 
 msgid "Feeling"
@@ -8560,6 +7457,9 @@ msgstr "/_Помощ"
 msgid "/Help/Online _Help"
 msgstr "/Помощ/Ръководство"
 
+msgid "/Help/D_onate"
+msgstr ""
+
 msgid "/Help/_Build Information"
 msgstr ""
 
@@ -9080,6 +7980,9 @@ msgid_plural "%d people in room"
 msgstr[0] "%d човек в стаята"
 msgstr[1] "%d човека в стаята"
 
+msgid "Typing"
+msgstr "Пише"
+
 msgid "Stopped Typing"
 msgstr ""
 
@@ -9187,23 +8090,14 @@ msgstr ""
 msgid "Fatal Error"
 msgstr ""
 
-msgid "artist"
-msgstr ""
-
 msgid "lead developer"
 msgstr "Главен разработчик"
 
-msgid "voice and video"
-msgstr ""
-
-msgid "support"
-msgstr "поддръжка"
-
-msgid "webmaster"
-msgstr ""
-
 msgid "win32 port"
 msgstr "порт за win32"
+
+msgid "artist"
+msgstr ""
 
 #. Translators: This is a person's name. For most languages we recommend
 #. not translating it.
@@ -9216,9 +8110,18 @@ msgstr "Поддръжка"
 msgid "libfaim maintainer"
 msgstr ""
 
+msgid "webmaster"
+msgstr ""
+
 #. If "lazy bum" translates literally into a serious insult, use something else or omit it.
 msgid "hacker and designated driver [lazy bum]"
 msgstr ""
+
+msgid "voice and video"
+msgstr ""
+
+msgid "support"
+msgstr "поддръжка"
 
 msgid "support/QA"
 msgstr ""
@@ -9543,20 +8446,20 @@ msgstr ""
 
 #, c-format
 msgid ""
-"<FONT SIZE=\"4\"><B>Helpful Resources</B></FONT><BR>\t<A HREF=\"%s"
-"\">Website</A><BR>\t<A HREF=\"%s\">Frequently Asked Questions</A><BR>\tIRC "
-"Channel: #pidgin on irc.freenode.net<BR>\tXMPP MUC: devel@conference.pidgin."
-"im<BR><BR>"
+"<FONT SIZE=\"4\"><B>Helpful Resources</B></FONT><BR>\t<A "
+"HREF=\"%s\">Website</A><BR>\t<A HREF=\"%s\">Frequently Asked Questions</"
+"A><BR>\tIRC Channel: #pidgin on irc.libera.chat<BR>\tXMPP MUC: "
+"devel@conference.pidgin.im<BR><BR>"
 msgstr ""
 
 msgid ""
 "<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
 "emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"http://pidgin.im/pipermail/"
-"support/\">archive</a>)<br/>We can't help with third-party protocols or "
-"plugins!<br/>This list's primary language is <b>English</b>.  You are "
-"welcome to post in another language, but the responses may be less helpful."
-"<br/>"
+"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
+"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
+"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
+"You are welcome to post in another language, but the responses may be less "
+"helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10593,6 +9496,9 @@ msgstr ""
 msgid "Use _automatically detected IP address: %s"
 msgstr ""
 
+msgid "IP Address"
+msgstr "IP адрес"
+
 msgid "ST_UN server:"
 msgstr ""
 
@@ -11023,6 +9929,9 @@ msgstr ""
 msgid "Unknown output"
 msgstr ""
 
+msgid "_Add"
+msgstr "Доб_авяне"
+
 #. list button
 msgid "_Get List"
 msgstr "_Получаване на списък"
@@ -11191,6 +10100,10 @@ msgstr ""
 "<b>Файл:</b> %s\n"
 "<b>Размер на файла:</b> %s\n"
 "<b>Размер на изображението:</b> %dx%d"
+
+#. Label
+msgid "Buddy Icon"
+msgstr "Икона на познат"
 
 #, c-format
 msgid "The file '%s' is too large for %s.  Please try a smaller image.\n"
@@ -12095,6 +11008,9 @@ msgstr ""
 msgid "Half Operator"
 msgstr ""
 
+msgid "Voice"
+msgstr "Глас"
+
 msgid "Authorization dialog"
 msgstr ""
 
@@ -12344,6 +11260,43 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
+msgid "ALSA"
+msgstr ""
+
+#. "esdmon",	"ESD", ?
+msgid "OSS"
+msgstr ""
+
+msgid "PulseAudio"
+msgstr ""
+
+msgid "sndio"
+msgstr ""
+
+msgid "aRts"
+msgstr ""
+
+msgid "ESD"
+msgstr ""
+
+msgid "Test Input"
+msgstr ""
+
+msgid "KS Video"
+msgstr ""
+
+msgid "Quickcam"
+msgstr ""
+
+msgid "Video4Linux"
+msgstr ""
+
+msgid "Video4Linux2"
+msgstr ""
+
+msgid "Video4Linux MJPEG"
+msgstr ""
+
 msgid "_Plugin"
 msgstr ""
 
@@ -12535,8 +11488,8 @@ msgstr ""
 #, no-c-format
 msgid ""
 "Error Installing Spellchecking ($R3).$\\rIf retrying fails, manual "
-"installation instructions are at: http://developer.pidgin.im/wiki/Installing"
-"%20Pidgin#manual_win32_spellcheck_installation"
+"installation instructions are at: http://developer.pidgin.im/wiki/"
+"Installing%20Pidgin#manual_win32_spellcheck_installation"
 msgstr ""
 
 #. Installer Subsection Detailed Description

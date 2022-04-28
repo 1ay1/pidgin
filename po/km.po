@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 22:11-0500\n"
-"PO-Revision-Date: 2020-06-06 08:16+0000\n"
-"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
+"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"PO-Revision-Date: 2012-02-20 18:15+0000\n"
+"Last-Translator: Seng Sutha, 2010\n"
 "Language-Team: Khmer (http://www.transifex.com/pidgin/pidgin/language/km/)\n"
 "Language: km\n"
 "MIME-Version: 1.0\n"
@@ -1771,7 +1771,6 @@ msgstr "+++ %s បាន​ចូល"
 msgid "+++ %s signed off"
 msgstr "+++ %s បានបិទ"
 
-#. Undocumented
 msgid "Unknown error"
 msgstr "មិនស្គាល់​កំហុស"
 
@@ -2194,10 +2193,25 @@ msgstr "កំហុស​ក្នុងការ​បង្កើត​សម
 msgid "Could not create media pipeline"
 msgstr ""
 
+#. "aasink", "AALib", Didn't work for me
+#. "aasink",	"AALib", Didn't work for me
+msgid "DirectDraw"
+msgstr ""
+
+msgid "OpenGL"
+msgstr ""
+
+msgid "X Window System"
+msgstr ""
+
+msgid "X Window System (Xv)"
+msgstr ""
+
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
+#. "audiotestsrc wave=silence", "Silence",
 msgid "Test Sound"
 msgstr ""
 
@@ -2746,7 +2760,7 @@ msgstr "របៀប Psychic សម្រាប់​ការ​សន្ទន
 
 msgid ""
 "Causes conversation windows to appear as other users begin to message you.  "
-"This works for AIM, ICQ, XMPP, and Sametime"
+"This works for XMPP and Sametime"
 msgstr ""
 
 msgid "You feel a disturbance in the force..."
@@ -3336,7 +3350,17 @@ msgstr "ប្រើ SSL"
 msgid "Authenticate with SASL"
 msgstr ""
 
+msgid "SASL login name"
+msgstr ""
+
 msgid "Allow plaintext SASL auth over unencrypted connection"
+msgstr ""
+
+#, fuzzy
+msgid "Seconds between sending messages"
+msgstr "មិនអាច​ផ្ញើ​សារ​បានទេ ។"
+
+msgid "Maximum messages to send at once"
 msgstr ""
 
 msgid "Bad mode"
@@ -3796,37 +3820,6 @@ msgstr "បាន​បរាជ័យ​ក្នុង​​ការ​ផ្
 #, c-format
 msgid "SASL error: %s"
 msgstr "កំហុស SASL ៖ %s"
-
-msgid "Invalid Encoding"
-msgstr ""
-
-msgid "Unsupported Extension"
-msgstr ""
-
-msgid ""
-"Unexpected response from the server.  This may indicate a possible MITM "
-"attack"
-msgstr ""
-
-msgid ""
-"The server does support channel binding, but did not appear to advertise "
-"it.  This indicates a likely MITM attack"
-msgstr ""
-
-msgid "Server does not support channel binding"
-msgstr ""
-
-msgid "Unsupported channel binding method"
-msgstr ""
-
-msgid "User not found"
-msgstr "រក​មិនឃើញ​អ្នក​ប្រើ"
-
-msgid "Invalid Username Encoding"
-msgstr ""
-
-msgid "Resource Constraint"
-msgstr "កា​រដាក់​កម្រិត​ធនធាន"
 
 msgid "Unable to canonicalize username"
 msgstr "មិន​អាច​ប្រកាស​ឈ្មោះ​អ្ន​ប្រើ​បាន​ទេ​"
@@ -4406,6 +4399,9 @@ msgstr "យន្ដការ​ផ្ទៀងផ្ទាត់​មិន​
 msgid "Authorization mechanism too weak"
 msgstr "យន្តការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ​​ខ្សោយ​ពេក"
 
+msgid "Incorrect username or password"
+msgstr "ឈ្មោះ​អ្នក​ប្រើ ឬ​ពាក្យ​សម្ងាត់​មិន​ត្រឹមត្រូវ"
+
 msgid "Temporary Authentication Failure"
 msgstr "ភាព​បរាជ័យ​ក្នុងការ​ផ្ទៀងផ្ទាត់​បណ្ដោះអាសន្ន"
 
@@ -4450,6 +4446,9 @@ msgstr "ការ​បំពាន​គោលនយោបាយ"
 
 msgid "Remote Connection Failed"
 msgstr "បានបរាជ័យ​ក្នុងកា​រតភ្ជាប់​ពី​ចម្ងាយ"
+
+msgid "Resource Constraint"
+msgstr "កា​រដាក់​កម្រិត​ធនធាន"
 
 msgid "Restricted XML"
 msgstr "XML ដែល​បាន​ដាក់​កម្រិត"
@@ -4997,7 +4996,6 @@ msgstr ""
 msgid "Sick"
 msgstr "ឈឺ"
 
-#. Sleepy / Tired
 msgid "Sleepy"
 msgstr "ងងុយដេក"
 
@@ -5085,6 +5083,9 @@ msgstr "ពាក្យ​​​សម្ងាត់​បាន​ផុត​
 msgid "Incorrect password"
 msgstr "ពាក្យ​សម្ងាត់​មិន​ត្រឹមត្រូវ"
 
+msgid "User not found"
+msgstr "រក​មិនឃើញ​អ្នក​ប្រើ"
+
 msgid "Account has been disabled"
 msgstr "គណនី​ត្រូវ​បាន​បិទ"
 
@@ -5105,9 +5106,6 @@ msgstr "មិនអាច​បន្ថែម​ខ្លួន​អ្នក
 
 msgid "Master archive is misconfigured"
 msgstr "ប័ណ្ណសារ​មេ​បាត់ misconfigured"
-
-msgid "Incorrect username or password"
-msgstr "ឈ្មោះ​អ្នក​ប្រើ ឬ​ពាក្យ​សម្ងាត់​មិន​ត្រឹមត្រូវ"
 
 msgid "Could not recognize the host of the username you entered"
 msgstr "មិនអាច​ស្គាល់​ឈ្មោះ​​អ្នកប្រើ​ម៉ាស៊ីន​ដែល​អ្នក​បានបញ្ចូល​ទេ"
@@ -5316,1161 +5314,6 @@ msgstr "អាសយដ្ឋាន​ម៉ាស៊ីន​បម្រើ"
 
 msgid "Server port"
 msgstr "ច្រក​ម៉ាស៊ីនបម្រើ"
-
-msgid "Please authorize me so I can add you to my buddy list."
-msgstr "សូម​អនុញ្ញាត​ខ្ញុំ ដូច្នេះ​ខ្ញុំ​អាច​បន្ថែម​អ្នក​នៅកាន់​បញ្ជី​មិត្តភក្ដិ​របស់​​ខ្ញុំ ។"
-
-msgid "No reason given."
-msgstr "គ្មាន​ហេតុផល​បានផ្ដល់ ។"
-
-msgid "Authorization Denied Message:"
-msgstr "សារ​បដិសេធ​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ ៖"
-
-#. *
-#. * A wrapper for purple_request_action() that uses @c OK and @c Cancel buttons.
-#.
-msgid "_OK"
-msgstr "យល់ព្រម"
-
-#, c-format
-msgid "Received unexpected response from %s: %s"
-msgstr "បាន​ទទួល​ការ​ឆ្លើយ​តប​ដែលមិន​រំពឹង​ទុក​ពី %s: %s"
-
-#, c-format
-msgid "Received unexpected response from %s"
-msgstr "បាន​​ទទួល​ការ​ឆ្លើយតប​ដែល​មិនបាន​រំពឹង​ទុក​ពី %s"
-
-msgid ""
-"You have been connecting and disconnecting too frequently. Wait ten minutes "
-"and try again. If you continue to try, you will need to wait even longer."
-msgstr ""
-"អ្នក​កំពុង​ត្រូវ​បានតភ្ជាប់ និង​ផ្ដាច់​ញឹក​ញាប់​ណាស់ ។ រង់ចាំ​ដប់នាទី ហើយ​ព្យាយាម​ម្ដង​ទៀត ។ ប្រសិនបើ​អ្នក​បន្ត​"
-"ដើម្បី​ព្យាយាម អ្នកនឹង​ត្រូវ​រង់ចាំ​យូរ​បន្តិច ។"
-
-msgid ""
-"You required encryption in your account settings, but one of the servers "
-"doesn't support it."
-msgstr ""
-
-#. Note to translators: The first %s is a URL, the second is an
-#. error message.
-#, c-format
-msgid "Error requesting %s: %s"
-msgstr "កំហុស​ក្នុងកា​រស្នើសុំ %s: %s"
-
-msgid "The server returned an empty response"
-msgstr ""
-
-msgid ""
-"Server requested that you fill out a CAPTCHA in order to sign in, but this "
-"client does not currently support CAPTCHAs."
-msgstr ""
-"ម៉ាស៊ីន​បម្រើ​បាន​ស្នើ​ឲ្យ​អ្នកបំពេញ CAPTCHA ដើម្បី​ចូល ម៉ាស៊ីន​ភ្ញៀវ​នេះ​​បច្ចុប្បន្ន​មិនគាំទ្រ CAPTCHAs ទេ ។"
-
-msgid "AOL does not allow your screen name to authenticate here"
-msgstr "AOL មិនអនុញ្ញាត​ឲ្យ​​​ផ្ទៀងផ្ទាត់​ឈ្មោះ​អេក្រង់​របស់​អ្នក​នៅ​ទីនេះ​ទេ"
-
-msgid ""
-"(There was an error receiving this message.  The buddy you are speaking with "
-"is probably using a different encoding than expected.  If you know what "
-"encoding he is using, you can specify it in the advanced account options for "
-"your AIM/ICQ account.)"
-msgstr ""
-"(មាន​កំហុស​មួយ​ក្នុងកា​រទទួល​សារ​នេះ ។ មិត្តភក្ដិ​ដែល​អ្នក​កំពុង​និយាយ​ជា​មួយ​ប្រហែលជា​ប្រើការ​អ៊ិនកូដ​ផ្សេង​ពីអ្វី​ដែល​"
-"រំពឹង​ទុក ។ ប្រសិនបើ​​អ្នកដឹង​ការ​អ៊ិនកូដ​អ្វី​ដែល​អ្នកកំពុង​ប្រើ អ្នក​អាច​បញ្ជាក់​វា​នៅ​ក្នុង​ជម្រើស​គណនី​កម្រិត​ខ្ពស់​"
-"សម្រាប់​គណនី AIM/ICQ របស់​អ្នក ។)"
-
-#, c-format
-msgid ""
-"(There was an error receiving this message.  Either you and %s have "
-"different encodings selected, or %s has a buggy client.)"
-msgstr ""
-"(មានកំហុស​មួយ​ក្នុងការ​ទទួល​សារ ។ អ្នក​ និង %s បាន​ជ្រើស​ការ​ការអ៊ិនកូដ​ផ្សេង​គ្នា ឬ %s មាន​ម៉ាស៊ីន​ភ្ញៀវ​"
-"មិត្តភក្ដិ ។)"
-
-msgid "Could not join chat room"
-msgstr "មិនអាច​ចូល​រួម​ក្នុង​បន្ទប់​ជជែក​បានទេ"
-
-msgid "Invalid chat room name"
-msgstr "ឈ្មោះ​បន្ទប់​ជជែក​មិន​ត្រឹមត្រូវ"
-
-msgid "Invalid error"
-msgstr "កំហុស​​មិន​ត្រឹមត្រូវ"
-
-msgid "Not logged in"
-msgstr "មិនបានចូល​ទេ"
-
-msgid "Cannot receive IM due to parental controls"
-msgstr "មិនអាច​ទទួល IM បាន​ទេ ដោយ​សារ​តែ​ការ​ត្រួតពិនិត្យ​​តឹងរឹង"
-
-msgid "Cannot send SMS without accepting terms"
-msgstr "មិន​អាច​ផ្ញើ SMS ដោយ​មិន​ទទួល​យក​លក្ខខណ្ឌ​បាន​ទេ"
-
-msgid "Cannot send SMS"
-msgstr "មិនអាច​ផ្ញើ SMS បាន​ទេ"
-
-#. SMS_WITHOUT_DISCLAIMER is weird
-msgid "Cannot send SMS to this country"
-msgstr "មិនអាច​ផ្ញើ SMS ទៅ​ប្រទេស​នេះ​បាន​ទេ"
-
-#. Undocumented
-msgid "Cannot send SMS to unknown country"
-msgstr "មិនអាច​ផ្ញើ SMS ទៅ​ប្រទេស​ដែល​មិន​ស្គាល់​បាន​ទេ"
-
-msgid "Bot accounts cannot initiate IMs"
-msgstr "គណនី​អ្នកលេង​លើ​បណ្ដាញ​​មិនអាច​ចាប់ផ្ដើម IMs បាន​ទេ"
-
-msgid "Bot account cannot IM this user"
-msgstr "គណនី​​អ្នក​លេង​លើ​បណ្ដាញ​មិន​អាច​ IM អ្នកប្រើ​នេះ​បាន​ទេ"
-
-msgid "Bot account reached IM limit"
-msgstr "គណនី​អ្នក​លេង​លើ​បណ្តាញ​បាន​​ដល់​កម្រិត​ IM"
-
-msgid "Bot account reached daily IM limit"
-msgstr "គណនី​អ្នក​លេង​លើ​បណ្តាញ​បាន​ដល់​កម្រិត​ IM ​ប្រចាំ​ថ្ងៃ​ហើយ"
-
-msgid "Bot account reached monthly IM limit"
-msgstr "គណនី​របស់​អ្នក​លេង​បាន​ដល់​​​កម្រិត IM ប្រចាំ​ខែ​ហើយ"
-
-msgid "Unable to receive offline messages"
-msgstr "មិនអាច​​ទទួល​សារ​ក្រៅបណ្ដាញ​បាន​ទេ"
-
-msgid "Offline message store full"
-msgstr "សារ​ក្រៅ​បណ្ដាញ​ផ្ទុក​ពេញ​ហើយ"
-
-#, c-format
-msgid "Unable to send message: %s (%s)"
-msgstr "មិន​អាចផ្ញើសារ​​ ៖ %s (%s) បាន​ទេ"
-
-#, c-format
-msgid "Unable to send message: %s"
-msgstr "មិនអាច​ផ្ញើ​សារ ៖ %s"
-
-#, c-format
-msgid "Unable to send message to %s: %s (%s)"
-msgstr "មិន​អាច​ផ្ញើសារ​ទៅ​កាន់ %s ៖ %s (%s) បាន​ទេ"
-
-#, c-format
-msgid "Unable to send message to %s: %s"
-msgstr "មិនអាច​ផ្ញើ​សារ​ទៅកាន់ %s ៖ %s បាន​ទេ"
-
-msgid "Thinking"
-msgstr ""
-
-msgid "Shopping"
-msgstr ""
-
-msgid "Questioning"
-msgstr ""
-
-msgid "Eating"
-msgstr ""
-
-msgid "Watching a movie"
-msgstr ""
-
-msgid "Typing"
-msgstr "វាយ"
-
-msgid "At the office"
-msgstr ""
-
-msgid "Taking a bath"
-msgstr ""
-
-msgid "Watching TV"
-msgstr ""
-
-msgid "Having fun"
-msgstr ""
-
-msgid "Sleeping"
-msgstr ""
-
-msgid "Using a PDA"
-msgstr ""
-
-msgid "Meeting friends"
-msgstr ""
-
-msgid "On the phone"
-msgstr ""
-
-msgid "Surfing"
-msgstr ""
-
-#. "I am mobile." / "John is mobile."
-msgid "Mobile"
-msgstr "ចល័ត"
-
-msgid "Searching the web"
-msgstr ""
-
-msgid "At a party"
-msgstr ""
-
-msgid "Having Coffee"
-msgstr ""
-
-#. Playing video games
-msgid "Gaming"
-msgstr ""
-
-msgid "Browsing the web"
-msgstr ""
-
-msgid "Smoking"
-msgstr ""
-
-msgid "Writing"
-msgstr ""
-
-#. Drinking [Alcohol]
-msgid "Drinking"
-msgstr ""
-
-msgid "Listening to music"
-msgstr "ស្ដាប់​តន្ត្រី"
-
-msgid "Studying"
-msgstr ""
-
-msgid "Working"
-msgstr "ធ្វើការ"
-
-msgid "In the restroom"
-msgstr ""
-
-msgid "Received invalid data on connection with server"
-msgstr "បាន​​ទទួល​ទិន្នន័យ​មិនត្រឹមត្រូវ​នៅពេល​តភ្ជាប់​ជា​មួយ​ម៉ាស៊ីន​បម្រើ"
-
-msgid "Error parsing response from authentication server"
-msgstr ""
-
-msgid "Unknown error during authentication"
-msgstr ""
-
-#. *< type
-#. *< ui_requirement
-#. *< flags
-#. *< dependencies
-#. *< priority
-#. *< id
-#. *< name
-#. *< version
-#. *  summary
-#. *  description
-msgid "AIM Protocol Plugin"
-msgstr "កម្មវិធី​ជំនួយ​ពិធីការ AIM"
-
-msgid "ICQ UIN..."
-msgstr "ICQ UIN..."
-
-#. *< type
-#. *< ui_requirement
-#. *< flags
-#. *< dependencies
-#. *< priority
-#. *< id
-#. *< name
-#. *< version
-#. *  summary
-#. *  description
-msgid "ICQ Protocol Plugin"
-msgstr "កម្មវិធី​ជំនួយ​ពិធីការ ICQ"
-
-msgid "Encoding"
-msgstr "ការ​អ៊ិនកូដ"
-
-msgid "The remote user has closed the connection."
-msgstr "អ្នក​ប្រើ​ពី​ចម្ងាយ​​បានបិទ​ការ​តភ្ជាប់ ។"
-
-msgid "The remote user has declined your request."
-msgstr "អ្នក​ប្រើពី​ចម្ងាយ​បានបដិសេធ​សំណើរ​របស់​អ្នក ។"
-
-#, c-format
-msgid "Lost connection with the remote user:<br>%s"
-msgstr "បាត់បង់​ការ​តភ្ជាប់​ជា​មួយ​អ្នកប្រើ​ពី​ចម្ងាយ ៖ <br>%s"
-
-msgid "Received invalid data on connection with remote user."
-msgstr "បាន​ទទួល​ទិន្នន័យ​មិន​ត្រឹមត្រូវ​នៅ​ពេល​តភ្ជាប់​ជា​មួយ​អ្នកប្រើពី​ចម្ងាយ ។"
-
-msgid "Unable to establish a connection with the remote user."
-msgstr "មិនអាច​បង្កើត​ការ​តភ្ជាប់​ជា​មួយ​អ្នក​ប្រើ​ពី​ចម្ងាយ​បាន​ឡើយ​ ។"
-
-msgid "Direct IM established"
-msgstr "បានបង្កើត IM ដោយ​ផ្ទាល់"
-
-#, c-format
-msgid ""
-"%s tried to send you a %s file, but we only allow files up to %s over Direct "
-"IM.  Try using file transfer instead.\n"
-msgstr ""
-"%s បានព្យាយាម​ផ្ញើ​ឲ្យ​​អ្ន​ក​នូវ​ឯកសារ %s ប៉ុន្តែ​អនុញ្ញាត​តែ​ឯកសារ​ %s លើ​ IM ដោយ​ផ្ទាល់ ។ ព្យាយាម​ប្រើ​"
-"ការ​ផ្ទេរ​ឯកសារ​ជំនួស​វិញ ។\n"
-
-#, c-format
-msgid "File %s is %s, which is larger than the maximum size of %s."
-msgstr "ឯកសារ %s គឺជា %s ដែល​ធំជាង​ទំហំ​អតិបរមា​របស់ %s ។"
-
-msgid "Free For Chat"
-msgstr "ទំនេរ​សម្រាប់​ជជែក"
-
-msgid "Not Available"
-msgstr "មិនអាច​ប្រើ​បាន"
-
-msgid "Occupied"
-msgstr "កាន់កាប់"
-
-msgid "Web Aware"
-msgstr "ការ​យល់ដឹង​អំពី​បណ្ដាញ"
-
-msgid "Invisible"
-msgstr "មើល​មិន​ឃើញ"
-
-msgid "Evil"
-msgstr ""
-
-msgid "Depression"
-msgstr ""
-
-msgid "At home"
-msgstr ""
-
-msgid "At work"
-msgstr ""
-
-msgid "At lunch"
-msgstr ""
-
-#, c-format
-msgid "Unable to connect to authentication server: %s"
-msgstr "មិនអាច​តភ្ជាប់​ទៅ​កាន់ម៉ាស៊ីនបម្រើ​​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ​បាន​ទេ ៖ %s"
-
-#, c-format
-msgid "Unable to connect to BOS server: %s"
-msgstr "មិនអាច​តភ្ជាប់​ទៅ​កាន់​ម៉ាស៊ីន​បម្រើ BOS បាន​​ទេ ៖ %s"
-
-msgid "Username sent"
-msgstr "បានផ្ញើ​ឈ្មោះ​អ្នក​ប្រើ"
-
-msgid "Connection established, cookie sent"
-msgstr "បានបង្កើត​ការ​តភ្ជាប់ បានផ្ញើ​ខូគី"
-
-#. TODO: Don't call this with ssi
-msgid "Finalizing connection"
-msgstr "បញ្ចប់​ការ​តភ្ជាប់"
-
-#, c-format
-msgid ""
-"Unable to sign on as %s because the username is invalid.  Usernames must be "
-"a valid email address, or start with a letter and contain only letters, "
-"numbers and spaces, or contain only numbers."
-msgstr ""
-"មិនអាចចាប់​ផ្តើម​​​ %s បានទេ​​ពីព្រោះ​ឈ្មោះ​អ្នក​ប្រើ​មិន​ត្រឹមត្រូវ ។ អ្នក​ប្រើ​ត្រូវ​តែ​មានអាសយដ្ឋាន​"
-"អ៊ីមែលត្រឹមត្រូវ​ ឬ​ចាប់ផ្ដើម​ដោយ​អក្សរ ហើយ​​មានតែ​អក្សរ លេខ និង​ចន្លោះ​មិនឃើញ ឬ​មាន​តែ​លេខ​ប៉ុណ្ណោះ ។"
-
-msgid ""
-"You required encryption in your account settings, but encryption is not "
-"supported by your system."
-msgstr ""
-
-msgid ""
-"You required Kerberos authentication but encryption is disabled in your "
-"account settings."
-msgstr ""
-
-#, c-format
-msgid "You may be disconnected shortly.  If so, check %s for updates."
-msgstr ""
-"អ្នក​អាច​ត្រូ​វបាន​ផ្ដាច់​ក្នុង​រយៈពេលបន្តិចទៀត​នេះ ។ ប្រសិនបើ​ដូច្នេះ​មែន ពិនិត្យ​មើល​ភាពទាន់សម័យ %s ។"
-
-msgid "Unable to get a valid AIM login hash."
-msgstr "មិនអាច​យក​សញ្ញា​ចូល AIM ត្រឹមត្រូវ​ទេ ។"
-
-msgid "Unable to get a valid login hash."
-msgstr "មិនអាច​យក​សញ្ញា​ចូល​ត្រឹមត្រូវ​បានទេ ។"
-
-msgid "Received authorization"
-msgstr "បានទទួល​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ"
-
-#. Unregistered username
-msgid "Username does not exist"
-msgstr "មិនមាន​​ឈ្មោះ​អ្នក​ប្រើ"
-
-#. Suspended account
-msgid "Your account is currently suspended"
-msgstr "គណនី​របស់​អ្នក​បច្ចុប្បន្ន​ត្រូវ​បាន​ផ្អាក​ហើយ ។"
-
-#. service temporarily unavailable
-msgid "The AOL Instant Messenger service is temporarily unavailable."
-msgstr "សេវា​កម្មវិធី​ផ្ញើសារបន្ទាន់ AOL បច្ចុប្បន្ន​ប្រើ​មិនបានទេ ។"
-
-#. username connecting too frequently
-msgid ""
-"Your username has been connecting and disconnecting too frequently. Wait ten "
-"minutes and try again. If you continue to try, you will need to wait even "
-"longer."
-msgstr ""
-"ឈ្មោះ​អ្នក​ប្រើ​របស់​អ្នក​កំពុង​ត្រូវ​បាន​តភ្ជាប់ និង​ដាច់​ញឹកញាប់ណាស់ ។ រង់ចាំ​ ១០ នាទី ហើយ​ព្យាយាម​ម្ដង​ទៀត ។ "
-"ប្រសិនបើ​អ្នក​នៅ​តែ​ព្យាយាម​ទៀត អ្នក​នឹង​ត្រូវ​ចាំ​កាន់តែ​យូរ ។"
-
-#. client too old
-#, c-format
-msgid "The client version you are using is too old. Please upgrade at %s"
-msgstr "កំណែ​ម៉ាស៊ីន​ភ្ញៀវ​ដែល​អ្នក​កំពុង​ប្រើ​ចាស់​ពេក ។ សូម​ធ្វើ​ឲ្យ​ប្រសើរ​នៅ %s"
-
-#. IP address connecting too frequently
-msgid ""
-"Your IP address has been connecting and disconnecting too frequently. Wait a "
-"minute and try again. If you continue to try, you will need to wait even "
-"longer."
-msgstr ""
-"អាសយដ្ឋាន​ IP របស់​អ្នក​​កំពុង​ត្រូវ​បាន​តភ្ជាប់ និង​ដាច់​ញឹកញាប់​ណាស់ ។ រង់ចាំ​មួយ​ភ្លេត ហើយ​ព្យាយាម​ម្ដង​ទៀត "
-"អ្នក​​ត្រូវ​តែ​រង់ចាំ​សូម្បី​តែ​យូរ​ក៏​ដោយ ។"
-
-msgid "The SecurID key entered is invalid"
-msgstr "បាន​បញ្ចូល​​សោ SecurID មិន​ត្រឹមត្រូវ"
-
-msgid "Enter SecurID"
-msgstr "បញ្ចូល SecurID"
-
-msgid "Enter the 6 digit number from the digital display."
-msgstr "បញ្ចូលលេខ ៦ តួលេខ​ពី​ការ​បង្ហាញឌីជីថល ។"
-
-msgid "Password sent"
-msgstr "បានផ្ញើ​ពាក្យ​​​សម្ងាត់"
-
-msgid "Unable to initialize connection"
-msgstr "មិនអាច​ចាប់ផ្ដើម​កា​រតភ្ជាប់​បានទេ"
-
-#, c-format
-msgid ""
-"The user %u has denied your request to add them to your buddy list for the "
-"following reason:\n"
-"%s"
-msgstr ""
-"អ្នក​ប្រើ %u បានបដិសេធ​សំណើ​របស់​អ្នក ក្នុងការ​បន្ថែម​ពួកគេ​ទៅ​ក្នុង​បញ្ជីមិត្តភក្ដិ​របស់​អ្នក​ដោយ​សារ​មាន​ហេតុផល​"
-"ដូច​ខាងក្រោម ៖\n"
-"%s"
-
-msgid "ICQ authorization denied."
-msgstr "បានបដិសេធ​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ ICQ ។"
-
-#. Someone has granted you authorization
-#, c-format
-msgid "The user %u has granted your request to add them to your buddy list."
-msgstr "អ្នក​ប្រើ %u បានផ្ដល់​សំណើ​របស់​អ្នក​ ដើម្បី​បន្ថែម​ពួកគេ​ទៅ​កាន់​បញ្ជីមិត្តភក្ដិ​របស់​អ្នក ។"
-
-#, c-format
-msgid ""
-"You have received a special message\n"
-"\n"
-"From: %s [%s]\n"
-"%s"
-msgstr ""
-"អ្នក​បាន​ទទួល​សារ​ពិសេស\n"
-"\n"
-"ពី ៖ %s [%s]\n"
-"%s"
-
-#, c-format
-msgid ""
-"You have received an ICQ page\n"
-"\n"
-"From: %s [%s]\n"
-"%s"
-msgstr ""
-"អ្នក​បាន​ទទួល​ទំព័រ ICQ\n"
-"\n"
-"ពី ៖ %s [%s]\n"
-"%s"
-
-#, c-format
-msgid ""
-"You have received an ICQ email from %s [%s]\n"
-"\n"
-"Message is:\n"
-"%s"
-msgstr ""
-"អ្នក​បាន​ទទួល​អ៊ីមែល ICQ ពី %s [%s]\n"
-"\n"
-"សារគឺ ៖\n"
-"%s"
-
-#, c-format
-msgid "ICQ user %u has sent you a buddy: %s (%s)"
-msgstr "អ្នក​ប្រើ ICQ %u បានផ្ញើ​ឲ្យ​អ្នក​នូវ​មិត្តភក្ដិ ៖ %s (%s)"
-
-msgid "Do you want to add this buddy to your buddy list?"
-msgstr "តើ​អ្នក​ចង់​ប​ន្ថែម​មិត្តភក្ដិ​នេះ​ទៅ​កាន់​បញ្ជីមិត្តភក្តិ​របស់​អ្នក​ដែរឬទេ ?"
-
-msgid "_Add"
-msgstr "បន្ថែម"
-
-msgid "_Decline"
-msgstr "បដិ​សេធ"
-
-#, c-format
-msgid "You missed %hu message from %s because it was invalid."
-msgid_plural "You missed %hu messages from %s because they were invalid."
-msgstr[0] "អ្នកបាត់សារ %hu ពី %s ដោយ​សារ​តែ​ពួកវា​មិន​ត្រឹមត្រូវ ។"
-
-#, c-format
-msgid "You missed %hu message from %s because it was too large."
-msgid_plural "You missed %hu messages from %s because they were too large."
-msgstr[0] "អ្នកបាត់សារ %hu ពី %s ពីព្រោះ​វា​ធំពេក ។"
-
-#, c-format
-msgid ""
-"You missed %hu message from %s because the rate limit has been exceeded."
-msgid_plural ""
-"You missed %hu messages from %s because the rate limit has been exceeded."
-msgstr[0] "អ្នក​បាត់សារ %hu ពី %s ដោយសារ​តែ​លើស​ដែន​កំណត់​អត្រា ។"
-
-#, c-format
-msgid ""
-"You missed %hu message from %s because his/her warning level is too high."
-msgid_plural ""
-"You missed %hu messages from %s because his/her warning level is too high."
-msgstr[0] "អ្នកបាត់សារ %hu ពី %s ដោយ​សារ​តែ​កម្រិត​ព្រមានរបស់​គាត់​ខ្ពស់​ពេក ។"
-
-#, c-format
-msgid "You missed %hu message from %s because your warning level is too high."
-msgid_plural ""
-"You missed %hu messages from %s because your warning level is too high."
-msgstr[0] "អ្នកបាត់​សារ %hu ពី %s ដោយសារ​តែ​កម្រិត​ព្រមាន​របស់​អ្នក​ខ្ពស់​ពេក ។"
-
-#, c-format
-msgid "You missed %hu message from %s for an unknown reason."
-msgid_plural "You missed %hu messages from %s for an unknown reason."
-msgstr[0] "អ្នកបាត់​សារ %hu ពី %s ដោយសារ​ហេតុផល​ដែល​មិនស្គាល់ ។"
-
-msgid "Your AIM connection may be lost."
-msgstr "កា​រតភ្ជាប់ AIM របស់​អ្នក​អាច​បាត់បង់ ។"
-
-#, c-format
-msgid "You have been disconnected from chat room %s."
-msgstr "អ្នក​ត្រូវ​បានផ្ដាច់​ចេញ​ពី​បន្ទប់​ជជែក %s ។"
-
-msgid "The new formatting is invalid."
-msgstr "កា​រធ្វើ​ទ្រង់ទ្រាយ​ថ្មី​មិន​ត្រឹមត្រូវ​ទេ ។"
-
-msgid "Username formatting can change only capitalization and whitespace."
-msgstr "កា​រធ្វើ​ទ្រង់ទ្រាយឈ្មោះ​អ្នកប្រើ​អាច​ផ្លាស់ប្ដូរ​តែ​​ក្នុង​ករណី​មានអក្សរ​ធំ និង​ចន្លោះមិនឃើញ ។"
-
-msgid "Pop-Up Message"
-msgstr "សារ​លេច​ឡើង"
-
-#, c-format
-msgid "The following username is associated with %s"
-msgid_plural "The following usernames are associated with %s"
-msgstr[0] "ឈ្មោះ​អ្នកប្រើ​ដូច​ខាងក្រោម​ត្រូវ​បានភ្ជាប់​ជា​មួយ %s"
-
-#, c-format
-msgid "No results found for email address %s"
-msgstr "រក​មិនឃើញ​លទ្ធផល​សម្រាប់​អាសយដ្ឋាន​អ៊ីមែល %s"
-
-#, c-format
-msgid "You should receive an email asking to confirm %s."
-msgstr "អ្នក​គួរ​ទទួល​អ៊ីមែល​មួយ ដោយ​សួរ​ឲ្យ​អះអាង %s ។"
-
-msgid "Account Confirmation Requested"
-msgstr "បាន​ស្នើ​ការ​អះអាង​របស់គណនី"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to format username because the requested name differs "
-"from the original."
-msgstr "កំហុស 0x%04x ៖ មិនអាច​ធ្វើ​ទ្រង់ទ្រាយ​ឈ្មោះអ្នកប្រើបានទេ ពីព្រោះ​ឈ្មោះ​ខុស​ពី​ឈ្មោះ​ដើម ។"
-
-#, c-format
-msgid "Error 0x%04x: Unable to format username because it is invalid."
-msgstr "កំហុស 0x%04x ៖ មិនអាច​ធ្វើ​ទ្រង់ទ្រាយ​ឈ្មោះ​អ្នកប្រើ​បានទេ ពីព្រោះ​វា​មិនត្រឹមត្រូវ ។"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to format username because the requested name is too "
-"long."
-msgstr "កំហុស 0x%04x ៖ មិនអាច​ធ្វើ​ទ្រង់ទ្រាយ​ឈ្មោះអ្នកប្រើ​បានទេ ពីព្រោះ​ឈ្មោះ​ដែល​បាន​ស្នើ​វែង​ពេក ។"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because there is already a "
-"request pending for this username."
-msgstr ""
-"កំហុស 0x%04x ៖ មិនអាច​ផ្លាស់ប្ដូរ​អាសយដ្ឋាន​អ៊ីមែល​បាន​ទេ ពីព្រោះ​មាន​សំណើ​រួ​ចហើយ​ដែល​រង់ចាំ​សម្រាប់​ឈ្មោះ​"
-"អ្នក​ប្រើ​នេះ ។"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because the given address has "
-"too many usernames associated with it."
-msgstr ""
-"កំហុស 0x%04x ៖ មិនអាច​ផ្លាស់ប្ដូរ​អាសយដ្ឋានអ៊ីមែលបានទេ ពីព្រោះ​អាសយដ្ឋាន​ដែលបានផ្ដល់​មាន​ឈ្មោះ​"
-"អ្នកប្រើ​ច្រើនពេក​ដែល​ជាប់​ជា​មួយ​វា ។"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because the given address is "
-"invalid."
-msgstr ""
-"កំហុស 0x%04x ៖ មិន​អាច​ផ្លាស់ប្ដូរ​អាសយដ្ឋាន​អ៊ីមែល​បានទេ ពីព្រោះ​អាសយដ្ឋាន​ដែល​បានផ្ដល់​មិន​ត្រឹមត្រូវ​ទេ ។"
-
-#, c-format
-msgid "Error 0x%04x: Unknown error."
-msgstr "កំហុស 0x%04x ៖ មិនស្គាល់​កំហុស ។"
-
-msgid "Error Changing Account Info"
-msgstr "កំហុស​ក្នុងកា​រផ្លាស់ប្ដូរ​ព័ត៌មាន​របស់​គណនី"
-
-#, c-format
-msgid "The email address for %s is %s"
-msgstr "អាសយដ្ឋាន​អ៊ីមែល​សម្រាប់ %s គឺ %s"
-
-msgid "Account Info"
-msgstr "ព័ត៌មាន​គណនី"
-
-msgid ""
-"Your IM Image was not sent. You must be Direct Connected to send IM Images."
-msgstr "មិនបានផ្ញើ​រូបភាព IM របស់​ទេ ។ អ្នក​ត្រូវតែ​បានតភ្ជាប់​ដោយ​ផ្ទាល់ ដើម្បី​ផ្ញើ​រូបភាព IM ។"
-
-msgid "Unable to set AIM profile."
-msgstr "មិនអាច​កំណត់​ទម្រង់ AIM ទេ ។"
-
-msgid ""
-"You have probably requested to set your profile before the login procedure "
-"completed.  Your profile remains unset; try setting it again when you are "
-"fully connected."
-msgstr ""
-"អ្នកប្រហែលជា​បាន​ស្នើ​ ឲ្យ​កំណត់​ទម្រង់​របស់​អ្នកមុននឹង​បញ្ចប់នីតិវិធី​បញ្ចូល ។ ទម្រង់​របស់​អ្នក​នៅតែ​មិនបាន​កំណត់ "
-"ព្យាយាម​កំណត់​វា​ម្ដង​ទៀត នៅពេល​ដែល​អ្នក​បានតភ្ជាប់ពេញលេញ ។"
-
-#, c-format
-msgid ""
-"The maximum profile length of %d byte has been exceeded.  It has been "
-"truncated for you."
-msgid_plural ""
-"The maximum profile length of %d bytes has been exceeded.  It has been "
-"truncated for you."
-msgstr[0] "ប្រវែង​ទម្រង់​អតិបរមានៃ %d បៃ​បានលើស​ដែនកំណត់​ហើយ ។ វា​ត្រូវ​បានកាត់​ឲ្យ​ខ្លី​សម្រាប់​អ្នក ។"
-
-msgid "Profile too long."
-msgstr "ទម្រង់​វែង​ពេក ។"
-
-#, c-format
-msgid ""
-"The maximum away message length of %d byte has been exceeded.  It has been "
-"truncated for you."
-msgid_plural ""
-"The maximum away message length of %d bytes has been exceeded.  It has been "
-"truncated for you."
-msgstr[0] ""
-"សារ​ចាកឆ្ងាយ​អតិបរមា​ប្រវែង %d បៃ បានលើស​កំណត់​ហើយ ។ វា​ត្រូវ​បាន​កាត់​ឲ្យ​ខ្លី​សម្រាប់​អ្នក ។"
-
-msgid "Away message too long."
-msgstr "សារ​ចាកឆ្ងាយ​វែង​ពេក ។"
-
-#, c-format
-msgid ""
-"Unable to add the buddy %s because the username is invalid.  Usernames must "
-"be a valid email address, or start with a letter and contain only letters, "
-"numbers and spaces, or contain only numbers."
-msgstr ""
-"មិនអាច​បន្ថែម​មិត្តភក្ដិ %s បាន​ទេ ពីព្រោះ​ឈ្មោះ​អ្នក​ប្រើ​មិន​ត្រឹមត្រូវឡើយ​ ។ ឈ្មោះ​អ្នកប្រើ​ត្រូវ​តែ​​ជា​"
-"អាសយដ្ឋានអ៊ីមែល​ដែល​ត្រឹមត្រូវ ឬ​ចាប់ផ្ដើម​ដោយ​អក្សរ ហើយមាន​តែ​អក្សរ លេខ និង​ចន្លោះ​មិនឃើញ ឬ​មាន​តែ​លេខ​"
-"ប៉ុណ្ណោះ ។"
-
-msgid "Unable to Add"
-msgstr "មិនអាច​បន្ថែម"
-
-msgid "Unable to Retrieve Buddy List"
-msgstr "មិនអាច​ទៅ​យក​បញ្ជីមិត្តភ្ដិ​បានទេ"
-
-msgid ""
-"The AIM servers were temporarily unable to send your buddy list.  Your buddy "
-"list is not lost, and will probably become available in a few minutes."
-msgstr ""
-"ម៉ាស៊ីនបម្រើ AIM មិនអាច​ផ្ញើ​ជា​បណ្ដោះអាសន្ន​ទៅ​កាន់​បញ្ជី​មិត្តភក្ដិ​របស់​អ្នក ។ បញ្ជី​មិត្តភក្ដិ​របស់​អ្នក​មិន​បាត់​"
-"បង់​ទេ ហើយ​​ប្រហែលជា​នឹង​អាច​ប្រើ​ក្នុង​រយៈ​ពីរ បី​នាទី ។"
-
-msgid "Orphans"
-msgstr "កំព្រា"
-
-#, c-format
-msgid ""
-"Unable to add the buddy %s because you have too many buddies in your buddy "
-"list.  Please remove one and try again."
-msgstr ""
-"មិនអាច​បន្ថែម​មមិត្តភក្ដិ %s បាន​ទេ ដោយ​សារ​តែ​អ្នក​មាន​មិត្តភក្ដិ​ច្រើន​ពេក​នៅ​ក្នុង​បញ្ជីមិត្តភក្ដិ​របស់​"
-"អ្នក ។  សូម​យក​​មិត្តភក្ដិ​ចេញ​មួយ ហើយ​ព្យាយាម​ម្ដង​ទៀត ។"
-
-msgid "(no name)"
-msgstr "(គ្មាន​ឈ្មោះ)"
-
-#, c-format
-msgid "Unable to add the buddy %s for an unknown reason."
-msgstr "មិនអាច​បន្ថែម​មិត្តភក្ដិ %s ដោយ​មិន​ស្គាល់​ហេតុផល​ទេ ។"
-
-#, c-format
-msgid ""
-"The user %s has given you permission to add him or her to your buddy list.  "
-"Do you want to add this user?"
-msgstr ""
-"អ្នក​ប្រើ %s បានផ្ដល់​សិទ្ធិ​ដើម្បី​បន្ថែម​គាត់​ទៅកាន់​បញ្ជីមិត្តភក្ដិ​របស់​អ្នក ។ តើអ្នក​ចង់​បន្ថែម​អ្នកប្រើនេះ​"
-"ដែរឬទេ ?"
-
-msgid "Authorization Given"
-msgstr "បានផ្ដល់កា​រផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ"
-
-#. Granted
-#, c-format
-msgid "The user %s has granted your request to add them to your buddy list."
-msgstr "អ្នកប្រើ %s បានផ្ដល់​សំណើ​របស់​អ្នក ដើម្បីបន្ថែម​ពួកគេ​ទៅ​កាន់បញ្ជី​មិត្តភក្ដិ​របស់​អ្នក ។"
-
-msgid "Authorization Granted"
-msgstr "បាន​ផ្ដល់​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ"
-
-#. Denied
-#, c-format
-msgid ""
-"The user %s has denied your request to add them to your buddy list for the "
-"following reason:\n"
-"%s"
-msgstr ""
-"អ្នកប្រើ %s បានបដិសេធ​សំណើ​របស់​អ្នក ដើម្បីបន្ថែម​ពួកគេ​ទៅក្នុង​បញ្ជីមិត្តភក្ដិ​របស់​អ្នក​ដោយ​សារ​តែ​មាន​ហេតុផល​"
-"ដូច​ខាងក្រោម ៖\n"
-"%s"
-
-msgid "Authorization Denied"
-msgstr "បានបដិសេធ​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ"
-
-msgid "_Exchange:"
-msgstr "ផ្លាស់ប្ដូរ ៖"
-
-msgid "Your IM Image was not sent. You cannot send IM Images in AIM chats."
-msgstr ""
-"រូបភាព IM របស់​អ្នក​មិន​ត្រូវ​បាន​ផ្ញើ​ទេ ។ អ្នកមិនអាច​ផ្ញើ​រូបភាព IM នៅ​ក្នុងការ​ជជែក​របស់ AIM បាន​ទេ "
-"។"
-
-msgid "iTunes Music Store Link"
-msgstr "តំណ​ផ្ទុក​តន្ត្រី​របស់ iTunes"
-
-msgid "Lunch"
-msgstr ""
-
-#, c-format
-msgid "Buddy Comment for %s"
-msgstr "មតិយោបល់​របស់មិត្តភក្ដិ​សម្រាប់ %s"
-
-msgid "Buddy Comment:"
-msgstr "មតិយោបល់របស់មិត្តភក្ដិ ៖"
-
-#, c-format
-msgid "You have selected to open a Direct IM connection with %s."
-msgstr "អ្នកបាន​ជ្រើស​ដើម្បីបើក​ការ​តភ្ជាប់ IM ដោយ​ផ្ទាល់ជា​មួយ %s ។"
-
-msgid ""
-"Because this reveals your IP address, it may be considered a security risk.  "
-"Do you wish to continue?"
-msgstr ""
-"ពីព្រោះ​វា​ដឹង​អាសយដ្ឋាន IP របស់​អ្នក វា​អាច​ត្រូវ​បាន​​ចាត់​ទុកថា​មានគ្រោះថ្នាក់ ។ តើអ្នក​ចង់​បន្ត​"
-"ដែរឬទេ ?"
-
-msgid "C_onnect"
-msgstr "តភ្ជាប់"
-
-msgid "You closed the connection."
-msgstr "អ្នក​បាន​បិទ​ការ​តភ្ជាប់ ។"
-
-msgid "Get AIM Info"
-msgstr "យក​ព័ត៌មាន​របស់ AIM"
-
-#. We only do this if the user is in our buddy list
-msgid "Edit Buddy Comment"
-msgstr "កែសម្រួល​មតិយោបល់​របស់​មិត្តភក្ដិ"
-
-msgid "Get X-Status Msg"
-msgstr ""
-
-msgid "End Direct IM Session"
-msgstr "បញ្ចប់​សម័យ IM ដោយ​ផ្ទាល់"
-
-msgid "Direct IM"
-msgstr "IM ផ្ទាល់"
-
-msgid "Re-request Authorization"
-msgstr "ស្នើ​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ​ឡើង​វិញ"
-
-msgid "Require authorization"
-msgstr "តម្រូវ​ឲ្យ​មានការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ"
-
-msgid "Web aware (enabling this will cause you to receive SPAM!)"
-msgstr "ការ​យល់​ដឹង​អំពីបណ្ដាញ (ការ​បើកវា​នឹង​​ធ្វើ​ឲ្យ​អ្នក​ទទួល​ SPAM!)"
-
-msgid "ICQ Privacy Options"
-msgstr "ជម្រើស​ឯកជន​របស់ ICQ"
-
-msgid "Change Address To:"
-msgstr "ផ្លាស់ប្ដូរ​អាសយដ្ឋាន​ ជូន​ចំពោះ ៖"
-
-msgid "you are not waiting for authorization"
-msgstr ""
-
-msgid "You are awaiting authorization from the following buddies"
-msgstr "អ្នកកំពុង​រង់ចាំ​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ​ពី​មិត្តភក្ដិ​ដូច​ខាង​ក្រោម"
-
-msgid ""
-"You can re-request authorization from these buddies by right-clicking on "
-"them and selecting \"Re-request Authorization.\""
-msgstr ""
-"អ្នក​អាច​ស្នើ​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ​ឡើង​វិញ​ពី​មិត្តភក្ដិ​ទាំង​នេះ ដោយ​ចុច​កណ្ដុរ​ស្ដាំ​លើ​ពួកវា ហើយជ្រើស "
-"\"ស្នើ​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ​ឡើង​វិញ ។\""
-
-msgid "Find Buddy by Email"
-msgstr "រក​មិត្តភក្ដិតាម​អ៊ីមែល"
-
-msgid "Search for a buddy by email address"
-msgstr "រក​មិត្តភក្ដិ​តាម​អាសយដ្ឋាន​អ៊ីមែល"
-
-msgid "Type the email address of the buddy you are searching for."
-msgstr "វាយ​អាសយដ្ឋាន​អ៊ីមែល​របស់​មិត្តភក្ដិ​ដែល​អ្នកកំពុង​ស្វែងរក ។"
-
-msgid "_Search"
-msgstr "ស្វែងរក"
-
-msgid "Set User Info (web)..."
-msgstr "កំណត់​ព័ត៌មាន​របស់​អ្នកប្រើ (បណ្ដាញ)..."
-
-#. This only happens when connecting with the old-style BUCP login
-msgid "Change Password (web)"
-msgstr "ផ្លាស់ប្ដូរ​ពាក្យ​សម្ងាត់ (បណ្ដាញ)"
-
-msgid "Configure IM Forwarding (web)"
-msgstr "កំណត់​រចនាសម្ព័ន្ធ​ការ​បញ្ជូន IM បន្ត (បណ្ដាញ)"
-
-#. ICQ actions
-msgid "Set Privacy Options..."
-msgstr "កំណត់​ជម្រើស​ឯកជន..."
-
-msgid "Show Visible List"
-msgstr ""
-
-msgid "Show Invisible List"
-msgstr ""
-
-#. AIM actions
-msgid "Confirm Account"
-msgstr "អះអាង​គណនី"
-
-msgid "Display Currently Registered Email Address"
-msgstr "បង្ហាញ​អាសយដ្ឋាន​អ៊ីមែល​ដែលបាន​ចុះឈ្មោះ​បច្ចុប្បន្ន"
-
-msgid "Change Currently Registered Email Address..."
-msgstr "ផ្លាស់ប្ដូរ​អាសយដ្ឋាន​អ៊ីមែល​ដែលបានចុះឈ្មោះ​បច្ចុប្បន្ន..."
-
-msgid "Show Buddies Awaiting Authorization"
-msgstr "បង្ហាញ​ការ​ផ្ទៀងផ្ទាត់​រង់ចាំ​របស់​មិត្តភក្ដិ"
-
-msgid "Search for Buddy by Email Address..."
-msgstr "ស្វែងរក​មិត្តភក្ដិ​តាម​អាសយដ្ឋាន​អ៊ីមែល..."
-
-msgid "clientLogin"
-msgstr ""
-
-msgid "Kerberos"
-msgstr ""
-
-msgid "MD5-based"
-msgstr ""
-
-msgid "Authentication method"
-msgstr ""
-
-msgid ""
-"Always use AIM/ICQ proxy server for\n"
-"file transfers and direct IM (slower,\n"
-"but does not reveal your IP address)"
-msgstr ""
-"ប្រើ​ម៉ាស៊ីនបម្រើ​ប្រូកស៊ី AIM/ICQ ជា​និច្ច​សម្រាប់​ការ​ផ្ទេរ​ឯកសារ និង IM ផ្ទាល់ (យឺត ប៉ុន្តែ​មិន​ដឹង​"
-"អាសយដ្ឋាន​ IP របស់​អ្នក​ទេ)"
-
-msgid "Allow multiple simultaneous logins"
-msgstr "អនុញ្ញាត​ការ​ចូល​ច្រើន​នាក់​ដំណាល​គ្នា"
-
-#, c-format
-msgid "Asking %s to connect to us at %s:%hu for Direct IM."
-msgstr "ស្នើ %s ឲ្យ​តភ្ជាប់​មក​យើង​នៅ %s:%hu សម្រាប់ IM ដោយ​ផ្ទាល់ ។"
-
-#, c-format
-msgid "Attempting to connect to %s:%hu."
-msgstr "ប៉ុនប៉ង​តភ្ជាប់​ទៅ​កាន់ %s:%hu ។"
-
-msgid "Attempting to connect via proxy server."
-msgstr "ប៉ុនប៉ង​តភ្ជាប់​តាមរយៈ​ម៉ាស៊ីន​បម្រើ​ប្រូកស៊ី ។"
-
-#, c-format
-msgid "%s has just asked to directly connect to %s"
-msgstr "%s ទើប​តែ​បានសួរ​ដើម្បីតភ្ជាប់​ដោយ​ផ្ទាល់ទៅ %s"
-
-msgid ""
-"This requires a direct connection between the two computers and is necessary "
-"for IM Images.  Because your IP address will be revealed, this may be "
-"considered a privacy risk."
-msgstr ""
-"វា​ត្រូវការ​ការ​តភ្ជាប់​ដោយ​ផ្ទាល់​រវាង​កុំព្យូទ័រ​ពីរ ហើយ​ចាំបាច់​សម្រាប់​រូបភាព IM ។ ពីព្រោះ​អាសយដ្ឋាន IP "
-"របស់​អ្នក​នឹង​ត្រូវ​បានដឹង វា​អាច​ចាត់​ទុក​ថា​គ្រោះថ្នាក់ ។"
-
-#. Label
-msgid "Buddy Icon"
-msgstr "រូបតំណាង​មិត្តភក្ដិ"
-
-msgid "Voice"
-msgstr "សំឡេង"
-
-msgid "AIM Direct IM"
-msgstr "AIM នាំ IM"
-
-msgid "Get File"
-msgstr "យក​ឯកសារ"
-
-msgid "Games"
-msgstr "ល្បែង"
-
-msgid "ICQ Xtraz"
-msgstr ""
-
-msgid "Add-Ins"
-msgstr "បន្ថែម"
-
-msgid "Send Buddy List"
-msgstr "ផ្ញើ​បញ្ជី​មិត្តភក្ដិ"
-
-msgid "ICQ Direct Connect"
-msgstr "តភ្ជាប់​ ICQ ដោយ​ផ្ទាល់"
-
-msgid "AP User"
-msgstr "អ្នក​ប្រើ AP"
-
-msgid "ICQ RTF"
-msgstr "ICQ RTF"
-
-msgid "Nihilist"
-msgstr "Nihilist"
-
-msgid "ICQ Server Relay"
-msgstr "ពន្យារ​ម៉ាស៊ីន​បម្រើ ICQ"
-
-msgid "Old ICQ UTF8"
-msgstr "ICQ UTF8 ចាស់"
-
-msgid "Trillian Encryption"
-msgstr "ការ​អ៊ិនគ្រីប Trillian"
-
-msgid "ICQ UTF8"
-msgstr "ICQ UTF8"
-
-msgid "Hiptop"
-msgstr "Hiptop"
-
-msgid "Security Enabled"
-msgstr "បាន​បើក​សុវត្ថិភាព"
-
-msgid "Video Chat"
-msgstr "ជជែក​តាម​វីដេអូ"
-
-msgid "iChat AV"
-msgstr "iChat AV"
-
-msgid "Live Video"
-msgstr "វីដេអូ​បន្តផ្ទាល់"
-
-msgid "Camera"
-msgstr "ម៉ាស៊ីន​ថត​"
-
-msgid "Screen Sharing"
-msgstr "ការ​ចែករំលែក​អេក្រង់"
-
-msgid "IP Address"
-msgstr "អាសយដ្ឋាន IP"
-
-msgid "Warning Level"
-msgstr "កម្រិត​ព្រមាន"
-
-msgid "Buddy Comment"
-msgstr "មតិយោបល់​មិត្តភក្ដិ"
-
-#, c-format
-msgid "User information not available: %s"
-msgstr "មិនមាន​ព័ត៌មាន​អ្នក​ប្រើ​ ៖ %s"
-
-msgid "Mobile Phone"
-msgstr "ទូរស័ព្ទ​​ចល័ត"
-
-msgid "Age"
-msgstr "អាយុ"
-
-msgid "Personal Web Page"
-msgstr "ទំព័រ​បណ្ដាញ​ផ្ទាល់ខ្លួន"
-
-#. aim_userinfo_t
-#. use_html_status
-msgid "Additional Information"
-msgstr "ព័ត៌មាន​បន្ថែម"
-
-msgid "Home Address"
-msgstr "អាសយដ្ឋាន​ផ្ទះ"
-
-msgid "Zip Code"
-msgstr "លេខ​តំបន់"
-
-msgid "Work Address"
-msgstr "អាសយដ្ឋាន​កន្លែងធ្វើការ"
-
-msgid "Work Information"
-msgstr "ព័ត៌មាន​ការងារ"
-
-msgid "Company"
-msgstr "ក្រុមហ៊ុន"
-
-msgid "Division"
-msgstr "វិធី​ចែក"
-
-msgid "Position"
-msgstr "ទីតាំង​"
-
-msgid "Web Page"
-msgstr "ទំព័រ​បណ្តាញ"
-
-msgid "Online Since"
-msgstr "លើ​បណ្ដាញ​តាំងពី"
-
-msgid "Member Since"
-msgstr "សមាជិក​តាំង​ពី"
-
-msgid "Capabilities"
-msgstr "សមត្ថភាព"
-
-msgid "Profile"
-msgstr "ទម្រង់"
-
-msgid "View web profile"
-msgstr "មើល​ទម្រង់​លើ​បណ្ដាញ"
-
-msgid "Invalid SNAC"
-msgstr "SNAC មិន​ត្រឹមត្រូវ"
-
-msgid "Server rate limit exceeded"
-msgstr ""
-
-msgid "Client rate limit exceeded"
-msgstr ""
-
-msgid "Service unavailable"
-msgstr "សេវា​មិនអាច​ប្រើបាន"
-
-msgid "Service not defined"
-msgstr "សេវា​មិនបានកំណត់"
-
-msgid "Obsolete SNAC"
-msgstr "SNAC ពេញលេញ"
-
-msgid "Not supported by host"
-msgstr "មិនបានគាំទ្រ​ដោយ​ម៉ាស៊ីន​ទេ"
-
-msgid "Not supported by client"
-msgstr "មិនបាន​គាំទ្រ​ដោយ​ម៉ាស៊ីន​ភ្ញៀវទេ"
-
-msgid "Refused by client"
-msgstr "បាន​បដិសេធ​ដោយ​ម៉ាស៊ីន​ភ្ញៀវ"
-
-msgid "Reply too big"
-msgstr "ការ​ឆ្លើយតប​ធំពេក"
-
-msgid "Responses lost"
-msgstr "បាត់បង់ការ​ឆ្លើយតប"
-
-msgid "Request denied"
-msgstr "បដិសេធ​សំណើ"
-
-msgid "Busted SNAC payload"
-msgstr "Busted SNAC payload"
-
-msgid "Insufficient rights"
-msgstr "សិទ្ធិ​មិន​គ្រប់គ្រាន់"
-
-msgid "In local permit/deny"
-msgstr "នៅ​ក្នុង​ការ​បដិសេធ/អនុញ្ញាត"
-
-msgid "Warning level too high (sender)"
-msgstr "កម្រិត​ព្រមាន​ខ្ពស់​ពេក (អ្នក​ផ្ញើ)"
-
-msgid "Warning level too high (receiver)"
-msgstr "កម្រិត​ព្រមាន​ខ្ពស់​ពេក (អ្នក​ទទួល)"
-
-msgid "User temporarily unavailable"
-msgstr "អ្នក​ប្រើ​មិនអាច​ប្រើបាន​ជា​បណ្ដោះអាសន្ន"
-
-msgid "No match"
-msgstr "គ្មានការ​ផ្គូផ្គង"
-
-msgid "List overflow"
-msgstr "បញ្ជី​លើស​ចំណុះ"
-
-msgid "Request ambiguous"
-msgstr "ការ​ស្នើ​មិន​ប្រាកដ"
-
-msgid "Queue full"
-msgstr "ជួរ​​ពេញ"
-
-msgid "Not while on AOL"
-msgstr "មិន​សម្រាក​នៅ​លើ AOL"
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear online to the chosen user even when your status is set to
-#. Invisible.
-msgid "Appear Online"
-msgstr "បង្ហាញ​លើ​បណ្ដាញ"
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear offline to the chosen user when your status is set to
-#. Invisible (this is the default).
-msgid "Don't Appear Online"
-msgstr ""
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to always appear offline to the chosen user (even when your status
-#. isn't Invisible).
-msgid "Appear Offline"
-msgstr "បង្ហាញ​នៅ​ក្រៅ​បណ្ដាញ"
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear offline to the chosen user if you are invisible, and
-#. appear online to the chosen user if you are not invisible (this is the
-#. default).
-msgid "Don't Appear Offline"
-msgstr ""
-
-msgid "you have no buddies on this list"
-msgstr ""
-
-#, c-format
-msgid ""
-"You can add a buddy to this list by right-clicking on them and selecting \"%s"
-"\""
-msgstr ""
-
-msgid "Visible List"
-msgstr ""
-
-msgid "These buddies will see your status when you switch to \"Invisible\""
-msgstr ""
-
-msgid "Invisible List"
-msgstr ""
-
-msgid "These buddies will always see you as offline"
-msgstr ""
 
 #, c-format
 msgid "<b>Group Title:</b> %s<br>"
@@ -7770,6 +6613,9 @@ msgstr "សន្និសីទ​វីដេអូ"
 msgid "Computer"
 msgstr "កុំព្យូទ័រ"
 
+msgid "Mobile Phone"
+msgstr "ទូរស័ព្ទ​​ចល័ត"
+
 msgid "PDA"
 msgstr "PDA"
 
@@ -8024,6 +6870,9 @@ msgstr "Realm"
 msgid "Exposure"
 msgstr "បង្ហាញ"
 
+msgid "Encoding"
+msgstr "ការ​អ៊ិនកូដ"
+
 #, c-format
 msgid "Unable to create socket: %s"
 msgstr "មិនអាច​បង្កើត​រន្ធ ៖ %s បាន​ទេ"
@@ -8044,6 +6893,9 @@ msgstr "បាន​​បដិសេធ​ ៖ ម៉ាស៊ីនបម្
 msgid "Error resolving %s"
 msgstr "កំហុស​ក្នុងការ​ដោះស្រាយ %s"
 
+msgid "Received invalid data on connection with server"
+msgstr "បាន​​ទទួល​ទិន្នន័យ​មិនត្រឹមត្រូវ​នៅពេល​តភ្ជាប់​ជា​មួយ​ម៉ាស៊ីន​បម្រើ"
+
 #, c-format
 msgid "Requesting %s's attention..."
 msgstr "កំពុងស្នើ​កា​រចាប់អារម្មណ៍​​របស់ %s..."
@@ -8060,6 +6912,12 @@ msgstr "បាទ/ចាស"
 
 msgid "_No"
 msgstr "ទេ"
+
+#. *
+#. * A wrapper for purple_request_action() that uses @c OK and @c Cancel buttons.
+#.
+msgid "_OK"
+msgstr "យល់ព្រម"
 
 #. *
 #. * A wrapper for purple_request_action() that uses Accept and Cancel buttons.
@@ -8131,8 +6989,17 @@ msgstr "មិន​បានកំណត់Unset"
 msgid "Do not disturb"
 msgstr "កុំ​រំខាន"
 
+msgid "Invisible"
+msgstr "មើល​មិន​ឃើញ"
+
 msgid "Extended away"
 msgstr "បាន​ពង្រីក​ការ​ចាកឆ្ងាយ"
+
+msgid "Mobile"
+msgstr "ចល័ត"
+
+msgid "Listening to music"
+msgstr "ស្ដាប់​តន្ត្រី"
 
 msgid "Feeling"
 msgstr ""
@@ -8800,6 +7667,9 @@ msgstr "/ជំនួយ"
 msgid "/Help/Online _Help"
 msgstr "/ជំនួយ/ជំនួយ​លើ​បណ្ដាញ"
 
+msgid "/Help/D_onate"
+msgstr ""
+
 msgid "/Help/_Build Information"
 msgstr ""
 
@@ -9325,6 +8195,9 @@ msgid "%d person in room"
 msgid_plural "%d people in room"
 msgstr[0] "មនុស្ស %d នៅ​ក្នុង​បន្ទប់"
 
+msgid "Typing"
+msgstr "វាយ"
+
 msgid "Stopped Typing"
 msgstr "ឈប់​វាយ"
 
@@ -9432,23 +8305,14 @@ msgstr "កំហុស"
 msgid "Fatal Error"
 msgstr "កំហុស​ធ្ងន់ធ្ងរ"
 
-msgid "artist"
-msgstr "សិល្បករ"
-
 msgid "lead developer"
 msgstr "ប្រធាន​អ្នកអភិវឌ្ឍ"
 
-msgid "voice and video"
-msgstr "សំឡេង និង​វីដេអូ"
-
-msgid "support"
-msgstr "គាំទ្រ"
-
-msgid "webmaster"
-msgstr "ប្រធាន​បណ្ដាញ"
-
 msgid "win32 port"
 msgstr "ច្រក win32"
+
+msgid "artist"
+msgstr "សិល្បករ"
 
 #. Translators: This is a person's name. For most languages we recommend
 #. not translating it.
@@ -9461,9 +8325,18 @@ msgstr "អ្នក​ថែទា"
 msgid "libfaim maintainer"
 msgstr "អ្នក​ថែទាំ libfaim"
 
+msgid "webmaster"
+msgstr "ប្រធាន​បណ្ដាញ"
+
 #. If "lazy bum" translates literally into a serious insult, use something else or omit it.
 msgid "hacker and designated driver [lazy bum]"
 msgstr "អ្នកលួច និង​កម្មវិធី​បញ្ជាដែល​បាន​ជ្រើស [អាល់ប៊ុម​កម្ជិល]"
+
+msgid "voice and video"
+msgstr "សំឡេង និង​វីដេអូ"
+
+msgid "support"
+msgstr "គាំទ្រ"
 
 msgid "support/QA"
 msgstr "គាំទ្រ/QA"
@@ -9788,20 +8661,20 @@ msgstr ""
 
 #, c-format
 msgid ""
-"<FONT SIZE=\"4\"><B>Helpful Resources</B></FONT><BR>\t<A HREF=\"%s"
-"\">Website</A><BR>\t<A HREF=\"%s\">Frequently Asked Questions</A><BR>\tIRC "
-"Channel: #pidgin on irc.freenode.net<BR>\tXMPP MUC: devel@conference.pidgin."
-"im<BR><BR>"
+"<FONT SIZE=\"4\"><B>Helpful Resources</B></FONT><BR>\t<A "
+"HREF=\"%s\">Website</A><BR>\t<A HREF=\"%s\">Frequently Asked Questions</"
+"A><BR>\tIRC Channel: #pidgin on irc.libera.chat<BR>\tXMPP MUC: "
+"devel@conference.pidgin.im<BR><BR>"
 msgstr ""
 
 msgid ""
 "<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
 "emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"http://pidgin.im/pipermail/"
-"support/\">archive</a>)<br/>We can't help with third-party protocols or "
-"plugins!<br/>This list's primary language is <b>English</b>.  You are "
-"welcome to post in another language, but the responses may be less helpful."
-"<br/>"
+"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
+"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
+"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
+"You are welcome to post in another language, but the responses may be less "
+"helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10858,6 +9731,9 @@ msgstr "មិនអាច​ចាប់ផ្ដើម​កម្មវិធ
 msgid "Use _automatically detected IP address: %s"
 msgstr "ប្រើ​អាសយដ្ឋាន IP ដែល​បាន​រកឃើញ ៖ %s"
 
+msgid "IP Address"
+msgstr "អាសយដ្ឋាន IP"
+
 msgid "ST_UN server:"
 msgstr "ម៉ាស៊ីន​បម្រើ STUN ៖"
 
@@ -11285,6 +10161,9 @@ msgstr ""
 msgid "Unknown output"
 msgstr ""
 
+msgid "_Add"
+msgstr "បន្ថែម"
+
 #. list button
 msgid "_Get List"
 msgstr "យក​បញ្ជី"
@@ -11457,6 +10336,10 @@ msgstr ""
 "<b>ឯកសារ ៖</b> %s\n"
 "<b>ទំហំ​ឯកសារ ៖</b> %s\n"
 "<b>ទំហំ​រូបភាព ៖</b> %dx%d"
+
+#. Label
+msgid "Buddy Icon"
+msgstr "រូបតំណាង​មិត្តភក្ដិ"
 
 #, c-format
 msgid "The file '%s' is too large for %s.  Please try a smaller image.\n"
@@ -12367,6 +11250,9 @@ msgstr "ការី"
 msgid "Half Operator"
 msgstr "ការី​ពាក់កណ្ដាល"
 
+msgid "Voice"
+msgstr "សំឡេង"
+
 msgid "Authorization dialog"
 msgstr "ប្រ​អប់អនុញ្ញាត​"
 
@@ -12618,6 +11504,43 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
+msgid "ALSA"
+msgstr ""
+
+#. "esdmon",	"ESD", ?
+msgid "OSS"
+msgstr ""
+
+msgid "PulseAudio"
+msgstr ""
+
+msgid "sndio"
+msgstr ""
+
+msgid "aRts"
+msgstr ""
+
+msgid "ESD"
+msgstr ""
+
+msgid "Test Input"
+msgstr ""
+
+msgid "KS Video"
+msgstr ""
+
+msgid "Quickcam"
+msgstr ""
+
+msgid "Video4Linux"
+msgstr ""
+
+msgid "Video4Linux2"
+msgstr ""
+
+msgid "Video4Linux MJPEG"
+msgstr ""
+
 msgid "_Plugin"
 msgstr "កម្មវិធី​ជំនួយ"
 
@@ -12809,8 +11732,8 @@ msgstr ""
 #, no-c-format
 msgid ""
 "Error Installing Spellchecking ($R3).$\\rIf retrying fails, manual "
-"installation instructions are at: http://developer.pidgin.im/wiki/Installing"
-"%20Pidgin#manual_win32_spellcheck_installation"
+"installation instructions are at: http://developer.pidgin.im/wiki/"
+"Installing%20Pidgin#manual_win32_spellcheck_installation"
 msgstr ""
 
 #. Installer Subsection Detailed Description

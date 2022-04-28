@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 22:08-0500\n"
-"PO-Revision-Date: 2020-06-06 08:16+0000\n"
-"Last-Translator: Gary Kramlich <grim@reaperworld.com>\n"
+"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"PO-Revision-Date: 2012-02-20 18:15+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Bodo (http://www.transifex.com/pidgin/pidgin/language/brx/)\n"
 "Language: brx\n"
 "MIME-Version: 1.0\n"
@@ -811,7 +811,7 @@ msgstr "मोनगासिनो दं"
 
 #, c-format
 msgid "Conversation in %s on %s"
-msgstr "%s आव रायज्लायनाय"
+msgstr ""
 
 #, c-format
 msgid "Conversation with %s on %s"
@@ -1786,7 +1786,6 @@ msgstr "+++ %s साइन अन खालामबाय"
 msgid "+++ %s signed off"
 msgstr "+++ %s साइन अफ खालामबाय"
 
-#. Undocumented
 msgid "Unknown error"
 msgstr "मोन्थिमोनै गोरोन्थि"
 
@@ -2225,10 +2224,25 @@ msgstr "जथुम्मा सोरजिनायाव जानाय ग
 msgid "Could not create media pipeline"
 msgstr ""
 
+#. "aasink", "AALib", Didn't work for me
+#. "aasink",	"AALib", Didn't work for me
+msgid "DirectDraw"
+msgstr ""
+
+msgid "OpenGL"
+msgstr ""
+
+msgid "X Window System"
+msgstr ""
+
+msgid "X Window System (Xv)"
+msgstr ""
+
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
 #. * user to check if her speakers or headphones have been
 #. * set up correctly for voice calling.
+#. "audiotestsrc wave=silence", "Silence",
 msgid "Test Sound"
 msgstr ""
 
@@ -2789,7 +2803,7 @@ msgstr "हाबफैनाय सावरायनायनि थाखा�
 
 msgid ""
 "Causes conversation windows to appear as other users begin to message you.  "
-"This works for AIM, ICQ, XMPP, and Sametime"
+"This works for XMPP and Sametime"
 msgstr ""
 
 msgid "You feel a disturbance in the force..."
@@ -3383,7 +3397,17 @@ msgstr "SSL बाहाय"
 msgid "Authenticate with SASL"
 msgstr ""
 
+msgid "SASL login name"
+msgstr ""
+
 msgid "Allow plaintext SASL auth over unencrypted connection"
+msgstr ""
+
+#, fuzzy
+msgid "Seconds between sending messages"
+msgstr "खौरां दैथाय हरनो हायाखै।"
+
+msgid "Maximum messages to send at once"
 msgstr ""
 
 msgid "Bad mode"
@@ -3821,8 +3845,6 @@ msgid ""
 "%s requires plaintext authentication over an unencrypted connection.  Allow "
 "this and continue authentication?"
 msgstr ""
-"आनइनक्रापटेट फोनांजाबआव सार्भारनो समान फराय बिजाब थार फोरमान गोनांथि जायो।  बेखौ "
-"गनायथि हो आरो थार फोरमानखौ सालायलांबाय था?"
 
 msgid "Plaintext Authentication"
 msgstr "समान फराय बिजाब थार फोरमान"
@@ -3855,40 +3877,6 @@ msgstr "SASL थारफोरमाना फेलें जाबाय"
 #, c-format
 msgid "SASL error: %s"
 msgstr "SASL गोरोन्थि: %s"
-
-msgid "Invalid Encoding"
-msgstr "बाहायजायै एनक’डिं"
-
-msgid "Unsupported Extension"
-msgstr "हेफाजाबहोयै फेहेरनाय"
-
-msgid ""
-"Unexpected response from the server.  This may indicate a possible MITM "
-"attack"
-msgstr ""
-"सार्भार निफ्राय मिजिंथियै फिननाय। बेयो MITM गाग्लोबनो हागौ होनानै दिन्थिनो हागौ। "
-
-msgid ""
-"The server does support channel binding, but did not appear to advertise "
-"it.  This indicates a likely MITM attack"
-msgstr ""
-"सार्भारा चेनेल बाइन्डिंखौ हेफाजाब होआ, नाथाय बेखौ फोसावदिं खालामनाय बादि नुआ। बेयो "
-"MITM गाग्लोबनो हागौ होनानै दिन्थिनो हागौ। "
-
-msgid "Server does not support channel binding"
-msgstr "सार्भारा चेनेल बाइन्डिंखौ हेफाजाब होआ।"
-
-msgid "Unsupported channel binding method"
-msgstr "हेफाजाबहोयै चेनेल बाइन्डिं खान्थि"
-
-msgid "User not found"
-msgstr "बाहायग्रा मोनाखै"
-
-msgid "Invalid Username Encoding"
-msgstr "बाहायजायै बाहायग्रामुं एनक’डिं"
-
-msgid "Resource Constraint"
-msgstr "धोन दबथायनाय"
 
 msgid "Unable to canonicalize username"
 msgstr "बाहायग्रामुंखौ केन’निकेल खालामनो हायाखै"
@@ -4474,6 +4462,9 @@ msgstr "बाहाय जायै मोन्थाय गोहो हो�
 msgid "Authorization mechanism too weak"
 msgstr "मोन्थाय गोहो होनाय जनथ्र'आ जोबोद लोरबां"
 
+msgid "Incorrect username or password"
+msgstr "गोरोन्थि बाहायग्रामुं एबा पासवर्ड"
+
 msgid "Temporary Authentication Failure"
 msgstr "अरायथा नङै मोन्थाय गोहो होनाय फेलें"
 
@@ -4518,6 +4509,9 @@ msgstr "पलिसि सिफायनाय"
 
 msgid "Remote Connection Failed"
 msgstr "रिमट फोनांजाबनाय फेलें जाबाय"
+
+msgid "Resource Constraint"
+msgstr "धोन दबथायनाय"
 
 msgid "Restricted XML"
 msgstr "रेस्ट्रिक्ट खालामनाय XML"
@@ -5071,7 +5065,6 @@ msgstr "लाजिगुसु"
 msgid "Sick"
 msgstr "बेरामि"
 
-#. Sleepy / Tired
 msgid "Sleepy"
 msgstr "उन्दुनाय"
 
@@ -5160,6 +5153,9 @@ msgstr "पासवर्डआ मेयाद बारलांबाय"
 msgid "Incorrect password"
 msgstr "गोरोनथि पासवर्ड"
 
+msgid "User not found"
+msgstr "बाहायग्रा मोनाखै"
+
 msgid "Account has been disabled"
 msgstr "एकाउन्टखौ लोरबां खालामबाय"
 
@@ -5180,9 +5176,6 @@ msgstr "नोंथाङा गावनो दाजाबदेरनो ह
 
 msgid "Master archive is misconfigured"
 msgstr "गाहाय दोन्थुमसालिखौ गाज्रियै बायजो महर दाबाय"
-
-msgid "Incorrect username or password"
-msgstr "गोरोन्थि बाहायग्रामुं एबा पासवर्ड"
 
 msgid "Could not recognize the host of the username you entered"
 msgstr "नोंथाङा हाबहोनाय बाहायग्रामुंनि हस्टखौ सिनायथिनो हायाखै"
@@ -5397,1204 +5390,6 @@ msgstr "सार्भार थं"
 
 msgid "Server port"
 msgstr "सार्भार पर्ट"
-
-msgid "Please authorize me so I can add you to my buddy list."
-msgstr "अननानै आंनि बाडि फारिलाइआव नोंथांखौ दाजाबनो हानाय बादि आंखौ मोनथाय गोहो हो।"
-
-msgid "No reason given."
-msgstr "जेबो जाउन होनाय गैया ।"
-
-msgid "Authorization Denied Message:"
-msgstr "मोन्थाय गोहो होनाया खौरांखौ नेवसिबाय:"
-
-#. *
-#. * A wrapper for purple_request_action() that uses @c OK and @c Cancel buttons.
-#.
-msgid "_OK"
-msgstr "_OK"
-
-#, c-format
-msgid "Received unexpected response from %s: %s"
-msgstr "%s निफ्राय मिजिंथियै फिननाय मोनबाय: %s"
-
-#, c-format
-msgid "Received unexpected response from %s"
-msgstr "%s निफ्राय मिजिंथियै फिननाय मोनबाय"
-
-msgid ""
-"You have been connecting and disconnecting too frequently. Wait ten minutes "
-"and try again. If you continue to try, you will need to wait even longer."
-msgstr ""
-"नोंथाङा गले गले फोनांजाबदों आरो फोनांजाब गैया खालामदों । जि मिनिट नेनानै फिन नाजा । "
-"जदि नोंथाङा नाजाबाय थागोन, नोंथाङा गोलाव सम नेबावनो गोनां जानो हागौ ।"
-
-msgid ""
-"You required encryption in your account settings, but one of the servers "
-"doesn't support it."
-msgstr ""
-"नोंथांनो नोंथांनि एकाउन्ट सेटिंयाव एनक्रिपसन नांगौ जादों, नाथाय सार्भारनि मोनसेआ बेखौ "
-"हेफाजाब खालामा।"
-
-#. Note to translators: The first %s is a URL, the second is an
-#. error message.
-#, c-format
-msgid "Error requesting %s: %s"
-msgstr "%s खावलायनायाव जानाय गोरोन्थि: %s"
-
-msgid "The server returned an empty response"
-msgstr "सार्भारा मोनसे लांदां फिननाय फैफिन होबाय"
-
-msgid ""
-"Server requested that you fill out a CAPTCHA in order to sign in, but this "
-"client does not currently support CAPTCHAs."
-msgstr ""
-"सार्भारा खावलायो जाहाते साइन-इन खालामनो थाखाय नोंथाङा मोनसे CAPTCHA खौ देरखां "
-"होयो, नाथाय बे क्लाइन्टा दासान्दि CAPTCHAs खौ हेफाजाब होआ।"
-
-msgid "AOL does not allow your screen name to authenticate here"
-msgstr "बेयाव AOL आ नोंथांनि स्क्रिन मुंखौ गनायथि होआ"
-
-msgid ""
-"(There was an error receiving this message.  The buddy you are speaking with "
-"is probably using a different encoding than expected.  If you know what "
-"encoding he is using, you can specify it in the advanced account options for "
-"your AIM/ICQ account.)"
-msgstr ""
-"(बे खौरांखौ मोननायाव मोनसे गोरोन्थि दंमोन । नोंथाङा बुंनाय बाडिया मिजिं थिनाय निख्रुइ "
-"मोनसे गुबुन एनक'डि बाहायजादों जानो हागौ। जदि नोंथाङा एनक'डिं बाहायनायखौ "
-"मोनथियोब्ला, नोंथाङा नोंथांनि AIM/ICQ एकाउन्टनि थाखाय जौगानाय हिसाब उफ्राफोराव थि "
-"खालामनो हायो।)"
-
-#, c-format
-msgid ""
-"(There was an error receiving this message.  Either you and %s have "
-"different encodings selected, or %s has a buggy client.)"
-msgstr ""
-"(बे खौरांखौ मोननायाव मोनसे गोरोन्थि दंमोन। नोंथांहा आरो %s हा गुबुन एनक'डिं सायखनाय दङ "
-"एबा %s हा मोनसे बागि क्लाइन्ट दङ।)"
-
-msgid "Could not join chat room"
-msgstr "सावरायनाय खथाजों जइन जानो हायाखै"
-
-msgid "Invalid chat room name"
-msgstr "बाहायजायै सावरायनाय खथानि मुं"
-
-msgid "Invalid error"
-msgstr "बाहाय जायै गोरोन्थि"
-
-msgid "Not logged in"
-msgstr "लग इन खालामनाय नङा"
-
-msgid "Cannot receive IM due to parental controls"
-msgstr "बिमा-बिफायारि दबथायनायनि थाखाय IM खौ मोननो हायाखै"
-
-msgid "Cannot send SMS without accepting terms"
-msgstr "रादायखौ आजावा बालानो SMS खौ दैथायनो हाया"
-
-msgid "Cannot send SMS"
-msgstr "SMS खौ दैथायनो हाया"
-
-#. SMS_WITHOUT_DISCLAIMER is weird
-msgid "Cannot send SMS to this country"
-msgstr "SMS खौ बे हादोताव दैथायनो हाया"
-
-#. Undocumented
-msgid "Cannot send SMS to unknown country"
-msgstr "SMS खौ मोनथिमोनै हादोताव दैथायनो हाया"
-
-msgid "Bot accounts cannot initiate IMs"
-msgstr "बट एकाउन्टफोरा IMs खौ जागायनो हाया"
-
-msgid "Bot account cannot IM this user"
-msgstr "बट एकाउन्टा बे बाहायग्राखौ IM खालामनो हाया"
-
-msgid "Bot account reached IM limit"
-msgstr "बट एकाउन्टा IM सिमाखौ सौहैबाय"
-
-msgid "Bot account reached daily IM limit"
-msgstr "बट एकाउन्टा सानफ्रोमबो IM सिमाखौ सौहैबाय"
-
-msgid "Bot account reached monthly IM limit"
-msgstr "बट एकाउन्टा दानालि IM सिमाखौ सौहैबाय"
-
-msgid "Unable to receive offline messages"
-msgstr "अफलाइन खौरांफोरखौ मोननो हायाखै"
-
-msgid "Offline message store full"
-msgstr "अफलाइन खौरां दोनथुमसालिया आबुं"
-
-#, c-format
-msgid "Unable to send message: %s (%s)"
-msgstr "खौरां दैथाय हरनो हायाखै: %s (%s)"
-
-#, c-format
-msgid "Unable to send message: %s"
-msgstr "खौरां दैथाय हरनो हाया: %s"
-
-#, c-format
-msgid "Unable to send message to %s: %s (%s)"
-msgstr "खौरांखौ  %s आव दैथाय हरनो हायाखै: %s (%s)"
-
-#, c-format
-msgid "Unable to send message to %s: %s"
-msgstr "%s आव खौरां दैथाय हरनो हायाखै: %s"
-
-msgid "Thinking"
-msgstr "सानगासिनो दं"
-
-msgid "Shopping"
-msgstr "हाथाय खालाम गासिनो दं"
-
-msgid "Questioning"
-msgstr "सोंलु खालाम गासिनो दं"
-
-msgid "Eating"
-msgstr "जागासिनो दं"
-
-msgid "Watching a movie"
-msgstr "मोनसे साउथुन नाइगासिनो दं"
-
-msgid "Typing"
-msgstr "टाइप खालाम गासिनो दङ"
-
-msgid "At the office"
-msgstr "मावख’आव"
-
-msgid "Taking a bath"
-msgstr "दुगै गासिनो दं"
-
-msgid "Watching TV"
-msgstr "TV नाइ गासिनो दं"
-
-msgid "Having fun"
-msgstr "जंखाय-लायगासिनो दं"
-
-msgid "Sleeping"
-msgstr "उन्दु गासिनो दं"
-
-msgid "Using a PDA"
-msgstr "मोनसे PDA बाहाय गासिनो दं"
-
-msgid "Meeting friends"
-msgstr "लोगोफोरजों लोगो हमलाय गासिनो दं"
-
-msgid "On the phone"
-msgstr "फनाव दं"
-
-msgid "Surfing"
-msgstr "सार्फ खालाम गासिनो दं"
-
-#. "I am mobile." / "John is mobile."
-msgid "Mobile"
-msgstr "मबाइल"
-
-msgid "Searching the web"
-msgstr "वेबखौ नागिर गासिनो दं"
-
-msgid "At a party"
-msgstr "पार्टिआव दं"
-
-msgid "Having Coffee"
-msgstr "कफि लोंगासिनो दं"
-
-#. Playing video games
-msgid "Gaming"
-msgstr "गेले गासिनो दं"
-
-msgid "Browsing the web"
-msgstr "वेबखौ ब्राउज खालाम गासिनो दं"
-
-msgid "Smoking"
-msgstr "सोब गासिनो दं"
-
-msgid "Writing"
-msgstr "लिर गासिनो दं"
-
-#. Drinking [Alcohol]
-msgid "Drinking"
-msgstr "लोंगासिनो दं"
-
-msgid "Listening to music"
-msgstr "देंखो खोना संगासिनो दङ"
-
-msgid "Studying"
-msgstr "फराय गासिनो दं"
-
-msgid "Working"
-msgstr "खामानि मावगासिनो दं"
-
-msgid "In the restroom"
-msgstr "जिरायनाय खथायाव दं"
-
-msgid "Received invalid data on connection with server"
-msgstr "सार्भारजों थानाय फोनांजाबाव बाहायजायै डाटा मोनबाय"
-
-msgid "Error parsing response from authentication server"
-msgstr ""
-
-msgid "Unknown error during authentication"
-msgstr ""
-
-#. *< type
-#. *< ui_requirement
-#. *< flags
-#. *< dependencies
-#. *< priority
-#. *< id
-#. *< name
-#. *< version
-#. *  summary
-#. *  description
-msgid "AIM Protocol Plugin"
-msgstr "AIM प्र'ट'कल प्लागिन"
-
-msgid "ICQ UIN..."
-msgstr "ICQ UIN..."
-
-#. *< type
-#. *< ui_requirement
-#. *< flags
-#. *< dependencies
-#. *< priority
-#. *< id
-#. *< name
-#. *< version
-#. *  summary
-#. *  description
-msgid "ICQ Protocol Plugin"
-msgstr "ICQ प्र'ट'कल प्लागिन"
-
-msgid "Encoding"
-msgstr "एनक'डिं"
-
-msgid "The remote user has closed the connection."
-msgstr "रिमट बाहायग्राया फोनांजाबखौ बन्द खालामबाय।"
-
-msgid "The remote user has declined your request."
-msgstr "रिमट बाहायग्राया नोंथांनि खावलायनायखौ नेवसिबाय।"
-
-#, c-format
-msgid "Lost connection with the remote user:<br>%s"
-msgstr "रिमट बाहायग्राजों फोनांजाबा गोमाबाय:<br>%s"
-
-msgid "Received invalid data on connection with remote user."
-msgstr "रिमट बाहायग्राजों फोनांजाबआव बाहाय जायै डाटा मोनबाय।"
-
-msgid "Unable to establish a connection with the remote user."
-msgstr "रिमट बाहायग्राजों मोनसे फोनांजाब गाइसननो हायाखै।"
-
-msgid "Direct IM established"
-msgstr "थोंजों IM गायसनबाय।"
-
-#, c-format
-msgid ""
-"%s tried to send you a %s file, but we only allow files up to %s over Direct "
-"IM.  Try using file transfer instead.\n"
-msgstr ""
-"%s आ नोंथांनो मोनसे %s फाइल दैथाय हरनो नाजाबाय, नाथाय जों फाइलफोरखौ थोंजों IM नि "
-"गेजेरजों %s सिमल' गनायथि होयो। बेनि सोलायै फाइल सोलायनाय बाहायनानै नाजा।\n"
-
-#, c-format
-msgid "File %s is %s, which is larger than the maximum size of %s."
-msgstr "फाइल %s आ जाबाय %s, जाय %s नि बांसिन बिबांनि महर निख्रुइ देरसिन।"
-
-msgid "Free For Chat"
-msgstr "सावरायनायनि थाखाय उदां"
-
-msgid "Not Available"
-msgstr "मोननो हाथाव नङा"
-
-msgid "Occupied"
-msgstr "दखल खालामनाय"
-
-msgid "Web Aware"
-msgstr "वेब सांग्रां"
-
-msgid "Invisible"
-msgstr "नुनो मोनै"
-
-msgid "Evil"
-msgstr "इनाय"
-
-msgid "Depression"
-msgstr "गोसो बायनाय"
-
-msgid "At home"
-msgstr "न’आव"
-
-msgid "At work"
-msgstr "खामानिआव"
-
-msgid "At lunch"
-msgstr "सानजौफुनि जानायाव"
-
-#, c-format
-msgid "Unable to connect to authentication server: %s"
-msgstr "थार फोरमान सार्भारजों फोनांजाब खालामनो हायाखै: %s"
-
-#, c-format
-msgid "Unable to connect to BOS server: %s"
-msgstr "BOS सार्भारजों फोनांजाब खालामनो हायाखै: %s"
-
-msgid "Username sent"
-msgstr "बाहायग्रामुं दैथाय हरबाय"
-
-msgid "Connection established, cookie sent"
-msgstr "फोनांजाब गायसनबाय, कुकि दैथाय हरबाय"
-
-#. TODO: Don't call this with ssi
-msgid "Finalizing connection"
-msgstr "फोनांजाब थि खालाम गासिनो दङ"
-
-#, c-format
-msgid ""
-"Unable to sign on as %s because the username is invalid.  Usernames must be "
-"a valid email address, or start with a letter and contain only letters, "
-"numbers and spaces, or contain only numbers."
-msgstr ""
-"%s बादि साइन-अन खालामनो हायाखै मानोना बाहायग्रामुंआ बाहायजायै। बाहायग्रामुंफोरा मोनसे "
-"बाहाय जाथाव इ-मेइल थं जाथार नांगौ, एबा हांखोजों जागाय नांगौ आरो बेयाव हांखोल’, "
-"अनजिमा आरो स्पेस, एबा अनजिमाफोरल’ थानांगौ। "
-
-msgid ""
-"You required encryption in your account settings, but encryption is not "
-"supported by your system."
-msgstr ""
-"नोंथांनो नोंथांनि एकाउन्ट सेटिंयाव एनक्रिपसन नांगौ जादों, नाथाय एनक्रिपसना नोंथांनि "
-"सिस्टेमजों हेफाजाब होजाया।"
-
-msgid ""
-"You required Kerberos authentication but encryption is disabled in your "
-"account settings."
-msgstr ""
-
-#, c-format
-msgid "You may be disconnected shortly.  If so, check %s for updates."
-msgstr ""
-"नोंथाङा थाबैनो फोनांजाबगैयै जानो हागौ। बेबादि जायोब्ला आपडेटफोरनि थाखाय %s खौ आनजाद "
-"खालाम।"
-
-msgid "Unable to get a valid AIM login hash."
-msgstr "बाहाय जाथाव  AIM लगिन हेश मोननो हाया।"
-
-msgid "Unable to get a valid login hash."
-msgstr "बाहायथाव लगिन हेश मोननो हाया।"
-
-msgid "Received authorization"
-msgstr "थार फोरमान मोनबाय"
-
-#. Unregistered username
-msgid "Username does not exist"
-msgstr "बाहायग्रामुं गैया"
-
-#. Suspended account
-msgid "Your account is currently suspended"
-msgstr "नोंथांनि एकाउन्टा दासान्दि दोनथ’ जादों "
-
-#. service temporarily unavailable
-msgid "The AOL Instant Messenger service is temporarily unavailable."
-msgstr "AOL हरखाब मेसेनजार हाबाखौ दा सान्दि मोननो हाथाव नङा।"
-
-#. username connecting too frequently
-msgid ""
-"Your username has been connecting and disconnecting too frequently. Wait ten "
-"minutes and try again. If you continue to try, you will need to wait even "
-"longer."
-msgstr ""
-"नोंथांनि बाहायग्रामुंजों फोनांजाब खालाम जागासिनो दं आरो थाब-थाबैनो फोनांजाबगैयैबो खालाम "
-"जागासिनो दं। जि मिनिट नेथ’ आरो फिन नाजा। नोंथाङा नाजाबाय थायोब्ला नोंथांनो "
-"गोबावसिन सम नांनो हागौ।"
-
-#. client too old
-#, c-format
-msgid "The client version you are using is too old. Please upgrade at %s"
-msgstr ""
-"नोंथाङा बाहायनाय क्लाइन्ट लिरस्लायनाय जोबोद गोजाम । अननानै %s आव आपग्रेड खालाम।"
-
-#. IP address connecting too frequently
-msgid ""
-"Your IP address has been connecting and disconnecting too frequently. Wait a "
-"minute and try again. If you continue to try, you will need to wait even "
-"longer."
-msgstr ""
-"नोंथांनि IP थंजों फोनांजाब खालाम जागासिनो दं आरो थाब-थाबैनो फोनांजाबगैयैबो खालाम "
-"जागासिनो दं। जि मिनिट नेथ’ आरो फिन नाजा। नोंथाङा नाजाबाय थायोब्ला नोंथांनो "
-"गोबावसिन सम नांनो हागौ। "
-
-msgid "The SecurID key entered is invalid"
-msgstr "SecurID साबि हाबहोनाया बाहायजायै।"
-
-msgid "Enter SecurID"
-msgstr "रैखाथिID एन्टार खालाम"
-
-msgid "Enter the 6 digit number from the digital display."
-msgstr "डिजिटाल दिन्थिफुंनाय निफ्राय 6 सानखान्थिनि अनजिमा एन्टार खालाम।"
-
-msgid "Password sent"
-msgstr "पासवर्ड दैथाय हरबाय"
-
-msgid "Unable to initialize connection"
-msgstr "फोनांजाब खालामजेननो हायाखै"
-
-#, c-format
-msgid ""
-"The user %u has denied your request to add them to your buddy list for the "
-"following reason:\n"
-"%s"
-msgstr ""
-"बाहायग्राया %u गाहायनि जाहोननि थाखाय नोंथांनि बाडि फारिलाइआव बेपोरखौ दाजाबदेरनो "
-"नोंथांनि खावलायनायखौ नेवसिबाय:\n"
-"%s"
-
-msgid "ICQ authorization denied."
-msgstr "ICQ मोन्थाय गोहो होनाया नेवसिबाय"
-
-#. Someone has granted you authorization
-#, c-format
-msgid "The user %u has granted your request to add them to your buddy list."
-msgstr ""
-"बाहायग्रा %u आ नोंथांनि बाडि फारिलाइआव बेफोरखौ दाजाबदेरनो नोंथांनि खावलायनायखौ "
-"गनायथि होबाय।"
-
-#, c-format
-msgid ""
-"You have received a special message\n"
-"\n"
-"From: %s [%s]\n"
-"%s"
-msgstr ""
-"नोंथाङा मोनसे जुनिया खौरां मोनबाय।\n"
-"\n"
-"निफ्राय: %s [%s]\n"
-"%s"
-
-#, c-format
-msgid ""
-"You have received an ICQ page\n"
-"\n"
-"From: %s [%s]\n"
-"%s"
-msgstr ""
-"नोंथाङा मोनसे ICQ बिखं मोनबाय।\n"
-"\n"
-" निफ्राय: %s [%s]\n"
-"%s"
-
-#, c-format
-msgid ""
-"You have received an ICQ email from %s [%s]\n"
-"\n"
-"Message is:\n"
-"%s"
-msgstr ""
-"नोंथाङा %s [%s] निफ्राय मोनसे ICQ इ-मेइल मोनबाय\n"
-"\n"
-"खौरांआ:\n"
-"%s"
-
-#, c-format
-msgid "ICQ user %u has sent you a buddy: %s (%s)"
-msgstr "ICQ बाहायग्रा %u आ नोंथांनो मोनसे बाडि दैथाय हरबाय: %s (%s)"
-
-msgid "Do you want to add this buddy to your buddy list?"
-msgstr "नोंथाङा बे बाडिखौ नोंथांनि बाडि फारिलाइआव सरजाबनो सानो नामा ?"
-
-msgid "_Add"
-msgstr "दाजाबदेर"
-
-msgid "_Decline"
-msgstr "नेवसिगार"
-
-#, c-format
-msgid "You missed %hu message from %s because it was invalid."
-msgid_plural "You missed %hu messages from %s because they were invalid."
-msgstr[0] "आपको %hu संदेश %s से नहीं मिला क्योंकि यह अवैध था."
-msgstr[1] "आपको %hu संदेश %s से नहीं मिला क्योंकि यह अवैध था."
-
-#, c-format
-msgid "You missed %hu message from %s because it was too large."
-msgid_plural "You missed %hu messages from %s because they were too large."
-msgstr[0] "आपको %hu संदेश %s से नहीं मिला क्योंकि यह बहुत बड़ा है"
-msgstr[1] "आपको %hu संदेश %s से नहीं मिला क्योंकि यह बहुत बड़ा है"
-
-#, c-format
-msgid ""
-"You missed %hu message from %s because the rate limit has been exceeded."
-msgid_plural ""
-"You missed %hu messages from %s because the rate limit has been exceeded."
-msgstr[0] "आपको %hu संदेश %s से नहीं मिला क्योंकि दर सीमा पार कर गया."
-msgstr[1] "आपको %hu संदेश %s से नहीं मिला क्योंकि दर सीमा पार कर गया."
-
-#, c-format
-msgid ""
-"You missed %hu message from %s because his/her warning level is too high."
-msgid_plural ""
-"You missed %hu messages from %s because his/her warning level is too high."
-msgstr[0] ""
-"नोंथाङा %s निफ्राय %hu खौरांखौ खोमाबाय मानोना बिनि सांग्रांथि लेभेला जोबोद गोजौ।"
-msgstr[1] ""
-"नोंथाङा %s निफ्राय %hu खौरांफोरखौ खोमाबाय मानोना बिनि सांग्रांथि लेभेला जोबोद गोजौ।"
-
-#, c-format
-msgid "You missed %hu message from %s because your warning level is too high."
-msgid_plural ""
-"You missed %hu messages from %s because your warning level is too high."
-msgstr[0] ""
-"नोंथाङा %s निफ्राय %hu खौरांखौ खोमाबाय मानोना नोंथांनि सांग्रांथि लेभेला जोबोद गोजौ।"
-msgstr[1] ""
-"नोंथाङा %s निफ्राय %hu खौरांफोरखौ खोमाबाय मानोना नोंथांनि सांग्रांथि लेभेला जोबोद गोजौ।"
-
-#, c-format
-msgid "You missed %hu message from %s for an unknown reason."
-msgid_plural "You missed %hu messages from %s for an unknown reason."
-msgstr[0] "आपको %hu संदेश %s से नहीं मिला किसी अनजान कारण से."
-msgstr[1] "आपको %hu संदेश %s से नहीं मिला किसी अनजान कारण से."
-
-msgid "Your AIM connection may be lost."
-msgstr "नोंथांनि AIM फोनांजाबा गोमानो हागौ ।"
-
-#, c-format
-msgid "You have been disconnected from chat room %s."
-msgstr "नोंथांखौ सावरायनाय खथा %s निफ्राय फोनांजाबगोयै खालाम जाबाय।"
-
-msgid "The new formatting is invalid."
-msgstr "गोदान दाथाय दानाया बाहाय जाथाव नङा ।"
-
-msgid "Username formatting can change only capitalization and whitespace."
-msgstr ""
-"बाहायग्रा मुं दाथाय दानाया खालि गेदेर हांखो खालामनाय आरो गुफुर जायगाखौ सोलायनो हायो।"
-
-msgid "Pop-Up Message"
-msgstr "प'प-आप खौरां"
-
-#, c-format
-msgid "The following username is associated with %s"
-msgid_plural "The following usernames are associated with %s"
-msgstr[0] "निम्न स्क्रीन-नाम %s के साथ जुड़ा है."
-msgstr[1] "निम्न स्क्रीन-नाम %s के साथ जुड़ा है"
-
-#, c-format
-msgid "No results found for email address %s"
-msgstr "%s इ-मेइल थंनि थाखाय जेबो फिथाइ मोनाखै।"
-
-#, c-format
-msgid "You should receive an email asking to confirm %s."
-msgstr "नोंथाङा %s खौ रोखा खालामनो सोंनाय मोनसे इ-मेइल मोनथार नांगौ।"
-
-msgid "Account Confirmation Requested"
-msgstr "एकाउन्ट थि खालामनाय खावलायबाय।"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to format username because the requested name differs "
-"from the original."
-msgstr ""
-"गोरोन्थि 0x%04x: स्क्रिन मुं दाथाय दानो हाया मानोना खावलायनाय स्क्रिन मुंआ गुबै निफ्राय "
-"आलादा।"
-
-#, c-format
-msgid "Error 0x%04x: Unable to format username because it is invalid."
-msgstr "गोरोन्थि 0x%04x: स्क्रिन मुं दाथाय दानो हाया मानोना बेयो बाहाय जाथाव नङा ।"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to format username because the requested name is too "
-"long."
-msgstr ""
-"गोरोन्थि 0x%04x: स्क्रिन मुं दाथाय दानो हाया मानोना खावलायनाय स्क्रिन मुङा जोबोद "
-"गोलाव।"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because there is already a "
-"request pending for this username."
-msgstr ""
-"गोरोन्थि 0x%04x: इ-मेइल थंखौ सोलायनो हायाखै मानोना बे बाहायग्रामुंनि थाखाय सिगाङावनो "
-"मोनसे खावलायनाय थाबथाना दं।"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because the given address has "
-"too many usernames associated with it."
-msgstr ""
-"गोरोन्थि 0x%04x: इ-मेइल थंखौ सोलायनो हायाखै मानोना होखानाय थंहा थाफानाय जोबोद "
-"गोबां बाहायग्रामुं दं।"
-
-#, c-format
-msgid ""
-"Error 0x%04x: Unable to change email address because the given address is "
-"invalid."
-msgstr "गोरोन्थि 0x%04x: इ-मेइल थंखौ सोलायनो हायाखै मानोना होखानाय थंआ बाहायजायै।"
-
-#, c-format
-msgid "Error 0x%04x: Unknown error."
-msgstr "गोरोन्थि 0x%04x: मोन्थिमोनै गोरोन्थि।"
-
-msgid "Error Changing Account Info"
-msgstr "एकाउन्ट मोनथिहोनाय सोलायनायाव जानाय गोरोन्थि"
-
-#, c-format
-msgid "The email address for %s is %s"
-msgstr "%s नि थाखाय इ-मेइल थंआ %s"
-
-msgid "Account Info"
-msgstr "एकाउन्ट मोनथिहोनाय"
-
-msgid ""
-"Your IM Image was not sent. You must be Direct Connected to send IM Images."
-msgstr ""
-"नोंथांनि IM मुसुखाखौ दैथाय हरनो जायाखैमोन। IM मुसुखा फोरखौ दैथाय हरनो नोंथाङा थोंजों "
-"फोनांजाब खालामनांगोन।"
-
-msgid "Unable to set AIM profile."
-msgstr "AIM प्रफाइल फजनो हाया।"
-
-msgid ""
-"You have probably requested to set your profile before the login procedure "
-"completed.  Your profile remains unset; try setting it again when you are "
-"fully connected."
-msgstr ""
-"नोंथाङा लगिन खानथि आबुं जानायनि सिगाङाव नोंथांनि प्रफाइल फजनो खावलायदोंमोन जानो "
-"हागौ। नोंथांनि प्रफाइला आनसेट जाना थायो; नोंथाङा आबुङै फोनांजाब खालाम जाब्ला बेखौ फिन "
-"फजनो नाजा।"
-
-#, c-format
-msgid ""
-"The maximum profile length of %d byte has been exceeded.  It has been "
-"truncated for you."
-msgid_plural ""
-"The maximum profile length of %d bytes has been exceeded.  It has been "
-"truncated for you."
-msgstr[0] ""
-"प्रोफाइल की अधिकतम लम्बाई %d बाइट से ऊपर हो गया है. इसे आपके लिए काटा जा रहा है."
-msgstr[1] ""
-"प्रोफाइल की अधिकतम लम्बाई %d बाइट्स से ऊपर हो गया है. इसे आपके लिए काटा जा रहा है."
-
-msgid "Profile too long."
-msgstr "प्रफाइला जोबोद गोलाव।"
-
-#, c-format
-msgid ""
-"The maximum away message length of %d byte has been exceeded.  It has been "
-"truncated for you."
-msgid_plural ""
-"The maximum away message length of %d bytes has been exceeded.  It has been "
-"truncated for you."
-msgstr[0] ""
-"अनुपस्थिति संदेश की अधिकतम लम्बाई %d बाइट से ऊपर हो गया है. इसे आपके लिये काट दिया गया."
-msgstr[1] ""
-"अनुपस्थिति संदेश की अधिकतम लम्बाई %d बाइट्स से ऊपर हो गया है. इसे आपके लिये काट दिया "
-"गया."
-
-msgid "Away message too long."
-msgstr "गोजान जालांनाय खौरांआ जोबोद गोलाव।"
-
-#, c-format
-msgid ""
-"Unable to add the buddy %s because the username is invalid.  Usernames must "
-"be a valid email address, or start with a letter and contain only letters, "
-"numbers and spaces, or contain only numbers."
-msgstr ""
-"%s बाडिखौ दाजाबदेरनो हायाखै मानोना बाहायग्रामुंआ बाहायजायै। बाहायग्रामुंफोरा मोनसे "
-"बाहाय जाथाव इ-मेइल थं जाथार नांगौ, एबा हांखोजों जागाय नांगौ आरो बेयाव हांखोल’, "
-"अनजिमा आरो स्पेस, एबा अनजिमाफोरल’ थानांगौ।"
-
-msgid "Unable to Add"
-msgstr "\"%s\"आव दाजाबनो हाया। "
-
-msgid "Unable to Retrieve Buddy List"
-msgstr "बाडि लिस्ट मोनफिननो हायाखै"
-
-msgid ""
-"The AIM servers were temporarily unable to send your buddy list.  Your buddy "
-"list is not lost, and will probably become available in a few minutes."
-msgstr ""
-"AIM सार्भार फोरा अरायथा नङै महरै नोंथांनि बाडि फारिलाइखौ दैथाय हरनो हाया। नोंथांनि "
-"बाडि फारिलाइआ गोमानाय नङा, आरो बेफोरखौ दसे समनि उनाव मोननो हाथाव जागोन।"
-
-msgid "Orphans"
-msgstr "मावरियाफोर"
-
-#, c-format
-msgid ""
-"Unable to add the buddy %s because you have too many buddies in your buddy "
-"list.  Please remove one and try again."
-msgstr ""
-"%s बाडि दाजाबदेरनो हायाखै मानोना नोंथांनि बाडि लिस्टयाव जोबोद गोबां बाडि दं। अननानै "
-"मोनसे बोखार आरो फिन नाजा।"
-
-msgid "(no name)"
-msgstr "(जेबो मुं गैया)"
-
-#, c-format
-msgid "Unable to add the buddy %s for an unknown reason."
-msgstr "मोनथिमोनै हाजोननि थाखाय %s बाडि दाजाबदेरनो हायाखै "
-
-#, c-format
-msgid ""
-"The user %s has given you permission to add him or her to your buddy list.  "
-"Do you want to add this user?"
-msgstr ""
-"%s बाहायग्रामुंआ नोंथांखौ नोंथांनि बाडि लिस्टयाव बिखौ दाजाबदेरनो गनायथि होयो। नोंथाङा "
-"बे बाहायग्राखौ दाजाबदेरनो लुबैयो नामा?"
-
-msgid "Authorization Given"
-msgstr "मोन्थाय गोहो होनाय होखानाय"
-
-#. Granted
-#, c-format
-msgid "The user %s has granted your request to add them to your buddy list."
-msgstr ""
-"बाहायग्रा %s या नोंथांनि खावलायनायखौ नोंथांनि बाडि फारिलाइआव दाजाबदेरनो गनायथि "
-"होबाय।"
-
-msgid "Authorization Granted"
-msgstr "मोन्थाय गोहो होनाय गनायथि होबाय"
-
-#. Denied
-#, c-format
-msgid ""
-"The user %s has denied your request to add them to your buddy list for the "
-"following reason:\n"
-"%s"
-msgstr ""
-"बाहायग्रा %s आ गाहायनि जाहोननि थाखाय नोंथांनि बाडि फारिलाइआव बेफोरखौ जादाबदेरनो "
-"नोंथांनि खावलायनायखौ नेवसिबाय:\n"
-"%s"
-
-msgid "Authorization Denied"
-msgstr "मोन्थाय गोहो होनाय नेवसिबाय"
-
-msgid "_Exchange:"
-msgstr "सोलाय सोल' खालाम:"
-
-msgid "Your IM Image was not sent. You cannot send IM Images in AIM chats."
-msgstr ""
-"नोंथांनि IM मुसुखाखौ दैथाय हरनाय जायाखै। नोंथाङा IM मुसुखाखौ AIM सावरायनायाव दैथाय "
-"हरनो हाया।"
-
-msgid "iTunes Music Store Link"
-msgstr "iTunes देंखो स्टर सोमोन्दो"
-
-msgid "Lunch"
-msgstr "सानजौफुनि जानाय"
-
-#, c-format
-msgid "Buddy Comment for %s"
-msgstr "%s नि थाखाय बाडि बिबुंथि"
-
-msgid "Buddy Comment:"
-msgstr "बाडि बिबुंथि:"
-
-#, c-format
-msgid "You have selected to open a Direct IM connection with %s."
-msgstr "नोंथांहा %s जों थोंजों IM फोनांजाब खेवनो सायखबाय।"
-
-msgid ""
-"Because this reveals your IP address, it may be considered a security risk.  "
-"Do you wish to continue?"
-msgstr ""
-"मानोना बेयो नोंथांनि IP थंआव नुजाथियो, बेयो मोनसे रैखाथि रिस्क जानो हागौ। । नोंथाङा "
-"सालायनलांनो सानो नामा?"
-
-msgid "C_onnect"
-msgstr "फोनांजाब खालाम"
-
-msgid "You closed the connection."
-msgstr "नोंथाङा फोनांजाबखौ बन्द खालामबाय।"
-
-msgid "Get AIM Info"
-msgstr "AIM मोनथिहोनाय मोन"
-
-#. We only do this if the user is in our buddy list
-msgid "Edit Buddy Comment"
-msgstr "बाडि बिबुंनि सुजु"
-
-msgid "Get X-Status Msg"
-msgstr "X-थाखोमान Msg खौ ला"
-
-msgid "End Direct IM Session"
-msgstr "Direct IM जथुम्माखौ फोजोब"
-
-msgid "Direct IM"
-msgstr "थोंजों IM"
-
-msgid "Re-request Authorization"
-msgstr "मोन्थाय गोहो होनायखौ फिन खावलाय"
-
-msgid "Require authorization"
-msgstr "मोन्थाय गोहो होनायखौ गोनां जायो"
-
-msgid "Web aware (enabling this will cause you to receive SPAM!)"
-msgstr "वेब सांग्रां(बेखौ मावथि खालामनाया नोंथांनि SPAM खौ मोननो हाहोनो हागौ!)"
-
-msgid "ICQ Privacy Options"
-msgstr "ICQ गुमुर उफ्राफोर"
-
-msgid "Change Address To:"
-msgstr "..सिम थं सोलाय:"
-
-msgid "you are not waiting for authorization"
-msgstr "नोंथाङा मोन्थाय गोहो होनायनि थाखाय नेथ’आखै। "
-
-msgid "You are awaiting authorization from the following buddies"
-msgstr "गाहायनि बाडि फोरनिफ्राय नोंथाङा मोन्थाय गोहो होनायखौ  नेथ' गासिनो दङ"
-
-msgid ""
-"You can re-request authorization from these buddies by right-clicking on "
-"them and selecting \"Re-request Authorization.\""
-msgstr ""
-"बेफोराव आगदाथिंखौ क्लिक खालामनानै आरो  \"मोनथाय गोहो होनायखौ फिन-खावलाय\"खौ "
-"सायखनानै नोंथाङा बेफोर बाडिनिफ्राय मोनथाय गोहो होनायखौ फिन-खावलायनो हायो"
-
-msgid "Find Buddy by Email"
-msgstr "इ-मेइलजों बाडिखौ नागिरना दिहुन"
-
-msgid "Search for a buddy by email address"
-msgstr "इ-मेइल थंजों मोनसे बाडिखौ नागिर"
-
-msgid "Type the email address of the buddy you are searching for."
-msgstr "नोंथाङा नागिरनो लुबैनाय बाडिनि इ-मेइल थंखौ टाइप खालाम। "
-
-msgid "_Search"
-msgstr "नागिर"
-
-msgid "Set User Info (web)..."
-msgstr "बाहायग्रा मोनथिहोनाय (वेब) खौ फज..."
-
-#. This only happens when connecting with the old-style BUCP login
-msgid "Change Password (web)"
-msgstr "पासवर्ड (वेब) सोलाय "
-
-msgid "Configure IM Forwarding (web)"
-msgstr "IM फरर्वाडिं (वेब) खौ बायजो महर दा"
-
-#. ICQ actions
-msgid "Set Privacy Options..."
-msgstr "गुमुर उफ्राफोर फज..."
-
-msgid "Show Visible List"
-msgstr "नुथाव लिस्टखौ दिन्थि"
-
-msgid "Show Invisible List"
-msgstr "नुथावै लिस्टखौ दिन्थि"
-
-#. AIM actions
-msgid "Confirm Account"
-msgstr "एकाउन्टखौ थि खालाम"
-
-msgid "Display Currently Registered Email Address"
-msgstr "दाबावैसो रेजिस्टार खालामनाय इ-मेइल थंखौ दिन्थिफुं"
-
-msgid "Change Currently Registered Email Address..."
-msgstr "दाबावैसो रेजिस्टार खालामनाय इ-मेइल थंखौ दिन्थिफुं..."
-
-msgid "Show Buddies Awaiting Authorization"
-msgstr "मोन्थाय गोहो नेनाय बाडिफोरखौ दिन्थि"
-
-msgid "Search for Buddy by Email Address..."
-msgstr "मोन्थाय गोहो नेनाय बाडिफोरखौ दिन्थि "
-
-msgid "clientLogin"
-msgstr ""
-
-msgid "Kerberos"
-msgstr ""
-
-msgid "MD5-based"
-msgstr ""
-
-msgid "Authentication method"
-msgstr ""
-
-msgid ""
-"Always use AIM/ICQ proxy server for\n"
-"file transfers and direct IM (slower,\n"
-"but does not reveal your IP address)"
-msgstr ""
-"फाइल जायगा सोलायनाय फोरनि थाखाय जेब्लायबो \n"
-"AIM/ICQ प्रक्सी सार्भार बाहाय\n"
-"(लासैसिन, नाथाय नोंथांनि IP थंखौ दिन्थिया)"
-
-msgid "Allow multiple simultaneous logins"
-msgstr "गोबां एखेसमनि लगिनखौ गनायथि हो"
-
-#, c-format
-msgid "Asking %s to connect to us at %s:%hu for Direct IM."
-msgstr "%s आव जोंखौ फोनांजाब खालामनो %s खौ सोंगासिनो दङ:%hu थोंजों IM"
-
-#, c-format
-msgid "Attempting to connect to %s:%hu."
-msgstr "%s आव फोनांजाब खालामनो नाजा गासिनो दङ:%hu."
-
-msgid "Attempting to connect via proxy server."
-msgstr "प्रक्सि सार्भार जों फोनांजाब खालामनो नाजागासिनो दङ।"
-
-#, c-format
-msgid "%s has just asked to directly connect to %s"
-msgstr "%s आ %s आव थोंजोंयै फोनांजाब खालामनो दासो सोंबाय।"
-
-msgid ""
-"This requires a direct connection between the two computers and is necessary "
-"for IM Images.  Because your IP address will be revealed, this may be "
-"considered a privacy risk."
-msgstr ""
-"मोननै कम्पुटारनि गेजेराव मोनसे थोंजों फोनांजाब खालामनो गोनां जादों आरो IM मुसुखानि थाखाय "
-"गोनांथि जायो। मानोना नोंथांनि IP थंआ नुजाथिगोन, बेखौ मोनसे गुमुरनि खैफोत सानजानोबो "
-"हागौ ।"
-
-#. Label
-msgid "Buddy Icon"
-msgstr "बाडि आइकन"
-
-msgid "Voice"
-msgstr "गारां"
-
-msgid "AIM Direct IM"
-msgstr "AIM थोंजों IM"
-
-msgid "Get File"
-msgstr "फाइल मोन"
-
-msgid "Games"
-msgstr "खेलाफोर"
-
-msgid "ICQ Xtraz"
-msgstr "ICQ Xtraz"
-
-msgid "Add-Ins"
-msgstr "Add-Ins"
-
-msgid "Send Buddy List"
-msgstr "बाडि फारिलाइ दैथाय हर"
-
-msgid "ICQ Direct Connect"
-msgstr "ICQ थोंजों फोनांजाब"
-
-msgid "AP User"
-msgstr "AP बाहायग्रा"
-
-msgid "ICQ RTF"
-msgstr "ICQ RTF"
-
-msgid "Nihilist"
-msgstr "*गैयै खालामथाय "
-
-msgid "ICQ Server Relay"
-msgstr "ICQ सार्भार रिले"
-
-msgid "Old ICQ UTF8"
-msgstr "गोजाम ICQ UTF8"
-
-msgid "Trillian Encryption"
-msgstr "ट्रिलियान इनक्राइपसन"
-
-msgid "ICQ UTF8"
-msgstr "ICQ UTF8"
-
-msgid "Hiptop"
-msgstr "हिपटप"
-
-msgid "Security Enabled"
-msgstr "रैखाथि हाहोनाय खालामबाय"
-
-msgid "Video Chat"
-msgstr "भिडिअ सावरायनाय"
-
-msgid "iChat AV"
-msgstr "iसावरायनाय  AV"
-
-msgid "Live Video"
-msgstr "लाइभ भिडिअ"
-
-msgid "Camera"
-msgstr "केमेरा"
-
-msgid "Screen Sharing"
-msgstr "स्क्रिन शेयारिं"
-
-msgid "IP Address"
-msgstr "IP थं"
-
-msgid "Warning Level"
-msgstr "सांग्रां लेभेल"
-
-msgid "Buddy Comment"
-msgstr "बाडि बिबुंथि"
-
-#, c-format
-msgid "User information not available: %s"
-msgstr "बाहायग्रा मोनथिहोनायखौ मोननो हाथाव नङा: %s"
-
-msgid "Mobile Phone"
-msgstr "मबाइल फन"
-
-msgid "Age"
-msgstr "बैसो"
-
-msgid "Personal Web Page"
-msgstr "गावनि वेब बिखं"
-
-#. aim_userinfo_t
-#. use_html_status
-msgid "Additional Information"
-msgstr "उफ्रायारि मोनथिहोनाय"
-
-msgid "Home Address"
-msgstr "न'नि थं"
-
-msgid "Zip Code"
-msgstr "जिप क'ड"
-
-msgid "Work Address"
-msgstr "खामानि थं"
-
-msgid "Work Information"
-msgstr "खामानि मोन्थिहोनाय"
-
-msgid "Company"
-msgstr "कम्पानि"
-
-msgid "Division"
-msgstr "बोखावनाय"
-
-msgid "Position"
-msgstr "थासारि"
-
-msgid "Web Page"
-msgstr "वेब बिखं"
-
-msgid "Online Since"
-msgstr "निफ्राय अनलाइन"
-
-msgid "Member Since"
-msgstr "निफ्राय सोद्रोमा"
-
-msgid "Capabilities"
-msgstr "हानाय गोहो"
-
-msgid "Profile"
-msgstr "प्रफाइल"
-
-msgid "View web profile"
-msgstr "वेब प्रफाइलखौ नाइ"
-
-msgid "Invalid SNAC"
-msgstr "बाहाय जायै SNAC"
-
-msgid "Server rate limit exceeded"
-msgstr "सार्भारनि दर सिमाया बारलांबाय  "
-
-msgid "Client rate limit exceeded"
-msgstr "क्लाइन्टनि दर सिमाया बारलांबाय"
-
-msgid "Service unavailable"
-msgstr "हाबा मोननो हाथाव नङा"
-
-msgid "Service not defined"
-msgstr "हाबा थि खालामै"
-
-msgid "Obsolete SNAC"
-msgstr "सोलियै SNAC"
-
-msgid "Not supported by host"
-msgstr "हस्टजों मदद होजायै"
-
-msgid "Not supported by client"
-msgstr "क्लाइन्टजों हस्टजों मदद होजायै"
-
-msgid "Refused by client"
-msgstr "क्लाइन्टजों नेवसिगार जानाय"
-
-msgid "Reply too big"
-msgstr "फिननाया जोबोद गेदेर"
-
-msgid "Responses lost"
-msgstr "फिननायफोरा गोमाबाय"
-
-msgid "Request denied"
-msgstr "खावलायनाया नेवसिगारबाय"
-
-msgid "Busted SNAC payload"
-msgstr "बास्टेट SNAC प्लेल'ड"
-
-msgid "Insufficient rights"
-msgstr "थोजासे नङै मोनथायफोर"
-
-msgid "In local permit/deny"
-msgstr "जायगायाव गनायथि हो/नेवसिगार"
-
-msgid "Warning level too high (sender)"
-msgstr "सांग्रांथि लेभेला जोबोत गोजौ (दैथाय हरग्रा)"
-
-msgid "Warning level too high (receiver)"
-msgstr "सांग्रांथि लेभेला जोबोत गोजौ (आजावग्रा)"
-
-msgid "User temporarily unavailable"
-msgstr "बाहायग्राखौ दा सान्दि मोननो हाथाव नङा"
-
-msgid "No match"
-msgstr "गोरोबै"
-
-msgid "List overflow"
-msgstr "फारिलाइ बांद्राय"
-
-msgid "Request ambiguous"
-msgstr "खावलायनाय रोखा नङै"
-
-msgid "Queue full"
-msgstr "सारिया आबुं जानाय"
-
-msgid "Not while on AOL"
-msgstr "AOL आव गैयाब्ला"
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear online to the chosen user even when your status is set to
-#. Invisible.
-msgid "Appear Online"
-msgstr "अफलाइन नुजाथि"
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear offline to the chosen user when your status is set to
-#. Invisible (this is the default).
-msgid "Don't Appear Online"
-msgstr "अनलाइनाव नुजाथिनो नाङा"
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to always appear offline to the chosen user (even when your status
-#. isn't Invisible).
-msgid "Appear Offline"
-msgstr "अफलाइन नुजाथि"
-
-#. Translators: This string is a menu option that, if selected, will cause
-#. you to appear offline to the chosen user if you are invisible, and
-#. appear online to the chosen user if you are not invisible (this is the
-#. default).
-msgid "Don't Appear Offline"
-msgstr "अफलाइनाव नुजाथिनो नाङा"
-
-msgid "you have no buddies on this list"
-msgstr "नोंथांहा बे लिस्टयाव जेबो बाडि गैया"
-
-#, c-format
-msgid ""
-"You can add a buddy to this list by right-clicking on them and selecting \"%s"
-"\""
-msgstr ""
-"नोंथाङा बे लिस्टआव आगदा-क्लिक खालामनानै आरो \"%s\" खौ सायखनानै मोनसे बाडि दाजाबदेरनो "
-"हायो"
-
-msgid "Visible List"
-msgstr "नुथाव लिस्ट"
-
-msgid "These buddies will see your status when you switch to \"Invisible\""
-msgstr "नोंथाङा \"नुथावै\" आव थांनाय समाव बेफोर बाडिआ नोंथांनि थाखोमानखौ नाइगोन।"
-
-msgid "Invisible List"
-msgstr "नुथावै लिस्ट"
-
-msgid "These buddies will always see you as offline"
-msgstr "बेफोर बाडिआ नोंथांखौ अरायबो अफलाइन महरै नाइगोन"
 
 #, c-format
 msgid "<b>Group Title:</b> %s<br>"
@@ -7914,6 +6709,9 @@ msgstr "भिडिअ सावराय मेल"
 msgid "Computer"
 msgstr "कम्पुटार"
 
+msgid "Mobile Phone"
+msgstr "मबाइल फन"
+
 msgid "PDA"
 msgstr "PDA"
 
@@ -8174,6 +6972,9 @@ msgstr "थिलि"
 msgid "Exposure"
 msgstr "दिन्थिफुंनाय"
 
+msgid "Encoding"
+msgstr "एनक'डिं"
+
 #, c-format
 msgid "Unable to create socket: %s"
 msgstr "सकेट सोरजिनो हायाखै: %s"
@@ -8194,6 +6995,9 @@ msgstr "हाबनाया नेवसिबाय: HTTP प्रक्स�
 msgid "Error resolving %s"
 msgstr "%s जेंना सुस्रांनायाव जानाय गोरोनथि"
 
+msgid "Received invalid data on connection with server"
+msgstr "सार्भारजों थानाय फोनांजाबाव बाहायजायै डाटा मोनबाय"
+
 #, c-format
 msgid "Requesting %s's attention..."
 msgstr "%s नि गोसो होनो खावलाय गासिनो दङ..."
@@ -8210,6 +7014,12 @@ msgstr "नंगौ"
 
 msgid "_No"
 msgstr "नङा"
+
+#. *
+#. * A wrapper for purple_request_action() that uses @c OK and @c Cancel buttons.
+#.
+msgid "_OK"
+msgstr "_OK"
 
 #. *
 #. * A wrapper for purple_request_action() that uses Accept and Cancel buttons.
@@ -8281,8 +7091,17 @@ msgstr "आनसेट खालाम"
 msgid "Do not disturb"
 msgstr "हेंथा होनो नाङा"
 
+msgid "Invisible"
+msgstr "नुनो मोनै"
+
 msgid "Extended away"
 msgstr "बाराय बावनाय"
+
+msgid "Mobile"
+msgstr "मबाइल"
+
+msgid "Listening to music"
+msgstr "देंखो खोना संगासिनो दङ"
 
 msgid "Feeling"
 msgstr "मोनदांथि"
@@ -8732,9 +7551,9 @@ msgstr "मोनसे बाडिनि थाखोमाननि थाख
 msgid "You have %d contact named %s. Would you like to merge them?"
 msgid_plural ""
 "You currently have %d contacts named %s. Would you like to merge them?"
-msgstr[0] "नोंथांहा %s मुंनि %d जगाजग दं। नोंथाङा बेफोरखौ खौसे खालामनो लुबैयो नामा?"
+msgstr[0] "नोंथांहा %2$s मुंनि %1$d जगाजग दं। नोंथाङा बेफोरखौ खौसे खालामनो लुबैयो नामा?"
 msgstr[1] ""
-"नोंथांहा दासान्दि %s मुंनि %d जगाजगफोर दं। नोंथाङा बेफोरखौ खौसे खालामनो लुबैयो नामा?"
+"नोंथांहा दासान्दि %2$s मुंनि %1$d जगाजगफोर दं। नोंथाङा बेफोरखौ खौसे खालामनो लुबैयो नामा?"
 
 msgid ""
 "Merging these contacts will cause them to share a single entry on the buddy "
@@ -8965,6 +7784,9 @@ msgstr "/मदद"
 
 msgid "/Help/Online _Help"
 msgstr "/मदद/अनलाइन_मदद"
+
+msgid "/Help/D_onate"
+msgstr ""
 
 msgid "/Help/_Build Information"
 msgstr "/मदद/मोनथिहोनायखौ दा"
@@ -9501,6 +8323,9 @@ msgid_plural "%d people in room"
 msgstr[0] "कक्ष में %d लोग हैं"
 msgstr[1] "कक्ष में %d लोग हैं"
 
+msgid "Typing"
+msgstr "टाइप खालाम गासिनो दङ"
+
 msgid "Stopped Typing"
 msgstr "टाइप खालामनायखौ दोनथ'बाय"
 
@@ -9608,23 +8433,14 @@ msgstr "गोरोन्थि"
 msgid "Fatal Error"
 msgstr "गिलु बालु गोरोन्थि"
 
-msgid "artist"
-msgstr "महरगिरि"
-
 msgid "lead developer"
 msgstr "जौगाहोग्रा दैदेन"
 
-msgid "voice and video"
-msgstr "भइस (गारां) आरो भिडिअ"
-
-msgid "support"
-msgstr "मददथि"
-
-msgid "webmaster"
-msgstr "वेबमास्टार"
-
 msgid "win32 port"
 msgstr "उइन्ड 32 पर्ट"
+
+msgid "artist"
+msgstr "महरगिरि"
 
 #. Translators: This is a person's name. For most languages we recommend
 #. not translating it.
@@ -9637,9 +8453,18 @@ msgstr "मेइनटेइन खालामग्रा "
 msgid "libfaim maintainer"
 msgstr "libfaim मेइनटेइन खालामग्रा"
 
+msgid "webmaster"
+msgstr "वेबमास्टार"
+
 #. If "lazy bum" translates literally into a serious insult, use something else or omit it.
 msgid "hacker and designated driver [lazy bum]"
 msgstr "हेकार आरो बिमुं होनाय सालायग्रा [लेजि बाम]"
+
+msgid "voice and video"
+msgstr "भइस (गारां) आरो भिडिअ"
+
+msgid "support"
+msgstr "मददथि"
 
 msgid "support/QA"
 msgstr "मददथि/QA"
@@ -9970,23 +8795,20 @@ msgstr ""
 
 #, c-format
 msgid ""
-"<FONT SIZE=\"4\"><B>Helpful Resources</B></FONT><BR>\t<A HREF=\"%s"
-"\">Website</A><BR>\t<A HREF=\"%s\">Frequently Asked Questions</A><BR>\tIRC "
-"Channel: #pidgin on irc.freenode.net<BR>\tXMPP MUC: devel@conference.pidgin."
-"im<BR><BR>"
+"<FONT SIZE=\"4\"><B>Helpful Resources</B></FONT><BR>\t<A "
+"HREF=\"%s\">Website</A><BR>\t<A HREF=\"%s\">Frequently Asked Questions</"
+"A><BR>\tIRC Channel: #pidgin on irc.libera.chat<BR>\tXMPP MUC: "
+"devel@conference.pidgin.im<BR><BR>"
 msgstr ""
-"<FONT SIZE=\"4\"><B>मददगोनां सम्पद</B></FONT><BR>\t<A HREF=\"%s\">वेबसाइट</"
-"A><BR>\t<A HREF=\"%s\">गलेगले सोंजानाय सोंलुफोर</A><BR>\tIRC चेनेल: #irc.freenode."
-"net आव पिडजिन<BR>\tXMPP MUC: devel@conference.pidgin.im<BR><BR>"
 
 msgid ""
 "<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
 "emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"http://pidgin.im/pipermail/"
-"support/\">archive</a>)<br/>We can't help with third-party protocols or "
-"plugins!<br/>This list's primary language is <b>English</b>.  You are "
-"welcome to post in another language, but the responses may be less helpful."
-"<br/>"
+"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
+"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
+"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
+"You are welcome to post in another language, but the responses may be less "
+"helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -11060,6 +9882,9 @@ msgstr "ब्राउजार बायजो महर हाबाफार
 msgid "Use _automatically detected IP address: %s"
 msgstr "संना दिहुननाय IP थंखौ गावनो गाव महरै बाहाय: %s"
 
+msgid "IP Address"
+msgstr "IP थं"
+
 msgid "ST_UN server:"
 msgstr "STUN सार्भार:"
 
@@ -11488,6 +10313,9 @@ msgstr ""
 msgid "Unknown output"
 msgstr ""
 
+msgid "_Add"
+msgstr "दाजाबदेर"
+
 #. list button
 msgid "_Get List"
 msgstr "फारिलाइ मोन"
@@ -11667,6 +10495,10 @@ msgstr ""
 "<b>फाइल:</b> %s\n"
 "<b>फाइल महर:</b> %s\n"
 "<b>मसुखा महर, दाथाय:</b> %dx%d"
+
+#. Label
+msgid "Buddy Icon"
+msgstr "बाडि आइकन"
 
 #, c-format
 msgid "The file '%s' is too large for %s.  Please try a smaller image.\n"
@@ -12592,6 +11424,9 @@ msgstr "अपारेटर"
 msgid "Half Operator"
 msgstr "खावसे-अपारेटर"
 
+msgid "Voice"
+msgstr "गारां"
+
 msgid "Authorization dialog"
 msgstr "मोन्थाय गोहो होनाय बिबुं"
 
@@ -12843,6 +11678,43 @@ msgstr ""
 msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr ""
 
+msgid "ALSA"
+msgstr ""
+
+#. "esdmon",	"ESD", ?
+msgid "OSS"
+msgstr ""
+
+msgid "PulseAudio"
+msgstr ""
+
+msgid "sndio"
+msgstr ""
+
+msgid "aRts"
+msgstr ""
+
+msgid "ESD"
+msgstr ""
+
+msgid "Test Input"
+msgstr ""
+
+msgid "KS Video"
+msgstr ""
+
+msgid "Quickcam"
+msgstr ""
+
+msgid "Video4Linux"
+msgstr ""
+
+msgid "Video4Linux2"
+msgstr ""
+
+msgid "Video4Linux MJPEG"
+msgstr ""
+
 msgid "_Plugin"
 msgstr "प्लागिन"
 
@@ -13042,8 +11914,8 @@ msgstr "बानान आनजाद खालामनाय हेफाज
 #, no-c-format
 msgid ""
 "Error Installing Spellchecking ($R3).$\\rIf retrying fails, manual "
-"installation instructions are at: http://developer.pidgin.im/wiki/Installing"
-"%20Pidgin#manual_win32_spellcheck_installation"
+"installation instructions are at: http://developer.pidgin.im/wiki/"
+"Installing%20Pidgin#manual_win32_spellcheck_installation"
 msgstr ""
 "बानान आनजाद खालामनाय ($R3) खौ इनष्टल खालामनायाव जानाय गोरोन्थि। $\\rफिन "
 "नाजानाया फेलें जायोब्ला मेनुयेल (आखाइजों) इनष्टलेसन बोसोना : http://developer.pidgin."
