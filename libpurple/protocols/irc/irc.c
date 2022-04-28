@@ -174,7 +174,7 @@ irc_send_handler_cb(gpointer data) {
 
 			irc->send_handler = 0;
 
-			return G_SOURCE_REMOVE;
+			return FALSE;
 		} else if(ret < length) {
 			gchar *partial = NULL;
 
@@ -215,7 +215,7 @@ irc_send_handler_cb(gpointer data) {
 		g_free(msg);
 	}
 
-	return G_SOURCE_CONTINUE;
+	return TRUE;
 }
 
 void irc_send(struct irc_conn *irc, const char *buf)

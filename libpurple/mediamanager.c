@@ -2299,7 +2299,7 @@ device_monitor_bus_cb(GstBus *bus, GstMessage *message, gpointer user_data)
 		purple_media_manager_unregister_gst_device(manager, device);
 	}
 
-	return G_SOURCE_CONTINUE;
+	return TRUE;
 }
 
 #endif /* GST_CHECK_VERSION(1, 4, 0) */
