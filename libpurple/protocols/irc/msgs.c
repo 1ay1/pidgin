@@ -1579,7 +1579,7 @@ irc_auth_start_cyrus(struct irc_conn *irc)
 	purple_debug_info("irc", "Using SASL: %s\n", irc->current_mech);
 
 	buf = irc_format(irc, "vv", "AUTHENTICATE", irc->current_mech);
-	irc_send(irc, buf);
+	irc_priority_send(irc, buf);
 	g_free(buf);
 }
 
@@ -1710,7 +1710,7 @@ irc_msg_auth(struct irc_conn *irc, char *arg)
 		authinfo = g_strdup("+");
 
 	buf = irc_format(irc, "vv", "AUTHENTICATE", authinfo);
-	irc_send(irc, buf);
+	irc_priority_send(irc, buf);
 	g_free(buf);
 	g_free(authinfo);
 	g_free(serverin);
@@ -1733,7 +1733,7 @@ irc_msg_authok(struct irc_conn *irc, const char *name, const char *from, char **
 
 	/* Finish auth session */
 	buf = irc_format(irc, "vv", "CAP", "END");
-	irc_send(irc, buf);
+	irc_priority_send(irc, buf);
 	g_free(buf);
 }
 
@@ -1812,7 +1812,7 @@ irc_sasl_finish(struct irc_conn *irc)
 
 	/* Auth failed, abort */
 	buf = irc_format(irc, "vv", "CAP", "END");
-	irc_send(irc, buf);
+	irc_priority_send(irc, buf);
 	g_free(buf);
 }
 #endif

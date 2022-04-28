@@ -129,7 +129,7 @@ typedef int (*IRCCmdCallback) (struct irc_conn *irc, const char *cmd, const char
 
 void irc_send(struct irc_conn *irc, const char *buf);
 void irc_send_len(struct irc_conn *irc, const char *buf, int len);
-void irc_priority_send(struct irc_conn *irc, const char *buf);
+int irc_priority_send(struct irc_conn *irc, const char *buf);
 gboolean irc_blist_timeout(struct irc_conn *irc);
 gboolean irc_who_channel_timeout(struct irc_conn *irc);
 void irc_buddy_query(struct irc_conn *irc);

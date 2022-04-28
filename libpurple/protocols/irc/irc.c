@@ -101,13 +101,14 @@ static int do_send(struct irc_conn *irc, const char *buf, gsize len)
 	return ret;
 }
 
-void irc_priority_send(struct irc_conn *irc, const char *buf)
+int irc_priority_send(struct irc_conn *irc, const char *buf)
 {
 	if(irc->sent_partial) {
 		g_queue_insert_after(irc->send_queue, irc->send_queue->head,
 		                     g_strdup(buf));
+		return 0;
 	} else {
-		do_send(irc, buf, strlen(buf));
+		return do_send(irc, buf, strlen(buf));
 	}
 }
 
@@ -459,7 +460,7 @@ static gboolean do_login(PurpleConnection *gc) {
 		else /* intended to fall through */
 #endif
 			buf = irc_format(irc, "v:", "PASS", pass);
-		if (do_send(irc, buf, strlen(buf)) < 0) {
+		if (irc_priority_send(irc, buf) < 0) {
 			g_free(buf);
 			return FALSE;
 		}
@@ -492,7 +493,7 @@ static gboolean do_login(PurpleConnection *gc) {
 	                 strlen(realname) ? realname : nickname);
 	g_free(tmp);
 	g_free(server);
-	if (do_send(irc, buf, strlen(buf)) < 0) {
+	if (irc_priority_send(irc, buf) < 0) {
 		g_free(buf);
 		return FALSE;
 	}
@@ -501,7 +502,7 @@ static gboolean do_login(PurpleConnection *gc) {
 	buf = irc_format(irc, "vn", "NICK", nickname);
 	irc->reqnick = g_strdup(nickname);
 	irc->nickused = FALSE;
-	if (do_send(irc, buf, strlen(buf)) < 0) {
+	if (irc_priority_send(irc, buf) < 0) {
 		g_free(buf);
 		return FALSE;
 	}
