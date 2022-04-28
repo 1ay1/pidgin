@@ -4647,7 +4647,7 @@ static gboolean resize_imhtml_cb(PidginConversation *gtkconv)
 				  GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
 				  GINT_TO_POINTER(0));
-		return;
+		return FALSE;
 	}
 
 	pad_top = gtk_text_view_get_pixels_above_lines(GTK_TEXT_VIEW(gtkconv->entry));
@@ -7434,7 +7434,7 @@ show_formatting_toolbar_pref_cb(const char *name, PurplePrefType type,
 		else
 			gtk_widget_hide(gtkconv->toolbar);
 
-		g_idle_add((GSourceFunc)resize_imhtml_cb,gtkconv);
+		g_idle_add((GSourceFunc)resize_imhtml_cb, gtkconv);
 
 		g_object_set_data(G_OBJECT(gtkconv->imhtml), "resize-count",
 				  GINT_TO_POINTER(0));
