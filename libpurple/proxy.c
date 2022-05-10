@@ -2819,7 +2819,7 @@ purple_proxy_init(void)
 		parse_no_proxy_list(no_proxy_value);
 
 		purple_debug_info("proxy",
-		                  "Found no_proxy envrionment variable ('%s')\n",
+		                  "Found no_proxy environment variable ('%s')\n",
 		                  no_proxy_value);
 		purple_debug_info("proxy", "Loaded %d no_proxy exceptions\n",
 		                  g_list_length(no_proxy_entries));
