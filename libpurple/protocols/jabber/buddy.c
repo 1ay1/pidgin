@@ -1044,7 +1044,7 @@ static void jabber_vcard_parse(JabberStream *js, const char *from,
 			} else if(text && purple_strequal(child->name, "NICKNAME")) {
 				/* Prefer the Nickcname to the Full Name as the serverside alias if it's not just part of the jid.
 				 * Ignore it if it's part of the jid. */
-				if (strstr(bare_jid, text) == NULL) {
+				if (bare_jid != NULL && strstr(bare_jid, text) == NULL) {
 					g_free(serverside_alias);
 					serverside_alias = g_strdup(text);
 
