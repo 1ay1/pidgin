@@ -807,6 +807,10 @@ jabber_login_callback(gpointer data, gint source, const gchar *error)
 		if (js->srv_rec != NULL) {
 			purple_debug_error("jabber", "Unable to connect to server: %s.  Trying next SRV record or connecting directly.\n", error);
 			try_srv_connect(js);
+		} else {
+			purple_connection_error_reason(js->gc,
+				PURPLE_CONNECTION_ERROR_NETWORK_ERROR,
+				_("Unable to connect"));
 		}
 		return;
 	}
