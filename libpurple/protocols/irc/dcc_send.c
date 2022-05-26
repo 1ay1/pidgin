@@ -62,6 +62,38 @@ static void irc_dccsend_recv_ack(PurpleXfer *xfer, const guchar *data, size_t si
 	}
 }
 
+static gssize irc_dccsend_recv_read(guchar **buffer, PurpleXfer *xfer) {
+	gssize s, r;
+
+	if (purple_xfer_get_size(xfer) == 0) {
+		s = xfer->current_buffer_size;
+	} else {
+		s = MIN(purple_xfer_get_bytes_remaining(xfer), xfer->current_buffer_size);
+	}
+
+	*buffer = g_malloc0(s);
+
+	r = read(xfer->fd, *buffer, s);
+	if (r < 0 && errno == EAGAIN) {
+		/* read() would block if the socket was nonblocking, so retry */
+		r = 0;
+	} else if (r < 0) {
+		/* read() has errored out for some other reason, so we fail the xfer */
+		r = -1;
+	} else if (r == 0) {
+		/* read() signals that there is no more data to get from the socket */
+		if(purple_xfer_get_bytes_sent(xfer) >= purple_xfer_get_size(xfer)) {
+			/* We got all the data, xfer successful */
+			purple_xfer_set_completed(xfer, TRUE);
+		} else {
+			/* We expect more data, fail the xfer */
+			r = -1;
+		}
+	}
+
+	return r;
+}
+
 static void irc_dccsend_recv_init(PurpleXfer *xfer) {
 	struct irc_xfer_rx_data *xd = xfer->data;
 
@@ -134,6 +166,7 @@ void irc_dccsend_recv(struct irc_conn *irc, const char *from, const char *msg) {
 		purple_xfer_set_init_fnc(xfer, irc_dccsend_recv_init);
 		purple_xfer_set_ack_fnc(xfer, irc_dccsend_recv_ack);
 
+		purple_xfer_set_read_fnc(xfer, irc_dccsend_recv_read);
 		purple_xfer_set_end_fnc(xfer, irc_dccsend_recv_destroy);
 		purple_xfer_set_request_denied_fnc(xfer, irc_dccsend_recv_destroy);
 		purple_xfer_set_cancel_recv_fnc(xfer, irc_dccsend_recv_destroy);

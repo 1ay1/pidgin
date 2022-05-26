@@ -1107,11 +1107,12 @@ purple_xfer_write(PurpleXfer *xfer, const guchar *buffer, gsize size)
 		r = write(xfer->fd, buffer, s);
 		if (r < 0 && errno == EAGAIN)
 			r = 0;
+
+		if ((purple_xfer_get_bytes_sent(xfer) + r) >= purple_xfer_get_size(xfer) &&
+		    !purple_xfer_is_completed(xfer)) {
+			purple_xfer_set_completed(xfer, TRUE);
+		}
 	}
-	if (r >= 0 && (purple_xfer_get_bytes_sent(xfer)+r) >= purple_xfer_get_size(xfer) &&
-		!purple_xfer_is_completed(xfer))
-		purple_xfer_set_completed(xfer, TRUE);
-	
 
 	return r;
 }
@@ -1222,6 +1223,7 @@ do_transfer(PurpleXfer *xfer)
 
 	if (xfer->type == PURPLE_XFER_RECEIVE) {
 		r = purple_xfer_read(xfer, &buffer);
+
 		if (r > 0) {
 			size_t wc;
 			if (ui_ops && ui_ops->ui_write)
@@ -1236,9 +1238,13 @@ do_transfer(PurpleXfer *xfer)
 				return;
 			}
 
-			if ((purple_xfer_get_size(xfer) > 0) &&
-				((purple_xfer_get_bytes_sent(xfer)+r) >= purple_xfer_get_size(xfer)))
-				purple_xfer_set_completed(xfer, TRUE);
+			if(xfer->ops.read == NULL) {
+				if ((purple_xfer_get_size(xfer) > 0) &&
+				    ((purple_xfer_get_bytes_sent(xfer) + r) >= purple_xfer_get_size(xfer))) {
+					purple_xfer_set_completed(xfer, TRUE);
+				}
+			}
+
 		} else if(r < 0) {
 			purple_xfer_cancel_remote(xfer);
 			g_free(buffer);
@@ -1545,19 +1551,6 @@ purple_xfer_start(PurpleXfer *xfer, int fd, const char *ip,
 	begin_transfer(xfer, cond);
 }
 
-static void
-purple_xfer_drain_socket(int sock)
-{
-	int ret;
-	char buffer[64];
-
-	do {
-		ret = read(sock, buffer, sizeof(buffer));
-	} while(ret > 0 ||
-		(ret == -1 &&
-		 (errno == EAGAIN || errno == EWOULDBLOCK)));
-}
-
 void
 purple_xfer_end(PurpleXfer *xfer)
 {
@@ -1579,7 +1572,6 @@ purple_xfer_end(PurpleXfer *xfer)
 	}
 
 	if (xfer->fd != -1) {
-		purple_xfer_drain_socket(xfer->fd);
 		close(xfer->fd);
 	}
 
