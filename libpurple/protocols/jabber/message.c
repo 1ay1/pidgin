@@ -967,26 +967,20 @@ jabber_message_smileyfy_xhtml(JabberMessage *jm, const char *xhtml)
 			for (iterator = found_smileys; iterator ;
 				iterator = g_list_next(iterator)) {
 				PurpleSmiley *smiley = (PurpleSmiley *) iterator->data;
-				const gchar *shortcut = purple_smiley_get_shortcut(smiley);
-				const JabberData *data =
-					jabber_data_find_local_by_alt(shortcut);
 				PurpleStoredImage *image = purple_smiley_get_stored_image(smiley);
 
 				if (purple_imgstore_get_size(image) <= JABBER_DATA_MAX_SIZE) {
-					/* the object has not been sent before */
-					if (!data) {
-						const gchar *ext = purple_imgstore_get_extension(image);
-						JabberStream *js = jm->js;
-
-						JabberData *new_data =
-							jabber_data_create_from_data(purple_imgstore_get_data(image),
-								purple_imgstore_get_size(image),
-								jabber_message_get_mimetype_from_ext(ext), FALSE, js);
-						purple_debug_info("jabber",
-							"cache local smiley alt = %s, cid = %s\n",
-							shortcut, jabber_data_get_cid(new_data));
-						jabber_data_associate_local(new_data, shortcut);
-					}
+					const gchar *shortcut = purple_smiley_get_shortcut(smiley);
+					const gchar *ext = purple_imgstore_get_extension(image);
+					JabberStream *js = jm->js;
+					JabberData *data =
+						jabber_data_create_from_data(purple_imgstore_get_data(image),
+									     purple_imgstore_get_size(image),
+									     jabber_message_get_mimetype_from_ext(ext), FALSE, js);
+					purple_debug_info("jabber",
+							  "cache local smiley alt = %s, cid = %s\n",
+							  shortcut, jabber_data_get_cid(data));
+					jabber_data_associate_local(data, shortcut);
 					valid_smileys = g_list_append(valid_smileys, smiley);
 				} else {
 					has_too_large_smiley = TRUE;
