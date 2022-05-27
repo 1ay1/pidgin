@@ -1912,6 +1912,7 @@ void jabber_add_deny(PurpleConnection *gc, const char *who)
 	JabberStream *js;
 	JabberIq *iq;
 	xmlnode *block, *item;
+	const char *norm = NULL;
 
 	g_return_if_fail(who != NULL && *who != '\0');
 
@@ -1932,13 +1933,15 @@ void jabber_add_deny(PurpleConnection *gc, const char *who)
 		return;
 	}
 
+	norm = jabber_normalize(purple_connection_get_account(gc), who);
+
 	iq = jabber_iq_new(js, JABBER_IQ_SET);
 
 	block = xmlnode_new_child(iq->node, "block");
 	xmlnode_set_namespace(block, NS_SIMPLE_BLOCKING);
 
 	item = xmlnode_new_child(block, "item");
-	xmlnode_set_attrib(item, "jid", who);
+	xmlnode_set_attrib(item, "jid", norm ? norm : who);
 
 	jabber_iq_send(iq);
 }
@@ -1948,6 +1951,7 @@ void jabber_rem_deny(PurpleConnection *gc, const char *who)
 	JabberStream *js;
 	JabberIq *iq;
 	xmlnode *unblock, *item;
+	const char *norm = NULL;
 
 	g_return_if_fail(who != NULL && *who != '\0');
 
@@ -1964,13 +1968,15 @@ void jabber_rem_deny(PurpleConnection *gc, const char *who)
 	if (!(js->server_caps & JABBER_CAP_BLOCKING))
 		return;
 
+	norm = jabber_normalize(purple_connection_get_account(gc), who);
+
 	iq = jabber_iq_new(js, JABBER_IQ_SET);
 
 	unblock = xmlnode_new_child(iq->node, "unblock");
 	xmlnode_set_namespace(unblock, NS_SIMPLE_BLOCKING);
 
 	item = xmlnode_new_child(unblock, "item");
-	xmlnode_set_attrib(item, "jid", who);
+	xmlnode_set_attrib(item, "jid", norm ? norm : who);
 
 	jabber_iq_send(iq);
 }
