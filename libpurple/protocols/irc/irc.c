@@ -88,15 +88,31 @@ static void irc_view_motd(PurplePluginAction *action)
 
 static int do_send(struct irc_conn *irc, const char *buf, gsize len)
 {
+	gchar *tosend = g_strndup(buf, len);
 	int ret;
 
+	purple_signal_emit(_irc_plugin, "irc-sending-text", purple_account_get_connection(irc->account), &tosend);
+
+	if(tosend == NULL) {
+		return 0;
+	}
+
+	if(purple_debug_is_verbose()) {
+		char *clean = purple_utf8_salvage(tosend);
+		clean = g_strstrip(clean);
+		purple_debug_misc("irc", "<< %s\n", clean);
+		g_free(clean);
+	}
+
 	if (irc->gsc) {
-		ret = purple_ssl_write(irc->gsc, buf, len);
+		ret = purple_ssl_write(irc->gsc, tosend, strlen(tosend));
 	} else {
-		ret = write(irc->fd, buf, len);
+		ret = write(irc->fd, tosend, strlen(tosend));
 	}
 
 	irc->send_time = time(NULL);
+
+	g_free(tosend);
 
 	return ret;
 }
@@ -160,7 +176,7 @@ irc_send_handler_cb(gpointer data) {
 		length = strlen(msg);
 
 		ret = do_send(irc, msg, length);
-		if(ret <= 0 && errno != EAGAIN) {
+		if(ret < 0 && errno != EAGAIN) {
 			PurpleConnection *gc = purple_account_get_connection(irc->account);
 			gchar *tmp = g_strdup_printf(_("Lost connection with server: %s"),
 			                             g_strerror(errno));
@@ -225,22 +241,7 @@ void irc_send(struct irc_conn *irc, const char *buf)
 
 void
 irc_send_len(struct irc_conn *irc, const char *buf, int buflen) {
-	char *tosend = g_strdup(buf);
-
-	purple_signal_emit(_irc_plugin, "irc-sending-text", purple_account_get_connection(irc->account), &tosend);
-
-	if(tosend == NULL) {
-		return;
-	}
-
-	if(purple_debug_is_verbose()) {
-		char *clean = purple_utf8_salvage(tosend);
-		clean = g_strstrip(clean);
-		purple_debug_misc("irc", "<< %s\n", clean);
-		g_free(clean);
-	}
-
-	g_queue_push_tail(irc->send_queue, tosend);
+	g_queue_push_tail(irc->send_queue, g_strdup(buf));
 }
 
 /* XXX I don't like messing directly with these buddies */
