@@ -71,7 +71,14 @@ static char *irc_mask_nick(const char *mask)
 
 static char *irc_mask_userhost(const char *mask)
 {
-	return g_strdup(strchr(mask, '!') + 1);
+	char *sep = strchr(mask, '!');
+	char *host = "";
+
+	if(sep) {
+		host = sep + 1;
+	}
+
+	return g_strdup(host);
 }
 
 static void irc_chat_remove_buddy(PurpleConversation *convo, char *data[2])
