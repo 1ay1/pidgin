@@ -1579,6 +1579,27 @@ void jabber_unregister_account(PurpleAccount *account, PurpleAccountUnregistrati
 	jabber_unregister_account_cb(js);
 }
 
+static void
+jabber_terminate_transfers(JabberStream *js)
+{
+	while(js->file_transfers != NULL) {
+		gpointer data = js->file_transfers->data;
+
+		purple_xfer_end(data);
+
+		if(js->file_transfers == NULL) {
+			break;
+		}
+
+		/* Forcefully remove the link if jabber_si_xfer_free doesn't
+		   remove the link. */
+		if(js->file_transfers->data == data) {
+			js->file_transfers = g_list_delete_link(js->file_transfers,
+								js->file_transfers);
+		}
+	}
+}
+
 /* TODO: As Will pointed out in IRC, after being notified by the core to
  * shutdown, we should async. wait for the server to send us the stream
  * termination before destorying everything. That seems like it would require
@@ -1590,6 +1611,8 @@ void jabber_close(PurpleConnection *gc)
 
 	/* Close all of the open Jingle sessions on this stream */
 	jingle_terminate_sessions(js);
+
+	jabber_terminate_transfers(js);
 
 	if (js->bosh)
 		jabber_bosh_connection_close(js->bosh);
