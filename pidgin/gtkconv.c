@@ -9806,9 +9806,6 @@ pidgin_conv_window_remove_gtkconv(PidginWindow *win, PidginConversation *gtkconv
 	if (win->gtkconvs && win->gtkconvs->next == NULL)
 		pidgin_conv_tab_pack(win, win->gtkconvs->data);
 
-	if (!win->gtkconvs && win != hidden_convwin)
-		pidgin_conv_window_destroy(win);
-
 	for (gtkconvs = win->gtkconvs; gtkconvs != NULL; gtkconvs = gtkconvs->next) {
 		gtkconvs_data = gtkconvs->data;
 		if(gtkconvs_data != NULL) {
@@ -9816,6 +9813,9 @@ pidgin_conv_window_remove_gtkconv(PidginWindow *win, PidginConversation *gtkconv
 					  GINT_TO_POINTER(0));
 		}
 	}
+
+	if (!win->gtkconvs && win != hidden_convwin)
+		pidgin_conv_window_destroy(win);
 }
 
 PidginConversation *
