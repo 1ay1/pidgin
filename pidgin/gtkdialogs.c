@@ -72,8 +72,6 @@ struct artist {
 
 /* Order: Alphabetical by Last Name */
 static const struct developer developers[] = {
-	{"John 'rekkanoryo' Bailey",           NULL,                  NULL},
-	{"Ethan 'Paco-Paco' Blanton",          NULL,                  NULL},
 	{"Gary 'grim' Kramlich",               N_("lead developer"),  "grim@pidgin.im"},
 	{"Richard 'rlaager' Laager",           NULL,                  "rlaager@pidgin.im"},
 	{"Eion Robb",                          NULL,                  NULL},
@@ -83,6 +81,7 @@ static const struct developer developers[] = {
 
 /* Order: Alphabetical by Last Name */
 static const struct developer patch_writers[] = {
+	{"Markus 'ivanhoe' Fischer", NULL, NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -90,6 +89,8 @@ static const struct developer patch_writers[] = {
 static const struct developer retired_developers[] = {
 	{"Daniel 'datallah' Atallah",   NULL,                      NULL},
 	{"Paul 'darkrain42' Aurich",    NULL,                      NULL},
+	{"John 'rekkanoryo' Bailey",    NULL,                      NULL},
+	{"Ethan 'Paco-Paco' Blanton",   NULL,                      NULL},
 	{"Herman Bloggs",               N_("win32 port"),          "herman@bluedigits.com"},
 	{"Hylke Bons",                  N_("artist"),              "hylkebons@gmail.com"},
 	{"Thomas Butter",               NULL,                      NULL},
