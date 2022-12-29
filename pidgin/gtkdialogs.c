@@ -552,14 +552,13 @@ void pidgin_dialogs_about(void)
 
 	g_string_append(str,
 			_("<font size=\"4\"><b>Help from other Pidgin users</b></font> is "
-			  "available by emailing <a "
-			  "href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>"
-			  "This is a <b>public</b> mailing list! "
-			  "(<a href=\"https://lists.pidgin.im/pipermail/support/\">archive</a>)<br/>"
-			  "We can't help with third-party protocols or plugins!<br/>"
-			  "This list's primary language is <b>English</b>.  You are "
-			  "welcome to post in another language, but the responses may "
-			  "be less helpful.<br/>"));
+			  "available via <a "
+			  "href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. "
+			  "This is a <b>public</b> forum and an account is required to "
+			  "post new messages!<br/>This forum's primary language is "
+			  "<b>English</b>. You are welcome to post in another language, "
+			  "but the responses may be less helpful.<br/>"
+			 ));
 
 	tmp = g_strdup_printf(_("About %s"), PIDGIN_NAME);
 	about = pidgin_build_help_dialog(tmp, "about", str);
