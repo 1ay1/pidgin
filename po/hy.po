@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: c078f47fed6bd0b092e53e98e3e8f138_d91fd90 "
 "<c370c2f493b99a2982fd64eb4486d307_432091>, 2017\n"
@@ -6944,29 +6944,40 @@ msgid ""
 "the old file has been renamed to %s~."
 msgstr ""
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr ""
+
 msgid "Instant Messaging Client"
 msgstr ""
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
 
-msgid "The buddy list showing friends on different networks."
-msgstr ""
-
-msgid "Pidgin Internet Messenger"
+msgid "Buddy list showing friends on different networks"
 msgstr ""
 
 msgid "Internet Messenger"
 msgstr ""
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr ""
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
 
 #. Build the login options frame.
@@ -8444,13 +8455,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10114,11 +10123,6 @@ msgid "Do you really want to clear?"
 msgstr ""
 
 msgid "Select color"
-msgstr ""
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
 msgstr ""
 
 msgid "_Alias"

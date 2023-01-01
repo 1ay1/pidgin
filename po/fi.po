@@ -4,16 +4,16 @@
 #
 # Translators:
 # Jaakko Helleranta <jaakko@helleranta.com>, 2016
-# Jiri Grönroos <jiri.gronroos@iki.fi>, 2014-2015
-# Mikaela Suomalainen <mikaela.suomalainen@outlook.com>, 2014
+# Jiri Grönroos <jiri.gronroos@iki.fi>, 2014-2015,2022
+# Aminda Suomalainen <delta@aminda.eu>, 2014
 # hondakassi <kasvain@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Jaakko Helleranta <jaakko@helleranta.com>, 2016\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>, 2014-2015,2022\n"
 "Language-Team: Finnish (http://www.transifex.com/pidgin/pidgin/language/"
 "fi/)\n"
 "Language: fi\n"
@@ -1288,7 +1288,7 @@ msgid "(default)"
 msgstr "(oletus)"
 
 msgid "Select Sound File..."
-msgstr ""
+msgstr "Valitse äänitiedosto..."
 
 msgid "Sound Preferences"
 msgstr "Ääniasetukset"
@@ -1412,7 +1412,7 @@ msgstr ""
 
 #. Save and Use
 msgid "Save and Use"
-msgstr ""
+msgstr "Tallenna ja käytä"
 
 msgid "Certificates"
 msgstr "Varmenteet"
@@ -1542,7 +1542,7 @@ msgid "TinyURL for above: %s"
 msgstr "TinyURL yllä olevalle: %s"
 
 msgid "Please wait while TinyURL fetches a shorter URL..."
-msgstr ""
+msgstr "Odota kun TinyURL hakee lyhyemmän URL-osoitteen..."
 
 msgid "Only create TinyURL for URLs of this length or greater"
 msgstr "Luo TinyURL vain tämän pituisille tai pidemmille osoitteille"
@@ -1557,7 +1557,7 @@ msgid "TinyURL plugin"
 msgstr "TinyURL-liitännäinen"
 
 msgid "Shorten URLs in messages using TinyURL"
-msgstr ""
+msgstr "Lyhennä viesteissä olevat URL-osoitteet käyttäen TinyURL:ää"
 
 msgid "Online"
 msgstr "Linjoilla"
@@ -2252,10 +2252,10 @@ msgstr ""
 #. "aasink", "AALib", Didn't work for me
 #. "aasink",	"AALib", Didn't work for me
 msgid "DirectDraw"
-msgstr ""
+msgstr "DirectDraw"
 
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 msgid "X Window System"
 msgstr ""
@@ -3428,16 +3428,14 @@ msgstr "Käytä SSL:ää"
 msgid "Authenticate with SASL"
 msgstr "Tunnistaudu SASL:ia käyttäen"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Kirjautumisnimi"
+msgstr ""
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr ""
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Viestiä ei voi lähettää."
+msgstr ""
 
 msgid "Maximum messages to send at once"
 msgstr ""
@@ -5565,7 +5563,7 @@ msgid "Topic:"
 msgstr "Aihe:"
 
 msgid "A server is required to connect this account"
-msgstr ""
+msgstr "Tämän tilin yhdistäminen vaatii palvelimen"
 
 #, c-format
 msgid "Unknown (0x%04x)<br>"
@@ -7292,31 +7290,40 @@ msgstr ""
 "%s:n lukemisessa tapahtui virhe. Tiedostoa ei ladattu ja vanha tiedosto on "
 "nimetty uudelleen nimelle %s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Pikaviestinsovellus"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
-"Pidgin on pikaviestinsovellus, jolla voit kirjautua useisiin eri "
-"keskusteluverkkoihin samanaikaisesti."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
 
-msgid "The buddy list showing friends on different networks."
-msgstr "Kaveriluettelo esittää yhteystiedot eri verkoista."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin-pikaviestin"
+msgid "Buddy list showing friends on different networks"
+msgstr ""
 
 msgid "Internet Messenger"
 msgstr "Pikaviestin"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin-pikaviestin"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
 
 #. Build the login options frame.
@@ -8050,10 +8057,10 @@ msgid "_Group:"
 msgstr "_Ryhmä:"
 
 msgid "Automatically _join when account connects"
-msgstr ""
+msgstr "Liity automaattisesti kun _tili yhdistyy"
 
 msgid "_Remain in chat after window is closed"
-msgstr ""
+msgstr "_Pysy keskustelussa ikkunan sulkemisen jälkeen"
 
 msgid "Please enter the name of the group to be added."
 msgstr "Anna lisättävän ryhmän nimi."
@@ -8841,13 +8848,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10226,7 +10231,7 @@ msgid "Themes"
 msgstr "Teemat"
 
 msgid "Voice/Video"
-msgstr ""
+msgstr "Ääni/video"
 
 msgid "Allow all users to contact me"
 msgstr "Salli kaikkien käyttäjien ottaa minuun yhteyttä"
@@ -10312,7 +10317,7 @@ msgid "Select Folder..."
 msgstr "Valitse kansio..."
 
 msgid "Screen share error"
-msgstr ""
+msgstr "Näytönjaon virhe"
 
 msgid "Error creating screencast request"
 msgstr ""
@@ -10336,14 +10341,14 @@ msgid "Test image"
 msgstr ""
 
 msgid "Select window"
-msgstr ""
+msgstr "Valitse ikkuna"
 
 msgid "Use monitor"
 msgstr ""
 
 #, c-format
 msgid "%s (%d✕%d @ %d,%d)"
-msgstr ""
+msgstr "%s (%d✕%d @ %d,%d)"
 
 msgid "Unknown output"
 msgstr ""
@@ -10384,7 +10389,7 @@ msgstr "Käytä eri tilaa joillekin käyttäjätileille"
 
 #. Save and Use button
 msgid "Sa_ve and Use"
-msgstr ""
+msgstr "_Tallenna ja käytä"
 
 #, c-format
 msgid "Status for %s"
@@ -10573,11 +10578,6 @@ msgstr "Haluatko varmasti tyhjentää?"
 
 msgid "Select color"
 msgstr "Valitse väri"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
 
 msgid "_Alias"
 msgstr "_Lempinimi"
@@ -11127,7 +11127,7 @@ msgid "Notify For"
 msgstr "Huomautus"
 
 msgid "\tS_ystem messages"
-msgstr ""
+msgstr "\t_Järjestelmäviestit"
 
 msgid "\t_Only when someone says your username"
 msgstr "\t_Vain kun joku sanoo käyttäjänimesi"
@@ -11720,23 +11720,23 @@ msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr "Tarjoaa integraation Unityn viestintävalikon ja käynnistimen kanssa."
 
 msgid "ALSA"
-msgstr ""
+msgstr "ALSA"
 
 #. "esdmon",	"ESD", ?
 msgid "OSS"
-msgstr ""
+msgstr "OSS"
 
 msgid "PulseAudio"
-msgstr ""
+msgstr "PulseAudio"
 
 msgid "sndio"
-msgstr ""
+msgstr "sndio"
 
 msgid "aRts"
-msgstr ""
+msgstr "aRts"
 
 msgid "ESD"
-msgstr ""
+msgstr "ESD"
 
 msgid "Test Input"
 msgstr ""
@@ -11748,10 +11748,10 @@ msgid "Quickcam"
 msgstr ""
 
 msgid "Video4Linux"
-msgstr ""
+msgstr "Video4Linux"
 
 msgid "Video4Linux2"
-msgstr ""
+msgstr "Video4Linux2"
 
 msgid "Video4Linux MJPEG"
 msgstr ""

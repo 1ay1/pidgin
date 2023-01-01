@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>, "
 "2006,2013-2018,2020,2022\n"
@@ -2194,12 +2194,16 @@ msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;SAMODEJNI ODGOVOR&gt;:</b></span> %s<br>\n"
 
 #, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;SAMODEJNI ODGOVOR&gt;:</b></span> %s<br>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>Ni mogoče najti poti do dnevnika!</b></font>"
@@ -2862,6 +2866,8 @@ msgid ""
 "Causes conversation windows to appear as other users begin to message you.  "
 "This works for XMPP and Sametime"
 msgstr ""
+"Povzroči pojavitev pogovornih oken, ko vam začnejo drugi uporabniki "
+"sporočati. To deluje za XMPP in Sametime."
 
 msgid "You feel a disturbance in the force..."
 msgstr "Občutite motnjo v Sili (saj veste, Vojna zvezd) ..."
@@ -3457,19 +3463,17 @@ msgstr "Uporabi SSL"
 msgid "Authenticate with SASL"
 msgstr "Overi s SASL"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Prijavno ime"
+msgstr "Prijavno ime SASL"
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "Dovoli overjanje SASL z navadnim besedilom prek nešifrirane povezave"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Sporočila ni mogoče poslati."
+msgstr "Število sekund med pošiljanjem sporočil"
 
 msgid "Maximum messages to send at once"
-msgstr ""
+msgstr "Največje število hkrati poslanih sporočil"
 
 msgid "Bad mode"
 msgstr "Neveljaven način"
@@ -4904,13 +4908,13 @@ msgstr "Izberite, kateremu viru %s bi radi poslali datoteko"
 
 #, c-format
 msgid "The queue for %s has reached its maximum length of %u."
-msgstr ""
+msgstr "Vrsta za%s je dosegla svojo največjo dolžino %u."
 
 msgid "XMPP stream management"
 msgstr "Upravljanje toka XMPP"
 
 msgid "Stanza queue is full"
-msgstr ""
+msgstr "Vrsta stanza je polna"
 
 msgid "No further messages will be queued"
 msgstr ""
@@ -7342,34 +7346,47 @@ msgstr ""
 "Pri branju vašega %s je prišlo do napake. Datoteka ni bial naložena, stara "
 "datoteka pa je bila preimenovana v %s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Odjemalec za klepet"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 "Pidgin je program za klepet, ki omogoča prijavo v račune na več omrežjih za "
 "klepet hkrati."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
-"To pomeni, da lahko obenem klepetate s prijatelji na AIM, s prijateljem v "
-"Google Talk in v klepetalnici IRC."
+"To pomeni, da lahko obenem klepetate s prijatelji na XMPP in v klepetalnici "
+"IRC."
 
-msgid "The buddy list showing friends on different networks."
+msgid "Buddy list showing friends on different networks"
 msgstr "Seznam prijateljev prikazuje prijatelje z različnih omrežij."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Spletni sel Pidgin"
 
 msgid "Internet Messenger"
 msgstr "Spletni sel"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr "Klepetajte s svetom. Podpira AIM, Google Talk, Jabber/XMPP in druge."
+msgid "Pidgin Internet Messenger"
+msgstr "Spletni sel Pidgin"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr "Klepetajte prek neposrednih sporočil. Podpira XMPP, IRC in druge"
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
+msgstr ""
+"klepet;pogovor;im;sporočanje;sporočilo;mesidž;bonjour;gadu-gadu;irc;"
+"groupwise;jabber;sametime;silc;simple;xmpp;zephyr"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -8897,16 +8914,23 @@ msgid ""
 "A><BR>\tIRC Channel: #pidgin on irc.libera.chat<BR>\tXMPP MUC: "
 "devel@conference.pidgin.im<BR><BR>"
 msgstr ""
+"<FONT SIZE=\"4\"><B>Viri pomoči</B></FONT><BR>\t<A HREF=\"%s\">Spletno "
+"mesto</A><BR>\t<A HREF=\"%s\">Pogosto zastavljena vprašanja</A><BR>\tKanal "
+"IRC: #pidgin na irc.freenode.net<BR>\tMUC XMPP: devel@conference.pidgin."
+"im<BR><BR>"
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
+"<font size=\"4\"><b>Pomoč drugih uporabnikov Pidgina</b></font> je na voljo "
+"prek <a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. "
+"To je <b>javen</b> forum in za objavo novi sporočil je potreben račun! "
+"Glavni jezik tega seznama je <b>angleščina</b>. Vabimo vas, da objavite tudi "
+"v drugih jezikih, vendar bodo odgovori najbrž manj v pomoč.<br/>"
 
 #, c-format
 msgid "About %s"
@@ -10651,11 +10675,6 @@ msgstr "Ste prepričani, da želite počistiti?"
 msgid "Select color"
 msgstr "Izberite barvo"
 
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
-
 msgid "_Alias"
 msgstr "Psev_donim"
 
@@ -11806,25 +11825,25 @@ msgid "OSS"
 msgstr "OSS"
 
 msgid "PulseAudio"
-msgstr ""
+msgstr "PulseAudio"
 
 msgid "sndio"
-msgstr ""
+msgstr "sndio"
 
 msgid "aRts"
-msgstr ""
+msgstr "aRts"
 
 msgid "ESD"
-msgstr ""
+msgstr "ESD"
 
 msgid "Test Input"
-msgstr ""
+msgstr "Preizkusi vnos"
 
 msgid "KS Video"
-msgstr ""
+msgstr "KS Video"
 
 msgid "Quickcam"
-msgstr ""
+msgstr "Quickcam"
 
 msgid "Video4Linux"
 msgstr "Video4Linux"

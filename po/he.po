@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Omer I.S. <omeritzicschwartz@gmail.com>, 2021
+# עומר א״ש <omeritzicschwartz@gmail.com>, 2021
 # Richard Laager <rlaager@wiktel.com>, 2011
 # Shalom Craimer <s.transifex2015@craimer.org>, 2011-2013
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2012
@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Omer I.S. <omeritzicschwartz@gmail.com>, 2021\n"
+"Last-Translator: עומר א״ש <omeritzicschwartz@gmail.com>, 2021\n"
 "Language-Team: Hebrew (http://www.transifex.com/pidgin/pidgin/language/he/)\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -3368,9 +3368,8 @@ msgstr ""
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "אפשר אימות SASL מעל חיבור לא־מוצפן"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "לא ניתן לשלוח הודעה"
+msgstr ""
 
 msgid "Maximum messages to send at once"
 msgstr ""
@@ -7173,29 +7172,40 @@ msgid ""
 msgstr ""
 "חלה שגיאה בעת קריאת ה-%s שלך. הקובץ לא נטען, ושם ההובץ הישן שונה ל-%s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "פידג׳ין"
+
 msgid "Instant Messaging Client"
 msgstr ""
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
 
-msgid "The buddy list showing friends on different networks."
+msgid "Buddy list showing friends on different networks"
 msgstr ""
-
-msgid "Pidgin Internet Messenger"
-msgstr "פידג׳ין למסרים באינטרנט"
 
 msgid "Internet Messenger"
 msgstr "למסרים באינטרנט"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "פידג׳ין למסרים באינטרנט"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
 
 #. Build the login options frame.
@@ -8713,13 +8723,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10439,11 +10447,6 @@ msgstr "האם למחוק הכול?"
 
 msgid "Select color"
 msgstr "בחר צבע"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "פידג׳ין"
 
 msgid "_Alias"
 msgstr "תיאו_ר"

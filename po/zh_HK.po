@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Chinese (Hong Kong) (http://www.transifex.com/pidgin/pidgin/"
@@ -3355,16 +3355,14 @@ msgstr "使用 SSL"
 msgid "Authenticate with SASL"
 msgstr "使用 SASL 認證"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "登入名稱"
+msgstr ""
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "允許使用明文，在未經加密的連線進行 SASL 認證"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "無法送出訊息。"
+msgstr ""
 
 msgid "Maximum messages to send at once"
 msgstr ""
@@ -7135,32 +7133,41 @@ msgid ""
 msgstr ""
 "在解析你的%s時發生錯誤。檔案內的資料並沒有被讀入，同時舊檔案已移至 %s~。"
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "即時通訊用戶端"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
-msgstr "Pidgin 是一個讓你在多個聊天網絡同時登入不同帳號的聊天程式。"
+msgstr ""
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
-"你可以同時在 AIM 上與好友聊天，又透過 Google Talk 和朋友通話，又待在 IRC 聊天"
-"室。"
 
-msgid "The buddy list showing friends on different networks."
-msgstr "不同網絡上的好友都在一個好友清單上"
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin 網絡即時通"
+msgid "Buddy list showing friends on different networks"
+msgstr ""
 
 msgid "Internet Messenger"
 msgstr "網絡即時通"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr "透過即時通訊與好友聊天，支援 AIM、Google Talk、Jabber/XMPP 等等"
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin 網絡即時通"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
+msgstr ""
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -8663,13 +8670,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10377,11 +10382,6 @@ msgstr "你確定要清除？"
 
 msgid "Select color"
 msgstr "選擇顏色"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
 
 msgid "_Alias"
 msgstr "別名(_A)"

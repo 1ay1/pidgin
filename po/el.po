@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: 79353a696ad19dc202b261b3067b7640_bec941e, 2015\n"
 "Language-Team: Greek (http://www.transifex.com/pidgin/pidgin/language/el/)\n"
@@ -3501,18 +3501,16 @@ msgstr "Χρήση SSL"
 msgid "Authenticate with SASL"
 msgstr "Αυθεντικοποίηση με SASL"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Όνομα εισόδου"
+msgstr ""
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr ""
 "Να επιτρέπεται αυθεντικοποίηση SASL απλού κειμένου μέσω μη κρυπτογραφημένης "
 "σύνδεσης"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Αδύνατο να σταλεί το μήνυμα."
+msgstr ""
 
 msgid "Maximum messages to send at once"
 msgstr ""
@@ -7447,31 +7445,40 @@ msgstr ""
 "Ένα σφάλμα συνέβη κατά την ανάγνωση του %s σας.  Δεν φορτώθηκε, και το παλιό "
 "αρχείο μετονομάστηκε σε %s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Πελάτης άμεσων μηνυμάτων "
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
-"Το Pidgin είναι μια εφαρμογή συνομιλίας που σας επιτρέπει να συνδεθείτε σε "
-"λογαριασμούς σε πολλαπλά δίκτυα συνομιλίας ταυτόχρονα."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
 
-msgid "The buddy list showing friends on different networks."
-msgstr "Η λίστα φίλων εμφανίζει φίλους σε διαφορετικά δίκτυα."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Αποστολέας μηνυμάτων διαδικτύου Pidgin"
+msgid "Buddy list showing friends on different networks"
+msgstr ""
 
 msgid "Internet Messenger"
 msgstr "Αποστολέας μηνυμάτων διαδικτύου"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Αποστολέας μηνυμάτων διαδικτύου Pidgin"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
 
 #. Build the login options frame.
@@ -9006,13 +9013,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10784,11 +10789,6 @@ msgstr "Είστε σίγουροι ότι θέλετε τον καθαρισμ�
 
 msgid "Select color"
 msgstr "Επιλογή χρώματος"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
 
 msgid "_Alias"
 msgstr "_Ψευδώνυμο"

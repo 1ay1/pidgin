@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin 2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2010-11-22 14:17+0300\n"
 "Last-Translator: Andrey Chemyshev <chemyshev.andrey@gmail.com>\n"
 "Language-Team: Mari <muter@lists.linux-ink.ru>\n"
@@ -7378,35 +7378,46 @@ msgstr ""
 "%s лудмо годым йоҥылыш лийын. Файлым налме огыл, тошто файллан %s~ лӱмым "
 "пуымо."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 #, fuzzy
 msgid "Instant Messaging Client"
 msgstr "Писе каласымаш алмаш"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
 
 #, fuzzy
-msgid "The buddy list showing friends on different networks."
+msgid "Buddy list showing friends on different networks"
 msgstr "%s мутланыше вотышто уке"
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin писе каласымаш алмаш клиент"
 
 msgid "Internet Messenger"
 msgstr "Писе каласымаш алмаш клиент"
 
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin писе каласымаш алмаш клиент"
+
 #, fuzzy
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
 msgstr ""
 "Писе каласымаш дене тототлымвер. AIM, Google Talk, Jabber/XMPP, MSN, Yahoo "
 "да молылын эҥерта"
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
+msgstr ""
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -8966,13 +8977,11 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 "<font size=\"4\">Pidgin вес пайдаланыше-влак деч полыш:</font> <a "
 "href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>Тиде "
@@ -10747,11 +10756,6 @@ msgstr "Тый чынак %s -ым кораҥдынет мо?"
 
 msgid "Select color"
 msgstr "Тӱсым ойыраш"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
 
 msgid "_Alias"
 msgstr "_Шолыплӱм"

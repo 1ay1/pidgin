@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>, 2013-2016,2022\n"
 "Language-Team: Albanian (http://www.transifex.com/pidgin/pidgin/language/"
@@ -3463,20 +3463,18 @@ msgstr "Përdor SSL"
 msgid "Authenticate with SASL"
 msgstr "Kryeni mirëfilltësimin me SASL"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Emër hyrjeje"
+msgstr "Emër hyrjeje SASL"
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr ""
 "Lejo mirëfilltësim SASL si tekst të thjeshtë përmes lidhjeje të pafshehtëzuar"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "S’arrihet të dërgohet mesazh."
+msgstr "Sekonda mes dërgimit të mesazheve"
 
 msgid "Maximum messages to send at once"
-msgstr ""
+msgstr "Maksimum mesazhesh për dërgim njëherësh"
 
 msgid "Bad mode"
 msgstr "Mënyrë e gabuar"
@@ -4927,7 +4925,7 @@ msgid "XMPP stream management"
 msgstr "Administrim rrëkeje XMPP"
 
 msgid "Stanza queue is full"
-msgstr ""
+msgstr "Radha stanza është plot"
 
 msgid "No further messages will be queued"
 msgstr "S’do të vihen në radhë mesazhe të tjerë"
@@ -7354,36 +7352,47 @@ msgstr ""
 "U has një gabim gjatë leximit të %s tuaj.  Kartela s’u ngarkua, dhe kartela "
 "e vjetër është riemërtuar si %s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Klient Mesazhesh të Atypëratyshme"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
-"Pidgin-i është një program fjalosjesh që ju lejon të hyni dhe përdorni shumë "
-"llogari njëherazi në disa rrjete fjalosjesh."
+"Pidgin-i është një program fjalosjesh që ju lejon të hyni në shumë llogari "
+"njëherazi në disa rrjete fjalosjesh në të njëjtën kohë."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
-"Kjo do të thotë se mund të fjaloseni me miqtë në AIM, të bisedoni me një "
-"shok në Google Talk, dhe të merrni pjesë në një dhomë fjalosjeje IRC, "
-"njëherazi."
+"Kjo do të thotë se mund të fjaloseni me miqtë në XMPP dhe në të njëjtën kohë "
+"të merrni pjesë në një dhomë fjalosjeje IRC."
 
-msgid "The buddy list showing friends on different networks."
-msgstr "Listë shokësh që shfaq shokë në rrjete të ndryshme."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin Internet Messenger"
+msgid "Buddy list showing friends on different networks"
+msgstr "Listë shokësh që shfaq shokë në rrjete të ndryshme"
 
 msgid "Internet Messenger"
 msgstr "Lajmsjellës Internet"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin Internet Messenger"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr "Bisedoni përmes IM-së. Mbulon XMPP, IRC, etj"
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
-"Fjalosje përmes IM-je.  Mbulon AIM, Google Talk, Jabber/XMPP, dhe të tjerë"
+"fjalosje;bisedë;im;mesazh;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;"
+"silc;simple;xmpp;zephyr;"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -8911,22 +8920,12 @@ msgstr ""
 "irc.libera.chat<BR>\tXMPP MUC: devel@conference.pidgin.im<BR><BR>"
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
-"<font size=\"4\"><b>Ndihmë nga përdorues të tjerë Pidgin</b></font> mund të "
-"kihet duke dërguar email te <a href=\"mailto:support@pidgin."
-"im\">support@pidgin.im</a><br/>Kjo është një listë postimesh <b>publike</b>! "
-"(<a href=\"https://lists.pidgin.im/pipermail/support/\">arkiv</a>)<br/"
-">S’ndihmojmë dot për protokolle ose shtojca nga palë të treta!<br/>Gjuha "
-"parësore e kësaj liste është <b>anglishtja</b>.  Jeni të mirëpritur të "
-"postoni në një gjuhë tjetër, por përgjigjet mund të jenë më pak të dobishme."
-"<br/>"
 
 #, c-format
 msgid "About %s"
@@ -10669,11 +10668,6 @@ msgstr "Doni vërtet të pastrohet?"
 
 msgid "Select color"
 msgstr "Përzgjidhni ngjyrë"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
 
 msgid "_Alias"
 msgstr "_Alias"

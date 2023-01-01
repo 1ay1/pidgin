@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>, 2009,2012-2018,2020,2022\n"
 "Language-Team: Polish (http://www.transifex.com/pidgin/pidgin/language/pl/)\n"
@@ -3487,21 +3487,19 @@ msgstr "SSL"
 msgid "Authenticate with SASL"
 msgstr "Uwierzytelnienie za pomocą SASL"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Login"
+msgstr "Login SASL"
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr ""
 "Zezwolenie na uwierzytelnianie zwykłym tekstem SASL przez niezaszyfrowane "
 "połączenie"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Nie można wysłać wiadomości."
+msgstr "Sekundy między wysyłaniem wiadomości"
 
 msgid "Maximum messages to send at once"
-msgstr ""
+msgstr "Maksymalna liczba jednocześnie wysyłanych wiadomości"
 
 msgid "Bad mode"
 msgstr "Błędny tryb"
@@ -7402,36 +7400,47 @@ msgstr ""
 "Wystąpił błąd podczas odczytywania %s. Plik nie został wczytany, a nazwa "
 "poprzedniego została zmieniona na %s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Komunikator"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 "Pidgin jest komunikatorem umożliwiającym logowanie do wielu sieci "
 "jednocześnie."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
-"Oznacza to, że można jednocześnie rozmawiać ze swoimi znajomymi przez AIM, "
-"z przyjacielem przez Google Talk i siedzieć w pokoju rozmów IRC."
+"Oznacza to, że można jednocześnie rozmawiać ze swoimi znajomymi przez XMPP "
+"i siedzieć na kanale IRC."
 
-msgid "The buddy list showing friends on different networks."
-msgstr "Lista znajomych wyświetlająca osoby używające różnych sieci."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin"
+msgid "Buddy list showing friends on different networks"
+msgstr "Lista znajomych wyświetlająca osoby używające różnych sieci"
 
 msgid "Internet Messenger"
 msgstr "Komunikator"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr "Rozmawianie przez komunikator. Obsługuje sieci XMPP, IRC i nie tylko"
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
-"Rozmawianie przez komunikator. Obsługuje sieci AIM, Google Talk, Jabber/XMPP "
-"oraz więcej"
+"komunikator;czat;chat;rozmowa;rozmawianie;talk;im;wiadomość;message;bonjour;"
+"gadu-gadu;gadugadu;gg;irc;groupwise;jabber;sametime;silc;simple;xmpp;zephyr;"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -8963,25 +8972,21 @@ msgid ""
 msgstr ""
 "<FONT SIZE=\"4\"><B>Przydatne zasoby</B></FONT><BR>\t<A HREF=\"%s\">Strona "
 "WWW</A><BR>\t<A HREF=\"%s\">Najczęściej zadawane pytania</A><BR>\tKanał IRC: "
-"#pidgin w  sieci irc.libera.chat<BR>\tMUC w sieci XMPP: devel@conference."
+"#pidgin w sieci irc.libera.chat<BR>\tMUC w sieci XMPP: devel@conference."
 "pidgin.im<BR><BR>"
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
-"<font size=\"4\"><b>Pomoc od innych użytkowników programu Pidgin</b></font>: "
-"<a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>To jest "
-"<b>publiczna</b> lista mailingowa (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archiwum</a>).<br/>Nie jest dostarczana żadna pomoc dla "
-"protokołów lub wtyczek osób trzecich.<br/>Główny język tej listy to "
-"<b>angielski</b>. Można na nią pisać w innych językach, ale odpowiedzi mogą "
-"być mniej pomocne.<br/>"
+"<font size=\"4\"><b>Pomoc od innych użytkowników programu Pidgin</b></font> "
+"jest dostępna w serwisie <a href=\"https://discourse.imfreedom.org/c/support/"
+"\">Discourse</a>. To <b>publiczne</b> forum, a do pisania wiadomości "
+"wymagane jest konto.<br/>Główny język tego forum to <b>angielski</b>. Można "
+"na nim pisać w innych językach, ale odpowiedzi mogą być mniej pomocne.<br/>"
 
 #, c-format
 msgid "About %s"
@@ -10732,11 +10737,6 @@ msgstr "Na pewno wyczyścić?"
 
 msgid "Select color"
 msgstr "Wybór koloru"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
 
 msgid "_Alias"
 msgstr "_Alias"

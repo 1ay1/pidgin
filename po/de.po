@@ -3,19 +3,23 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Adrian Heine <mail@adrianheine.de>, 2017
+# Adrian Heine né Lang <mail@adrianheine.de>, 2017
+# Adrian Heine né Lang <mail@adrianheine.de>, 2017
 # Andy Kleinert <Wawuschel@erweiterungen.de>, 2014-2017,2020
 # Björn Voigt <bjoernv@arcor.de>, 2014,2016-2018
 # Eion Robb <eion@robbmob.com>, 2017
-# Mario Siegmann <mario_siegmann@web.de>, 2014-2015,2018
+# iv4nhoe, 2022
+# iv4nhoe, 2022
+# Mario Siegmann <mario_siegmann@web.de>, 2014-2015,2018,2022
 # Tobias Bannert <tobannert@gmail.com>, 2014-2016
+# try once, 2015
 # try once, 2015
 # Andy Kleinert <Wawuschel@erweiterungen.de>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: Andy Kleinert <Wawuschel@erweiterungen.de>, 2014-2017,2020\n"
 "Language-Team: German (http://www.transifex.com/pidgin/pidgin/language/de/)\n"
@@ -2312,16 +2316,16 @@ msgstr "Medien-Pipeline konnte nicht erstellt werden"
 #. "aasink", "AALib", Didn't work for me
 #. "aasink",	"AALib", Didn't work for me
 msgid "DirectDraw"
-msgstr ""
+msgstr "DirectDraw"
 
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 msgid "X Window System"
-msgstr ""
+msgstr "X-Window System"
 
 msgid "X Window System (Xv)"
-msgstr ""
+msgstr "X-Window System (Xv)"
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
@@ -2903,6 +2907,9 @@ msgid ""
 "Causes conversation windows to appear as other users begin to message you.  "
 "This works for XMPP and Sametime"
 msgstr ""
+"Bewirkt, dass Konversationsfenster angezeigt werden, wenn andere Benutzer "
+"beginnen, Ihnen Nachrichten zu senden. Dies funktioniert für XMPP und "
+"Sametime"
 
 msgid "You feel a disturbance in the force..."
 msgstr "Ihr Kontakt beginnt zu tippen …"
@@ -3377,7 +3384,7 @@ msgid "Don't use encryption"
 msgstr "Keine Verschlüsselung verwenden"
 
 msgid "Use encryption if available"
-msgstr "Verschlüsselung verqwenden, wenn verfügbar"
+msgstr "Verschlüsselung verwenden, wenn verfügbar"
 
 #. TODO
 msgid "Require encryption"
@@ -3503,19 +3510,18 @@ msgstr "SSL verwenden"
 msgid "Authenticate with SASL"
 msgstr "Mit SASL legitimieren"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Anmeldename"
+msgstr "SASL-Anmeldename"
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "Klartextlegitimierung über eine unverschlüsselten Verbindung erlauben"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Nachricht konnte nicht gesendet werden."
+msgstr "Sekunden zwischen dem Senden von Nachrichten"
 
 msgid "Maximum messages to send at once"
 msgstr ""
+"Maximale Anzahl von Nachrichten, die gleichzeitig gesendet werden können"
 
 msgid "Bad mode"
 msgstr "Unzulässiger Modus"
@@ -4597,7 +4603,7 @@ msgid "Authorization mechanism too weak"
 msgstr "Legitimierungsmechanismus zu schwach"
 
 msgid "Incorrect username or password"
-msgstr "Benutzername oder Passwort ungülzig"
+msgstr "Benutzername oder Passwort ungültig"
 
 msgid "Temporary Authentication Failure"
 msgstr "Temporärer Legitimierungsfehler"
@@ -7470,37 +7476,47 @@ msgstr ""
 "Beim Einlesen Ihrer %s trat ein Fehler auf.  Die Datei wurde nicht geladen "
 "und die alte Datei wurde in %s~ umbenannt."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Client für Instant Messaging (Sofortnachrichten)"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 "Pidgin ist eine Chat-Anwendung, welche es Ihnen erlaubt, sich gleichzeitig "
 "bei mehreren Chat-Netzwerken anzumelden."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
-"Dies bedeutet, dass Sie mit Freunden auf AIM chatten können, sich mit einem "
-"Freund auf Google Talk unterhalten können und in einem IRC-Chatraum sitzen "
-"können und all dies gleichzeitig."
+"Dies bedeutet, dass Sie mit Freunden auf XMPP chatten und gleichzeitig in "
+"einem IRC-Kanal sitzen können."
 
-msgid "The buddy list showing friends on different networks."
-msgstr "Die Kontaktliste zeigt die Freunde aus den veschiedenen Netzwerken."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin Internet-Sofortnachrichtendienst"
+msgid "Buddy list showing friends on different networks"
+msgstr "Freundesliste zeigt Freunde in verschiedenen Netzwerken"
 
 msgid "Internet Messenger"
 msgstr "Internet-Sofortnachrichtendienst"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin Internet-Sofortnachrichtendienst"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr "Chatten Sie über IM. Unterstützt XMPP, IRC und mehr"
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
-"Chatten mit Kurznachrichten.  Unterstützt AIM, Google Talk, Jabber/XMPP und "
-"weitere"
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -8010,7 +8026,7 @@ msgid "/Help/Online _Help"
 msgstr "/Hilfe/_Internethilfe"
 
 msgid "/Help/D_onate"
-msgstr ""
+msgstr "/Hilfe/Spend_e"
 
 msgid "/Help/_Build Information"
 msgstr "/Hilfe/_Versionsdaten"
@@ -9030,16 +9046,24 @@ msgid ""
 "A><BR>\tIRC Channel: #pidgin on irc.libera.chat<BR>\tXMPP MUC: "
 "devel@conference.pidgin.im<BR><BR>"
 msgstr ""
+"<FONT SIZE=\"4\"><B>Hilfreiche Ressourcen</B></FONT><BR>\t<A "
+"HREF=\"%s\">Webseite</A><BR>\t<A HREF=\"%s\">Häufig gestellte Fragen</"
+"A><BR>\tIRC Kanal: #pidgin on irc.libera.chat<BR>\tXMPP MUC: "
+"devel@conference.pidgin.im<BR><BR>"
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
+"<font size=\"4\"><b>Hilfe von anderen Pidgin-Benutzern</b></font> ist "
+"verfügbar über <a href=\"https://discourse.imfreedom.org/c/support/"
+"\">Discourse</a>. Das ist ein <b>öffentliches</b> Forum und ein Konto ist "
+"nötig, um neue Nachrichten zu posten!<br/>In diesem Forum ist die primäre "
+"Sprache <b>Englisch</b>. Sie können gerne in einer anderen Sprache posten, "
+"aber die Antworten könnten weniger hilfreich sein.<br/>"
 
 #, c-format
 msgid "About %s"
@@ -10808,11 +10832,6 @@ msgstr "Möchten Sie wirklich löschen?"
 msgid "Select color"
 msgstr "Farbe auswählen"
 
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
-
 msgid "_Alias"
 msgstr "Alia_s"
 
@@ -11976,41 +11995,41 @@ msgstr ""
 "Integration mit Unity's Benachrichtigungsfeld und dem Unity-Starter erlauben."
 
 msgid "ALSA"
-msgstr ""
+msgstr "ALSA"
 
 #. "esdmon",	"ESD", ?
 msgid "OSS"
-msgstr ""
+msgstr "OSS"
 
 msgid "PulseAudio"
-msgstr ""
+msgstr "PulseAudio"
 
 msgid "sndio"
-msgstr ""
+msgstr "sndio"
 
 msgid "aRts"
-msgstr ""
+msgstr "aRts"
 
 msgid "ESD"
-msgstr ""
+msgstr "ESD"
 
 msgid "Test Input"
-msgstr ""
+msgstr "Testeingabe"
 
 msgid "KS Video"
-msgstr ""
+msgstr "KS-Video"
 
 msgid "Quickcam"
-msgstr ""
+msgstr "Quickcam"
 
 msgid "Video4Linux"
-msgstr ""
+msgstr "Video4Linux"
 
 msgid "Video4Linux2"
-msgstr ""
+msgstr "Video4Linux2"
 
 msgid "Video4Linux MJPEG"
-msgstr ""
+msgstr "Video4Linux MJPEG"
 
 msgid "_Plugin"
 msgstr "_Plugin"

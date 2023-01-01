@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: French (http://www.transifex.com/pidgin/pidgin/language/fr/)\n"
@@ -15,7 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % "
+"1000000 == 0 ? 1 : 2;\n"
 
 #. Translators may want to transliterate the name.
 #. It is not to be translated.
@@ -655,6 +656,7 @@ msgid "List of %d user:\n"
 msgid_plural "List of %d users:\n"
 msgstr[0] "Liste de %d utilisateur :\n"
 msgstr[1] "Liste de %d utilisateurs :\n"
+msgstr[2] "Liste de %d utilisateurs :\n"
 
 msgid "Supported debug options are: plugins version"
 msgstr "Les options de débuggage supportées sont : plugins version"
@@ -768,6 +770,7 @@ msgid "File Transfers - %d%% of %d file"
 msgid_plural "File Transfers - %d%% of %d files"
 msgstr[0] "Transferts - %d%% de %d fichier."
 msgstr[1] "Transferts - %d%% de %d fichiers."
+msgstr[2] "Transferts - %d%% de %d fichiers."
 
 #. Create the window.
 msgid "File Transfers"
@@ -938,6 +941,7 @@ msgid "%s (%s) has %d new message."
 msgid_plural "%s (%s) has %d new messages."
 msgstr[0] "%s (%s) a reçu %d nouveau message."
 msgstr[1] "%s (%s) a reçu %d nouveaux messages."
+msgstr[2] "%s (%s) a reçu %d nouveaux messages."
 
 msgid "New Mail"
 msgstr "Nouveau courrier"
@@ -3451,9 +3455,8 @@ msgstr ""
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr ""
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Impossible d'envoyer le message"
+msgstr ""
 
 msgid "Maximum messages to send at once"
 msgstr ""
@@ -7256,36 +7259,42 @@ msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d seconde"
 msgstr[1] "%d secondes"
+msgstr[2] "%d secondes"
 
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d jour"
 msgstr[1] "%d jours"
+msgstr[2] "%d jours"
 
 #, c-format
 msgid "%s, %d hour"
 msgid_plural "%s, %d hours"
 msgstr[0] "%s, %d heure"
 msgstr[1] "%s, %d heures"
+msgstr[2] "%s, %d heures"
 
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d heure"
 msgstr[1] "%d heures"
+msgstr[2] "%d heures"
 
 #, c-format
 msgid "%s, %d minute"
 msgid_plural "%s, %d minutes"
 msgstr[0] "%s, %d minute"
 msgstr[1] "%s, %d minutes"
+msgstr[2] "%s, %d minutes"
 
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minute"
 msgstr[1] "%d minutes"
+msgstr[2] "%d minutes"
 
 #, c-format
 msgid "Could not open %s: Redirected too many times"
@@ -7359,29 +7368,40 @@ msgstr ""
 "Une erreur est survenue à la lecture de « %s ». Il n'a pas été chargé et "
 "l'ancien fichier a été renommé « %s~ »."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr ""
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
 
-msgid "The buddy list showing friends on different networks."
+msgid "Buddy list showing friends on different networks"
 msgstr ""
-
-msgid "Pidgin Internet Messenger"
-msgstr "Messagerie internet Pidgin"
 
 msgid "Internet Messenger"
 msgstr "Messagerie internet"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Messagerie internet Pidgin"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
 
 #. Build the login options frame.
@@ -7654,6 +7674,7 @@ msgid_plural ""
 "You currently have %d contacts named %s. Would you like to merge them?"
 msgstr[0] "Vous avez %d contact nommé %s. Voulez-vous le fusionner ?"
 msgstr[1] "Vous avez %d contacts nommé %s. Voulez-vous les fusionner ?"
+msgstr[2] "Vous avez %d contacts nommé %s. Voulez-vous les fusionner ?"
 
 msgid ""
 "Merging these contacts will cause them to share a single entry on the buddy "
@@ -7993,6 +8014,7 @@ msgid "%d unread message from %s\n"
 msgid_plural "%d unread messages from %s\n"
 msgstr[0] "%d message non lu de %s\n"
 msgstr[1] "%d messages non lus de %s\n"
+msgstr[2] "%d messages non lus de %s\n"
 
 msgid "Manually"
 msgstr "Manuel"
@@ -8031,6 +8053,9 @@ msgstr[0] ""
 "%d compte a été désactivé parce que vous venez de vous connecter depuis un "
 "autre endroit :"
 msgstr[1] ""
+"%d comptes ont été désactivés parce que vous venez de vous connecter depuis "
+"un autre endroit :"
+msgstr[2] ""
 "%d comptes ont été désactivés parce que vous venez de vous connecter depuis "
 "un autre endroit :"
 
@@ -8426,6 +8451,7 @@ msgid "%d person in room"
 msgid_plural "%d people in room"
 msgstr[0] "%d personne dans le salon"
 msgstr[1] "%d personnes dans le salon"
+msgstr[2] "%d personnes dans le salon"
 
 msgid "Typing"
 msgstr "En train d'écrire"
@@ -8909,13 +8935,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -9012,6 +9036,9 @@ msgstr[0] ""
 "Vous allez supprimer le contact contenant %s et %d autre identifiant de "
 "votre liste de contacts. Voulez-vous continuer ?"
 msgstr[1] ""
+"Vous allez supprimer le contact contenant %s et %d autres identifiants de "
+"votre liste de contacts. Voulez-vous continuer ?"
+msgstr[2] ""
 "Vous allez supprimer le contact contenant %s et %d autres identifiants de "
 "votre liste de contacts. Voulez-vous continuer ?"
 
@@ -9626,12 +9653,14 @@ msgid "%s has %d new message."
 msgid_plural "%s has %d new messages."
 msgstr[0] "%s a reçu %d nouveau message."
 msgstr[1] "%s a reçu %d nouveaux messages."
+msgstr[2] "%s a reçu %d nouveaux messages."
 
 #, c-format
 msgid "<b>%d new email.</b>"
 msgid_plural "<b>%d new emails.</b>"
 msgstr[0] "<b>%d nouveau courrier.</b>"
 msgstr[1] "<b>%d nouveaux courriers.</b>"
+msgstr[2] "<b>%d nouveaux courriers.</b>"
 
 #, c-format
 msgid "The browser command \"%s\" is invalid."
@@ -10663,11 +10692,6 @@ msgstr "Êtes-vous sûr de vouloir l'effacer ?"
 
 msgid "Select color"
 msgstr "Choisir la couleur"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
 
 msgid "_Alias"
 msgstr "_Alias"

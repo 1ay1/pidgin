@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Anders Jonsson <transifex@norsjovallen.se>, 2016
+# Anders Jonsson <transifex@norsjovallen.se>, 2016,2022
 # Josef Andersson <josef.andersson@fripost.org>, 2014-2016
 # Linus Malmgren <linus@malmgren.nu>, 2015
 # Sebastian Rasmussen <sebras@gmail.com>, 2018
@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Sebastian Rasmussen <sebras@gmail.com>, 2018\n"
+"Last-Translator: Anders Jonsson <transifex@norsjovallen.se>, 2016,2022\n"
 "Language-Team: Swedish (http://www.transifex.com/pidgin/pidgin/language/"
 "sv/)\n"
 "Language: sv\n"
@@ -2253,10 +2253,10 @@ msgstr ""
 #. "aasink", "AALib", Didn't work for me
 #. "aasink",	"AALib", Didn't work for me
 msgid "DirectDraw"
-msgstr ""
+msgstr "DirectDraw"
 
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 msgid "X Window System"
 msgstr ""
@@ -3431,16 +3431,14 @@ msgstr "Använd SSL"
 msgid "Authenticate with SASL"
 msgstr "Autentisera med SASL"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Inloggningsnamn"
+msgstr ""
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "Tillåt SASL-autentisering i klartext över en okrypterad anslutning"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Kan inte skicka meddelandet."
+msgstr ""
 
 msgid "Maximum messages to send at once"
 msgstr ""
@@ -7308,34 +7306,41 @@ msgstr ""
 "Ett fel upptäcktes vid inläsandet av din %s.  Filen har inte laddats och den "
 "gamla har blivit flyttad till %s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Snabbmeddelandeklient"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
-"Pidgin är ett chattprogram som låter dig logga in på flera chattnätverk "
-"samtidigt."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
-"Det betyder att du kan chatta med vänner på AIM, prata med en vän på Google "
-"Talk samt delta i ett IRC-chattrum samtidigt."
 
-msgid "The buddy list showing friends on different networks."
-msgstr "Kompislistan visar vänner på olika nätverk."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin meddelandeklient"
+msgid "Buddy list showing friends on different networks"
+msgstr ""
 
 msgid "Internet Messenger"
 msgstr "Meddelandeklient"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr "Chatt över IM. Stöd för AIM, GoogleTalk, Jabber/XMPP med flera."
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin meddelandeklient"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
+msgstr ""
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -8859,13 +8864,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10607,11 +10610,6 @@ msgstr "Är du säker på att du vill rensa?"
 msgid "Select color"
 msgstr "Välj färg"
 
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
-
 msgid "_Alias"
 msgstr "_Alias"
 
@@ -11760,14 +11758,14 @@ msgstr ""
 "Tillhandahåller integration med Unitys meddelandemeny och Programstartare."
 
 msgid "ALSA"
-msgstr ""
+msgstr "ALSA"
 
 #. "esdmon",	"ESD", ?
 msgid "OSS"
-msgstr ""
+msgstr "OSS"
 
 msgid "PulseAudio"
-msgstr ""
+msgstr "PulseAudio"
 
 msgid "sndio"
 msgstr ""

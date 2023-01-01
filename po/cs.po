@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# David Vachulka <archdvx@dxsolutions.org>, 2022
 # David Vachulka <archdvx@dxsolutions.org>, 2015-2016,2018,2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: David Vachulka <archdvx@dxsolutions.org>, "
-"2015-2016,2018,2020\n"
+"Last-Translator: David Vachulka <archdvx@dxsolutions.org>, 2022\n"
 "Language-Team: Czech (http://www.transifex.com/pidgin/pidgin/language/cs/)\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -2255,16 +2255,16 @@ msgstr "Nemohu vytvořit rouru pro média"
 #. "aasink", "AALib", Didn't work for me
 #. "aasink",	"AALib", Didn't work for me
 msgid "DirectDraw"
-msgstr ""
+msgstr "DirectDraw"
 
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 msgid "X Window System"
-msgstr ""
+msgstr "X Window System"
 
 msgid "X Window System (Xv)"
-msgstr ""
+msgstr "X Window System (Xv)"
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
@@ -2834,6 +2834,8 @@ msgid ""
 "Causes conversation windows to appear as other users begin to message you.  "
 "This works for XMPP and Sametime"
 msgstr ""
+"Způsobí, že okna konverzací se objeví, když vám jiní uživatelé začnou psát "
+"zprávu. Funguje s XMPP a Sametime"
 
 msgid "You feel a disturbance in the force..."
 msgstr "Cítíte narušení síly..."
@@ -3428,19 +3430,17 @@ msgstr "Používat SSL"
 msgid "Authenticate with SASL"
 msgstr "Autentizace pomocí SASL"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Přihlašovací jméno"
+msgstr "SASL přihlašovací jméno"
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "Povolit textovou autentizaci SASL po nešifrovaných proudech"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Nemohu odeslat zprávu."
+msgstr "Interval mezi posláním zpráv v sekundách"
 
 msgid "Maximum messages to send at once"
-msgstr ""
+msgstr "Maximální počet zpráv poslaných najednou"
 
 msgid "Bad mode"
 msgstr "Špatný mód"
@@ -7295,34 +7295,47 @@ msgstr ""
 "Při čtení vašeho %s došlo k chybě. Nebyl načten a starý soubor byl "
 "přejmenován na %s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Instant Messaging Klient"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 "Pidgin je chatovací program umožňující přihlášení k účtům na různých sítích "
 "současně. "
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
-"To znamená chatování s přáteli na AIM, rozhovory na Google Talk a sezení v "
-"chatovacích místnostech IRC současně."
+"To znamená chatování s přáteli na XMPP a sezení v chatovacích místnostech "
+"IRC současně."
 
-msgid "The buddy list showing friends on different networks."
+msgid "Buddy list showing friends on different networks"
 msgstr "Seznam kamarádů zobrazuje kamarády na různých sítích."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin Internet Messenger"
 
 msgid "Internet Messenger"
 msgstr "Internet Messenger"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
-msgstr "Chat pomocí IM. Podporuje AIM, Google Talk, Jabber/XMPP, MSN a další"
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin Internet Messenger"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr "Chatování pomocí IM. Podporuje XMPP, IRC a další"
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
+msgstr ""
+"chat;rozhovor;im;zpráva;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -7825,7 +7838,7 @@ msgid "/Help/Online _Help"
 msgstr "/Nápověda/_Nápověda online"
 
 msgid "/Help/D_onate"
-msgstr ""
+msgstr "/Help/P_odpořit"
 
 msgid "/Help/_Build Information"
 msgstr "/Nápověda/Informace o sestavení"
@@ -8842,15 +8855,16 @@ msgid ""
 "A><BR>\tIRC Channel: #pidgin on irc.libera.chat<BR>\tXMPP MUC: "
 "devel@conference.pidgin.im<BR><BR>"
 msgstr ""
+"<FONT SIZE=\"4\"><B>Užitečné zdroje</B></FONT><BR>\t<A HREF=\"%s\">Webová "
+"stránka</A><BR>\t<A HREF=\"%s\">Často kladené otázky</A><BR>\tIRC kanál: "
+"#pidgin on irc.libera.chat<BR>\tXMPP MUC: devel@conference.pidgin.im<BR><BR>"
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10589,11 +10603,6 @@ msgstr "Opravdu chcete vymazat?"
 msgid "Select color"
 msgstr "Zvolte barvu"
 
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
-
 msgid "_Alias"
 msgstr "_Alias"
 
@@ -11731,41 +11740,41 @@ msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr "Poskytuje integraci s menu zpráv a launcherem Unity."
 
 msgid "ALSA"
-msgstr ""
+msgstr "ALSA"
 
 #. "esdmon",	"ESD", ?
 msgid "OSS"
-msgstr ""
+msgstr "OSS"
 
 msgid "PulseAudio"
-msgstr ""
+msgstr "PulseAudio"
 
 msgid "sndio"
-msgstr ""
+msgstr "sndio"
 
 msgid "aRts"
-msgstr ""
+msgstr "aRts"
 
 msgid "ESD"
-msgstr ""
+msgstr "ESD"
 
 msgid "Test Input"
-msgstr ""
+msgstr "Test vstupu"
 
 msgid "KS Video"
-msgstr ""
+msgstr "KS Video"
 
 msgid "Quickcam"
-msgstr ""
+msgstr "Quickcam"
 
 msgid "Video4Linux"
-msgstr ""
+msgstr "Video4Linux"
 
 msgid "Video4Linux2"
-msgstr ""
+msgstr "Video4Linux2"
 
 msgid "Video4Linux MJPEG"
-msgstr ""
+msgstr "Video4Linux MJPEG"
 
 msgid "_Plugin"
 msgstr "_Zásuvný modul"

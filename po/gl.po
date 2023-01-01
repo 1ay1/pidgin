@@ -5,15 +5,15 @@
 # Translators:
 # Antón Méixome <meixome@mancomun.org>, 2009
 # Frco. Javier Rial Rodríguez <fjrial@cesga.es>, 2008-2009
-# Miguel Anxo Bouzada <mbouzada@gmail.com>, 2015
+# Miguel Anxo Bouzada <mbouzada@gmail.com>, 2015,2022
 # Richard Laager <rlaager@wiktel.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>, 2015\n"
+"Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>, 2015,2022\n"
 "Language-Team: Galician (http://www.transifex.com/pidgin/pidgin/language/"
 "gl/)\n"
 "Language: gl\n"
@@ -1289,7 +1289,7 @@ msgid "(default)"
 msgstr "(predeterminado)"
 
 msgid "Select Sound File..."
-msgstr ""
+msgstr "Seleccionar ficheiro de son..."
 
 msgid "Sound Preferences"
 msgstr "Preferencias de son"
@@ -1409,11 +1409,11 @@ msgid "Edit Status"
 msgstr "Editar estado"
 
 msgid "Use a different status for some accounts"
-msgstr ""
+msgstr "Usar un estado diferente para algunhas contas"
 
 #. Save and Use
 msgid "Save and Use"
-msgstr ""
+msgstr "Gardar e usar"
 
 msgid "Certificates"
 msgstr "Certificados"
@@ -1544,7 +1544,7 @@ msgid "TinyURL for above: %s"
 msgstr "TinyURL para enriba: %s"
 
 msgid "Please wait while TinyURL fetches a shorter URL..."
-msgstr ""
+msgstr "Agarde mentres TinyURL busca un URL máis curto..."
 
 msgid "Only create TinyURL for URLs of this length or greater"
 msgstr "Só crear o TinyURL dun URL se ten unha lonxitude coma esta ou superior"
@@ -1559,7 +1559,7 @@ msgid "TinyURL plugin"
 msgstr "Plugin TinyURL"
 
 msgid "Shorten URLs in messages using TinyURL"
-msgstr ""
+msgstr "Acurtar os URL nas mensaxes usando TinyURL"
 
 msgid "Online"
 msgstr "Conectado"
@@ -2191,12 +2191,16 @@ msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;RESPOSTA AUTOMÁTICA&gt;:</b></span> %s<br>\n"
 
 #, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;RESPOSTA AUTOMÁTICA&gt;:</b></span> %s<br>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr ""
@@ -2277,16 +2281,16 @@ msgstr ""
 #. "aasink", "AALib", Didn't work for me
 #. "aasink",	"AALib", Didn't work for me
 msgid "DirectDraw"
-msgstr ""
+msgstr "DirectDraw"
 
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 msgid "X Window System"
-msgstr ""
+msgstr "X Window System"
 
 msgid "X Window System (Xv)"
-msgstr ""
+msgstr "X Window System (Xv)"
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
@@ -2294,7 +2298,7 @@ msgstr ""
 #. * set up correctly for voice calling.
 #. "audiotestsrc wave=silence", "Silence",
 msgid "Test Sound"
-msgstr ""
+msgstr "Proba de son"
 
 msgid "Disabled"
 msgstr "Desactivado"
@@ -2305,7 +2309,7 @@ msgstr "Desactivado"
 #. * the video output has been set up correctly without
 #. * needing a webcam connected to the computer.
 msgid "Test Pattern"
-msgstr ""
+msgstr "Patrón de proba"
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -3460,16 +3464,14 @@ msgstr "Usar SSL"
 msgid "Authenticate with SASL"
 msgstr "Autenticar con SASL"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Nome de usuario"
+msgstr ""
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "Permitir autenticación SASL en texto plano sobre conexión sen cifrar"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Non é posíbel enviar a mensaxe."
+msgstr ""
 
 msgid "Maximum messages to send at once"
 msgstr ""
@@ -7363,31 +7365,40 @@ msgstr ""
 "Produciuse un erro lendo o seu %s. Non se cargou o ficheiro e o antigo "
 "renomeouse como %s~."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Cliente de mensaxería instantánea"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
-"Pidgin é un programa de conversas que permite conectarse simultaneamente  "
-"con contas en múltiples redes de conversa."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
 
-msgid "The buddy list showing friends on different networks."
-msgstr "A lista de contactos amosa  os seus amigos en diferentes redes."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Mensaxería na Internet de Pidgin"
+msgid "Buddy list showing friends on different networks"
+msgstr ""
 
 msgid "Internet Messenger"
 msgstr "Mensaxería na Internet"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Mensaxería na Internet de Pidgin"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
 
 #. Build the login options frame.
@@ -8912,13 +8923,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10273,16 +10282,16 @@ msgstr "SOLTAR"
 
 #, c-format
 msgid "Silence threshold: %d%%"
-msgstr ""
+msgstr "Limiar de silencio: %d%%"
 
 msgid "Volume:"
 msgstr "Volume:"
 
 msgid "Test Audio"
-msgstr ""
+msgstr "Proba de son"
 
 msgid "Test Video"
-msgstr ""
+msgstr "Proba de vídeo"
 
 msgid "_Device"
 msgstr "_Dispositivo"
@@ -10312,7 +10321,7 @@ msgid "Themes"
 msgstr "Temas"
 
 msgid "Voice/Video"
-msgstr ""
+msgstr "Voz/Vídeo"
 
 msgid "Allow all users to contact me"
 msgstr "Permitir que todos os usuarios contacten comigo"
@@ -10400,7 +10409,7 @@ msgid "Select Folder..."
 msgstr "Seleccionar cartafol..."
 
 msgid "Screen share error"
-msgstr ""
+msgstr "Produciuse un erro ao compartir a pantalla"
 
 msgid "Error creating screencast request"
 msgstr ""
@@ -10663,11 +10672,6 @@ msgstr "Confirma a limpeza?"
 
 msgid "Select color"
 msgstr "Seleccione a cor"
-
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
 
 msgid "_Alias"
 msgstr "_Alias"

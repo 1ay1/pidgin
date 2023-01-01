@@ -3,16 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# 3d5ab56b1b83fefceeab671c39a98a6d_999ae54, 2022
 # Mișu Moldovan <dumol@gnome.org>, 2011
 # drazvan, 2016-2017
-# Simona Iacob <s@zp1.net>, 2021
+# Richard Laager <rlaager@wiktel.com>, 2022
+# Simona Iacob <s@zp1.net>, 2021-2022
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 04:34-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Simona Iacob <s@zp1.net>, 2021\n"
+"Last-Translator: Simona Iacob <s@zp1.net>, 2021-2022\n"
 "Language-Team: Romanian (http://www.transifex.com/pidgin/pidgin/language/"
 "ro/)\n"
 "Language: ro\n"
@@ -86,7 +88,7 @@ msgstr ""
 "utilizator."
 
 msgid "New mail notifications"
-msgstr "Notificare la mail nou"
+msgstr "Notificare pentru mesaje noi"
 
 msgid "Remember password"
 msgstr "Salvează parola"
@@ -2290,16 +2292,16 @@ msgstr "Nu s-a putut crea conducta media"
 #. "aasink", "AALib", Didn't work for me
 #. "aasink",	"AALib", Didn't work for me
 msgid "DirectDraw"
-msgstr ""
+msgstr "DirectDraw"
 
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 msgid "X Window System"
-msgstr ""
+msgstr "X Window Sistem"
 
 msgid "X Window System (Xv)"
-msgstr ""
+msgstr "X Window Sistem (Xv)"
 
 #. Translators: This is a noun that refers to one
 #. * possible audio input device. The device can help the
@@ -2869,6 +2871,8 @@ msgid ""
 "Causes conversation windows to appear as other users begin to message you.  "
 "This works for XMPP and Sametime"
 msgstr ""
+"Determină apariția ferestrelor de conversație atunci când alți utilizatori "
+"încep să vă trimită mesaje.  Funcționează pentru XMPP și Sametime."
 
 msgid "You feel a disturbance in the force..."
 msgstr "Vine, vine, calcă totul în picioare..."
@@ -3462,19 +3466,17 @@ msgstr "Utilizare SSL"
 msgid "Authenticate with SASL"
 msgstr "Autentificare cu SASL"
 
-#, fuzzy
 msgid "SASL login name"
-msgstr "Nume login"
+msgstr "nume de utilizator SASL"
 
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "Permiteți autentificarea SASL în text simplu prin conexiune necriptată"
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "Nu se poate trimite mesajul."
+msgstr "secunde între trimiterea mesajelor"
 
 msgid "Maximum messages to send at once"
-msgstr ""
+msgstr "numărul maxim de mesaje trimise deodată"
 
 msgid "Bad mode"
 msgstr "Mod greșit"
@@ -7378,36 +7380,47 @@ msgstr ""
 "A apărut o eroare la citirea %s. Fișierul nu a fost încărcat și vechiul "
 "fișier a fost redenumit în „%s~”."
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr "Client mesagerie instantă"
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 "Pidgin este un program de chat care vă permite să vă conectați simultan la "
 "conturi din mai multe rețele de chat."
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
-"Acest lucru înseamnă că puteți discuta cu prietenii pe AIM, vorbi cu un "
-"prieten pe Google Talk și sta într-o cameră de chat IRC, toate în același "
-"timp."
+"Acest lucru înseamnă că puteți să discutați cu prietenii pe XMPP și să stați "
+"pe un canal IRC în același timp."
 
-msgid "The buddy list showing friends on different networks."
-msgstr "Lista de prieteni care arată prietenii din diferite rețele."
-
-msgid "Pidgin Internet Messenger"
-msgstr "Mesagerul Pidgin"
+msgid "Buddy list showing friends on different networks"
+msgstr "Lista de prieteni care arată prietenii din diferite rețele"
 
 msgid "Internet Messenger"
 msgstr "Mesagerie instant"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Mesagerul Pidgin"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr "Discutați prin IM.  Suportă XMPP, IRC și multe altele"
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
-"Discutați prin IM.  Suportă AIM, Google Talk, Jabber/XMPP și multe altele."
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 
 #. Build the login options frame.
 msgid "Login Options"
@@ -7914,7 +7927,7 @@ msgid "/Help/Online _Help"
 msgstr "/Ajutor/Ajutor _online"
 
 msgid "/Help/D_onate"
-msgstr ""
+msgstr "/Ajutor/D_onați"
 
 msgid "/Help/_Build Information"
 msgstr "/Ajutor/Informații de _versiune"
@@ -8935,16 +8948,23 @@ msgid ""
 "A><BR>\tIRC Channel: #pidgin on irc.libera.chat<BR>\tXMPP MUC: "
 "devel@conference.pidgin.im<BR><BR>"
 msgstr ""
+"<FONT SIZE=\"4\"><B>Resurse utile</B></FONT><BR>\t<A HREF=\"%s\">Site web</"
+"A><BR>\t<A HREF=\"%s\">Întrebări frecvente</A><BR>\tCanal IRC : #pidgin on "
+"irc.libera.chat<BR>\tXMPP MUC: devel@conference.pidgin.im<BR><BR>"
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
+"<font size=\"4\"><b>Ajutorul din partea altor utilizatori Pidgin</b></"
+"font>este disponibil prin intermediul <a href=\"https://discourse.imfreedom."
+"org/c/support/\">Discourse</a>. Acesta este un <b>forum public</b> forum  și "
+"este necesar un cont pentru a posta mesaje noi!<br/>Limba principală a "
+"acestui forum este<b>Engleza</b>.Sunteți binevenit să postați în altă limbă, "
+"dar răspunsurile pot fi mai puțin utile.<br/>"
 
 #, c-format
 msgid "About %s"
@@ -10692,11 +10712,6 @@ msgstr "Sigur doriți să curățați?"
 msgid "Select color"
 msgstr "Selectare culoare"
 
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
-
 msgid "_Alias"
 msgstr "_Alias"
 
@@ -11847,41 +11862,41 @@ msgid "Provides integration with Unity's messaging menu and launcher."
 msgstr "Oferă integrare cu meniul de mesagerie și lansatorul Unity."
 
 msgid "ALSA"
-msgstr ""
+msgstr "ALSA"
 
 #. "esdmon",	"ESD", ?
 msgid "OSS"
-msgstr ""
+msgstr "OSS"
 
 msgid "PulseAudio"
-msgstr ""
+msgstr "PulseAudio"
 
 msgid "sndio"
-msgstr ""
+msgstr "sndio"
 
 msgid "aRts"
-msgstr ""
+msgstr "aRts"
 
 msgid "ESD"
-msgstr ""
+msgstr "ESD"
 
 msgid "Test Input"
-msgstr ""
+msgstr "Test de intrare"
 
 msgid "KS Video"
-msgstr ""
+msgstr "KS Video"
 
 msgid "Quickcam"
-msgstr ""
+msgstr "Camera video Quickcam"
 
 msgid "Video4Linux"
-msgstr ""
+msgstr "Video4Linux"
 
 msgid "Video4Linux2"
-msgstr ""
+msgstr "Video4Linux2"
 
 msgid "Video4Linux MJPEG"
-msgstr ""
+msgstr "Video4Linux MJPEG"
 
 msgid "_Plugin"
 msgstr "_Modul"
@@ -12006,8 +12021,8 @@ msgid ""
 "$(^Name) is released under the GNU General Public License (GPL). The license "
 "is provided here for information purposes only. $_CLICK"
 msgstr ""
-"$(^Name) are licenţă GPL (GNU Public License). Licenţa este inclusă aici "
-"doar pentru scopuri informative. $_CLICK"
+"$(^Name) are licenţă GPL (GNU General Public License). Licenţa este inclusă "
+"aici doar pentru scopuri informative. $_CLICK"
 
 #. Installer Subsection Text
 msgid "Pidgin Instant Messaging Client (required)"
@@ -12072,6 +12087,8 @@ msgid ""
 "Pidgin requires a compatible GTK+ Runtime (which does not appear to be "
 "installed).$\\rAre you sure you want to skip installing the GTK+ Runtime?"
 msgstr ""
+"Pidgin necesită un Runtime GTK+ compatibil (care nu pare să fie instalat).$"
+"\\rSunteți sigur că doriți să săriți peste instalarea Runtime-ului GTK+?"
 
 #. Installer Subsection Text
 msgid "URI Handlers"

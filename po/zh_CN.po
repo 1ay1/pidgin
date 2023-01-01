@@ -7,13 +7,14 @@
 # fujianwzh <fujianwzh@gmail.com>, 2009
 # Funda Wang <fundawang@linux.net.cn>, 2003-2004
 # liyuekui <liyuekui@gmail.com>, 2009
+# William Goodspeed, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 00:47-0500\n"
+"POT-Creation-Date: 2022-12-31 20:43-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Aron Xu <happyaron.xu@gmail.com>, 2009-2011\n"
+"Last-Translator: William Goodspeed, 2022\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/pidgin/pidgin/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
@@ -214,7 +215,7 @@ msgid "Alias (optional)"
 msgstr "别名(可选)"
 
 msgid "Invite message (optional)"
-msgstr ""
+msgstr "邀请消息（可选）"
 
 msgid "Add in group"
 msgstr "添加到组"
@@ -1250,7 +1251,7 @@ msgid "(default)"
 msgstr "(默认)"
 
 msgid "Select Sound File..."
-msgstr ""
+msgstr "选择音频文件..."
 
 msgid "Sound Preferences"
 msgstr "声音首选项"
@@ -1370,11 +1371,11 @@ msgid "Edit Status"
 msgstr "编辑状态"
 
 msgid "Use a different status for some accounts"
-msgstr ""
+msgstr "为个别帐号设置不同状态"
 
 #. Save and Use
 msgid "Save and Use"
-msgstr ""
+msgstr "保存并应用"
 
 msgid "Certificates"
 msgstr "证书"
@@ -1406,7 +1407,7 @@ msgstr "剪贴板插件"
 msgid ""
 "When the gnt clipboard contents change, the contents are made available to "
 "X, if possible."
-msgstr ""
+msgstr "当 gnt 的剪贴簿内容变更时，尽可能把新的内容导出到X。"
 
 #, c-format
 msgid "%s just signed on"
@@ -1442,7 +1443,7 @@ msgstr "有人在聊天中提到了您的名字"
 
 #. Translators: "toaster" here means "pop-up".
 msgid "Notify with a toaster when"
-msgstr ""
+msgstr "以下情况使用弹出通知"
 
 msgid "Beep too!"
 msgstr "同时发出声音！"
@@ -1455,7 +1456,7 @@ msgstr "GntGf"
 
 #. Translators: "toaster" here means "pop-up".
 msgid "Toaster plugin"
-msgstr ""
+msgstr "弹出通知插件"
 
 #, c-format
 msgid "<b>Conversation with %s on %s:</b><br>"
@@ -1498,7 +1499,7 @@ msgid "TinyURL for above: %s"
 msgstr "以上地址的 TinyURL：%s"
 
 msgid "Please wait while TinyURL fetches a shorter URL..."
-msgstr ""
+msgstr "TinyURL 正在获取短链接，请稍候..."
 
 msgid "Only create TinyURL for URLs of this length or greater"
 msgstr "只为等于或超过此长度的 URL 创建 TinyURL"
@@ -1513,7 +1514,7 @@ msgid "TinyURL plugin"
 msgstr "TinyURL 插件"
 
 msgid "Shorten URLs in messages using TinyURL"
-msgstr ""
+msgstr "使用 TinyURL 缩短消息链接"
 
 msgid "Online"
 msgstr "在线"
@@ -1550,7 +1551,7 @@ msgstr "最近聊天记录"
 
 #. Translator Note: The "backlog" is the conversation buffer/history.
 msgid "lastlog: Searches for a substring in the backlog."
-msgstr ""
+msgstr "lastlog：在过往日志中搜索字符串"
 
 msgid "GntLastlog"
 msgstr "GntLastlog"
@@ -1727,7 +1728,7 @@ msgid "Certificate Information"
 msgstr "证书信息"
 
 msgid "Unable to find Issuer Certificate"
-msgstr ""
+msgstr "无法验证证书"
 
 #. Make messages
 #, c-format
@@ -1741,12 +1742,20 @@ msgid ""
 "Activation date: %s\n"
 "Expiration date: %s\n"
 msgstr ""
+"通用名称：%s\n"
+"\n"
+"签发机构：%s\n"
+"\n"
+"指纹（SHA1）：%s\n"
+"\n"
+"激活时间：%s\n"
+"过期时间：%s\n"
 
 msgid "(self-signed)"
-msgstr ""
+msgstr "（自签）"
 
 msgid "View Issuer Certificate"
-msgstr ""
+msgstr "查看签发者证书"
 
 msgid "Registration Error"
 msgstr "注册错误"
@@ -1780,7 +1789,7 @@ msgstr "无法发送消息。"
 
 #. Meaningful name in case a UI doesn't actually honour the INVISIBLE flag
 msgid "(internal) Temporary IM peers"
-msgstr ""
+msgstr "【内部专用】临时 IM 节点"
 
 msgid "Send Message"
 msgstr "发送消息"
@@ -1822,12 +1831,12 @@ msgid ""
 msgstr "您想要邀请谁？请输入他/她的名字，以及可选的邀请消息。"
 
 msgid "Whether the specified command should handle \"aim\" URLs"
-msgstr ""
+msgstr "指令是否应处理「aim」链接"
 
 msgid ""
 "True if the command specified in the \"command\" key should handle \"aim\" "
 "URLs."
-msgstr ""
+msgstr "若变量为真，则指令应处理「aim」链接。"
 
 msgid "The handler for \"aim\" URLs"
 msgstr "“aim”URL 的处理程序"
@@ -1841,15 +1850,15 @@ msgstr "在终端中运行命令"
 msgid ""
 "True if the command used to handle this type of URL should be run in a "
 "terminal."
-msgstr ""
+msgstr "若变量为真，处理此种链接的程序会在终端运行。"
 
 msgid "Whether the specified command should handle \"gg\" URLs"
-msgstr ""
+msgstr "指令是否应处理「gg」链接"
 
 msgid ""
 "True if the command specified in the \"command\" key should handle \"gg\" "
 "URLs."
-msgstr ""
+msgstr "若变量为真，则指令应处理「gg」链接。"
 
 msgid "The handler for \"gg\" URLs"
 msgstr "“gg”URL 的处理程序"
@@ -1858,12 +1867,12 @@ msgid "The command used to handle \"gg\" URLs, if enabled."
 msgstr "如果启用的话，用于处理“gg”URL 的命令。"
 
 msgid "Whether the specified command should handle \"icq\" URLs"
-msgstr ""
+msgstr "指令是否应处理「icq」链接"
 
 msgid ""
 "True if the command specified in the \"command\" key should handle \"icq\" "
 "URLs."
-msgstr ""
+msgstr "若变量为真，则指令应处理「icq」链接。"
 
 msgid "The handler for \"icq\" URLs"
 msgstr "“icq”URL 的处理程序"
@@ -1872,12 +1881,12 @@ msgid "The command used to handle \"icq\" URLs, if enabled."
 msgstr "如果启用的话，用于处理“icq”URL 的命令。"
 
 msgid "Whether the specified command should handle \"irc\" URLs"
-msgstr ""
+msgstr "指令是否应处理「irc」链接"
 
 msgid ""
 "True if the command specified in the \"command\" key should handle \"irc\" "
 "URLs."
-msgstr ""
+msgstr "若变量为真，则指令应处理「irc」链接。"
 
 msgid "The handler for \"irc\" URLs"
 msgstr "“irc”URL 的处理程序"
@@ -1886,12 +1895,12 @@ msgid "The command used to handle \"irc\" URLs, if enabled."
 msgstr "如果启用的话，用于处理“irc”URL 的命令。"
 
 msgid "Whether the specified command should handle \"sip\" URLs"
-msgstr ""
+msgstr "指令是否应处理「sip」链接"
 
 msgid ""
 "True if the command specified in the \"command\" key should handle \"sip\" "
 "URLs."
-msgstr ""
+msgstr "若变量为真，则指令应处理「sip」链接。"
 
 msgid "The handler for \"sip\" URLs"
 msgstr "“sip”URL 的处理程序"
@@ -1900,12 +1909,12 @@ msgid "The command used to handle \"sip\" URLs, if enabled."
 msgstr "如果启用的话，用于处理“sip”URL 的命令。"
 
 msgid "Whether the specified command should handle \"xmpp\" URLs"
-msgstr ""
+msgstr "指令是否应处理「xmpp」链接"
 
 msgid ""
 "True if the command specified in the \"command\" key should handle \"xmpp\" "
 "URLs."
-msgstr ""
+msgstr "若变量为真，则指令应处理「xmpp」链接。"
 
 msgid "The handler for \"xmpp\" URLs"
 msgstr "“xmpp”URL 的处理程序"
@@ -1973,7 +1982,7 @@ msgid "Unknown reason"
 msgstr "未知原因"
 
 msgid "Aborting DNS lookup in Tor Proxy mode."
-msgstr ""
+msgstr "使用 Tor 代理时中止 DNS 解析。"
 
 #, c-format
 msgid ""
@@ -2110,12 +2119,16 @@ msgid ""
 "<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
+"<span style=\"color: #16569E\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;自动回复&gt;：</b></span>%s<br>\n"
 
 #, c-format
 msgid ""
 "<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
 "span> <b>%s &lt;AUTO-REPLY&gt;:</b></span> %s<br>\n"
 msgstr ""
+"<span style=\"color: #A82F2F\"><span style=\"font-size: smaller\">(%s)</"
+"span> <b>%s &lt;自动回复&gt;：</b></span>%s<br>\n"
 
 msgid "<font color=\"red\"><b>Unable to find log path!</b></font>"
 msgstr "<font color=\"red\"><b>找不到聊天记录路径！</b></font>"
@@ -2133,19 +2146,23 @@ msgid ""
 "\n"
 "Message from Farsight: "
 msgstr ""
+"\n"
+"\n"
+"Farsight 消息："
 
 msgid ""
 "Error initializing the call. This probably denotes problem in installation "
 "of GStreamer or Farsight."
 msgstr ""
+"初始化通话时出现了错误，这可能因为 GStreamer 或 Farsight 的安装有问题。"
 
 msgid "Network error."
-msgstr ""
+msgstr "网络错误。"
 
 msgid ""
 "Codec negotiation failed. This problem might be resolved by installing more "
 "GStreamer codecs."
-msgstr ""
+msgstr "编解码协商失败。安装额外 GStreamer 编解码器可能会解决此问题。"
 
 msgid ""
 "No codecs found. Install some GStreamer codecs found in GStreamer plugins "
@@ -2157,13 +2174,13 @@ msgid ""
 msgstr "没有可用的解码器。您的 fs.codecs.conf 中规则过于严格。"
 
 msgid "Could not connect to the remote party"
-msgstr ""
+msgstr "无法连接到远程服务器"
 
 msgid "A non-recoverable Farsight2 error has occurred."
 msgstr "发生不可恢复的 Farsight2 错误。"
 
 msgid "A non-recoverable Farstream error has occurred."
-msgstr ""
+msgstr "发生不可恢复的 Farstream 错误。"
 
 msgid "Error with your microphone"
 msgstr "您的话筒出现故障"
@@ -2179,7 +2196,7 @@ msgid "Error creating session: %s"
 msgstr "创建会话出错：%s"
 
 msgid "Could not create media pipeline"
-msgstr ""
+msgstr "无法建立媒体流水线"
 
 #. "aasink", "AALib", Didn't work for me
 #. "aasink",	"AALib", Didn't work for me
@@ -2201,7 +2218,7 @@ msgstr ""
 #. * set up correctly for voice calling.
 #. "audiotestsrc wave=silence", "Silence",
 msgid "Test Sound"
-msgstr ""
+msgstr "测试音效"
 
 msgid "Disabled"
 msgstr "禁用"
@@ -2212,7 +2229,7 @@ msgstr "禁用"
 #. * the video output has been set up correctly without
 #. * needing a webcam connected to the computer.
 msgid "Test Pattern"
-msgstr ""
+msgstr "测试图像"
 
 #, c-format
 msgid "You are using %s, but this plugin requires %s."
@@ -2223,7 +2240,7 @@ msgstr "此插件没有定义 ID。"
 
 #, c-format
 msgid "Plugin magic mismatch %d (need %d)"
-msgstr ""
+msgstr "插件魔数不匹配 %d (需要 %d)"
 
 #, c-format
 msgid "ABI version mismatch %d.%d.x (need %d.%d.x)"
@@ -2353,7 +2370,7 @@ msgstr "在好友列表中添加好友备注的选项。"
 #. *< priority
 #. *< id
 msgid "Cipher Test"
-msgstr ""
+msgstr "加密测试"
 
 #. *< name
 #. *< version
@@ -3330,9 +3347,8 @@ msgstr ""
 msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr ""
 
-#, fuzzy
 msgid "Seconds between sending messages"
-msgstr "无法发送消息。"
+msgstr ""
 
 msgid "Maximum messages to send at once"
 msgstr ""
@@ -7061,29 +7077,40 @@ msgid ""
 "the old file has been renamed to %s~."
 msgstr "读取您的 %s 时遇到了错误。该文件未载入，旧文件被移动到 %s~ 中了。"
 
+#. Translators may want to transliterate the name.
+#. It is not to be translated.
+msgid "Pidgin"
+msgstr "Pidgin"
+
 msgid "Instant Messaging Client"
 msgstr ""
 
 msgid ""
-"Pidgin is a chat program which lets you log in to accounts on multiple chat "
+"Pidgin is a chat program which lets you log into accounts on multiple chat "
 "networks simultaneously."
 msgstr ""
 
 msgid ""
-"This means that you can be chatting with friends on AIM, talking to a friend "
-"on Google Talk, and sitting in an IRC chat room all at the same time."
+"This means that you can be chatting with friends on XMPP and sitting in an "
+"IRC channel at the same time."
 msgstr ""
 
-msgid "The buddy list showing friends on different networks."
+msgid "Buddy list showing friends on different networks"
 msgstr ""
-
-msgid "Pidgin Internet Messenger"
-msgstr "Pidgin 互联网通讯程序"
 
 msgid "Internet Messenger"
 msgstr "互联网通讯程序"
 
-msgid "Chat over IM.  Supports AIM, Google Talk, Jabber/XMPP, and more"
+msgid "Pidgin Internet Messenger"
+msgstr "Pidgin 互联网通讯程序"
+
+msgid "Chat over IM.  Supports XMPP, IRC, and more"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+msgid ""
+"chat;talk;im;message;bonjour;gadu-gadu;irc;groupwise;jabber;sametime;silc;"
+"simple;xmpp;zephyr"
 msgstr ""
 
 #. Build the login options frame.
@@ -8581,13 +8608,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available by "
-"emailing <a href=\"mailto:support@pidgin.im\">support@pidgin.im</a><br/>This "
-"is a <b>public</b> mailing list! (<a href=\"https://lists.pidgin.im/"
-"pipermail/support/\">archive</a>)<br/>We can't help with third-party "
-"protocols or plugins!<br/>This list's primary language is <b>English</b>.  "
-"You are welcome to post in another language, but the responses may be less "
-"helpful.<br/>"
+"<font size=\"4\"><b>Help from other Pidgin users</b></font> is available via "
+"<a href=\"https://discourse.imfreedom.org/c/support/\">Discourse</a>. This "
+"is a <b>public</b> forum and an account is required to post new messages!<br/"
+">This forum's primary language is <b>English</b>. You are welcome to post in "
+"another language, but the responses may be less helpful.<br/>"
 msgstr ""
 
 #, c-format
@@ -10280,11 +10305,6 @@ msgstr "您真的想要清屏吗？"
 msgid "Select color"
 msgstr "选择颜色"
 
-#. Translators may want to transliterate the name.
-#. It is not to be translated.
-msgid "Pidgin"
-msgstr "Pidgin"
-
 msgid "_Alias"
 msgstr "别名(_A)"
 
@@ -11350,33 +11370,33 @@ msgstr ""
 
 #. Alerts
 msgid "Chatroom alerts"
-msgstr ""
+msgstr "聊天室通知"
 
 msgid "Chatroom message alerts _only where someone says your username"
-msgstr ""
+msgstr "只在有人提及你的用户名时触发聊天室通知"
 
 #. Launcher integration
 msgid "Launcher Icon"
-msgstr ""
+msgstr "启动器图标"
 
 msgid "_Disable launcher integration"
-msgstr ""
+msgstr "禁用启动器整合功能(_D)"
 
 msgid "Show number of unread _messages on launcher icon"
-msgstr ""
+msgstr "在应用图标上显示未读消息数(_M)"
 
 msgid "Show number of unread co_nversations on launcher icon"
-msgstr ""
+msgstr "在应用图标上显示未读聊天数(_N)"
 
 #. Messaging menu integration
 msgid "Messaging Menu"
-msgstr ""
+msgstr "消息菜单"
 
 msgid "Show number of _unread messages for conversations in messaging menu"
-msgstr ""
+msgstr "在消息菜单中显示未读消息数(_U)"
 
 msgid "Show _elapsed time for unread conversations in messaging menu"
-msgstr ""
+msgstr "在消息菜单中显示未读消息是多长时间前的(_E)"
 
 #. *< type
 #. *< ui_requirement
@@ -11385,17 +11405,17 @@ msgstr ""
 #. *< priority
 #. *< id
 msgid "Unity Integration"
-msgstr ""
+msgstr "Unity 整合功能"
 
 #. *< name
 #. *< version
 #. *  summary
 msgid "Provides integration with Unity."
-msgstr ""
+msgstr "提供和 Unity 整合的功能。"
 
 #. *  description
 msgid "Provides integration with Unity's messaging menu and launcher."
-msgstr ""
+msgstr "提供和 Unity 的消息菜单和启动器的整合功能。"
 
 msgid "ALSA"
 msgstr ""
@@ -11444,13 +11464,13 @@ msgid "D_evice"
 msgstr "设备(_E)"
 
 msgid "Silence threshold:"
-msgstr ""
+msgstr "安静阈值："
 
 msgid "Input and Output Settings"
-msgstr ""
+msgstr "输出输出设定"
 
 msgid "Microphone Test"
-msgstr ""
+msgstr "测试麦克风"
 
 #. *< magic
 #. *< major version
@@ -11612,10 +11632,12 @@ msgid ""
 "Pidgin requires a compatible GTK+ Runtime (which does not appear to be "
 "installed).$\\rAre you sure you want to skip installing the GTK+ Runtime?"
 msgstr ""
+"Pidgin 需要一个兼容的 GTK+ 运行时(您的系统上没有安装)。$\\r您确定不安装 GTK+ "
+"运行时吗？"
 
 #. Installer Subsection Text
 msgid "URI Handlers"
-msgstr ""
+msgstr "URL 处理"
 
 #. Installer Subsection Text
 msgid "Spellchecking Support"
