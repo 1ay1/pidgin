@@ -1046,6 +1046,12 @@ make_blist_request_dialog(PidginBlistRequestData *data, PurpleAccount *account,
 	return vbox;
 }
 
+static inline void
+destroy_widget_cb(GtkWidget *widget, G_GNUC_UNUSED gpointer data)
+{
+	gtk_widget_destroy(widget);
+}
+
 static void
 rebuild_chat_entries(PidginChatData *data, const char *default_chat_name)
 {
@@ -1059,7 +1065,7 @@ rebuild_chat_entries(PidginChatData *data, const char *default_chat_name)
 
 	gc = purple_account_get_connection(data->rq_data.account);
 
-	gtk_container_foreach(GTK_CONTAINER(data->rq_data.vbox), (GtkCallback)gtk_widget_destroy, NULL);
+	gtk_container_foreach(GTK_CONTAINER(data->rq_data.vbox), destroy_widget_cb, NULL);
 
 	g_list_free(data->entries);
 	data->entries = NULL;
