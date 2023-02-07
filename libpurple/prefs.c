@@ -759,6 +759,7 @@ remove_pref(struct purple_pref *pref)
 	struct purple_pref *child = NULL, *next = NULL;
 	char *name;
 	GSList *l;
+	PurplePrefCallbackData *cb;
 
 	if(!pref)
 		return;
@@ -793,7 +794,9 @@ remove_pref(struct purple_pref *pref)
 
 	while((l = pref->callbacks) != NULL) {
 		pref->callbacks = pref->callbacks->next;
-		g_free(l->data);
+		cb = l->data;
+		g_free(cb->name);
+		g_free(cb);
 		g_slist_free_1(l);
 	}
 	g_free(pref->name);
