@@ -1,11 +1,12 @@
 environment:
-  - DOCS_BUILD_IMAGE=pidgin/2.x.y-builders:debian-bookworm-amd64
+  - DOCS_BUILD_IMAGE=docker.io/pidgin/2.x.y-builders:debian-bookworm-amd64
 
 tasks:
   clean:
     type: convey/clean
     files:
       - pidgin2-docs
+      - pidgin2-docs.zip
 
   docs-build:
     type: docker/run
@@ -15,16 +16,20 @@ tasks:
       - set -ex
       - ./autogen.sh --disable-gevolution
       - make -s -j$(nproc) docs
+      - cd doc
+      - mv html pidgin2
+      - zip -9r pidgin2-docs.zip pidgin2
 
   docs-clean:
     type: convey/clean
     files:
       - pidgin2-docs
+      - pidgin2-docs.zip
 
   docs-export:
     type: docker/export
     files:
-      - doc/html:pidgin2-docs
+      - doc/pidgin2-docs.zip:pidgin2-docs.zip
 
   import:
     type: docker/import
