@@ -1099,7 +1099,7 @@ dnl #######################################################################
 PKG_CHECK_MODULES(LIBGADU, [libgadu >= 1.12.0], [have_libgadu=yes], [have_libgadu=no])
 
 if test "x$have_libgadu" = "xyes"; then
-	AC_CHECK_LIB(gadu, gg_is_gpl_compliant, , [
+	AC_CHECK_LIB(gadu, gg_is_gpl_compliant, [:], [
 		LIBGADU_LIBS=""
 		LIBGADU_CFLAGS=""
 		have_libgadu=no
