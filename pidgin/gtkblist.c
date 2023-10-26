@@ -170,6 +170,7 @@ typedef struct _pidgin_blist_node {
 	GtkTreeRowReference *row;
 	gboolean contact_expanded;
 	gboolean recent_signonoff;
+	gboolean expanded_by_search;
 	gint recent_signonoff_timer;
 	struct {
 		PurpleConversation *conv;
@@ -5709,6 +5710,65 @@ pidgin_blist_build_layout(PurpleBuddyList *list)
 
 }
 
+static void
+collapse_all_groups_expanded_by_search(GtkTreeModel *model, PurpleBlistNode *node) {
+	PurpleBlistNode *group_node = purple_blist_get_root();
+	while(group_node) {
+		if(PURPLE_BLIST_NODE_IS_GROUP(group_node) &&
+		   purple_blist_node_get_parent(node) != group_node) {
+			PidginBlistNode *ui = purple_blist_node_get_ui_data(group_node);
+			if(ui->expanded_by_search) {
+				GtkTreeIter group_iter;
+				GtkTreePath *group_path;
+
+				if(get_iter_from_node(group_node, &group_iter)) {
+					group_path = gtk_tree_model_get_path(model, &group_iter);
+					ui->expanded_by_search = FALSE;
+					gtk_tree_view_collapse_row(GTK_TREE_VIEW(gtkblist->treeview), group_path);
+					gtk_tree_path_free(group_path);
+				}
+			}
+		}
+
+		group_node = purple_blist_node_get_sibling_next(group_node);
+	}
+}
+
+static gboolean
+pidgin_blist_collapse_all_search_groups_timer_cb(gpointer user_data)
+{
+	if(!gtk_widget_get_visible(user_data)) {
+		collapse_all_groups_expanded_by_search(GTK_TREE_MODEL(gtkblist->treemodel),
+						       NULL);
+	}
+	return FALSE;
+}
+
+static void
+pidgin_blist_search_widget_hide_cb(GtkWidget *widget,
+				   gpointer user_data)
+{
+	g_timeout_add(5, pidgin_blist_collapse_all_search_groups_timer_cb, user_data);
+}
+
+static void
+pidgin_blist_search_position_cb(GtkTreeView *tree_view,
+				GtkWidget *search_dialog,
+				gpointer user_data)
+{
+	GtkTreeViewSearchPositionFunc search_position_func;
+
+	g_signal_handlers_disconnect_by_func(G_OBJECT(search_dialog),
+					     G_CALLBACK(pidgin_blist_search_widget_hide_cb),
+					     NULL);
+	g_signal_connect(G_OBJECT(search_dialog), "hide",
+			 G_CALLBACK(pidgin_blist_search_widget_hide_cb),
+			 search_dialog);
+
+	search_position_func = user_data;
+	search_position_func(tree_view, search_dialog, NULL);
+}
+
 static gboolean
 pidgin_blist_search_equal_func(GtkTreeModel *model, gint column,
 			const gchar *key, GtkTreeIter *iter, gpointer data)
@@ -5751,6 +5811,28 @@ pidgin_blist_search_equal_func(GtkTreeModel *model, gint column,
 		g_free(enteredstring);
 	}
 
+	collapse_all_groups_expanded_by_search(model, node);
+
+	if (PURPLE_BLIST_NODE_IS_GROUP(node) && purple_blist_node_get_bool(node, "collapsed")) {
+		GtkTreePath *group_path = gtk_tree_model_get_path(model, iter);
+		PurpleBlistNode *child_node = purple_blist_node_get_first_child(node);
+
+		while (child_node) {
+			GtkTreeIter child_iter;
+			if(get_iter_from_node(child_node, &child_iter)) {
+				if(!pidgin_tree_view_search_equal_func(model, column, key, &child_iter, data)) {
+					PidginBlistNode *ui = purple_blist_node_get_ui_data(node);
+					ui->expanded_by_search = TRUE;
+					gtk_tree_view_expand_row(GTK_TREE_VIEW(gtkblist->treeview), group_path, FALSE);
+				}
+			}
+
+			child_node = purple_blist_node_get_sibling_next(child_node);
+		}
+
+		gtk_tree_path_free(group_path);
+	}
+
 	return res;
 }
 
@@ -5776,6 +5858,8 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	GtkTargetEntry ste[] = {{"PURPLE_BLIST_NODE", GTK_TARGET_SAME_APP, DRAG_ROW},
 				{"application/x-im-contact", 0, DRAG_BUDDY},
 				{"text/x-vcard", 0, DRAG_VCARD }};
+	GtkTreeViewSearchPositionFunc search_position_func;
+
 	if (gtkblist && gtkblist->window) {
 		purple_blist_set_visible(purple_prefs_get_bool(PIDGIN_PREFS_ROOT "/blist/list_visible"));
 		return;
@@ -5989,6 +6073,11 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(gtkblist->treeview), NAME_COLUMN);
 	gtk_tree_view_set_search_equal_func(GTK_TREE_VIEW(gtkblist->treeview),
 			pidgin_blist_search_equal_func, NULL, NULL);
+
+	search_position_func = gtk_tree_view_get_search_position_func(GTK_TREE_VIEW(gtkblist->treeview));
+	gtk_tree_view_set_search_position_func(GTK_TREE_VIEW(gtkblist->treeview),
+					       pidgin_blist_search_position_cb,
+					       search_position_func, NULL);
 
 	gtk_box_pack_start(GTK_BOX(gtkblist->vbox),
 		pidgin_make_scrollable(gtkblist->treeview, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC, GTK_SHADOW_NONE, -1, -1),
