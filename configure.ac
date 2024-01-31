@@ -1267,7 +1267,8 @@ if test "x$GCC" = "xyes"; then
 	dnl We enable -Wall later.
 	dnl If it's set after the warning CFLAGS in the compiler invocation, it counteracts the -Wno... flags.
 	dnl This leads to warnings we don't want.
-	CFLAGS=`echo $CFLAGS |$sedpath 's/-Wall//'`
+	starting_CFLAGS=`echo $CFLAGS |$sedpath 's/-Wall//'`
+	orig_CFLAGS="$CFLAGS"
 
 	dnl ENABLE WARNINGS SUPPORTED BY THE VERSION OF GCC IN USE
 	dnl
@@ -1301,18 +1302,16 @@ if test "x$GCC" = "xyes"; then
 			"-Wpointer-arith" \
 			"-Wundef" \
 	; do
-		orig_CFLAGS="$CFLAGS"
-		CFLAGS="$CFLAGS $newflag"
+		CFLAGS="$starting_CFLAGS $newflag"
 		AC_MSG_CHECKING(for $newflag option to gcc)
 		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])], [
 			AC_MSG_RESULT(yes)
-			CFLAGS="$orig_CFLAGS"
 			DEBUG_CFLAGS="$DEBUG_CFLAGS $newflag"
 		], [
 			AC_MSG_RESULT(no)
-			CFLAGS="$orig_CFLAGS"
 		])
 	done
+	CFLAGS="$orig_CFLAGS"
 
 	if test "x$enable_fortify" = "xyes"; then
 		AC_MSG_CHECKING(for FORTIFY_SOURCE support)
