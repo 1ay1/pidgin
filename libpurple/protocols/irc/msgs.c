@@ -1618,22 +1618,22 @@ irc_msg_cap(struct irc_conn *irc, const char *name, const char *from, char **arg
 	irc->sasl_cb = g_new0(sasl_callback_t, 5);
 
 	irc->sasl_cb[id].id = SASL_CB_AUTHNAME;
-	irc->sasl_cb[id].proc = irc_sasl_cb_simple;
+	irc->sasl_cb[id].proc = (void *)irc_sasl_cb_simple;
 	irc->sasl_cb[id].context = (void *)irc;
 	id++;
 
 	irc->sasl_cb[id].id = SASL_CB_USER;
-	irc->sasl_cb[id].proc = irc_sasl_cb_simple;
+	irc->sasl_cb[id].proc = (void *)irc_sasl_cb_simple;
 	irc->sasl_cb[id].context = (void *)irc;
 	id++;
 
 	irc->sasl_cb[id].id = SASL_CB_PASS;
-	irc->sasl_cb[id].proc = irc_sasl_cb_secret;
+	irc->sasl_cb[id].proc = (void *)irc_sasl_cb_secret;
 	irc->sasl_cb[id].context = (void *)irc;
 	id++;
 
 	irc->sasl_cb[id].id = SASL_CB_LOG;
-	irc->sasl_cb[id].proc = irc_sasl_cb_log;
+	irc->sasl_cb[id].proc = (void *)irc_sasl_cb_log;
 	irc->sasl_cb[id].context = (void *)irc;
 	id++;
 

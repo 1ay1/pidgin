@@ -187,7 +187,7 @@ jabber_parser_element_text_libxml(void *user_data, const xmlChar *text, int text
 }
 
 static void
-jabber_parser_structured_error_handler(void *user_data, xmlErrorPtr error)
+jabber_parser_structured_error_handler(void *user_data, const xmlError *error)
 {
 	JabberStream *js = user_data;
 

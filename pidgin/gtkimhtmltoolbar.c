@@ -952,7 +952,7 @@ static void toggle_button_set_active_block(GtkToggleButton *button,
 	GObject *object;
 	g_return_if_fail(toolbar);
 
-	object = g_object_ref(button);
+	object = g_object_ref(G_OBJECT(button));
 	g_signal_handlers_block_matched(object, G_SIGNAL_MATCH_DATA,
 									0, 0, NULL, NULL, toolbar);
 	gtk_toggle_button_set_active(button, is_active);

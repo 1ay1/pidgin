@@ -2363,7 +2363,7 @@ pidgin_convert_buddy_icon(PurplePlugin *plugin, const char *path, size_t *len)
 		g_strfreev(prpl_formats);
 		return NULL;
 	}
-	original = g_object_ref(G_OBJECT(pixbuf));
+	original = g_object_ref(pixbuf);
 
 	new_width = orig_width;
 	new_height = orig_height;

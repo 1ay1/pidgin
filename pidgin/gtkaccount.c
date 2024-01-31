@@ -2065,9 +2065,9 @@ set_account(GtkListStore *store, GtkTreeIter *iter, PurpleAccount *account, GdkP
 		prpl_info = PURPLE_PLUGIN_PROTOCOL_INFO(prpl);
 	if (prpl_info != NULL && prpl_info->icon_spec.format != NULL) {
 		if (purple_account_get_bool(account, "use-global-buddyicon", TRUE)) {
-			if (global_buddyicon != NULL)
-				buddyicon = g_object_ref(G_OBJECT(global_buddyicon));
-			else {
+			if (global_buddyicon != NULL) {
+				buddyicon = g_object_ref(global_buddyicon);
+			} else {
 				/* This is for when set_account() is called for a single account */
 				const char *path;
 				path = purple_prefs_get_path(PIDGIN_PREFS_ROOT "/accounts/buddyicon");

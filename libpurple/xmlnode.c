@@ -647,7 +647,7 @@ xmlnode_parser_error_libxml(void *user_data, const char *msg, ...)
 }
 
 static void
-xmlnode_parser_structural_error_libxml(void *user_data, xmlErrorPtr error)
+xmlnode_parser_structural_error_libxml(void *user_data, const xmlError *error)
 {
 	struct _xmlnode_parser_data *xpd = user_data;
 

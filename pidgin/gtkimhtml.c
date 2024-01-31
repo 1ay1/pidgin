@@ -1881,11 +1881,16 @@ static void gtk_imhtml_link_destroy(GtkIMHtmlLink *link)
 }
 
 /* The callback for an event on a link tag. */
-static gboolean tag_event(GtkTextTag *tag, GObject *imhtml, GdkEvent *event, GtkTextIter *arg2, gpointer unused)
+static gboolean
+tag_event(GtkTextTag *tag, GObject *event_object, GdkEvent *event, GtkTextIter *arg2, gpointer unused)
 {
+	GtkIMHtml *imhtml = GTK_IMHTML(event_object);
 	GdkEventButton *event_button = (GdkEventButton *) event;
-	if (GTK_IMHTML(imhtml)->editable)
+
+	if (imhtml->editable) {
 		return FALSE;
+	}
+
 	if (event->type == GDK_BUTTON_RELEASE) {
 		if ((event_button->button == 1) || (event_button->button == 2)) {
 			GtkTextIter start, end;
@@ -1893,7 +1898,7 @@ static gboolean tag_event(GtkTextTag *tag, GObject *imhtml, GdkEvent *event, Gtk
 			if (gtk_text_buffer_get_selection_bounds(
 						gtk_text_iter_get_buffer(arg2),	&start, &end))
 				return FALSE;
-			gtk_imhtml_activate_tag(GTK_IMHTML(imhtml), tag);
+			gtk_imhtml_activate_tag(imhtml, tag);
 			return FALSE;
 		} else if(event_button->button == 3) {
 			GList *children;
@@ -1905,18 +1910,19 @@ static gboolean tag_event(GtkTextTag *tag, GObject *imhtml, GdkEvent *event, Gtk
 			link->tag = g_object_ref(tag);
 
 			/* Don't want the tooltip around if user right-clicked on link */
-			if (GTK_IMHTML(imhtml)->tip_window) {
-				gtk_widget_destroy(GTK_IMHTML(imhtml)->tip_window);
-				GTK_IMHTML(imhtml)->tip_window = NULL;
+			if (imhtml->tip_window) {
+				gtk_widget_destroy(imhtml->tip_window);
+				imhtml->tip_window = NULL;
 			}
-			if (GTK_IMHTML(imhtml)->tip_timer) {
-				g_source_remove(GTK_IMHTML(imhtml)->tip_timer);
-				GTK_IMHTML(imhtml)->tip_timer = 0;
+			if (imhtml->tip_timer) {
+				g_source_remove(imhtml->tip_timer);
+				imhtml->tip_timer = 0;
 			}
-			if (GTK_IMHTML(imhtml)->editable)
-				gdk_window_set_cursor(event_button->window, GTK_IMHTML(imhtml)->text_cursor);
-			else
-				gdk_window_set_cursor(event_button->window, GTK_IMHTML(imhtml)->arrow_cursor);
+			if (imhtml->editable) {
+				gdk_window_set_cursor(event_button->window, imhtml->text_cursor);
+			} else {
+				gdk_window_set_cursor(event_button->window, imhtml->arrow_cursor);
+			}
 			menu = gtk_menu_new();
 			g_object_set_data_full(G_OBJECT(menu), "x-imhtml-url-data", link,
 					(GDestroyNotify)gtk_imhtml_link_destroy);
@@ -1924,7 +1930,7 @@ static gboolean tag_event(GtkTextTag *tag, GObject *imhtml, GdkEvent *event, Gtk
 			proto = imhtml_find_protocol(link->url, FALSE);
 
 			if (proto && proto->context_menu) {
-				proto->context_menu(GTK_IMHTML(link->imhtml), link, menu);
+				proto->context_menu(link->imhtml, link, menu);
 			}
 
 			children = gtk_container_get_children(GTK_CONTAINER(menu));
