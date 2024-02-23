@@ -5737,7 +5737,14 @@ collapse_all_groups_expanded_by_search(GtkTreeModel *model, PurpleBlistNode *nod
 static gboolean
 pidgin_blist_collapse_all_search_groups_timer_cb(gpointer user_data)
 {
-	if(!gtk_widget_get_visible(user_data)) {
+	gboolean visible = FALSE;
+
+	/* gtk_widget_get_visible was added in gtk 2.18.0 but we need to support
+	 * 2.16.0 for our windows build. Luckily the property existed in 2.16.0, so
+	 * we just pull it out via g_object_get.
+	 */
+	g_object_get(user_data, "visible", &visible, NULL);
+	if(!visible) {
 		collapse_all_groups_expanded_by_search(GTK_TREE_MODEL(gtkblist->treemodel),
 						       NULL);
 	}
