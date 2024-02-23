@@ -4,6 +4,8 @@
 #
 # Translators:
 # 3d5ab56b1b83fefceeab671c39a98a6d_999ae54, 2022
+# Dumitru Moldovan <dumol@gnome.org>, 2023
+# Gary Kramlich <grim@reaperworld.com>, 2024
 # Mișu Moldovan <dumol@gnome.org>, 2011
 # drazvan, 2016-2017
 # Richard Laager <rlaager@wiktel.com>, 2022
@@ -12,10 +14,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-31 21:28-0600\n"
+"POT-Creation-Date: 2024-02-23 03:36-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Simona Iacob <s@zp1.net>, 2021-2022\n"
-"Language-Team: Romanian (http://www.transifex.com/pidgin/pidgin/language/"
+"Last-Translator: Gary Kramlich <grim@reaperworld.com>, 2024\n"
+"Language-Team: Romanian (http://app.transifex.com/pidgin/pidgin/language/"
 "ro/)\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -12087,6 +12089,8 @@ msgid ""
 "Pidgin requires a compatible GTK+ Runtime (which does not appear to be "
 "installed).$\\rAre you sure you want to skip installing the GTK+ Runtime?"
 msgstr ""
+"Pidgin necesită o instalare GTK+ compatibilă (ce nu pare să fie prezentă).$"
+"\\rSigur doriţi să omiteţi instalarea pachetului GTK+?"
 
 #. Installer Subsection Text
 msgid "URI Handlers"

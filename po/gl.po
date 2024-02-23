@@ -5,16 +5,16 @@
 # Translators:
 # Antón Méixome <meixome@mancomun.org>, 2009
 # Frco. Javier Rial Rodríguez <fjrial@cesga.es>, 2008-2009
-# Miguel Anxo Bouzada <mbouzada@gmail.com>, 2015,2022
+# Miguel Anxo Bouzada <mbouzada@gmail.com>, 2015,2022-2023
 # Richard Laager <rlaager@wiktel.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-31 20:43-0600\n"
+"POT-Creation-Date: 2024-02-23 03:36-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>, 2015,2022\n"
-"Language-Team: Galician (http://www.transifex.com/pidgin/pidgin/language/"
+"Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>, 2015,2022-2023\n"
+"Language-Team: Galician (http://app.transifex.com/pidgin/pidgin/language/"
 "gl/)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
@@ -2276,7 +2276,7 @@ msgid "Error creating session: %s"
 msgstr "Produciuse un erro ao crear a sesión: %s"
 
 msgid "Could not create media pipeline"
-msgstr ""
+msgstr "Non foi posíbel crear a canalización multimedia"
 
 #. "aasink", "AALib", Didn't work for me
 #. "aasink",	"AALib", Didn't work for me
@@ -3471,10 +3471,10 @@ msgid "Allow plaintext SASL auth over unencrypted connection"
 msgstr "Permitir autenticación SASL en texto plano sobre conexión sen cifrar"
 
 msgid "Seconds between sending messages"
-msgstr ""
+msgstr "Segundos entre o envío de mensaxes"
 
 msgid "Maximum messages to send at once"
-msgstr ""
+msgstr "Número máximo de mensaxes para enviar de vez"
 
 msgid "Bad mode"
 msgstr "Modo non válido"
@@ -4923,13 +4923,13 @@ msgid "The queue for %s has reached its maximum length of %u."
 msgstr ""
 
 msgid "XMPP stream management"
-msgstr ""
+msgstr "Xestión de fluxos XMPP"
 
 msgid "Stanza queue is full"
 msgstr ""
 
 msgid "No further messages will be queued"
-msgstr ""
+msgstr "Non se poñerán máis mensaxes en cola"
 
 msgid "Afraid"
 msgstr "Asustado"
@@ -7905,7 +7905,7 @@ msgid "/Help/Online _Help"
 msgstr "/Axuda/A_xuda en liña"
 
 msgid "/Help/D_onate"
-msgstr ""
+msgstr "/Axuda/D_oar"
 
 msgid "/Help/_Build Information"
 msgstr "/Axuda/Información da _compilación"

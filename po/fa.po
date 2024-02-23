@@ -4,16 +4,16 @@
 #
 # Translators:
 # Elnaz Sarbar <elnaz.s@gmail.com>, 2013
-# Elnaz Sarbar <elnaz.s@gmail.com>, 2013,2015
+# Elnaz Sarbar <elnaz.s@gmail.com>, 2013,2015,2023
 # Richard Laager <rlaager@wiktel.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-31 20:43-0600\n"
+"POT-Creation-Date: 2024-02-23 03:36-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: Elnaz Sarbar <elnaz.s@gmail.com>, 2013,2015\n"
-"Language-Team: Persian (http://www.transifex.com/pidgin/pidgin/language/"
+"Last-Translator: Elnaz Sarbar <elnaz.s@gmail.com>, 2013,2015,2023\n"
+"Language-Team: Persian (http://app.transifex.com/pidgin/pidgin/language/"
 "fa/)\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
@@ -648,8 +648,8 @@ msgstr "<پاسخ خودکار>"
 #, c-format
 msgid "List of %d user:\n"
 msgid_plural "List of %d users:\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "فهرست کاربران %d:\n"
+msgstr[1] "فهرست کاربران %d:\n"
 
 msgid "Supported debug options are: plugins version"
 msgstr "گزینه‌های اشکال‌زدایی پشتیبانی‌شده عبارتند از: plugins version"
@@ -794,7 +794,7 @@ msgstr "شکست خورد"
 
 #, c-format
 msgid "%.2f KiB/s"
-msgstr ""
+msgstr "%.2f KiB/s"
 
 msgid "Sent"
 msgstr "فرستاده شده"
@@ -807,7 +807,7 @@ msgstr "تمام شد"
 
 #, c-format
 msgid "The file was saved as %s."
-msgstr ""
+msgstr "پرونده با نام %s ذخیره شد."
 
 msgid "Sending"
 msgstr "در حال فرستادن"

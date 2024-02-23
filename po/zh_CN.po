@@ -7,15 +7,15 @@
 # fujianwzh <fujianwzh@gmail.com>, 2009
 # Funda Wang <fundawang@linux.net.cn>, 2003-2004
 # liyuekui <liyuekui@gmail.com>, 2009
-# William Goodspeed, 2022
+# William Goodspeed, 2022-2023
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-31 20:43-0600\n"
+"POT-Creation-Date: 2024-02-23 03:36-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
-"Last-Translator: William Goodspeed, 2022\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/pidgin/pidgin/"
+"Last-Translator: William Goodspeed, 2022-2023\n"
+"Language-Team: Chinese (China) (http://app.transifex.com/pidgin/pidgin/"
 "language/zh_CN/)\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -650,8 +650,8 @@ msgid ""
 "Use \"/help &lt;command&gt;\" for help on a specific command.\n"
 "The following commands are available in this context:\n"
 msgstr ""
-"使用“/help &lt;命令&gt;”可获得具体命令的帮助。\n"
-"此环境下可使用下列命令：\n"
+"使用“/help &lt;命令&gt;”可获得特定命令的帮助。\n"
+"此处可使用下列命令：\n"
 
 #, c-format
 msgid ""
@@ -680,7 +680,7 @@ msgid "clear: Clears the conversation scrollback."
 msgstr "clear：清除对话回滚。"
 
 msgid "help &lt;command&gt;:  Help on a specific command."
-msgstr "help &lt;命令&gt;：关于具体命令的帮助。"
+msgstr "help &lt;命令&gt;：关于特定命令的帮助。"
 
 msgid "users:  Show the list of users in the chat."
 msgstr "users：在聊天中显示用户列表。"

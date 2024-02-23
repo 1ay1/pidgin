@@ -3,19 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Giuseppe Pignataro <rogepix@gmail.com>, 2015
-# Giuseppe Pignataro <rogepix@gmail.com>, 2015
-# Giuseppe Pignataro <rogepix@gmail.com>, 2015
+# Giuseppe Pignataro (Fastbyte01) <rogepix@gmail.com>, 2015
+# Giuseppe Pignataro (Fastbyte01) <rogepix@gmail.com>, 2015
+# Giuseppe Pignataro (Fastbyte01) <rogepix@gmail.com>, 2015
 # Saverio <saverio.brancaccio@gmail.com>, 2015
 # SebastianoPistore <SebastianoPistore.info@protonmail.ch>, 2016-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Pidgin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-31 20:43-0600\n"
+"POT-Creation-Date: 2024-02-23 03:36-0600\n"
 "PO-Revision-Date: 2012-02-20 18:15+0000\n"
 "Last-Translator: Saverio <saverio.brancaccio@gmail.com>, 2015\n"
-"Language-Team: Italian (http://www.transifex.com/pidgin/pidgin/language/"
+"Language-Team: Italian (http://app.transifex.com/pidgin/pidgin/language/"
 "it/)\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
