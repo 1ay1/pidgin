@@ -8,7 +8,7 @@
 PIDGIN_TREE_TOP := .
 include $(PIDGIN_TREE_TOP)/libpurple/win32/global.mak
 
-DICTIONARY_TIMESTAMP := 20220215-003057
+DICTIONARY_TIMESTAMP := 20240223-040846
 
 # Generate a X.X.X.X version for the installer file versioning header
 # The last digit will be 99 for a final release, 0 for dev or unknown, or the beta number
