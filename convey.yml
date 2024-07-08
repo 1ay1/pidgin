@@ -1,10 +1,18 @@
 environment:
   - DOCS_BUILD_IMAGE=docker.io/pidgin/2.x.y-builders:debian-bookworm-amd64
+  - REPOSITORY=pidgin/2.x.y-builders
+  - REGISTRY=docker.io
 
 tasks:
+  build:
+    type: docker/run
+    image: ${REGISTRY}/${REPOSITORY}:${TARGET}
+
   clean:
     type: convey/clean
     files:
+      - debian-trixie-amd64
+      - fedora-40-amd64
       - pidgin2-docs
       - pidgin2-docs.zip
 
@@ -39,6 +47,19 @@ plans:
   clean:
     stages:
       - tasks: [clean]
+
+  debian-trixie-amd64:
+    environment:
+      - TARGET=debian-trixie-amd64
+    stages:
+      - tasks: [import, build]
+
+
+  fedora-40-amd64:
+    environment:
+      - TARGET=fedora-40-amd64
+    stages:
+      - tasks: [import, build]
 
   docs:
     stages:
