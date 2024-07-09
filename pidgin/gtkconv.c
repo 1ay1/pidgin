@@ -3093,76 +3093,76 @@ static GtkItemFactoryEntry menu_items[] =
 	/* Conversation menu */
 	{ N_("/_Conversation"), NULL, NULL, 0, "<Branch>", NULL },
 
-	{ N_("/Conversation/New Instant _Message..."), "<CTL>M", menu_new_conv_cb,
+	{ N_("/Conversation/New Instant _Message..."), "<CTL>M", (GtkItemFactoryCallback)menu_new_conv_cb,
 			0, "<StockItem>", PIDGIN_STOCK_TOOLBAR_MESSAGE_NEW },
-	{ N_("/Conversation/Join a _Chat..."), NULL, menu_join_chat_cb,
+	{ N_("/Conversation/Join a _Chat..."), NULL, (GtkItemFactoryCallback)menu_join_chat_cb,
 			0, "<StockItem>", PIDGIN_STOCK_CHAT },
 
 	{ "/Conversation/sep0", NULL, NULL, 0, "<Separator>", NULL },
 
-	{ N_("/Conversation/_Find..."), NULL, menu_find_cb, 0,
+	{ N_("/Conversation/_Find..."), NULL, (GtkItemFactoryCallback)menu_find_cb, 0,
 			"<StockItem>", GTK_STOCK_FIND },
-	{ N_("/Conversation/View _Log"), NULL, menu_view_log_cb, 0, "<Item>", NULL },
-	{ N_("/Conversation/_Save As..."), NULL, menu_save_as_cb, 0,
+	{ N_("/Conversation/View _Log"), NULL, (GtkItemFactoryCallback)menu_view_log_cb, 0, "<Item>", NULL },
+	{ N_("/Conversation/_Save As..."), NULL, (GtkItemFactoryCallback)menu_save_as_cb, 0,
 			"<StockItem>", GTK_STOCK_SAVE_AS },
-	{ N_("/Conversation/Clea_r Scrollback"), "<CTL>L", menu_clear_cb, 0, "<StockItem>", GTK_STOCK_CLEAR },
+	{ N_("/Conversation/Clea_r Scrollback"), "<CTL>L", (GtkItemFactoryCallback)menu_clear_cb, 0, "<StockItem>", GTK_STOCK_CLEAR },
 
 	{ "/Conversation/sep1", NULL, NULL, 0, "<Separator>", NULL },
 
 #ifdef USE_VV
 	{ N_("/Conversation/M_edia"), NULL, NULL, 0, "<Branch>", NULL },
 
-	{ N_("/Conversation/Media/_Audio Call"), NULL, menu_initiate_media_call_cb, 0,
+	{ N_("/Conversation/Media/_Audio Call"), NULL, (GtkItemFactoryCallback)menu_initiate_media_call_cb, 0,
 		"<StockItem>", PIDGIN_STOCK_TOOLBAR_AUDIO_CALL },
-	{ N_("/Conversation/Media/_Video Call"), NULL, menu_initiate_media_call_cb, 1,
+	{ N_("/Conversation/Media/_Video Call"), NULL, (GtkItemFactoryCallback)menu_initiate_media_call_cb, 1,
 		"<StockItem>", PIDGIN_STOCK_TOOLBAR_VIDEO_CALL },
-	{ N_("/Conversation/Media/Audio\\/Video _Call"), NULL, menu_initiate_media_call_cb, 2,
+	{ N_("/Conversation/Media/Audio\\/Video _Call"), NULL, (GtkItemFactoryCallback)menu_initiate_media_call_cb, 2,
 		"<StockItem>", PIDGIN_STOCK_TOOLBAR_VIDEO_CALL },
 #endif
 
-	{ N_("/Conversation/Se_nd File..."), NULL, menu_send_file_cb, 0, "<StockItem>", PIDGIN_STOCK_TOOLBAR_SEND_FILE },
-	{ N_("/Conversation/Get _Attention"), NULL, menu_get_attention_cb, 0, "<StockItem>", PIDGIN_STOCK_TOOLBAR_SEND_ATTENTION },
-	{ N_("/Conversation/Add Buddy _Pounce..."), NULL, menu_add_pounce_cb,
+	{ N_("/Conversation/Se_nd File..."), NULL, (GtkItemFactoryCallback)menu_send_file_cb, 0, "<StockItem>", PIDGIN_STOCK_TOOLBAR_SEND_FILE },
+	{ N_("/Conversation/Get _Attention"), NULL, (GtkItemFactoryCallback)menu_get_attention_cb, 0, "<StockItem>", PIDGIN_STOCK_TOOLBAR_SEND_ATTENTION },
+	{ N_("/Conversation/Add Buddy _Pounce..."), NULL, (GtkItemFactoryCallback)menu_add_pounce_cb,
 			0, "<Item>", NULL },
-	{ N_("/Conversation/_Get Info"), "<CTL>O", menu_get_info_cb, 0,
+	{ N_("/Conversation/_Get Info"), "<CTL>O", (GtkItemFactoryCallback)menu_get_info_cb, 0,
 			"<StockItem>", PIDGIN_STOCK_TOOLBAR_USER_INFO },
-	{ N_("/Conversation/In_vite..."), NULL, menu_invite_cb, 0,
+	{ N_("/Conversation/In_vite..."), NULL, (GtkItemFactoryCallback)menu_invite_cb, 0,
 			"<Item>", NULL },
 	{ N_("/Conversation/M_ore"), NULL, NULL, 0, "<Branch>", NULL },
 
 	{ "/Conversation/sep2", NULL, NULL, 0, "<Separator>", NULL },
 
-	{ N_("/Conversation/Al_ias..."), NULL, menu_alias_cb, 0,
+	{ N_("/Conversation/Al_ias..."), NULL, (GtkItemFactoryCallback)menu_alias_cb, 0,
 			"<Item>", NULL },
-	{ N_("/Conversation/_Block..."), NULL, menu_block_cb, 0,
+	{ N_("/Conversation/_Block..."), NULL, (GtkItemFactoryCallback)menu_block_cb, 0,
 			"<StockItem>", PIDGIN_STOCK_TOOLBAR_BLOCK },
-	{ N_("/Conversation/_Unblock..."), NULL, menu_unblock_cb, 0,
+	{ N_("/Conversation/_Unblock..."), NULL, (GtkItemFactoryCallback)menu_unblock_cb, 0,
 			"<StockItem>", PIDGIN_STOCK_TOOLBAR_UNBLOCK },
-	{ N_("/Conversation/_Add..."), NULL, menu_add_remove_cb, 0,
+	{ N_("/Conversation/_Add..."), NULL, (GtkItemFactoryCallback)menu_add_remove_cb, 0,
 			"<StockItem>", GTK_STOCK_ADD },
-	{ N_("/Conversation/_Remove..."), NULL, menu_add_remove_cb, 0,
+	{ N_("/Conversation/_Remove..."), NULL, (GtkItemFactoryCallback)menu_add_remove_cb, 0,
 			"<StockItem>", GTK_STOCK_REMOVE },
 
 	{ "/Conversation/sep3", NULL, NULL, 0, "<Separator>", NULL },
 
-	{ N_("/Conversation/Insert Lin_k..."), NULL, menu_insert_link_cb, 0,
+	{ N_("/Conversation/Insert Lin_k..."), NULL, (GtkItemFactoryCallback)menu_insert_link_cb, 0,
 		"<StockItem>", PIDGIN_STOCK_TOOLBAR_INSERT_LINK },
-	{ N_("/Conversation/Insert Imag_e..."), NULL, menu_insert_image_cb, 0,
+	{ N_("/Conversation/Insert Imag_e..."), NULL, (GtkItemFactoryCallback)menu_insert_image_cb, 0,
 		"<StockItem>", PIDGIN_STOCK_TOOLBAR_INSERT_IMAGE },
 
 	{ "/Conversation/sep4", NULL, NULL, 0, "<Separator>", NULL },
 
 
-	{ N_("/Conversation/_Close"), NULL, menu_close_conv_cb, 0,
+	{ N_("/Conversation/_Close"), NULL, (GtkItemFactoryCallback)menu_close_conv_cb, 0,
 			"<StockItem>", GTK_STOCK_CLOSE },
 
 	/* Options */
 	{ N_("/_Options"), NULL, NULL, 0, "<Branch>", NULL },
-	{ N_("/Options/Enable _Logging"), NULL, menu_logging_cb, 0, "<CheckItem>", NULL },
-	{ N_("/Options/Enable _Sounds"), NULL, menu_sounds_cb, 0, "<CheckItem>", NULL },
+	{ N_("/Options/Enable _Logging"), NULL, (GtkItemFactoryCallback)menu_logging_cb, 0, "<CheckItem>", NULL },
+	{ N_("/Options/Enable _Sounds"), NULL, (GtkItemFactoryCallback)menu_sounds_cb, 0, "<CheckItem>", NULL },
 	{ "/Options/sep0", NULL, NULL, 0, "<Separator>", NULL },
-	{ N_("/Options/Show Formatting _Toolbars"), NULL, menu_toolbar_cb, 0, "<CheckItem>", NULL },
-	{ N_("/Options/Show Ti_mestamps"), NULL, menu_timestamps_cb, 0, "<CheckItem>", NULL },
+	{ N_("/Options/Show Formatting _Toolbars"), NULL, (GtkItemFactoryCallback)menu_toolbar_cb, 0, "<CheckItem>", NULL },
+	{ N_("/Options/Show Ti_mestamps"), NULL, (GtkItemFactoryCallback)menu_timestamps_cb, 0, "<CheckItem>", NULL },
 };
 
 static const int menu_item_count =
