@@ -1,5 +1,5 @@
 environment:
-  - DOCS_BUILD_IMAGE=docker.io/pidgin/2.x.y-builders:debian-bookworm-amd64
+  - DOCS_BUILD_IMAGE=docker.io/pidgin/2.x.y-builders:debian-trixie-amd64
   - REPOSITORY=pidgin/2.x.y-builders
   - REGISTRY=docker.io
 
