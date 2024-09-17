@@ -274,8 +274,7 @@ static gboolean writing_msg(PurpleAccount *account, char *sender, char **message
 			urls = g_list_delete_link(urls, iter);
 		}
 	}
-	*message = t->str;
-	g_string_free(t, FALSE);
+	*message = g_string_free(t, FALSE);
 	if (conv == NULL)
 		conv = purple_conversation_new(PURPLE_CONV_TYPE_IM, account, sender);
 	purple_conversation_set_data(conv, "TinyURLs", urls);

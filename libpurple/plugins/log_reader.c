@@ -444,7 +444,6 @@ struct msn_logger_data {
 	xmlnode *message;
 	const char *session_id;
 	int last_log;
-	GString *text;
 };
 
 /* This function is really confusing.  It makes baby rlaager cry...
@@ -865,7 +864,6 @@ static GList *msn_logger_list(PurpleLogType type, const char *sn, PurpleAccount 
 			data->root = root;
 			data->message = message;
 			data->session_id = session_id;
-			data->text = NULL;
 			data->last_log = FALSE;
 
 			stamp = msn_logger_parse_timestamp(message, &tm);
@@ -897,24 +895,14 @@ static char * msn_logger_read (PurpleLog *log, PurpleLogReadFlags *flags)
 
 	data = log->logger_data;
 
-	if (data->text) {
-		/* The GTK code which displays the logs g_free()s whatever is
-		 * returned from this function. Thus, we can't reuse the str
-		 * part of the GString. The only solution is to free it and
-		 * start over.
-		 */
-		g_string_free(data->text, FALSE);
-	}
-
 	text = g_string_new("");
 
 	if (!data->root || !data->message || !data->session_id) {
 		/* Something isn't allocated correctly. */
 		purple_debug_error("MSN log parse",
 		                   "Error parsing message: %s\n", "Internal variables inconsistent");
-		data->text = text;
 
-		return text->str;
+		return g_string_free(text, FALSE);
 	}
 
 	for (message = data->message; message;
@@ -1157,9 +1145,7 @@ static char * msn_logger_read (PurpleLog *log, PurpleLogReadFlags *flags)
 		g_free(tmp);
 	}
 
-	data->text = text;
-
-	return text->str;
+	return g_string_free(text, FALSE);
 }
 
 static int msn_logger_size (PurpleLog *log)
@@ -1189,9 +1175,6 @@ static void msn_logger_finalize(PurpleLog *log)
 
 	if (data->last_log)
 		xmlnode_free(data->root);
-
-	if (data->text)
-		g_string_free(data->text, FALSE);
 
 	g_free(data);
 }
