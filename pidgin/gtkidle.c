@@ -74,12 +74,11 @@ pidgin_get_time_idle(void)
 # ifdef HAVE_IOKIT
 	/* Query the IOKit API */
 
-	static io_service_t macIOsrvc = NULL;
+	static io_service_t macIOsrvc = 0;
 	CFTypeRef property;
 	uint64_t idle_time = 0; /* nanoseconds */
 
-	if (macIOsrvc == NULL)
-	{
+	if(macIOsrvc == 0) {
 		mach_port_t master;
 		IOMasterPort(MACH_PORT_NULL, &master);
 		macIOsrvc = IOServiceGetMatchingService(master,
