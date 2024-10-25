@@ -389,7 +389,7 @@ char *irc_mirc2html(const char *string)
 
 	cur = string;
 	do {
-		end = strpbrk(cur, "\002\003\007\017\026\037");
+		end = strpbrk(cur, "\002\003\007\017\026\035\037");
 
 		decoded = g_string_append_len(decoded, cur, (end ? (gssize)(end - cur) : (gssize)strlen(cur)));
 		cur = end ? end : cur + strlen(cur);
@@ -438,7 +438,7 @@ char *irc_mirc2html(const char *string)
 				decoded = g_string_append_c(decoded, '>');
 			}
 			break;
-		case '\011':
+		case '\035':
 			cur++;
 			if (!italic) {
 				decoded = g_string_append(decoded, "<I>");
@@ -496,7 +496,6 @@ char *irc_mirc2txt (const char *string)
 
 	for (i = 0, j = 0; result[i]; i++) {
 		switch (result[i]) {
-		case '\002':
 		case '\003':
 			/* Foreground color */
 			if (isdigit(result[i + 1]))
@@ -514,9 +513,11 @@ char *irc_mirc2txt (const char *string)
 			/* Note that i still points to the last character
 			 * of the color selection string. */
 			continue;
+		case '\002':
 		case '\007':
 		case '\017':
 		case '\026':
+		case '\035':
 		case '\037':
 			continue;
 		default:
