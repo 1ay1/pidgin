@@ -246,7 +246,7 @@ static xmlSAXHandler jabber_parser_libxml = {
 	NULL,									/*_private*/
 	jabber_parser_element_start_libxml,		/*startElementNs*/
 	jabber_parser_element_end_libxml,		/*endElementNs*/
-	jabber_parser_structured_error_handler	/*serror*/
+	(xmlStructuredErrorFunc)jabber_parser_structured_error_handler	/*serror*/
 };
 
 void

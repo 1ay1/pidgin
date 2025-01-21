@@ -197,7 +197,7 @@ static xmlSAXHandler bonjour_parser_libxml = {
 	NULL,									/*_private*/
 	bonjour_parser_element_start_libxml,	/*startElementNs*/
 	bonjour_parser_element_end_libxml,		/*endElementNs*/
-	bonjour_parser_structured_error_handler /*serror*/
+	(xmlStructuredErrorFunc)bonjour_parser_structured_error_handler /*serror*/
 };
 
 void

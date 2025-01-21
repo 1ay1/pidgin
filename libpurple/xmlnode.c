@@ -700,7 +700,7 @@ static xmlSAXHandler xmlnode_parser_libxml = {
 	NULL, /* _private */
 	xmlnode_parser_element_start_libxml, /* startElementNs */
 	xmlnode_parser_element_end_libxml,   /* endElementNs   */
-	xmlnode_parser_structural_error_libxml, /* serror */
+	(xmlStructuredErrorFunc)xmlnode_parser_structural_error_libxml, /* serror */
 };
 
 xmlnode *
