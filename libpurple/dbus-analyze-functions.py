@@ -534,8 +534,8 @@ class BindingSet(object):
     def __init__(self, inputfile, fprefix):
         self.inputiter = iter(inputfile)
         self.functionregexp = \
-             re.compile("^%s(\w[^()]*)\(([^()]*)\)\s*;\s*$" % fprefix)    
-        self.typeregexp = re.compile("^\w+\s*\*?\s*$")
+             re.compile(r"^%s(\w[^()]*)\(([^()]*)\)\s*;\s*$" % fprefix)
+        self.typeregexp = re.compile(r"^\w+\s*\*?\s*$")
 
 
                 
@@ -636,7 +636,7 @@ for arg in sys.argv[1:]:
             options[command] = None
 
 if "export-only" in options:
-    fprefix = "DBUS_EXPORT\s+"
+    fprefix = r"DBUS_EXPORT\s+"
 else:
     fprefix = ""
 
@@ -648,7 +648,3 @@ if "client" in options:
 else:
     bindings = ServerBindingSet(sys.stdin, fprefix)
 bindings.process()
-
-
-
-
