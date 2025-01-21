@@ -200,7 +200,7 @@ AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <time.h>
 #include <stdio.h>
 
-int main()
+int main(void)
 {
 	char buf[6];
 	time_t t = time(NULL);
