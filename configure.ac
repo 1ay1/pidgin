@@ -21,10 +21,10 @@ AC_PREREQ([2.50])
 #   For code under development: [devel]
 #   For production releases:    []
 #
-m4_define([purple_lt_current], [14])
+m4_define([purple_lt_current], [15])
 m4_define([purple_major_version], [2])
-m4_define([purple_minor_version], [14])
-m4_define([purple_micro_version], [15])
+m4_define([purple_minor_version], [15])
+m4_define([purple_micro_version], [0])
 m4_define([purple_version_suffix], [dev])
 m4_define([purple_version],
           [purple_major_version.purple_minor_version.purple_micro_version])
