@@ -336,18 +336,63 @@ gboolean purple_log_delete(PurpleLog *log)
 char *
 purple_log_get_log_dir(PurpleLogType type, const char *name, PurpleAccount *account)
 {
-	PurplePlugin *prpl;
-	PurplePluginProtocolInfo *prpl_info;
-	const char *prpl_name;
-	char *acct_name;
-	const char *target;
-	char *dir;
+	PurplePlugin *prpl = NULL;
+	char *acct_name = NULL;
+	char *dir = NULL;
+	const char *prpl_id = NULL;
+	const char *prpl_name = NULL;
+	const char *target = NULL;
 
-	prpl = purple_find_prpl(purple_account_get_protocol_id(account));
-	if (!prpl)
-		return NULL;
-	prpl_info = PURPLE_PLUGIN_PROTOCOL_INFO(prpl);
-	prpl_name = prpl_info->list_icon(account, NULL);
+	prpl_id = purple_account_get_protocol_id(account);
+	prpl = purple_find_prpl(prpl_id);
+	if(prpl != NULL) {
+		PurplePluginProtocolInfo *prpl_info = NULL;
+
+		prpl_info = PURPLE_PLUGIN_PROTOCOL_INFO(prpl);
+		prpl_name = prpl_info->list_icon(account, NULL);
+	} else {
+		/* If the protocol doesn't exist anymore, use the protocol id, which is
+		 * the id of the protocol plugin, to map it to the list icon (which is
+		 * what we used for the log directory for some reason) that the
+		 * protocol was known to have.
+		 */
+		if(purple_strequal(prpl_id, "prpl-aim")) {
+			prpl_name = "aim";
+		} else if(purple_strequal(prpl_id, "prpl-gg")) {
+			prpl_name = "gadu-gadu";
+		} else if(purple_strequal(prpl_id, "prpl-icq")) {
+			prpl_name = "icq";
+		} else if(purple_strequal(prpl_id, "prpl-msn")) {
+			prpl_name = "msn";
+		} else if(purple_strequal(prpl_id, "prpl-loubserp-mxit")) {
+			prpl_name = "mxit";
+		} else if(purple_strequal(prpl_id, "prpl-myspace")) {
+			prpl_name = "myspace";
+		} else if(purple_strequal(prpl_id, "prpl-napster")) {
+			prpl_name = "napster";
+		} else if(purple_strequal(prpl_id, "prpl-novell")) {
+			prpl_name = "novell";
+		} else if(purple_strequal(prpl_id, "prpl-qq")) {
+			prpl_name = "qq";
+		} else if(purple_strequal(prpl_id, "prpl-meanwhile")) {
+			prpl_name = "meanwhile";
+		} else if(purple_strequal(prpl_id, "prpl-silc")) {
+			/* silc and silc10 have the same id's and list_icon values. */
+			prpl_name = "silc";
+		} else if(purple_strequal(prpl_id, "prpl-toc")) {
+			prpl_name = "toc-aim";
+		} else if(purple_strequal(prpl_id, "prpl-trepia")) {
+			prpl_name = "trepia";
+		} else if(purple_strequal(prpl_id, "prpl-yahoo")) {
+			prpl_name = "yahoo";
+		} else if(purple_strequal(prpl_id, "prpl-yahoojp")) {
+			prpl_name = "yahoo";
+		} else if(purple_strequal(prpl_id, "prpl-zephyr")) {
+			prpl_name = "zephyr";
+		} else {
+			return NULL;
+		}
+	}
 
 	acct_name = g_strdup(purple_escape_filename(purple_normalize(account,
 				purple_account_get_username(account))));
