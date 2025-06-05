@@ -121,16 +121,17 @@ update_plugin_list(void *data)
 		char *summary;
 		char *desc;
 		plug = probes->data;
+		gboolean can_be_disabled = TRUE;
 
 		if (plug->info->type == PURPLE_PLUGIN_LOADER) {
 			GList *cur;
 			for (cur = PURPLE_PLUGIN_LOADER_INFO(plug)->exts; cur != NULL;
 					 cur = cur->next)
 				purple_plugins_probe(cur->data);
-			continue;
+			can_be_disabled = FALSE;
 		} else if (plug->info->type != PURPLE_PLUGIN_STANDARD ||
 			(plug->info->flags & PURPLE_PLUGIN_FLAG_INVISIBLE)) {
-			continue;
+			can_be_disabled = FALSE;
 		}
 
 		gtk_list_store_append (ls, &iter);
@@ -157,6 +158,7 @@ update_plugin_list(void *data)
 				   1, desc,
 				   2, plug,
 				   3, purple_plugin_is_unloadable(plug),
+				   4, can_be_disabled,
 				   -1);
 		g_free(desc);
 	}
@@ -730,7 +732,7 @@ void pidgin_plugin_dialog_show()
 	gtk_widget_set_sensitive(pref_button, FALSE);
 	gtk_window_set_role(GTK_WINDOW(plugin_dialog), "plugins");
 
-	ls = gtk_list_store_new(4, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
+	ls = gtk_list_store_new(5, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(ls),
 					     1, GTK_SORT_ASCENDING);
 
@@ -754,6 +756,8 @@ void pidgin_plugin_dialog_show()
 	col = gtk_tree_view_column_new_with_attributes (_("Enabled"),
 							rend,
 							"active", 0,
+							"sensitive", 4,
+							"activatable", 4,
 							NULL);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(event_view), col);
 	gtk_tree_view_column_set_sort_column_id(col, 0);
