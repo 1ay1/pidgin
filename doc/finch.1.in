@@ -30,9 +30,8 @@ Messaging client.
 .SH DESCRIPTION
 .PP
 \fBfinch\fR is a console-based modular messaging client based on libpurple
-which is capable of connecting to XMPP, IRC, SILC,
-Novell GroupWise, Lotus Sametime, Zephyr, Gadu-Gadu, and QQ all at once. It has
-many common features found in other clients, as well as many unique features.
+which is capable of connecting to IRC and XMPP. It has many common features
+found in other clients, as well as many unique features.
 
 .SH OPTIONS
 The following options are provided by \fBfinch\fR using the standard GNU

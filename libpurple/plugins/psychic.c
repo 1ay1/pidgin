@@ -20,8 +20,7 @@
 #define PLUGIN_NAME     N_("Psychic Mode")
 #define PLUGIN_SUMMARY  N_("Psychic mode for incoming conversation")
 #define PLUGIN_DESC     N_("Causes conversation windows to appear as other" \
-			   " users begin to message you.  This works for" \
-			   " XMPP and Sametime")
+			   " users begin to message you.  This works for XMPP")
 #define PLUGIN_AUTHOR   "Christopher O'Brien <siege@preoccupied.net>"
 
 

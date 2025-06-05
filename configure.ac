@@ -926,28 +926,6 @@ Use --disable-idn if you do not need it.
 fi
 
 dnl #######################################################################
-dnl # Check for Meanwhile headers (for Sametime)
-dnl #######################################################################
-AC_ARG_ENABLE(meanwhile,
-	[AC_HELP_STRING([--disable-meanwhile],
-		[compile without meanwhile (required for Sametime support)])],
-	enable_meanwhile="$enableval", enable_meanwhile="yes")
-if test "x$enable_meanwhile" = "xyes"; then
-	PKG_CHECK_MODULES(MEANWHILE, [meanwhile >= 1.0.0 meanwhile < 2.0.0], [
-		have_meanwhile="yes"
-	], [
-		have_meanwhile="no"
-		if test "x$force_deps" = "xyes" ; then
-			AC_MSG_ERROR([
-Meanwhile development headers not found.
-Use --disable-meanwhile if you do not need meanwhile (Sametime) support.
-])
-		fi])
-fi
-AC_SUBST(MEANWHILE_CFLAGS)
-AC_SUBST(MEANWHILE_LIBS)
-
-dnl #######################################################################
 dnl # Check for Native Avahi headers (for Bonjour)
 dnl #######################################################################
 AC_ARG_ENABLE(avahi,
@@ -1000,158 +978,6 @@ fi
 AC_SUBST(AVAHI_CFLAGS)
 AC_SUBST(AVAHI_LIBS)
 
-
-dnl #######################################################################
-dnl # Check for SILC client includes and libraries
-dnl #######################################################################
-AC_ARG_WITH(silc-includes, [AC_HELP_STRING([--with-silc-includes=DIR], [compile the SILC plugin against includes in DIR])], [ac_silc_includes="$withval"], [ac_silc_includes="no"])
-AC_ARG_WITH(silc-libs, [AC_HELP_STRING([--with-silc-libs=DIR], [compile the SILC plugin against the SILC libs in DIR])], [ac_silc_libs="$withval"], [ac_silc_libs="no"])
-SILC_CFLAGS=""
-SILC_LIBS=""
-have_silc="no"
-if test -n "$with_silc_includes" || test -n "$with_silc_libs"; then
-	silc_manual_check="yes"
-else
-	silc_manual_check="no"
-fi
-if test "x$silc_manual_check" = "xno"; then
-	PKG_CHECK_MODULES(SILC, [silcclient >= 1.1], [
-		have_silc="yes"
-		silcincludes="yes"
-		silcclient="yes"
-	], [
-		have_silc="no"
-	])
-	if test "x$have_silc" = "xno"; then
-		PKG_CHECK_MODULES(SILC, silcclient, [
-			have_silc="yes"
-			silc10includes="yes"
-			silc10client="yes"
-		], [
-			have_silc="no"
-		])
-		dnl If silcclient.pc wasn't found, check for just silc.pc
-		if test "x$have_silc" = "xno"; then
-			PKG_CHECK_MODULES(SILC, silc, [
-				have_silc="yes"
-				silc10includes="yes"
-				silc10client="yes"
-			], [
-				have_silc="no"
-			])
-		fi
-	fi
-else
-	if test "$ac_silc_includes" != "no"; then
-		SILC_CFLAGS="-I$ac_silc_includes"
-	fi
-	CPPFLAGS_save="$CPPFLAGS"
-	CPPFLAGS="$CPPFLAGS $SILC_CFLAGS"
-	AC_CHECK_HEADER(silc.h, [silcincludes=yes])
-	CPPFLAGS="$CPPFLAGS_save"
-
-	if test "$ac_silc_libs" != "no"; then
-		SILC_LIBS="-L$ac_silc_libs"
-	fi
-	SILC_LIBS="$SILC_LIBS -lsilc -lsilcclient -lpthread $LIBDL"
-	AC_CHECK_LIB(silcclient, silc_client_init, [silcclient=yes], , $SILC_LIBS)
-
-	if test "x$silcincludes" = "xyes" -a "x$silcclient" = "xyes"; then
-		have_silc="yes"
-	else
-		CPPFLAGS_save="$CPPFLAGS"
-		CPPFLAGS="$CPPFLAGS $SILC_CFLAGS"
-		AC_CHECK_HEADER(silcincludes.h, [silc10includes=yes])
-		CPPFLAGS="$CPPFLAGS_save"
-
-		SILC_LIBS="$SILC_LIBS -lsilc -lsilcclient -lpthread $LIBDL"
-		AC_CHECK_LIB(silcclient, silc_client_init, [silc10client=yes], , $SILC_LIBS)
-		if test "x$silc10includes" = "xyes" -a "x$silc10client" = "xyes"; then
-			have_silc="yes"
-		fi
-	fi
-fi
-AC_SUBST(SILC_LIBS)
-AC_SUBST(SILC_CFLAGS)
-dnl SILC Toolkit >= 1.0.1 has a new MIME API
-if test "x$silcclient" = "xyes"; then
-	AC_DEFINE(HAVE_SILCMIME_H, 1, [Define if we have silcmime.h])
-elif test "x$silc10client" = "xyes"; then
-	CPPFLAGS_save="$CPPFLAGS"
-	CPPFLAGS="$CPPFLAGS $SILC_CFLAGS"
-		AC_MSG_CHECKING(for silcmime.h)
-		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <silcincludes.h>
-#include <silcmime.h>
-		]], [[]])], [
-		AC_MSG_RESULT(yes)
-		AC_DEFINE(HAVE_SILCMIME_H, 1, [Define if we have silcmime.h])
-		], [
-		AC_MSG_RESULT(no)
-		])
-	CPPFLAGS="$CPPFLAGS_save"
-fi
-
-dnl #######################################################################
-dnl # Check for Gadu-Gadu protocol library (libgadu)
-dnl #######################################################################
-
-PKG_CHECK_MODULES(LIBGADU, [libgadu >= 1.12.0], [have_libgadu=yes], [have_libgadu=no])
-
-if test "x$have_libgadu" = "xyes"; then
-	AC_CHECK_LIB(gadu, gg_is_gpl_compliant, [:], [
-		LIBGADU_LIBS=""
-		LIBGADU_CFLAGS=""
-		have_libgadu=no
-		AC_MSG_WARN([
-libgadu is not compatible with the GPL when compiled with OpenSSL support.
-
-To compile against system libgadu, please recompile libgadu using:
-./configure --with-openssl=no
-Then rerun this ./configure
-
-Falling back to using our own copy of libgadu.
-		])
-	])
-fi
-
-AM_CONDITIONAL(HAVE_LIBGADU, test "x$have_libgadu" = "xyes")
-if test "x$have_libgadu" = "xyes"; then
-	AC_DEFINE(HAVE_LIBGADU, 1, [Linked with external libgadu])
-else
-	AC_CHECK_LIB(gnutls, gnutls_certificate_set_x509_system_trust, [gg_have_gnutls_csxst=yes], [gg_have_gnutls_csxst=no])
-
-	gg_gnutls_sts=""
-	if test "x$gg_have_gnutls_csxst" = "xno"; then
-		for i in /etc/ssl/ca-bundle.pem \
-			/etc/ssl/certs/ca-certificates.crt \
-			/etc/pki/tls/cert.pem \
-			/usr/local/share/certs/ca-root-nss.crt \
-			/etc/ssl/cert.pem
-		do
-			if test -e $i; then
-				gg_gnutls_sts="$i"
-				break
-			fi
-		done
-	fi
-
-	if test "x$gg_have_gnutls_csxst" = "xyes"; then
-		AC_DEFINE(HAVE_GNUTLS_CERTIFICATE_SET_X509_SYSTEM_TRUST, 1, [gnutls contains the gnutls_certificate_set_x509_system_trust function])
-	fi
-	if test "x$gg_gnutls_sts" != "x"; then
-		AC_DEFINE_UNQUOTED(GG_CONFIG_GNUTLS_SYSTEM_TRUST_STORE, ["$gg_gnutls_sts"], [use the given file as GnuTLS default trust store])
-	fi
-
-	PKG_CHECK_MODULES([GNUTLS_2_10], [gnutls >= 2.10.0], [
-		AC_DEFINE([HAVE_GNUTLS_2_10], [], [Defined if GnuTLS >= 2.10.0 is available.])
-	],:)
-fi
-
-AC_SUBST(LIBGADU_LIBS)
-AC_SUBST(LIBGADU_CFLAGS)
-
-
 AC_ARG_ENABLE(distrib,,,enable_distrib=no)
 AM_CONDITIONAL(DISTRIB, test "x$enable_distrib" = "xyes")
 DYNAMIC_PRPLS=all
@@ -1161,101 +987,56 @@ if test "x$STATIC_PRPLS" != "x" -a "x$DYNAMIC_PRPLS" = "xall"; then
 fi
 
 if test "x$STATIC_PRPLS" = "xall" ; then
-	STATIC_PRPLS="bonjour gg irc jabber novell sametime silc simple zephyr"
-fi
-if test "x$have_meanwhile" != "xyes" ; then
-	STATIC_PRPLS=`echo $STATIC_PRPLS | $sedpath 's/sametime//'`
+	STATIC_PRPLS="bonjour irc jabber simple"
 fi
 if test "x$avahiincludes" != "xyes" -o "x$avahilibs" != "xyes"; then
 	STATIC_PRPLS=`echo $STATIC_PRPLS | $sedpath 's/bonjour//'`
-fi
-if test "x$silcincludes" != "xyes" -o "x$silcclient" != "xyes"; then
-	STATIC_PRPLS=`echo $STATIC_PRPLS | $sedpath 's/silc/silc10/'`
-fi
-if test "x$silc10includes" != "xyes" -o "x$silc10client" != "xyes"; then
-	STATIC_PRPLS=`echo $STATIC_PRPLS | $sedpath 's/silc10//'`
 fi
 AC_SUBST(STATIC_PRPLS)
 STATIC_LINK_LIBS=
 extern_init=
 load_proto=
 for i in $STATIC_PRPLS ; do
-	dnl Ugly special case for "libsilcpurple.la":
-	if test "x$i" = "xsilc"; then
-		STATIC_LINK_LIBS="$STATIC_LINK_LIBS \$(top_builddir)/libpurple/protocols/$i/lib${i}purple.la"
-	elif test "x$i" = "xsilc10"; then
-		STATIC_LINK_LIBS="$STATIC_LINK_LIBS \$(top_builddir)/libpurple/protocols/$i/libsilcpurple.la"
-	else
-		STATIC_LINK_LIBS="$STATIC_LINK_LIBS \$(top_builddir)/libpurple/protocols/$i/lib$i.la"
-	fi
+	STATIC_LINK_LIBS="$STATIC_LINK_LIBS \$(top_builddir)/libpurple/protocols/$i/lib$i.la"
 	extern_init="$extern_init extern gboolean purple_init_${i}_plugin();"
 	load_proto="$load_proto purple_init_${i}_plugin();"
 
 	case $i in
 		bonjour)	static_bonjour=yes ;;
-		gg)			static_gg=yes ;;
 		irc)		static_irc=yes ;;
 		jabber)		static_jabber=yes ;;
-		novell)		static_novell=yes ;;
-		sametime)	static_sametime=yes ;;
-		silc)		static_silc=yes ;;
-		silc10)		static_silc=yes ;;
 		simple)		static_simple=yes ;;
-		zephyr)		static_zephyr=yes ;;
 		*)			echo "Invalid static protocol $i!!" ; exit 1 ;;
 	esac
 done
 AM_CONDITIONAL(STATIC_BONJOUR, test "x$static_bonjour" = "xyes")
-AM_CONDITIONAL(STATIC_GG, test "x$static_gg" = "xyes")
 AM_CONDITIONAL(STATIC_IRC, test "x$static_irc" = "xyes")
 AM_CONDITIONAL(STATIC_JABBER, test "x$static_jabber" = "xyes")
-AM_CONDITIONAL(STATIC_NOVELL, test "x$static_novell" = "xyes")
-AM_CONDITIONAL(STATIC_SAMETIME, test "x$static_sametime" = "xyes" -a "x$have_meanwhile" = "xyes")
-AM_CONDITIONAL(STATIC_SILC, test "x$static_silc" = "xyes" -a "x$have_silc" = "xyes")
 AM_CONDITIONAL(STATIC_SIMPLE, test "x$static_simple" = "xyes")
-AM_CONDITIONAL(STATIC_ZEPHYR, test "x$static_zephyr" = "xyes")
 AC_SUBST(STATIC_LINK_LIBS)
 AC_DEFINE_UNQUOTED(STATIC_PROTO_INIT, $extern_init static void static_proto_init(void) { $load_proto },
 	[Loads static protocol plugin module initialization functions.])
 
 AC_ARG_WITH(dynamic_prpls, [AC_HELP_STRING([--with-dynamic-prpls], [specify which protocols to build dynamically])], [DYNAMIC_PRPLS=`echo $withval | $sedpath 's/,/ /g'`])
 if test "x$DYNAMIC_PRPLS" = "xall" ; then
-	DYNAMIC_PRPLS="bonjour gg irc jabber novell sametime silc simple zephyr"
-fi
-if test "x$have_meanwhile" != "xyes"; then
-	DYNAMIC_PRPLS=`echo $DYNAMIC_PRPLS | $sedpath 's/sametime//'`
+	DYNAMIC_PRPLS="bonjour irc jabber simple"
 fi
 if test "x$avahiincludes" != "xyes" -o "x$avahilibs" != "xyes"; then
 	DYNAMIC_PRPLS=`echo $DYNAMIC_PRPLS | $sedpath 's/bonjour//'`
-fi
-if test "x$silcincludes" != "xyes" -o "x$silcclient" != "xyes"; then
-	DYNAMIC_PRPLS=`echo $DYNAMIC_PRPLS | $sedpath 's/silc/silc10/'`
-fi
-if test "x$silc10includes" != "xyes" -o "x$silc10client" != "xyes"; then
-	DYNAMIC_PRPLS=`echo $DYNAMIC_PRPLS | $sedpath 's/silc10//'`
 fi
 AC_SUBST(DYNAMIC_PRPLS)
 for i in $DYNAMIC_PRPLS ; do
 	case $i in
 		bonjour)	dynamic_bonjour=yes ;;
-		gg)			dynamic_gg=yes ;;
 		irc)		dynamic_irc=yes ;;
 		jabber)		dynamic_jabber=yes ;;
-		novell)		dynamic_novell=yes ;;
 		null)		dynamic_null=yes ;;
-		sametime)	dynamic_sametime=yes ;;
-		silc)		dynamic_silc=yes ;;
-		silc10)		dynamic_silc=yes ;;
 		simple)		dynamic_simple=yes ;;
-		zephyr)		dynamic_zephyr=yes ;;
 		*)			echo "Invalid dynamic protocol $i!!" ; exit 1 ;;
 	esac
 done
 
 AC_ARG_ENABLE(plugins, [AC_HELP_STRING([--disable-plugins], [compile without plugin support])], , enable_plugins=yes)
-AC_ARG_WITH(krb4, [AC_HELP_STRING([--with-krb4=PREFIX], [compile Zephyr plugin with Kerberos 4 support])], kerberos="$withval", kerberos="no")
-AC_ARG_WITH(zephyr, [AC_HELP_STRING([--with-zephyr=PREFIX], [compile Zephyr plugin against external libzephyr])], zephyr="$withval", zephyr="no")
-AM_CONDITIONAL(EXTERNAL_LIBZEPHYR, test "x$zephyr" != "xno")
 
 AC_CHECK_HEADERS(sys/utsname.h)
 AC_CHECK_FUNC(uname)
@@ -1715,7 +1496,7 @@ AC_ARG_ENABLE(nss,
 	[enable_nss="$enableval"],
 	[enable_nss="yes"])
 
-msg_ssl="None. Novell Groupwise and Google Talk will not work without GnuTLS or NSS. OpenSSL is NOT usable!"
+msg_ssl="None. OpenSSL is NOT usable!"
 looked_for_gnutls="no"
 dnl #
 dnl # Check for GnuTLS if it's specified.
@@ -2126,19 +1907,16 @@ elif test "x$looked_for_gnutls" = "xyes" -a "x$looked_for_nss" = "xyes" -a "x$fo
 	AC_MSG_ERROR([
 Neither GnuTLS or NSS SSL development headers found.
 Use --disable-nss --disable-gnutls if you do not need SSL support.
-Novell Groupwise and Google Talk will not work without GnuTLS or NSS. OpenSSL is NOT usable!
 ])
 elif test "x$looked_for_gnutls" = "xyes" -a "x$force_deps" = "xyes" ; then
 	AC_MSG_ERROR([
 GnuTLS SSL development headers not found.
 Use --disable-gnutls if you do not need SSL support.
-Novell Groupwise and Google Talk will not work without SSL support.
 ])
 elif test "x$looked_for_nss" = "xyes" -a "x$force_deps" = "xyes" ; then
 	AC_MSG_ERROR([
 NSS SSL development headers not found.
 Use --disable-nss if you do not need SSL support.
-Novell Groupwise and Google Talk will not work without SSL support.
 ])
 fi
 
@@ -2324,74 +2102,6 @@ if test "x$enable_cyrus_sasl" = "xyes" ; then
 		])
 else
 	AM_CONDITIONAL(USE_CYRUS_SASL, false)
-fi
-
-dnl #######################################################################
-dnl # Check for Kerberos (for Zephyr)
-dnl #######################################################################
-AC_DEFINE(ZEPHYR_INT32, long, [Size of an int32.])
-AC_SUBST(KRB4_CFLAGS)
-AC_SUBST(KRB4_LDFLAGS)
-AC_SUBST(KRB4_LIBS)
-if test "$kerberos" != "no" ; then
-	if test "$kerberos" != "yes" ; then
-		KRB4_CFLAGS="-I${kerberos}/include"
-		if test -d "$kerberos/include/kerberosIV" ; then
-			KRB4_CFLAGS="$KRB4_CFLAGS -I${kerberos}/include/kerberosIV"
-		fi
-		KRB4_LDFLAGS="-L${kerberos}/lib"
-	elif test -d /usr/local/include/kerberosIV ; then
-		KRB4_CFLAGS="-I/usr/local/include/kerberosIV"
-	elif test -d /usr/include/kerberosIV ; then
-		KRB4_CFLAGS="-I/usr/include/kerberosIV"
-	fi
-	AC_DEFINE(ZEPHYR_USES_KERBEROS, 1, [Define if kerberos should be used in Zephyr.])
-
-	orig_LDFLAGS="$LDFLAGS"
-	LDFLAGS="$LDFLAGS $KRB4_LDFLAGS"
-	AC_CHECK_LIB(krb4, krb_rd_req,
-			[KRB4_LIBS="-lkrb4 -ldes425 -lkrb5 -lk5crypto -lcom_err"],
-			[AC_CHECK_LIB(krb, krb_rd_req,
-				[KRB4_LIBS="-lkrb -ldes"],
-				[AC_MSG_ERROR([Kerberos 4 libraries not found])],
-				-ldes)],
-			-ldes425 -lkrb5 -lk5crypto -lcom_err)
-	orig_LIBS="$LIBS"
-	LIBS="$LIBS $KRB4_LIBS"
-	AC_CHECK_FUNCS(krb_set_key krb_rd_req krb_get_lrealm)
-	AC_CHECK_FUNCS(krb_get_err_text krb_log)
-	LIBS="$orig_LIBS"
-	LDFLAGS="$orig_LDFLAGS"
-fi
-
-dnl #######################################################################
-dnl # Check for external libzephyr
-dnl #######################################################################
-AC_SUBST(ZEPHYR_CFLAGS)
-AC_SUBST(ZEPHYR_LDFLAGS)
-AC_SUBST(ZEPHYR_LIBS)
-if test "$zephyr" != "no" ; then
-	if test "$zephyr" != "yes" ; then
-		ZEPHYR_CFLAGS="-I${zephyr}/include"
-		ZEPHYR_LDFLAGS="-L${zephyr}/lib"
-	elif test -d /usr/athena/include/zephyr ; then
-		ZEPHYR_CFLAGS="-I/usr/athena/include"
-	elif test -d /usr/include/zephyr ; then
-		ZEPHYR_CFLAGS="-I/usr/include"
-	elif test -d /usr/local/include/zephyr ; then
-		ZEPHYR_CFLAGS="-I/usr/local/include"
-	fi
-	AC_DEFINE(LIBZEPHYR_EXT, 1 , [Define if external libzephyr should be used.])
-	AM_CONDITIONAL(EXTERNAL_LIBZEPHYR, test "x$zephyr" != "xno")
-	orig_LDFLAGS="$LDFLAGS"
-	LDFLAGS="$LDFLAGS $ZEPHYR_LDFLAGS"
-	AC_CHECK_LIB(zephyr, ZInitialize,
-		[ZEPHYR_LIBS="-lzephyr"],
-		[AC_MSG_ERROR([Zephyr libraries not found])],
-		-lzephyr)
-	orig_LIBS="$LIBS"
-	LIBS="$orig_LIBS"
-	LDFLAGS="$orig_LDFLAGS"
 fi
 
 AC_MSG_CHECKING(for me pot o' gold)
@@ -2597,16 +2307,10 @@ AC_CONFIG_FILES([Makefile
 		   libpurple/Makefile
 		   libpurple/protocols/Makefile
 		   libpurple/protocols/bonjour/Makefile
-		   libpurple/protocols/gg/Makefile
 		   libpurple/protocols/irc/Makefile
 		   libpurple/protocols/jabber/Makefile
-		   libpurple/protocols/novell/Makefile
 		   libpurple/protocols/null/Makefile
-		   libpurple/protocols/sametime/Makefile
-		   libpurple/protocols/silc/Makefile
-		   libpurple/protocols/silc10/Makefile
 		   libpurple/protocols/simple/Makefile
-		   libpurple/protocols/zephyr/Makefile
 		   libpurple/tests/Makefile
 		   libpurple/purple.h
 		   libpurple/version.h
@@ -2646,9 +2350,6 @@ if test "x$SSL_CERTIFICATES_DIR" != "x" ; then
 	eval eval echo SSL CA certificates directory. : $SSL_CERTIFICATES_DIR
 fi
 echo Build with Cyrus SASL support. : $enable_cyrus_sasl
-echo Use kerberos 4 with zephyr.... : $kerberos
-echo Use external libzephyr........ : $zephyr
-echo Use external libgadu.......... : $have_libgadu
 echo Install pixmaps............... : $enable_pixmaps
 echo Old tray icon compatibility... : $enable_traycompat
 echo Install translations.......... : $enable_i18n

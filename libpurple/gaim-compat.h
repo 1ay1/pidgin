@@ -2304,16 +2304,7 @@
 #define gaim_init_ssl_plugin			purple_init_ssl_plugin
 #define gaim_init_ssl_openssl_plugin	purple_init_ssl_openssl_plugin
 #define gaim_init_ssl_gnutls_plugin		purple_init_ssl_gnutls_plugin
-#define gaim_init_gg_plugin				purple_init_gg_plugin
 #define gaim_init_jabber_plugin			purple_init_jabber_plugin
-#define gaim_init_sametime_plugin		purple_init_sametime_plugin
-#define gaim_init_msn_plugin			purple_init_msn_plugin
-#define gaim_init_novell_plugin			purple_init_novell_plugin
-#define gaim_init_qq_plugin				purple_init_qq_plugin
 #define gaim_init_simple_plugin			purple_init_simple_plugin
-#define gaim_init_yahoo_plugin			purple_init_yahoo_plugin
-#define gaim_init_zephyr_plugin			purple_init_zephyr_plugin
-#define gaim_init_aim_plugin			purple_init_aim_plugin
-#define gaim_init_icq_plugin			purple_init_icq_plugin
 
 #endif /* _GAIM_COMPAT_H_ */

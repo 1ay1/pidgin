@@ -146,13 +146,11 @@ compile.
 	`--disable-gstreamer' will build without sound support.  This applies to
 *both* Pidgin and Finch.
 
-	`--enable-gnutls=yes,no' will enable or disable the use of gnutls for ssl support.  Disabling both gnutls and nss will mean you cannot use either MSN or Google Talk.  There is no static option for gnutls at this time.
+	`--enable-gnutls=yes,no' will enable or disable the use of gnutls for ssl support.  There is no static option for gnutls at this time.
 
-	`--enable-nss=yes,no,static'  will enable or disable the use of nss for ssl support.  This is the only option for ssl support if you are attempting to compile a static version of Pidgin or Finch.  
+	`--enable-nss=yes,no,static'  will enable or disable the use of nss for ssl support.  This is the only option for ssl support if you are attempting to compile a static version of Pidgin or Finch.
 
 Optional Packages:
-
-	`--with-silc-includes=DIR' 	and `--with-silc-libs=DIR' can be used if your silc libraries are installed to a location not in your path. 
 
 	`--with-static-prpls' takes a list of comma separated protocols to build in statically (rather than as plugins).  Use this with care.
 

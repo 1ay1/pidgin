@@ -500,8 +500,6 @@ Section Uninstall
 
     ; Remove any URI handlers
     ; I can't think of an easy way to maintain a list in a single place
-    Push "aim"
-    Call un.UnregisterURIHandler
     Push "xmpp"
     Call un.UnregisterURIHandler
 
@@ -549,17 +547,9 @@ Section Uninstall
     Delete "$INSTDIR\plugins\iconaway.dll"
     Delete "$INSTDIR\plugins\idle.dll"
     Delete "$INSTDIR\plugins\joinpart.dll"
-    Delete "$INSTDIR\plugins\libaim.dll"
     Delete "$INSTDIR\plugins\libbonjour.dll"
-    Delete "$INSTDIR\plugins\libgg.dll"
-    Delete "$INSTDIR\plugins\libicq.dll"
     Delete "$INSTDIR\plugins\libirc.dll"
-    Delete "$INSTDIR\plugins\libnapster.dll"
-    Delete "$INSTDIR\plugins\libnovell.dll"
-    Delete "$INSTDIR\plugins\libsametime.dll"
-    Delete "$INSTDIR\plugins\libsilc.dll"
     Delete "$INSTDIR\plugins\libsimple.dll"
-    Delete "$INSTDIR\plugins\libtoc.dll"
     Delete "$INSTDIR\plugins\libxmpp.dll"
     Delete "$INSTDIR\plugins\log_reader.dll"
     Delete "$INSTDIR\plugins\markerline.dll"
@@ -619,18 +609,13 @@ Section Uninstall
     Delete "$INSTDIR\libgcc_s_dw2-1.dll"
     Delete "$INSTDIR\libjabber.dll"
     Delete "$INSTDIR\libnspr4.dll"
-    Delete "$INSTDIR\libmeanwhile-1.dll"
-    Delete "$INSTDIR\liboscar.dll"
     Delete "$INSTDIR\libplc4.dll"
     Delete "$INSTDIR\libplds4.dll"
     Delete "$INSTDIR\libpurple.dll"
     Delete "$INSTDIR\libsasl2-3.dll"
-    Delete "$INSTDIR\libsilc-1-1-4.dll"
-    Delete "$INSTDIR\libsilcclient-1-1-4.dll"
     Delete "$INSTDIR\libssp-0.dll"
     Delete "$INSTDIR\libwinpthread-1.dll"
     Delete "$INSTDIR\libxml2-2.dll"
-    Delete "$INSTDIR\libymsg.dll"
     Delete "$INSTDIR\nss3.dll"
     Delete "$INSTDIR\nssutil3.dll"
     Delete "$INSTDIR\pidgin.dll"

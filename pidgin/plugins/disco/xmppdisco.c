@@ -250,8 +250,6 @@ static const struct {
 	const char *from;
 	const char *to;
 } disco_type_mappings[] = {
-	{ "gadu-gadu", "gadu-gadu" }, /* the prpl is prpl-gg, but list_icon returns "gadu-gadu" */
-	{ "sametime",  "meanwhile" },
 	{ "xmpp",      "jabber" }, /* prpl-jabber (mentioned in case the prpl is renamed so this line will match) */
 	{ NULL,        NULL }
 };

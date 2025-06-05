@@ -12,7 +12,7 @@ the fuzzers.
 
 Example:
 ```bash
-$ CC=clang ./configure --enable-fuzzing --disable-cyrus-sasl --disable-gtkui --disable-gstreamer --disable-vv --disable-idn --disable-meanwhile --disable-avahi --disable-libgadu --disable-dbus --disable-libsecret --disable-gnome-keyring --disable-kwallet --disable-plugins
+$ CC=clang ./configure --enable-fuzzing --disable-cyrus-sasl --disable-gtkui --disable-gstreamer --disable-vv --disable-idn --disable-avahi --disable-dbus --disable-libsecret --disable-gnome-keyring --disable-kwallet --disable-plugins
 ```
 
 Now that the build system has been configured, you need to build everything,

@@ -642,12 +642,6 @@ g_string_append(str, "<br/>  <b>Library Support</b><br/>");
 #endif
 #endif
 
-#ifdef HAVE_LIBGADU
-	g_string_append(str, "    <b>Gadu-Gadu library (libgadu):</b> External<br/>");
-#else
-	g_string_append(str, "    <b>Gadu-Gadu library (libgadu):</b> Internal<br/>");
-#endif
-
 #ifdef USE_GTKSPELL
 	g_string_append(str, "    <b>GtkSpell:</b> Enabled<br/>");
 #else
@@ -732,17 +726,6 @@ if (purple_plugins_find_with_id("core-tcl") != NULL) {
 	g_string_append(str, "    <b>XScreenSaver:</b> Disabled<br/>");
 #endif
 
-#ifdef LIBZEPHYR_EXT
-	g_string_append(str, "    <b>Zephyr library (libzephyr):</b> External<br/>");
-#else
-	g_string_append(str, "    <b>Zephyr library (libzephyr):</b> Internal<br/>");
-#endif
-
-#ifdef ZEPHYR_USES_KERBEROS
-	g_string_append(str, "    <b>Zephyr uses Kerberos:</b> Yes<br/>");
-#else
-	g_string_append(str, "    <b>Zephyr uses Kerberos:</b> No<br/>");
-#endif
 #endif
 
 	/* End of not to be translated section */

@@ -14,8 +14,7 @@ PackageVersion: 1
 
 [Description]
 Pidgin allows you to talk to anyone using a variety of messaging protocols,
-including IRC, XMPP,
-Gadu-Gadu, and Zephyr. These protocols are implemented using a
+including IRC and XMPP. These protocols are implemented using a
 modular, easy to use design. To use a protocol, just add an account using the
 account editor.
 

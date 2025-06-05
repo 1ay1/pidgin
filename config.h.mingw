@@ -155,9 +155,6 @@
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 /* #define HAVE_LC_MESSAGES 1 */
 
-/* Linked with external libgadu */
-#define HAVE_LIBGADU 1
-
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 /* #define HAVE_LIBNSL 1 */
 
@@ -244,9 +241,6 @@
 
 /* Define to 1 if you have the <signal.h> header file. */
 /* #define HAVE_SIGNAL_H 1 */
-
-/* Define if we have silcmime.h */
-#define HAVE_SILCMIME_H 1
 
 /* Define to 1 if you have the <smime.h> header file. */
 /* #undef HAVE_SMIME_H */
@@ -385,9 +379,6 @@
 /* whether or not we have xsltproc for devhelp index */
 /* #define HAVE_XSLTPROC 1 */
 
-/* Define if external libzephyr should be used. */
-/* #undef LIBZEPHYR_EXT */
-
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
 /* #define LT_OBJDIR ".libs/" */
@@ -487,12 +478,6 @@
 
 /* Define to 1 if the X Window System is missing or not being used. */
 /* #undef X_DISPLAY_MISSING */
-
-/* Size of an int32. */
-#define ZEPHYR_INT32 long
-
-/* Define if kerberos should be used in Zephyr. */
-/* #undef ZEPHYR_USES_KERBEROS */
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #define _FILE_OFFSET_BITS 64 */
