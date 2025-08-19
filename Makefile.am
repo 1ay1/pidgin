@@ -16,7 +16,6 @@ EXTRA_DIST = \
 		intltool-merge.in \
 		intltool-update.in \
 		package_revision.h \
-		pidgin.apspec.in \
 		pidgin.spec.in \
 		po/Makefile.mingw \
 		valgrind-suppressions

@@ -2268,7 +2268,6 @@ AC_CONFIG_FILES([Makefile
 		   doc/pidgin.1
 		   doc/finch.1
 		   m4macros/Makefile
-		   pidgin.apspec
 		   pidgin/Makefile
 		   pidgin/data/pidgin.desktop.in
 		   pidgin/data/pidgin.pc
