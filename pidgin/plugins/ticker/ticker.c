@@ -295,8 +295,11 @@ signoff_cb(PurpleConnection *gc)
 				g_source_remove(td->timeout);
 			g_free(td);
 		}
-		gtk_widget_destroy(tickerwindow);
-		tickerwindow = NULL;
+		if(tickerwindow != NULL) {
+			gtk_widget_destroy(tickerwindow);
+			tickerwindow = NULL;
+		}
+
 		ticker = NULL;
 	} else {
 		GList *t = tickerbuds;
