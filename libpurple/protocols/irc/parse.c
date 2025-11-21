@@ -408,15 +408,15 @@ char *irc_mirc2html(const char *string)
 		case '\003':
 			cur++;
 			fg[0] = fg[1] = bg[0] = bg[1] = '\0';
-			if (isdigit(*cur))
+			if (isdigit((unsigned char)*cur))
 				fg[0] = *cur++;
-			if (isdigit(*cur))
+			if (isdigit((unsigned char)*cur))
 				fg[1] = *cur++;
 			if (*cur == ',') {
 				cur++;
-				if (isdigit(*cur))
+				if (isdigit((unsigned char)*cur))
 					bg[0] = *cur++;
-				if (isdigit(*cur))
+				if (isdigit((unsigned char)*cur))
 					bg[1] = *cur++;
 			}
 			if (font) {
@@ -498,16 +498,16 @@ char *irc_mirc2txt (const char *string)
 		switch (result[i]) {
 		case '\003':
 			/* Foreground color */
-			if (isdigit(result[i + 1]))
+			if (isdigit((unsigned char)result[i + 1]))
 				i++;
-			if (isdigit(result[i + 1]))
+			if (isdigit((unsigned char)result[i + 1]))
 				i++;
 			/* Optional comma and background color */
 			if (result[i + 1] == ',') {
 				i++;
-				if (isdigit(result[i + 1]))
+				if (isdigit((unsigned char)result[i + 1]))
 					i++;
-				if (isdigit(result[i + 1]))
+				if (isdigit((unsigned char)result[i + 1]))
 					i++;
 			}
 			/* Note that i still points to the last character

@@ -287,7 +287,7 @@ void pidgin_themes_load_smiley_theme(const char *file, gboolean load)
 		}
 
 		i = buf;
-		while (isspace(*i))
+		while (isspace((unsigned char)*i))
 			i++;
 
 		if (*i == '[' && strchr(i, ']') && load) {
@@ -325,7 +325,7 @@ void pidgin_themes_load_smiley_theme(const char *file, gboolean load)
 				char l[64];
 				size_t li = 0;
 				char *next;
-				while (*i && !isspace(*i) && li < sizeof(l) - 1) {
+				while (*i && !isspace((unsigned char)*i) && li < sizeof(l) - 1) {
 					if (*i == '\\' && *(i+1) != '\0')
 						i++;
 					/* coverity[tainted_data] */
@@ -343,7 +343,7 @@ void pidgin_themes_load_smiley_theme(const char *file, gboolean load)
 					GtkIMHtmlSmiley *smiley = gtk_imhtml_smiley_create(sfile, l, hidden, 0);
 					list->smileys = g_slist_prepend(list->smileys, smiley);
 				}
-				while (isspace(*i))
+				while (isspace((unsigned char)*i))
 					i++;
 
 			}

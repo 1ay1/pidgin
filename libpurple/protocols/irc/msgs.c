@@ -149,8 +149,8 @@ void irc_msg_default(struct irc_conn *irc, const char *name, const char *from, c
 		/* Check for 3-digit numeric in second position */
 		if (i == 1) {
 			if (end - cur != 3
-			    || !isdigit(cur[0]) || !isdigit(cur[1])
-			    || !isdigit(cur[2])) {
+			    || !isdigit((unsigned char)cur[0]) || !isdigit((unsigned char)cur[1])
+			    || !isdigit((unsigned char)cur[2])) {
 				goto undirected;
 			}
 			/* Save the numeric for printing to the channel */

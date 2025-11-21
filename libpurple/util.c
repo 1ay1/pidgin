@@ -215,11 +215,11 @@ purple_base16_decode(const char *str, gsize *ret_len)
 		else
 			accumulator <<= 4;
 
-		if (isdigit(str[i]))
+		if (isdigit((unsigned char)str[i]))
 			accumulator |= str[i] - 48;
 		else
 		{
-			switch(tolower(str[i]))
+			switch(tolower((unsigned char)str[i]))
 			{
 				case 'a':  accumulator |= 10;  break;
 				case 'b':  accumulator |= 11;  break;
@@ -310,8 +310,8 @@ purple_quotedp_decode(const char *str, gsize *ret_len)
 				n -= 1;
 				p += 1;
 			} else if (p[1] && p[2]) {
-				char *nibble1 = strchr(xdigits, tolower(p[1]));
-				char *nibble2 = strchr(xdigits, tolower(p[2]));
+				char *nibble1 = strchr(xdigits, tolower((unsigned char)p[1]));
+				char *nibble2 = strchr(xdigits, tolower((unsigned char)p[2]));
 				if (nibble1 && nibble2) { /* 5.1 #1 */
 					*n = ((nibble1 - xdigits) << 4) | (nibble2 - xdigits);
 					p += 2;
@@ -362,11 +362,11 @@ purple_mime_decode_field(const char *str)
 
 	/* token can be any CHAR (supposedly ISO8859-1/ISO2022), not just ASCII */
 	#define token_char_p(c) \
-		(c != ' ' && !iscntrl(c) && !strchr("()<>@,;:\"/[]?.=", c))
+		(c != ' ' && !iscntrl((unsigned char)c) && !strchr("()<>@,;:\"/[]?.=", c))
 
 	/* But encoded-text must be ASCII; alas, isascii() may not exist */
 	#define encoded_text_char_p(c) \
-		((c & 0x80) == 0 && c != '?' && c != ' ' && isgraph(c))
+		((c & 0x80) == 0 && c != '?' && c != ' ' && isgraph((unsigned char)c))
 
 	g_return_val_if_fail(str != NULL, NULL);
 
@@ -4588,7 +4588,7 @@ purple_uri_list_extract_uris(const gchar *uri_list)
 	*/
 	while (p) {
 		if (*p != '#') {
-			while (isspace(*p))
+			while (isspace((unsigned char)*p))
 				p++;
 
 			q = p;
@@ -4597,7 +4597,7 @@ purple_uri_list_extract_uris(const gchar *uri_list)
 
 			if (q > p) {
 				q--;
-				while (q > p && isspace(*q))
+				while (q > p && isspace((unsigned char)*q))
 					q--;
 
 				retval = (gchar*)g_malloc (q - p + 2);
@@ -5124,7 +5124,7 @@ const char *_purple_oscar_convert(const char *act, const char *protocol)
 	if (act && purple_strequal(protocol, "prpl-oscar")) {
 		int i;
 		for (i = 0; act[i] != '\0'; i++)
-			if (!isdigit(act[i]))
+			if (!isdigit((unsigned char)act[i]))
 				return "prpl-aim";
 		return "prpl-icq";
 	}
