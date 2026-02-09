@@ -92,7 +92,7 @@ static const struct developer retired_developers[] = {
 	{"John 'rekkanoryo' Bailey",    NULL,                      NULL},
 	{"Ethan 'Paco-Paco' Blanton",   NULL,                      NULL},
 	{"Herman Bloggs",               N_("win32 port"),          "herman@bluedigits.com"},
-	{"Hylke Bons",                  N_("artist"),              "hylkebons@gmail.com"},
+	{"Hylke Bons",                  N_("artist"),              "hello@planetpeanut.studio"},
 	{"Thomas Butter",               NULL,                      NULL},
 	/* Translators: This is a person's name. For most languages we recommend
 	   not translating it. */
