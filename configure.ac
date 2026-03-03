@@ -358,7 +358,7 @@ AC_ARG_ENABLE(gtkspell,
 AC_ARG_ENABLE(gevolution,
 	[AC_HELP_STRING([--enable-gevolution],
 		[compile with the Evolution plugin])],
-	enable_gevolution="$enableval", enable_gevolution="yes")
+	enable_gevolution="$enableval", enable_gevolution="no")
 AC_ARG_ENABLE(cap,
 	[AC_HELP_STRING([--enable-cap],
 		[compile with Contact Availability Prediction plugin])],
