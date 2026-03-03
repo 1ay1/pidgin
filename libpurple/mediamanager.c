@@ -2216,7 +2216,8 @@ purple_media_manager_register_gst_device(PurpleMediaManager *manager,
 			"create-cb", gst_device_create_cb,
 			NULL);
 
-	g_object_set_data(G_OBJECT(info), "gst-device", device);
+	g_object_set_data_full(G_OBJECT(info), "gst-device", g_object_ref(device),
+	                       g_object_unref);
 
 	purple_media_manager_register_element(manager, info);
 
@@ -2259,12 +2260,11 @@ purple_media_manager_unregister_gst_device(PurpleMediaManager *manager,
 				gchar *id;
 
 				id = purple_media_element_info_get_id(info);
-				purple_media_manager_unregister_element(manager,
-						id);
+				purple_media_manager_unregister_element(manager, id);
 
 				purple_debug_info("mediamanager",
-						"Unregistered %s device %s",
-						device_class, name);
+				                  "Unregistered %s device %s\n",
+				                  device_class, name);
 
 				g_free(id);
 
