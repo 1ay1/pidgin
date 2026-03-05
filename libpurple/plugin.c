@@ -1186,6 +1186,7 @@ void
 purple_plugins_init(void) {
 	void *handle = purple_plugins_get_handle();
 
+	purple_plugins_add_search_paths_from_env("PURPLE_PLUGIN_PATH");
 	purple_plugins_add_search_path(LIBDIR);
 
 	purple_signal_register(handle, "plugin-load",
@@ -1226,6 +1227,27 @@ purple_plugins_add_search_path(const char *path)
 		return;
 
 	search_paths = g_list_append(search_paths, g_strdup(path));
+}
+
+void
+purple_plugins_add_search_paths_from_env(const char *from_env) {
+	char **paths = NULL;
+	const char *value = NULL;
+	int i = 0;
+
+	g_return_if_fail(from_env != NULL);
+
+	value = g_getenv(from_env);
+	if(value == NULL) {
+		return;
+	}
+
+	paths = g_strsplit(value, G_SEARCHPATH_SEPARATOR_S, 0);
+	for(i = 0; paths[i] != NULL; i++) {
+		purple_plugins_add_search_path(paths[i]);
+	}
+
+	g_strfreev(paths);
 }
 
 GList *

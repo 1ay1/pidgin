@@ -512,6 +512,13 @@ void *purple_plugin_ipc_call(PurplePlugin *plugin, const char *command,
 void purple_plugins_add_search_path(const char *path);
 
 /**
+ * Add new directory to search for plugins from an environment variable.
+ *
+ * @param from_env The environment variable to read paths from.
+ */
+void purple_plugins_add_search_paths_from_env(const char *env_from);
+
+/**
  * Returns a list of plugin search paths.
  *
  * @constreturn A list of searched paths.

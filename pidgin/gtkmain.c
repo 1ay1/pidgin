@@ -813,9 +813,10 @@ int main(int argc, char *argv[])
 	purple_eventloop_set_ui_ops(pidgin_eventloop_get_ui_ops());
 
 	/*
-	 * Set plugin search directories. Give priority to the plugins
-	 * in user's home directory.
+	 * Set plugin search directories. Give priority to the environment variable
+	 * and then the user's home directory.
 	 */
+	purple_plugins_add_search_paths_from_env("PIDGIN_PLUGIN_PATH");
 	search_path = g_build_filename(purple_user_dir(), "plugins", NULL);
 	if (g_mkdir(search_path, S_IRUSR | S_IWUSR | S_IXUSR) != 0 && errno != EEXIST)
 		fprintf(stderr, "Couldn't create plugins dir\n");

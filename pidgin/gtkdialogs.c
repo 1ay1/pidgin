@@ -822,6 +822,15 @@ void pidgin_dialogs_plugins_info(void)
 	str = g_string_sized_new(4096);
 
 	g_string_append_printf(str, "<FONT SIZE=\"4\">%s</FONT><BR/>",
+	                       _("Search Paths"));
+	for(l = purple_plugins_get_search_paths(); l; l = l->next) {
+		const char *path = l->data;
+
+		g_string_append_printf(str, "\t%s<BR/>", path);
+	}
+	g_string_append(str, "<BR/>");
+
+	g_string_append_printf(str, "<FONT SIZE=\"4\">%s</FONT><BR/>",
 			_("Plugin Information"));
 
 	for(l = purple_plugins_get_all(); l; l = l->next) {
