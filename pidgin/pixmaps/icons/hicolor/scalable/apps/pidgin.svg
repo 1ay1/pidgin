@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="48px"
    height="48px"
    id="svg4345"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
-   sodipodi:docbase="/home/hbons/Desktop/2.0.2/pidgin/pixmaps/icons/48/scalable"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
    sodipodi:docname="pidgin.svg"
    inkscape:export-filename="/home/hbons/Desktop/pidgin48.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.1"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs4347">
     <linearGradient
@@ -267,7 +268,11 @@
        gradientTransform="matrix(1.0769231,0,0,1.1428571,-0.905101,-4.6800586)" />
     <filter
        inkscape:collect="always"
-       id="filter8730">
+       id="filter8730"
+       x="-0.044752707"
+       y="-0.068580648"
+       width="1.0895054"
+       height="1.1371613">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.27197245"
@@ -276,10 +281,10 @@
     <filter
        inkscape:collect="always"
        id="filter8792"
-       x="-0.095301818"
-       width="1.1906036"
-       y="-0.27704017"
-       height="1.5540803">
+       x="-0.096361799"
+       width="1.1927236"
+       y="-0.28619165"
+       height="1.5723833">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.31022727"
@@ -405,28 +410,37 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.828427"
-     inkscape:cx="63.722923"
-     inkscape:cy="33.120105"
+     inkscape:cx="63.81639"
+     inkscape:cy="33.410797"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="1434"
-     inkscape:window-height="840"
-     inkscape:window-x="-2"
-     inkscape:window-y="0"
+     inkscape:window-width="1916"
+     inkscape:window-height="1016"
+     inkscape:window-x="1080"
+     inkscape:window-y="1110"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:grid-points="true"
      inkscape:snap-bbox="true"
      inkscape:snap-nodes="false"
      objecttolerance="10"
-     gridtolerance="10">
+     gridtolerance="10"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid7914"
        visible="true"
-       enabled="true" />
+       enabled="true"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px" />
   </sodipodi:namedview>
   <metadata
      id="metadata4350">

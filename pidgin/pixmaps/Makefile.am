@@ -233,6 +233,12 @@ ICONS_32 = icons/hicolor/32x32/apps/pidgin.png
 
 ICONS_48 = icons/hicolor/48x48/apps/pidgin.png
 
+ICONS_64 = icons/hicolor/64x64/apps/pidgin.png
+
+ICONS_128 = icons/hicolor/128x128/apps/pidgin.png
+
+ICONS_256 = icons/hicolor/256x256/apps/pidgin.png
+
 ICONS_SCALABLE = icons/hicolor/scalable/apps/pidgin.svg
 
 PROTOCOLS_22_SCALABLE = \
@@ -550,5 +556,8 @@ nobase_dist_pidginicons_DATA = \
 		$(ICONS_24) \
 		$(ICONS_32) \
 		$(ICONS_48) \
+		$(ICONS_64) \
+		$(ICONS_128) \
+		$(ICONS_256) \
 		$(ICONS_SCALABLE)
 endif

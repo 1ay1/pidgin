@@ -33,8 +33,14 @@
   <url type="faq">https://pidgin.im/development/faq/</url>
   <url type="help">https://pidgin.im/help/</url>
   <url type="donation">https://imfreedom.org/donate/</url>
+  <url type="vcs-browser">https://keep.imfreedom.org/pidgin/pidgin/file/release-2.x.y/</url>
 
   <update_contact>devel@pidgin.im</update_contact>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#794a85</color>
+    <color type="primary" scheme_preference="dark">#af7faf</color>
+  </branding>
 
   <developer id="im.pidgin">
     <name>Pidgin Developers</name>
