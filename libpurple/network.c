@@ -441,7 +441,7 @@ purple_network_do_listen(unsigned short port, int socket_family, int socket_type
 	 * XXX - Try IPv6 addresses first?
 	 */
 	for (next = res; next != NULL; next = next->ai_next) {
-#if _WIN32
+#ifdef _WIN32
 		/*
 		 * On Windows, the address family for the transport
 		 * address should always be set to AF_INET.
