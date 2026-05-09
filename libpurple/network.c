@@ -77,10 +77,6 @@
 #include <dbus/dbus-glib.h>
 #include <NetworkManager.h>
 
-#if !defined(NM_CHECK_VERSION)
-#define NM_CHECK_VERSION(x,y,z) 0
-#endif
-
 static DBusGConnection *nm_conn = NULL;
 static DBusGProxy *nm_proxy = NULL;
 static DBusGProxy *dbus_proxy = NULL;
@@ -884,13 +880,9 @@ purple_network_is_available(void)
 	switch (nm_state)
 	{
 		case NM_STATE_UNKNOWN:
-#if NM_CHECK_VERSION(0,8,992)
 		case NM_STATE_CONNECTED_LOCAL:
 		case NM_STATE_CONNECTED_SITE:
 		case NM_STATE_CONNECTED_GLOBAL:
-#else
-		case NM_STATE_CONNECTED:
-#endif
 			return TRUE;
 		default:
 			break;
@@ -927,13 +919,9 @@ nm_update_state(NMState state)
 
 	switch(state)
 	{
-#if NM_CHECK_VERSION(0,8,992)
 		case NM_STATE_CONNECTED_LOCAL:
 		case NM_STATE_CONNECTED_SITE:
 		case NM_STATE_CONNECTED_GLOBAL:
-#else
-		case NM_STATE_CONNECTED:
-#endif
 			/* Call res_init in case DNS servers have changed */
 			res_init();
 			/* update STUN IP in case we it changed (theoretically we could
@@ -950,16 +938,9 @@ nm_update_state(NMState state)
 		case NM_STATE_ASLEEP:
 		case NM_STATE_CONNECTING:
 		case NM_STATE_DISCONNECTED:
-#if NM_CHECK_VERSION(0,8,992)
 		case NM_STATE_DISCONNECTING:
-#endif
-#if NM_CHECK_VERSION(1,0,0)
 			if (prev != NM_STATE_CONNECTED_GLOBAL && prev != NM_STATE_UNKNOWN)
 				break;
-#else
-			if (prev != NM_STATE_CONNECTED && prev != NM_STATE_UNKNOWN)
-				break;
-#endif
 			if (ui_ops != NULL && ui_ops->network_disconnected != NULL)
 				ui_ops->network_disconnected();
 			break;
@@ -1263,10 +1244,6 @@ purple_network_init(void)
 		                                     NM_DBUS_SERVICE,
 		                                     NM_DBUS_PATH,
 		                                     NM_DBUS_INTERFACE);
-		/* NM 0.6 signal */
-		dbus_g_proxy_add_signal(nm_proxy, "StateChange", G_TYPE_UINT, G_TYPE_INVALID);
-		dbus_g_proxy_connect_signal(nm_proxy, "StateChange",
-		                            G_CALLBACK(nm_state_change_cb), NULL, NULL);
 		/* NM 0.7 and later signal */
 		dbus_g_proxy_add_signal(nm_proxy, "StateChanged", G_TYPE_UINT, G_TYPE_INVALID);
 		dbus_g_proxy_connect_signal(nm_proxy, "StateChanged",
@@ -1304,7 +1281,6 @@ purple_network_uninit(void)
 {
 #ifdef HAVE_NETWORKMANAGER
 	if (nm_proxy) {
-		dbus_g_proxy_disconnect_signal(nm_proxy, "StateChange", G_CALLBACK(nm_state_change_cb), NULL);
 		dbus_g_proxy_disconnect_signal(nm_proxy, "StateChanged", G_CALLBACK(nm_state_change_cb), NULL);
 		g_object_unref(G_OBJECT(nm_proxy));
 	}
