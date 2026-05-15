@@ -11,8 +11,8 @@ static JabberScramHash sha1_mech = { "-SHA-1", "sha1", 20 };
 	GString *p = g_string_new(password); \
 	GString *s = g_string_new(salt); \
 	guchar *result = jabber_scram_hi(&sha1_mech, p, s, count); \
-	fail_if(result == NULL, "Hi() returned NULL"); \
-	fail_if(0 != memcmp(result, expected, 20), "Hi() returned invalid result"); \
+	ck_assert_msg(result != NULL, "Hi() returned NULL"); \
+	ck_assert_msg(0 == memcmp(result, expected, 20), "Hi() returned invalid result"); \
 	g_string_free(s, TRUE); \
 	g_string_free(p, TRUE); \
 }
@@ -47,9 +47,9 @@ START_TEST(test_proofs)
 
 	salt = g_string_new("salt");
 	ret = jabber_scram_calc_proofs(data, salt, 1);
-	fail_if(ret == FALSE, "Failed to calculate SCRAM proofs!");
+	ck_assert_msg(ret != FALSE, "Failed to calculate SCRAM proofs!");
 
-	fail_unless(0 == memcmp(client_proof, data->client_proof->str, 20));
+	ck_assert(0 == memcmp(client_proof, data->client_proof->str, 20));
 	g_string_free(salt, TRUE);
 
 	jabber_scram_data_destroy(data);
@@ -64,19 +64,19 @@ END_TEST
 	data->step = 1; \
 	data->hash = &sha1_mech; \
 	data->password = jabber_saslprep(pw); \
-	fail_if(data->password == NULL); \
+	ck_assert(data->password != NULL); \
 	data->cnonce = g_strdup(nonce); \
 	data->auth_message = g_string_new(start_data); \
 	\
 	ret = jabber_scram_feed_parser(data, challenge1, &out); \
-	fail_unless(ret == TRUE); \
-	fail_unless(purple_strequal(out, response1), "Got unexpected response to challenge. Expected %s, got %s", response1, out); \
+	ck_assert(ret == TRUE); \
+	ck_assert_msg(purple_strequal(out, response1), "Got unexpected response to challenge. Expected %s, got %s", response1, out); \
 	g_free(out); \
 	\
 	data->step = 2; \
 	ret = jabber_scram_feed_parser(data, success, &out); \
-	fail_unless(ret == TRUE); \
-	fail_unless(out == NULL); \
+	ck_assert(ret == TRUE); \
+	ck_assert(out == NULL); \
 	\
 	jabber_scram_data_destroy(data); \
 }

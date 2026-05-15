@@ -13,7 +13,7 @@ START_TEST(test_util_base16_decode)
 {
 	gsize sz = 0;
 	guchar *out = purple_base16_decode("21646c726f77202c6f6c6c656800", &sz);
-	fail_unless(sz == 14, NULL);
+	ck_assert(sz == 14);
 	assert_string_equal_free("!dlrow ,olleh", (char *)out);
 }
 END_TEST
@@ -28,7 +28,7 @@ START_TEST(test_util_base64_decode)
 {
 	gsize sz;
 	guchar *out = purple_base64_decode("b3d0LXl0cm9mAA==", &sz);
-	fail_unless(sz == 10, NULL);
+	ck_assert(sz == 10);
 	assert_string_equal_free("owt-ytrof", (char *)out);
 }
 END_TEST
@@ -128,29 +128,29 @@ START_TEST(test_util_email_is_valid)
 	size_t i;
 
 	for (i = 0; i < G_N_ELEMENTS(valid_emails); i++)
-		fail_unless(purple_email_is_valid(valid_emails[i]), "Email address was: %s", valid_emails[i]);
+		ck_assert_msg(purple_email_is_valid(valid_emails[i]), "Email address was: %s", valid_emails[i]);
 
 	for (i = 0; i < G_N_ELEMENTS(invalid_emails); i++)
-		fail_if(purple_email_is_valid(invalid_emails[i]), "Email address was: %s", invalid_emails[i]);
+		ck_assert_msg(!purple_email_is_valid(invalid_emails[i]), "Email address was: %s", invalid_emails[i]);
 }
 END_TEST
 
 START_TEST(test_util_ipv6_is_valid)
 {
-	fail_unless(purple_ipv6_address_is_valid("2001:0db8:85a3:0000:0000:8a2e:0370:7334"));
-	fail_unless(purple_ipv6_address_is_valid("2001:db8:85a3:0:0:8a2e:370:7334"));
-	fail_unless(purple_ipv6_address_is_valid("2001:db8:85a3::8a2e:370:7334"));
-	fail_unless(purple_ipv6_address_is_valid("2001:0db8:0:0::1428:57ab"));
-	fail_unless(purple_ipv6_address_is_valid("::1"));
-	fail_unless(purple_ipv6_address_is_valid("1::"));
-	fail_unless(purple_ipv6_address_is_valid("1::1"));
-	fail_unless(purple_ipv6_address_is_valid("::"));
-	fail_if(purple_ipv6_address_is_valid(""));
-	fail_if(purple_ipv6_address_is_valid(":"));
-	fail_if(purple_ipv6_address_is_valid("1.2.3.4"));
-	fail_if(purple_ipv6_address_is_valid("2001::FFD3::57ab"));
-	fail_if(purple_ipv6_address_is_valid("200000000::1"));
-	fail_if(purple_ipv6_address_is_valid("QWERTY::1"));
+	ck_assert(purple_ipv6_address_is_valid("2001:0db8:85a3:0000:0000:8a2e:0370:7334"));
+	ck_assert(purple_ipv6_address_is_valid("2001:db8:85a3:0:0:8a2e:370:7334"));
+	ck_assert(purple_ipv6_address_is_valid("2001:db8:85a3::8a2e:370:7334"));
+	ck_assert(purple_ipv6_address_is_valid("2001:0db8:0:0::1428:57ab"));
+	ck_assert(purple_ipv6_address_is_valid("::1"));
+	ck_assert(purple_ipv6_address_is_valid("1::"));
+	ck_assert(purple_ipv6_address_is_valid("1::1"));
+	ck_assert(purple_ipv6_address_is_valid("::"));
+	ck_assert(!purple_ipv6_address_is_valid(""));
+	ck_assert(!purple_ipv6_address_is_valid(":"));
+	ck_assert(!purple_ipv6_address_is_valid("1.2.3.4"));
+	ck_assert(!purple_ipv6_address_is_valid("2001::FFD3::57ab"));
+	ck_assert(!purple_ipv6_address_is_valid("200000000::1"));
+	ck_assert(!purple_ipv6_address_is_valid("QWERTY::1"));
 }
 END_TEST
 
@@ -163,16 +163,16 @@ START_TEST(test_util_str_to_time)
 	gchar *oldtz = g_strdup(g_getenv("TZ"));
 
 	timestamp = purple_str_to_time("2010-08-27.134202-0700PDT", FALSE, &tm, &tz_off, &rest);
-	fail_unless(1282941722 == timestamp);
-	fail_unless((-7 * 60 * 60) == tz_off);
+	ck_assert(1282941722 == timestamp);
+	ck_assert((-7 * 60 * 60) == tz_off);
 	assert_string_equal("PDT", rest);
 
-	fail_unless(377182200 == purple_str_to_time("19811214T12:50:00", TRUE, NULL, NULL, NULL));
-	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21", TRUE, NULL, NULL, NULL));
-	fail_unless(1282941722 == purple_str_to_time("2010-08-27.204202", TRUE, NULL, NULL, NULL));
-	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21.3234", TRUE, NULL, NULL, NULL));
-	fail_unless(1175919261 == purple_str_to_time("20070407T04:14:21Z", TRUE, NULL, NULL, NULL));
-	fail_unless(1631491200 == purple_str_to_time("09-13-2021", TRUE, NULL, NULL, NULL));
+	ck_assert(377182200 == purple_str_to_time("19811214T12:50:00", TRUE, NULL, NULL, NULL));
+	ck_assert(1175919261 == purple_str_to_time("20070407T04:14:21", TRUE, NULL, NULL, NULL));
+	ck_assert(1282941722 == purple_str_to_time("2010-08-27.204202", TRUE, NULL, NULL, NULL));
+	ck_assert(1175919261 == purple_str_to_time("20070407T04:14:21.3234", TRUE, NULL, NULL, NULL));
+	ck_assert(1175919261 == purple_str_to_time("20070407T04:14:21Z", TRUE, NULL, NULL, NULL));
+	ck_assert(1631491200 == purple_str_to_time("09-13-2021", TRUE, NULL, NULL, NULL));
 
 	/* For testing local time we use Asia/Kathmandu because it's +05:45 and
 	 * doesn't have DST which means the test should always pass regardless of
@@ -183,24 +183,24 @@ START_TEST(test_util_str_to_time)
 	/* There's a timezone in this timestamp, so the returned value will be in
 	 * UTC with the offset added/subtracted.
 	 */
-	fail_unless(377203800 == purple_str_to_time("19811214T12:50:00-06", FALSE, NULL, NULL, NULL));
+	ck_assert(377203800 == purple_str_to_time("19811214T12:50:00-06", FALSE, NULL, NULL, NULL));
 
 	/* This also has a tz, so the returned value will be utc with the given
 	 * offset.
 	 */
-	fail_unless(1569746481 == purple_str_to_time("2019-09-29T08:41:21.401000+00:00", FALSE, NULL, NULL, NULL));
+	ck_assert(1569746481 == purple_str_to_time("2019-09-29T08:41:21.401000+00:00", FALSE, NULL, NULL, NULL));
 
 	/* while it looks like the time is specified, this time is not valid
 	 * according to our parser, so it's just the date which will be handled by
 	 * localtime.
 	 */
 	timestamp = purple_str_to_time("09/13/202115:34:34", TRUE, NULL, NULL, &rest);
-	fail_unless(1631491200 == timestamp);
+	ck_assert(1631491200 == timestamp);
 	assert_string_equal("15:34:34", rest);
 
 	timestamp = purple_str_to_time("2010-08-27.134202-0700PDT", FALSE, &tm, &tz_off, &rest);
-	fail_unless(1282941722 == timestamp);
-	fail_unless((-7 * 60 * 60) == tz_off);
+	ck_assert(1282941722 == timestamp);
+	ck_assert((-7 * 60 * 60) == tz_off);
 	assert_string_equal("PDT", rest);
 
 	/* finally revert the TZ environment variable */
@@ -230,11 +230,11 @@ END_TEST
 
 START_TEST(test_utf8_strip_unprintables)
 {
-	fail_unless(NULL == purple_utf8_strip_unprintables(NULL));
+	ck_assert(NULL == purple_utf8_strip_unprintables(NULL));
 	/* invalid UTF-8 */
 #if 0
 	/* disabled because make check fails on an assertion */
-	fail_unless(NULL == purple_utf8_strip_unprintables("abc\x80\x7f"));
+	ck_assert(NULL == purple_utf8_strip_unprintables("abc\x80\x7f"));
 #endif
 	/* \t, \n, \r, space */
 	assert_string_equal_free("ab \tcd\nef\r   ", purple_utf8_strip_unprintables("ab \tcd\nef\r   "));
@@ -294,11 +294,14 @@ END_TEST
 Suite *
 util_suite(void)
 {
+	Suite *s = NULL;
+	TCase *tc = NULL;
+
 	purple_util_init();
 
-	Suite *s = suite_create("Utility Functions");
+	s = suite_create("Utility Functions");
 
-	TCase *tc = tcase_create("Base16");
+	tc = tcase_create("Base16");
 	tcase_add_test(tc, test_util_base16_encode);
 	tcase_add_test(tc, test_util_base16_decode);
 	suite_add_tcase(s, tc);

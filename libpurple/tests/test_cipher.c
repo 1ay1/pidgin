@@ -25,9 +25,9 @@
 	ret = purple_cipher_context_digest_to_str(context, sizeof(cdigest), cdigest, \
 	                                        NULL); \
 	\
-	fail_unless(ret == TRUE, NULL); \
+	ck_assert(ret == TRUE); \
 	\
-	fail_unless(purple_strequal((digest), cdigest), NULL); \
+	ck_assert(purple_strequal((digest), cdigest)); \
 	\
 	purple_cipher_context_destroy(context); \
 }
@@ -88,9 +88,9 @@ END_TEST
 	ret = purple_cipher_context_digest_to_str(context, sizeof(cdigest), cdigest, \
 	                                        NULL); \
 	\
-	fail_unless(ret == TRUE, NULL); \
+	ck_assert(ret == TRUE); \
 	\
-	fail_unless(purple_strequal((digest), cdigest), NULL); \
+	ck_assert(purple_strequal((digest), cdigest)); \
 	\
 	purple_cipher_context_destroy(context); \
 }
@@ -162,9 +162,9 @@ END_TEST
 	ret = purple_cipher_context_digest_to_str(context, sizeof(cdigest), cdigest, \
 	                                        NULL); \
 	\
-	fail_unless(ret == TRUE, NULL); \
+	ck_assert(ret == TRUE); \
 	\
-	fail_unless(purple_strequal((digest), cdigest), NULL); \
+	ck_assert(purple_strequal((digest), cdigest)); \
 	\
 	purple_cipher_context_destroy(context); \
 }
@@ -223,9 +223,9 @@ END_TEST
 	ret = purple_cipher_context_digest_to_str(context, sizeof(cdigest), cdigest, \
 	                                        NULL); \
 	\
-	fail_unless(ret == TRUE, NULL); \
+	ck_assert(ret == TRUE); \
 	\
-	fail_unless(purple_strequal((digest), cdigest), NULL); \
+	ck_assert(purple_strequal((digest), cdigest)); \
 	\
 	purple_cipher_context_destroy(context); \
 }
@@ -274,14 +274,14 @@ END_TEST
 	purple_cipher_context_set_key(context, key); \
 	\
 	ret = purple_cipher_context_encrypt(context, decrypt, len, answer, &outlen); \
-	fail_unless(ret == 0, NULL); \
-	fail_unless(outlen == (len), NULL); \
-	fail_unless(memcmp(encrypt, answer, len) == 0, NULL); \
+	ck_assert(ret == 0); \
+	ck_assert(outlen == (len)); \
+	ck_assert(memcmp(encrypt, answer, len) == 0); \
 	\
 	ret = purple_cipher_context_decrypt(context, encrypt, len, answer, &outlen); \
-	fail_unless(ret == 0, NULL); \
-	fail_unless(outlen == (len), NULL); \
-	fail_unless(memcmp(decrypt, answer, len) == 0, NULL); \
+	ck_assert(ret == 0); \
+	ck_assert(outlen == (len)); \
+	ck_assert(memcmp(decrypt, answer, len) == 0); \
 	\
 	purple_cipher_context_destroy(context); \
 }
@@ -324,14 +324,14 @@ END_TEST
 	purple_cipher_context_set_iv(context, (guchar *)iv, 8); \
 	\
 	ret = purple_cipher_context_encrypt(context, decrypt, len, answer, &outlen); \
-	fail_unless(ret == 0, NULL); \
-	fail_unless(outlen == (len), NULL); \
-	fail_unless(memcmp(encrypt, answer, len) == 0, NULL); \
+	ck_assert(ret == 0); \
+	ck_assert(outlen == (len)); \
+	ck_assert(memcmp(encrypt, answer, len) == 0); \
 	\
 	ret = purple_cipher_context_decrypt(context, encrypt, len, answer, &outlen); \
-	fail_unless(ret == 0, NULL); \
-	fail_unless(outlen == (len), NULL); \
-	fail_unless(memcmp(decrypt, answer, len) == 0, NULL); \
+	ck_assert(ret == 0); \
+	ck_assert(outlen == (len)); \
+	ck_assert(memcmp(decrypt, answer, len) == 0); \
 	\
 	purple_cipher_context_destroy(context); \
 }
@@ -494,8 +494,8 @@ END_TEST
 	ret = purple_cipher_context_digest_to_str(context, sizeof(cdigest), cdigest, \
 	                                        NULL); \
 	\
-	fail_unless(ret == TRUE, NULL); \
-	fail_unless(purple_strequal((digest), cdigest), NULL); \
+	ck_assert(ret == TRUE); \
+	ck_assert(purple_strequal((digest), cdigest)); \
 	\
 	purple_cipher_context_destroy(context); \
 }
@@ -858,5 +858,3 @@ cipher_suite(void) {
 
 	return s;
 }
-
-

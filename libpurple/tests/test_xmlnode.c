@@ -16,8 +16,8 @@ START_TEST(test_xmlnode_billion_laughs_attack)
 	   the parser for the above XML document */
 	/* purple_debug_set_enabled(TRUE); */
 
-	fail_if(xmlnode_from_str(malicious_xml_doc, -1),
-			"xmlnode_from_str() returned an XML tree, but we didn't want it to");
+	ck_assert_msg(xmlnode_from_str(malicious_xml_doc, -1) == NULL,
+	              "xmlnode_from_str() returned an XML tree, but we didn't want it to");
 }
 END_TEST
 

@@ -19,8 +19,8 @@ END_TEST
 START_TEST(test_get_resource_no_resource)
 {
 
-	fail_unless(NULL == jabber_get_resource("foo@bar"));
-	fail_unless(NULL == jabber_get_resource("bar"));
+	ck_assert(NULL == jabber_get_resource("foo@bar"));
+	ck_assert(NULL == jabber_get_resource("bar"));
 }
 END_TEST
 
@@ -37,62 +37,62 @@ START_TEST(test_nodeprep_validate)
 {
 	char *longnode;
 
-	fail_unless(jabber_nodeprep_validate(NULL));
-	fail_unless(jabber_nodeprep_validate("foo"));
-	fail_unless(jabber_nodeprep_validate("%d"));
-	fail_unless(jabber_nodeprep_validate("y\\z"));
-	fail_unless(jabber_nodeprep_validate("a="));
-	fail_unless(jabber_nodeprep_validate("a,"));
+	ck_assert(jabber_nodeprep_validate(NULL));
+	ck_assert(jabber_nodeprep_validate("foo"));
+	ck_assert(jabber_nodeprep_validate("%d"));
+	ck_assert(jabber_nodeprep_validate("y\\z"));
+	ck_assert(jabber_nodeprep_validate("a="));
+	ck_assert(jabber_nodeprep_validate("a,"));
 
 	longnode = g_strnfill(1023, 'a');
-	fail_unless(jabber_nodeprep_validate(longnode));
+	ck_assert(jabber_nodeprep_validate(longnode));
 	g_free(longnode);
 
 	longnode = g_strnfill(1024, 'a');
-	fail_if(jabber_nodeprep_validate(longnode));
+	ck_assert(!jabber_nodeprep_validate(longnode));
 	g_free(longnode);
 }
 END_TEST
 
 START_TEST(test_nodeprep_validate_illegal_chars)
 {
-	fail_if(jabber_nodeprep_validate("don't"));
-	fail_if(jabber_nodeprep_validate("m@ke"));
-	fail_if(jabber_nodeprep_validate("\"me\""));
-	fail_if(jabber_nodeprep_validate("&ngry"));
-	fail_if(jabber_nodeprep_validate("c:"));
-	fail_if(jabber_nodeprep_validate("a/b"));
-	fail_if(jabber_nodeprep_validate("4>2"));
-	fail_if(jabber_nodeprep_validate("4<7"));
+	ck_assert(!jabber_nodeprep_validate("don't"));
+	ck_assert(!jabber_nodeprep_validate("m@ke"));
+	ck_assert(!jabber_nodeprep_validate("\"me\""));
+	ck_assert(!jabber_nodeprep_validate("&ngry"));
+	ck_assert(!jabber_nodeprep_validate("c:"));
+	ck_assert(!jabber_nodeprep_validate("a/b"));
+	ck_assert(!jabber_nodeprep_validate("4>2"));
+	ck_assert(!jabber_nodeprep_validate("4<7"));
 }
 END_TEST
 
 START_TEST(test_nodeprep_validate_too_long)
 {
 	char *longnode = g_strnfill(1024, 'a');
-	fail_if(jabber_nodeprep_validate(longnode));
+	ck_assert(!jabber_nodeprep_validate(longnode));
 	g_free(longnode);
 }
 END_TEST
 
 #define assert_valid_jid(str) { \
 	JabberID *jid = jabber_id_new(str); \
-	fail_if(jid == NULL, "JID '%s' is valid but jabber_id_new() rejected it", str); \
+	ck_assert_msg(jid != NULL, "JID '%s' is valid but jabber_id_new() rejected it", str); \
 	jabber_id_free(jid); \
 }
 
 #define assert_invalid_jid(str) { \
 	JabberID *jid = jabber_id_new(str); \
-	fail_if(jid != NULL, "JID '%s' is invalid but jabber_id_new() allowed it", str); \
+	ck_assert_msg(jid == NULL, "JID '%s' is invalid but jabber_id_new() allowed it", str); \
 	jabber_id_free(jid); \
 }
 
 #define assert_jid_parts(expect_node, expect_domain, str) { \
 	JabberID *jid = jabber_id_new(str); \
-	fail_if(jid == NULL, "JID '%s' is valid but jabber_id_new() rejected it", str); \
-	fail_if(jid->node == NULL,     "JID '%s' is valid but jabber_id_new() didn't return a node", str); \
-	fail_if(jid->domain == NULL,   "JID '%s' is valid but jabber_id_new() didn't return a domain", str); \
-	fail_if(jid->resource != NULL, "JID '%s' doesn't contain a resource", str); \
+	ck_assert_msg(jid != NULL, "JID '%s' is valid but jabber_id_new() rejected it", str); \
+	ck_assert_msg(jid->node != NULL,     "JID '%s' is valid but jabber_id_new() didn't return a node", str); \
+	ck_assert_msg(jid->domain != NULL,   "JID '%s' is valid but jabber_id_new() didn't return a domain", str); \
+	ck_assert_msg(jid->resource == NULL, "JID '%s' doesn't contain a resource", str); \
 	assert_string_equal(expect_node, jid->node); \
 	assert_string_equal(expect_domain, jid->domain); \
 	jabber_id_free(jid); \
