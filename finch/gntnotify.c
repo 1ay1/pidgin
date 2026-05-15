@@ -93,8 +93,7 @@ finch_notify_common(PurpleNotifyType ntype, PurpleNotifyMsgType msgtype,
 			gnt_text_view_set_flag(GNT_TEXT_VIEW(msg), GNT_TEXT_VIEW_TOP_ALIGN | GNT_TEXT_VIEW_NO_SCROLL);
 
 			plain = purple_markup_strip_html(secondary);
-			if (!gnt_util_parse_xhtml_to_textview(secondary, GNT_TEXT_VIEW(msg)))
-				gnt_text_view_append_text_with_flags(GNT_TEXT_VIEW(msg), plain, sf);
+			gnt_text_view_append_text_with_flags(GNT_TEXT_VIEW(msg), plain, sf);
 
 			gnt_text_view_attach_scroll_widget(GNT_TEXT_VIEW(msg), button);
 			gnt_util_get_text_bound(plain, &width, &height);
@@ -347,8 +346,7 @@ finch_notify_userinfo(PurpleConnection *gc, const char *who, PurpleNotifyUserInf
 		gnt_widget_get_size(GNT_WIDGET(msg), &tvw, &tvh);
 
 		gnt_text_view_clear(msg);
-		if (!gnt_util_parse_xhtml_to_textview(info, msg))
-			gnt_text_view_append_text_with_flags(msg, strip, GNT_TEXT_FLAG_NORMAL);
+		gnt_text_view_append_text_with_flags(msg, strip, GNT_TEXT_FLAG_NORMAL);
 		gnt_text_view_scroll(msg, 0);
 		gnt_util_get_text_bound(strip, &ntvw, &ntvh);
 		ntvw += 3;
