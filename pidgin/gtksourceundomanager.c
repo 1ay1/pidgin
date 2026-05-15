@@ -134,8 +134,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static void gtk_source_undo_manager_class_init 			(GtkSourceUndoManagerClass 	*klass);
-static void gtk_source_undo_manager_init 			(GtkSourceUndoManager 		*um);
+static void gtk_source_undo_manager_class_init 			(GtkSourceUndoManagerClass 	*klass, gpointer class_data);
+static void gtk_source_undo_manager_init 			(GtkSourceUndoManager 		*um, GTypeClass *klass);
 static void gtk_source_undo_manager_finalize 			(GObject 			*object);
 
 static void gtk_source_undo_manager_insert_text_handler 	(GtkTextBuffer 			*buffer,
@@ -201,7 +201,8 @@ gtk_source_undo_manager_get_type (void)
 }
 
 static void
-gtk_source_undo_manager_class_init (GtkSourceUndoManagerClass *klass)
+gtk_source_undo_manager_class_init (GtkSourceUndoManagerClass *klass,
+                                    G_GNUC_UNUSED gpointer class_data)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
@@ -236,7 +237,8 @@ gtk_source_undo_manager_class_init (GtkSourceUndoManagerClass *klass)
 }
 
 static void
-gtk_source_undo_manager_init (GtkSourceUndoManager *um)
+gtk_source_undo_manager_init (GtkSourceUndoManager *um,
+                              G_GNUC_UNUSED GTypeClass *klass)
 {
 	um->priv = g_new0 (GtkSourceUndoManagerPrivate, 1);
 

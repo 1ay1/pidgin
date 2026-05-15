@@ -133,7 +133,7 @@ copy_font_and_color(const PidginThemeFont *pair)
 
 	copy = g_new0(PidginThemeFont, 1);
 	copy->font  = g_strdup(pair->font);
-	strncpy(copy->color, pair->color, sizeof(copy->color) - 1);
+	g_strlcpy(copy->color, pair->color, sizeof(copy->color));
 	if (pair->gdkcolor)
 		copy->gdkcolor = pair->gdkcolor ? gdk_color_copy(pair->gdkcolor) : NULL;
 	return copy;
@@ -357,7 +357,8 @@ pidgin_blist_theme_finalize(GObject *obj)
 }
 
 static void
-pidgin_blist_theme_class_init(PidginBlistThemeClass *klass)
+pidgin_blist_theme_class_init(PidginBlistThemeClass *klass,
+                              G_GNUC_UNUSED gpointer *class_data)
 {
 	GObjectClass *obj_class = G_OBJECT_CLASS(klass);
 	GParamSpec *pspec;

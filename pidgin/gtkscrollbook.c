@@ -27,8 +27,10 @@
 #include "gtkscrollbook.h"
 
 
-static void pidgin_scroll_book_init (PidginScrollBook *scroll_book);
-static void pidgin_scroll_book_class_init (PidginScrollBookClass *klass);
+static void pidgin_scroll_book_init (PidginScrollBook *scroll_book,
+                                     GTypeClass *klass);
+static void pidgin_scroll_book_class_init (PidginScrollBookClass *klass,
+                                           gpointer class_data);
 static void pidgin_scroll_book_forall (GtkContainer *c,
 					 gboolean include_internals,
 					 GtkCallback callback,
@@ -219,7 +221,8 @@ pidgin_scroll_book_forall(GtkContainer *container,
 }
 
 static void
-pidgin_scroll_book_class_init (PidginScrollBookClass *klass)
+pidgin_scroll_book_class_init (PidginScrollBookClass *klass,
+                               G_GNUC_UNUSED gpointer class_data)
 {
 	GtkContainerClass *container_class = (GtkContainerClass*)klass;
 
@@ -255,7 +258,8 @@ close_button_entered_cb(GtkWidget *widget, GdkEventCrossing *event, GtkLabel *la
 }
 
 static void
-pidgin_scroll_book_init (PidginScrollBook *scroll_book)
+pidgin_scroll_book_init(PidginScrollBook *scroll_book,
+                        G_GNUC_UNUSED GTypeClass *klass)
 {
 	GtkWidget *eb;
 	GtkWidget *close_button;

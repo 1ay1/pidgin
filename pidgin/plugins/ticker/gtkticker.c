@@ -51,8 +51,8 @@
 #endif
 
 static void gtk_ticker_compute_offsets (GtkTicker    *ticker);
-static void gtk_ticker_class_init    (GtkTickerClass    *klass);
-static void gtk_ticker_init          (GtkTicker         *ticker);
+static void gtk_ticker_class_init    (GtkTickerClass    *klass, gpointer *class_data);
+static void gtk_ticker_init          (GtkTicker         *ticker, GTypeClass *klass);
 static void gtk_ticker_map           (GtkWidget        *widget);
 static void gtk_ticker_realize       (GtkWidget        *widget);
 static void gtk_ticker_size_request  (GtkWidget        *widget,
@@ -101,7 +101,8 @@ GType gtk_ticker_get_type (void)
 
 	/* kludge to re-initialise the class if it's already registered */
 	else if (parent_class == NULL) {
-		gtk_ticker_class_init((GtkTickerClass *)g_type_class_peek(ticker_type));
+		gtk_ticker_class_init((GtkTickerClass *)g_type_class_peek(ticker_type),
+		                      NULL);
 	}
 
 	return ticker_type;
@@ -113,7 +114,8 @@ static void gtk_ticker_finalize(GObject *object) {
 	G_OBJECT_CLASS(parent_class)->finalize(object);
 }
 
-static void gtk_ticker_class_init (GtkTickerClass *class)
+static void gtk_ticker_class_init (GtkTickerClass *class,
+                                   G_GNUC_UNUSED gpointer *class_data)
 {
 	GObjectClass *gobject_class;
 	GtkWidgetClass *widget_class;
@@ -143,7 +145,7 @@ static GType gtk_ticker_child_type (GtkContainer *container)
 	return GTK_TYPE_WIDGET;
 }
 
-static void gtk_ticker_init (GtkTicker *ticker)
+static void gtk_ticker_init (GtkTicker *ticker, G_GNUC_UNUSED GTypeClass *klass)
 {
 #if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_has_window (GTK_WIDGET (ticker), TRUE);
@@ -589,4 +591,3 @@ static void gtk_ticker_forall (GtkContainer *container,
 		(* callback) (child->widget, callback_data);
 	}
 }
-

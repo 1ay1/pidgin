@@ -34,13 +34,15 @@
 #include "pidgin/pidgin.h"
 #include "pidgin/pidginstock.h"
 
-static void     pidgin_mini_dialog_init       (PidginMiniDialog      *self);
+static void     pidgin_mini_dialog_init       (PidginMiniDialog      *self,
+                                               GTypeClass *klass);
 static void     pidgin_mini_dialog_class_init (PidginMiniDialogClass *klass);
 
 static gpointer pidgin_mini_dialog_parent_class = NULL;
 
 static void
-pidgin_mini_dialog_class_intern_init (gpointer klass)
+pidgin_mini_dialog_class_intern_init (gpointer klass,
+                                      G_GNUC_UNUSED gpointer *class_data)
 {
 	pidgin_mini_dialog_parent_class = g_type_class_peek_parent (klass);
 	pidgin_mini_dialog_class_init ((PidginMiniDialogClass*) klass);
@@ -473,7 +475,8 @@ blist_width_changed_cb(const char *name,
 }
 
 static void
-pidgin_mini_dialog_init(PidginMiniDialog *self)
+pidgin_mini_dialog_init(PidginMiniDialog *self,
+                        G_GNUC_UNUSED GTypeClass *klass)
 {
 	GtkBox *self_box = GTK_BOX(self);
 	guint blist_width = purple_prefs_get_int(BLIST_WIDTH_PREF);

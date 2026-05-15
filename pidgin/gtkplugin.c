@@ -120,8 +120,8 @@ update_plugin_list(void *data)
 		char *version;
 		char *summary;
 		char *desc;
-		plug = probes->data;
 		gboolean can_be_disabled = TRUE;
+		plug = probes->data;
 
 		if (plug->info->type == PURPLE_PLUGIN_LOADER) {
 			GList *cur;

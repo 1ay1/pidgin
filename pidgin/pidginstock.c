@@ -623,7 +623,8 @@ pidgin_stock_init(void)
 }
 
 static void
-pidgin_stock_icon_theme_class_init(PidginStockIconThemeClass *klass)
+pidgin_stock_icon_theme_class_init(G_GNUC_UNUSED PidginStockIconThemeClass *klass,
+                                   G_GNUC_UNUSED gpointer *class_data)
 {
 }
 

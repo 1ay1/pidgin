@@ -1956,6 +1956,12 @@ browser_changed2_cb(const char *name, PurplePrefType type,
 	gtk_widget_set_sensitive(hbox, purple_strequal(browser, "custom"));
 }
 
+static void
+pidgin_prefs_free_data(gpointer data, G_GNUC_UNUSED GClosure *closure)
+{
+	g_free(data);
+}
+
 static GtkWidget *
 browser_page(void)
 {
@@ -1997,7 +2003,7 @@ browser_page(void)
 			browser_button = gtk_button_new_with_mnemonic(_("Configure _Browser"));
 			g_signal_connect_data(G_OBJECT(browser_button), "clicked",
 			                      G_CALLBACK(browser_button_clicked_cb), path,
-			                      (GClosureNotify)g_free, 0);
+			                      (GClosureNotify)pidgin_prefs_free_data, 0);
 			gtk_box_pack_start(GTK_BOX(hbox), browser_button, FALSE, FALSE, 0);
 		}
 

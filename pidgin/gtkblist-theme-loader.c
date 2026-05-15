@@ -251,7 +251,8 @@ pidgin_blist_loader_build(const gchar *dir)
  *****************************************************************************/
 
 static void
-pidgin_blist_theme_loader_class_init(PidginBlistThemeLoaderClass *klass)
+pidgin_blist_theme_loader_class_init(PidginBlistThemeLoaderClass *klass,
+                                     G_GNUC_UNUSED gpointer *class_data)
 {
 	PurpleThemeLoaderClass *loader_klass = PURPLE_THEME_LOADER_CLASS(klass);
 

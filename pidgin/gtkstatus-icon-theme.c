@@ -39,7 +39,8 @@ pidgin_status_icon_theme_finalize(GObject *obj)
 }
 
 static void
-pidgin_status_icon_theme_class_init(PidginStatusIconThemeClass *klass)
+pidgin_status_icon_theme_class_init(PidginStatusIconThemeClass *klass,
+                                    G_GNUC_UNUSED gpointer class_data)
 {
 	GObjectClass *obj_class = G_OBJECT_CLASS(klass);
 

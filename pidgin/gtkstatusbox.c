@@ -192,8 +192,10 @@ static char *connecting_stock_ids[] = {
 
 static GtkContainerClass *parent_class = NULL;
 
-static void pidgin_status_box_class_init (PidginStatusBoxClass *klass);
-static void pidgin_status_box_init (PidginStatusBox *status_box);
+static void pidgin_status_box_class_init (PidginStatusBoxClass *klass,
+                                          gpointer class_data);
+static void pidgin_status_box_init (PidginStatusBox *status_box,
+                                    GTypeClass *klass);
 
 GType
 pidgin_status_box_get_type (void)
@@ -559,7 +561,8 @@ pidgin_status_box_child_type (GtkContainer *container)
 }
 
 static void
-pidgin_status_box_class_init (PidginStatusBoxClass *klass)
+pidgin_status_box_class_init (PidginStatusBoxClass *klass,
+                              G_GNUC_UNUSED gpointer class_data)
 {
 	GObjectClass *object_class;
 	GtkWidgetClass *widget_class;
@@ -1119,7 +1122,7 @@ static gboolean imhtml_remove_focus(GtkWidget *w, GdkEventKey *event, PidginStat
 
 	pidgin_status_box_pulse_typing(status_box);
 	purple_timeout_remove(status_box->typing);
-	status_box->typing = purple_timeout_add_seconds(TYPING_TIMEOUT, (GSourceFunc)remove_typing_cb, status_box);
+	status_box->typing = purple_timeout_add_seconds(TYPING_TIMEOUT, G_SOURCE_FUNC(remove_typing_cb), status_box);
 
 	return FALSE;
 }
@@ -1693,7 +1696,8 @@ treeview_cursor_changed_cb(GtkTreeView *treeview, gpointer data)
 }
 
 static void
-pidgin_status_box_init (PidginStatusBox *status_box)
+pidgin_status_box_init (PidginStatusBox *status_box,
+                        G_GNUC_UNUSED GTypeClass *klass)
 {
 	GtkCellRenderer *text_rend;
 	GtkCellRenderer *icon_rend;
@@ -2644,7 +2648,7 @@ static void pidgin_status_box_changed(PidginStatusBox *status_box)
 			GtkTextIter start, end;
 			GtkTextBuffer *buffer;
 			gtk_widget_show_all(status_box->vbox);
-			status_box->typing = purple_timeout_add_seconds(TYPING_TIMEOUT, (GSourceFunc)remove_typing_cb, status_box);
+			status_box->typing = purple_timeout_add_seconds(TYPING_TIMEOUT, G_SOURCE_FUNC(remove_typing_cb), status_box);
 			gtk_widget_grab_focus(status_box->imhtml);
 			buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(status_box->imhtml));
 
@@ -2703,7 +2707,7 @@ static void imhtml_changed_cb(GtkTextBuffer *buffer, void *data)
 			pidgin_status_box_pulse_typing(status_box);
 			purple_timeout_remove(status_box->typing);
 		}
-		status_box->typing = purple_timeout_add_seconds(TYPING_TIMEOUT, (GSourceFunc)remove_typing_cb, status_box);
+		status_box->typing = purple_timeout_add_seconds(TYPING_TIMEOUT, G_SOURCE_FUNC(remove_typing_cb), status_box);
 	}
 	pidgin_status_box_refresh(status_box);
 }
