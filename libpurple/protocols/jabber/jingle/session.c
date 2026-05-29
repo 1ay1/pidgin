@@ -45,8 +45,9 @@ struct _JingleSessionPrivate
 
 #define JINGLE_SESSION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), JINGLE_TYPE_SESSION, JingleSessionPrivate))
 
-static void jingle_session_class_init (JingleSessionClass *klass);
-static void jingle_session_init (JingleSession *session);
+static void jingle_session_class_init (JingleSessionClass *klass,
+                                       gpointer class_data);
+static void jingle_session_init (JingleSession *session, GTypeClass *klass);
 static void jingle_session_finalize (GObject *object);
 static void jingle_session_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 static void jingle_session_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -89,7 +90,8 @@ jingle_session_get_type()
 }
 
 static void
-jingle_session_class_init (JingleSessionClass *klass)
+jingle_session_class_init (JingleSessionClass *klass,
+                           G_GNUC_UNUSED gpointer class_data)
 {
 	GObjectClass *gobject_class = (GObjectClass*)klass;
 	parent_class = g_type_class_peek_parent(klass);
@@ -155,7 +157,8 @@ jingle_session_class_init (JingleSessionClass *klass)
 }
 
 static void
-jingle_session_init (JingleSession *session)
+jingle_session_init (JingleSession *session,
+                     G_GNUC_UNUSED GTypeClass *klass)
 {
 	session->priv = JINGLE_SESSION_GET_PRIVATE(session);
 	memset(session->priv, 0, sizeof(*session->priv));
@@ -650,4 +653,3 @@ jingle_session_redirect_packet(JingleSession *session, const gchar *sid)
 	}
 	return iq;
 }
-

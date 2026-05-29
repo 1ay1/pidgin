@@ -38,8 +38,9 @@ struct _JingleIceUdpPrivate
 
 #define JINGLE_ICEUDP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), JINGLE_TYPE_ICEUDP, JingleIceUdpPrivate))
 
-static void jingle_iceudp_class_init (JingleIceUdpClass *klass);
-static void jingle_iceudp_init (JingleIceUdp *iceudp);
+static void jingle_iceudp_class_init (JingleIceUdpClass *klass,
+                                      gpointer class_data);
+static void jingle_iceudp_init (JingleIceUdp *iceudp, GTypeClass *klass);
 static void jingle_iceudp_finalize (GObject *object);
 static void jingle_iceudp_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 static void jingle_iceudp_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -155,7 +156,8 @@ jingle_iceudp_get_type()
 }
 
 static void
-jingle_iceudp_class_init (JingleIceUdpClass *klass)
+jingle_iceudp_class_init (JingleIceUdpClass *klass,
+                          G_GNUC_UNUSED gpointer class_data)
 {
 	GObjectClass *gobject_class = (GObjectClass*)klass;
 	parent_class = g_type_class_peek_parent(klass);
@@ -183,7 +185,8 @@ jingle_iceudp_class_init (JingleIceUdpClass *klass)
 }
 
 static void
-jingle_iceudp_init (JingleIceUdp *iceudp)
+jingle_iceudp_init (JingleIceUdp *iceudp,
+                    G_GNUC_UNUSED GTypeClass *klass)
 {
 	iceudp->priv = JINGLE_ICEUDP_GET_PRIVATE(iceudp);
 	iceudp->priv->local_candidates = NULL;
@@ -451,4 +454,3 @@ jingle_iceudp_to_xml_internal(JingleTransport *transport, xmlnode *content, Jing
 
 	return node;
 }
-

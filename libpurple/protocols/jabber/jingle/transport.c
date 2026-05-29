@@ -37,8 +37,9 @@ struct _JingleTransportPrivate
 
 #define JINGLE_TRANSPORT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), JINGLE_TYPE_TRANSPORT, JingleTransportPrivate))
 
-static void jingle_transport_class_init (JingleTransportClass *klass);
-static void jingle_transport_init (JingleTransport *transport);
+static void jingle_transport_class_init (JingleTransportClass *klass,
+                                         gpointer class_data);
+static void jingle_transport_init (JingleTransport *transport, GTypeClass *klass);
 static void jingle_transport_finalize (GObject *object);
 static void jingle_transport_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 static void jingle_transport_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -75,7 +76,8 @@ jingle_transport_get_type()
 }
 
 static void
-jingle_transport_class_init (JingleTransportClass *klass)
+jingle_transport_class_init (JingleTransportClass *klass,
+                             G_GNUC_UNUSED gpointer class_data)
 {
 	GObjectClass *gobject_class = (GObjectClass*)klass;
 	parent_class = g_type_class_peek_parent(klass);
@@ -90,7 +92,8 @@ jingle_transport_class_init (JingleTransportClass *klass)
 }
 
 static void
-jingle_transport_init (JingleTransport *transport)
+jingle_transport_init (JingleTransport *transport,
+                       G_GNUC_UNUSED GTypeClass *klass)
 {
 	transport->priv = JINGLE_TRANSPORT_GET_PRIVATE(transport);
 	transport->priv->dummy = NULL;
@@ -165,7 +168,7 @@ jingle_transport_parse(xmlnode *transport)
 	GType type = jingle_get_type(type_name);
 	if (type == G_TYPE_NONE)
 		return NULL;
-	
+
 	return JINGLE_TRANSPORT_CLASS(g_type_class_ref(type))->parse(transport);
 }
 
@@ -176,4 +179,3 @@ jingle_transport_to_xml(JingleTransport *transport, xmlnode *content, JingleActi
 	g_return_val_if_fail(JINGLE_IS_TRANSPORT(transport), NULL);
 	return JINGLE_TRANSPORT_GET_CLASS(transport)->to_xml(transport, content, action);
 }
-

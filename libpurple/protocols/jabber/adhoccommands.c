@@ -30,7 +30,9 @@
 #include "iq.h"
 #include "request.h"
 
-static void do_adhoc_ignoreme(JabberStream *js, ...) {
+static void do_adhoc_ignoreme(JabberStream *js, xmlnode *result,
+                              gpointer user_data)
+{
 	/* we don't have to do anything */
 }
 
@@ -180,7 +182,7 @@ jabber_adhoc_parse(JabberStream *js, const char *from,
 		}
 
 		if(xdata)
-			jabber_x_data_request(js, xdata, (jabber_x_data_cb)do_adhoc_ignoreme, NULL);
+			jabber_x_data_request(js, xdata, do_adhoc_ignoreme, NULL);
 		return;
 	}
 	if(purple_strequal(status,"executing")) {

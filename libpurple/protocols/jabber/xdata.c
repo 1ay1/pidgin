@@ -39,16 +39,19 @@ typedef enum {
 struct jabber_x_data_data {
 	GHashTable *fields;
 	GSList *values;
-	jabber_x_data_action_cb cb;
+	jabber_x_data_action_cb data_action_cb;
+	jabber_x_data_cb data_cb;
 	gpointer user_data;
 	JabberStream *js;
 	GList *actions;
 	PurpleRequestFieldGroup *actiongroup;
 };
 
-static void jabber_x_data_ok_cb(struct jabber_x_data_data *data, PurpleRequestFields *fields) {
+static void
+jabber_x_data_ok_cb(struct jabber_x_data_data *data, PurpleRequestFields *fields) {
 	xmlnode *result = xmlnode_new("x");
-	jabber_x_data_action_cb cb = data->cb;
+	jabber_x_data_action_cb data_action_cb = data->data_action_cb;
+	jabber_x_data_cb data_cb = data->data_cb;
 	gpointer user_data = data->user_data;
 	JabberStream *js = data->js;
 	GList *groups, *flds;
@@ -155,17 +158,19 @@ static void jabber_x_data_ok_cb(struct jabber_x_data_data *data, PurpleRequestFi
 	}
 	g_free(data);
 
-	if (hasActions)
-		cb(js, result, actionhandle, user_data);
-	else
-		((jabber_x_data_cb)cb)(js, result, user_data);
+	if (hasActions && data_action_cb != NULL) {
+		data_action_cb(js, result, actionhandle, user_data);
+	} else if (data_cb != NULL) {
+		data_cb(js, result, user_data);
+	}
 
 	g_free(actionhandle);
 }
 
 static void jabber_x_data_cancel_cb(struct jabber_x_data_data *data, PurpleRequestFields *fields) {
 	xmlnode *result = xmlnode_new("x");
-	jabber_x_data_action_cb cb = data->cb;
+	jabber_x_data_action_cb data_action_cb = data->data_action_cb;
+	jabber_x_data_cb data_cb = data->data_cb;
 	gpointer user_data = data->user_data;
 	JabberStream *js = data->js;
 	gboolean hasActions = FALSE;
@@ -187,18 +192,19 @@ static void jabber_x_data_cancel_cb(struct jabber_x_data_data *data, PurpleReque
 	xmlnode_set_namespace(result, "jabber:x:data");
 	xmlnode_set_attrib(result, "type", "cancel");
 
-	if (hasActions)
-		cb(js, result, NULL, user_data);
-	else
-		((jabber_x_data_cb)cb)(js, result, user_data);
+	if (hasActions && data_action_cb != NULL) {
+		data_action_cb(js, result, NULL, user_data);
+	} else if (data_cb != NULL) {
+		data_cb(js, result, user_data);
+	}
 }
 
-void *jabber_x_data_request(JabberStream *js, xmlnode *packet, jabber_x_data_cb cb, gpointer user_data)
-{
-	return jabber_x_data_request_with_actions(js, packet, NULL, 0, (jabber_x_data_action_cb)cb, user_data);
-}
-
-void *jabber_x_data_request_with_actions(JabberStream *js, xmlnode *packet, GList *actions, int defaultaction, jabber_x_data_action_cb cb, gpointer user_data)
+static void *
+jabber_x_data_request_internal(JabberStream *js, xmlnode *packet,
+                               GList *actions, int defaultaction,
+                               jabber_x_data_cb data_cb,
+                               jabber_x_data_action_cb data_action_cb,
+                               gpointer user_data)
 {
 	void *handle;
 	xmlnode *fn, *x;
@@ -213,7 +219,8 @@ void *jabber_x_data_request_with_actions(JabberStream *js, xmlnode *packet, GLis
 
 	data->fields = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 	data->user_data = user_data;
-	data->cb = cb;
+	data->data_cb = data_cb;
+	data->data_action_cb = data_action_cb;
 	data->js = js;
 
 	fields = purple_request_fields_new();
@@ -411,6 +418,23 @@ void *jabber_x_data_request_with_actions(JabberStream *js, xmlnode *packet, GLis
 	return handle;
 }
 
+void *
+jabber_x_data_request(JabberStream *js, xmlnode *packet, jabber_x_data_cb cb,
+                      gpointer user_data)
+{
+	return jabber_x_data_request_internal(js, packet, NULL, 0,
+	                                      cb, NULL, user_data);
+}
+
+void *
+jabber_x_data_request_with_actions(JabberStream *js, xmlnode *packet, GList *actions,
+                                   int defaultaction, jabber_x_data_action_cb cb,
+                                   gpointer user_data)
+{
+	return jabber_x_data_request_internal(js, packet, NULL, 0,
+	                                      NULL, cb, user_data);
+}
+
 gchar *
 jabber_x_data_get_formtype(const xmlnode *form)
 {
@@ -437,4 +461,3 @@ jabber_x_data_get_formtype(const xmlnode *form)
 	/* Erm, none found :( */
 	return NULL;
 }
-

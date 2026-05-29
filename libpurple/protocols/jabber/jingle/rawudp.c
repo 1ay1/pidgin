@@ -38,8 +38,9 @@ struct _JingleRawUdpPrivate
 
 #define JINGLE_RAWUDP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), JINGLE_TYPE_RAWUDP, JingleRawUdpPrivate))
 
-static void jingle_rawudp_class_init (JingleRawUdpClass *klass);
-static void jingle_rawudp_init (JingleRawUdp *rawudp);
+static void jingle_rawudp_class_init (JingleRawUdpClass *klass,
+                                      gpointer class_data);
+static void jingle_rawudp_init (JingleRawUdp *rawudp, GTypeClass *klass);
 static void jingle_rawudp_finalize (GObject *object);
 static void jingle_rawudp_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 static void jingle_rawudp_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -126,7 +127,8 @@ jingle_rawudp_get_type()
 }
 
 static void
-jingle_rawudp_class_init (JingleRawUdpClass *klass)
+jingle_rawudp_class_init (JingleRawUdpClass *klass,
+                          G_GNUC_UNUSED gpointer class_data)
 {
 	GObjectClass *gobject_class = (GObjectClass*)klass;
 	parent_class = g_type_class_peek_parent(klass);
@@ -154,7 +156,8 @@ jingle_rawudp_class_init (JingleRawUdpClass *klass)
 }
 
 static void
-jingle_rawudp_init (JingleRawUdp *rawudp)
+jingle_rawudp_init (JingleRawUdp *rawudp,
+                    G_GNUC_UNUSED GTypeClass *klass)
 {
 	rawudp->priv = JINGLE_RAWUDP_GET_PRIVATE(rawudp);
 	rawudp->priv->local_candidates = NULL;
@@ -356,4 +359,3 @@ jingle_rawudp_to_xml_internal(JingleTransport *transport, xmlnode *content, Jing
 
 	return node;
 }
-

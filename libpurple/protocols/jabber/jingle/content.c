@@ -44,8 +44,9 @@ struct _JingleContentPrivate
 
 #define JINGLE_CONTENT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), JINGLE_TYPE_CONTENT, JingleContentPrivate))
 
-static void jingle_content_class_init (JingleContentClass *klass);
-static void jingle_content_init (JingleContent *content);
+static void jingle_content_class_init (JingleContentClass *klass,
+                                       gpointer class_data);
+static void jingle_content_init (JingleContent *content, GTypeClass *klass);
 static void jingle_content_finalize (GObject *object);
 static void jingle_content_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 static void jingle_content_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -89,7 +90,8 @@ jingle_content_get_type()
 }
 
 static void
-jingle_content_class_init (JingleContentClass *klass)
+jingle_content_class_init (JingleContentClass *klass,
+                           G_GNUC_UNUSED gpointer class_data)
 {
 	GObjectClass *gobject_class = (GObjectClass*)klass;
 	parent_class = g_type_class_peek_parent(klass);
@@ -153,7 +155,8 @@ jingle_content_class_init (JingleContentClass *klass)
 }
 
 static void
-jingle_content_init (JingleContent *content)
+jingle_content_init (JingleContent *content,
+                     G_GNUC_UNUSED GTypeClass *klass)
 {
 	content->priv = JINGLE_CONTENT_GET_PRIVATE(content);
 	memset(content->priv, 0, sizeof(*content->priv));
@@ -470,4 +473,3 @@ jingle_content_handle_action(JingleContent *content, xmlnode *xmlcontent, Jingle
 	g_return_if_fail(JINGLE_IS_CONTENT(content));
 	JINGLE_CONTENT_GET_CLASS(content)->handle_action(content, xmlcontent, action);
 }
-
