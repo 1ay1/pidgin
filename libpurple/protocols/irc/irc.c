@@ -982,8 +982,15 @@ static void irc_roomlist_cancel(PurpleRoomlist *list)
 static void irc_keepalive(PurpleConnection *gc)
 {
 	struct irc_conn *irc = gc->proto_data;
-	if ((time(NULL) - irc->recv_time) > PING_TIMEOUT)
+	int delta = 0;
+
+	delta = time(NULL) - irc->recv_time;
+	if(delta >= 2 * PING_TIMEOUT) {
+		purple_connection_error(gc, _("Lost connection with server"));
+	} else if(delta >= PING_TIMEOUT) {
+		purple_debug_warning("irc", "sending keepalive\n");
 		irc_cmd_ping(irc, NULL, NULL, NULL);
+	}
 }
 
 static PurplePluginProtocolInfo prpl_info =
