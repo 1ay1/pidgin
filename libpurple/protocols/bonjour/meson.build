@@ -1,0 +1,17 @@
+libbonjour = shared_library('bonjour',
+  files(
+    'bonjour.c',
+    'buddy.c',
+    'jabber.c',
+    'mdns_avahi.c',
+    'mdns_common.c',
+    'parser.c',
+    'bonjour_ft.c',
+  ),
+  include_directories : prpl_inc,
+  c_args : prpl_cflags,
+  dependencies : [libpurple_dep, glib_dep, libxml_dep, avahi_client_dep, avahi_glib_dep],
+  name_prefix : 'lib',
+  install : true,
+  install_dir : prpl_install_dir,
+)

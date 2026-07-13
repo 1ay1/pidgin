@@ -1,0 +1,17 @@
+shared_library('gevolution',
+  files(
+    'add_buddy_dialog.c',
+    'assoc-buddy.c',
+    'gevolution.c',
+    'gevo-util.c',
+    'new_person_dialog.c',
+    'eds-utils.c',
+  ),
+  include_directories : pidgin_plugin_inc,
+  c_args : pidgin_plugin_cflags,
+  dependencies : [pidgin_dep, gtk_dep, evo_dep],
+  name_prefix : '',
+  override_options : ['b_lundef=false'],
+  install : true,
+  install_dir : pidgin_plugindir,
+)

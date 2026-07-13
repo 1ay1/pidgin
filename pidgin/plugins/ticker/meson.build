@@ -1,0 +1,10 @@
+shared_library('ticker',
+  files('gtkticker.c', 'ticker.c'),
+  include_directories : pidgin_plugin_inc,
+  c_args : pidgin_plugin_cflags,
+  dependencies : [pidgin_dep, gtk_dep],
+  name_prefix : '',
+  override_options : ['b_lundef=false'],
+  install : true,
+  install_dir : pidgin_plugindir,
+)

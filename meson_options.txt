@@ -1,0 +1,31 @@
+# Feature options for the Pidgin/Purple/Finch Meson build.
+
+option('gtk',            type : 'feature', value : 'auto', description : 'Build the GTK+2 Pidgin client')
+option('gnt',            type : 'feature', value : 'auto', description : 'Build the ncurses/GNT Finch client')
+
+option('ssl',            type : 'combo',   choices : ['auto', 'gnutls', 'nss', 'none'], value : 'auto', description : 'SSL/TLS backend')
+option('sasl',           type : 'feature', value : 'auto', description : 'Cyrus SASL support')
+option('idn',            type : 'feature', value : 'auto', description : 'GNU libidn stringprep/IDN support')
+option('avahi',          type : 'feature', value : 'auto', description : 'Avahi support for the Bonjour protocol')
+option('gstreamer',      type : 'feature', value : 'auto', description : 'GStreamer sound/media support')
+option('networkmanager', type : 'feature', value : 'disabled', description : 'NetworkManager connectivity detection (legacy dbus-glib API)')
+option('gtkspell',       type : 'feature', value : 'auto', description : 'GtkSpell spell-checking in Pidgin')
+
+option('plugins',        type : 'boolean', value : true,  description : 'Enable loadable plugin support')
+option('nls',            type : 'boolean', value : true,  description : 'Native language support (gettext)')
+
+option('dbus',           type : 'feature', value : 'auto', description : 'D-Bus remote-control support')
+option('perl',           type : 'feature', value : 'auto', description : 'Perl plugin loader')
+option('tcl',            type : 'feature', value : 'auto', description : 'Tcl plugin loader')
+option('tk',             type : 'feature', value : 'auto', description : 'Tk support for the Tcl loader')
+option('mono',           type : 'feature', value : 'disabled', description : 'Mono/.NET plugin loader')
+option('sqlite3',        type : 'feature', value : 'auto', description : 'SQLite3 (Contact Availability Prediction plugin)')
+option('evolution',      type : 'feature', value : 'disabled', description : 'Evolution addressbook integration')
+option('unity-integration',          type : 'feature', value : 'disabled', description : 'Unity messaging-menu integration')
+option('doc',            type : 'boolean', value : false, description : 'Build Doxygen API documentation')
+option('install-ssl-certs', type : 'boolean', value : true, description : 'Install the bundled CA certificate bundle')
+
+option('protocols',      type : 'array',
+  choices : ['irc', 'jabber', 'simple', 'bonjour', 'null'],
+  value   : ['irc', 'jabber', 'simple', 'bonjour'],
+  description : 'Protocol plugins to build')
