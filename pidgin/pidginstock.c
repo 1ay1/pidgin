@@ -582,6 +582,24 @@ pidgin_stock_init(void)
 
 	stock_initted = TRUE;
 
+	/* GTK3 defaults gtk-menu-images to FALSE (and buttons-have-icons too),
+	 * which hides the icon of every GtkImageMenuItem -- so all of Pidgin's
+	 * menu icons (docklet/tray menu, right-click menus, New Message, Join
+	 * Chat, Plugins, Preferences, Quit, status icons, ...) silently vanished.
+	 * Pidgin 2's look has icons in its menus, so re-enable them explicitly.
+	 * The properties are deprecated but still honoured by GtkImageMenuItem. */
+	{
+		GtkSettings *settings = gtk_settings_get_default();
+		if (settings != NULL) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+			g_object_set(settings,
+				"gtk-menu-images", TRUE,
+				"gtk-button-images", TRUE,
+				NULL);
+G_GNUC_END_IGNORE_DEPRECATIONS
+		}
+	}
+
 	/* Setup the status icon theme */
 	loader = g_object_new(PIDGIN_TYPE_ICON_THEME_LOADER, "type", "status-icon", NULL);
 	purple_theme_manager_register_type(PURPLE_THEME_LOADER(loader));
