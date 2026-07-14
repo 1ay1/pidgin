@@ -346,9 +346,9 @@ static void
 icon_box_dnd_cb(GtkWidget *widget, GdkDragContext *dc, gint x, gint y,
 		GtkSelectionData *sd, guint info, guint t, PidginStatusBox *box)
 {
-	gchar *name = (gchar *)sd->data;
+	gchar *name = (gchar *)gtk_selection_data_get_data(sd);
 
-	if ((sd->length >= 0) && (sd->format == 8)) {
+	if ((gtk_selection_data_get_length(sd) >= 0) && (gtk_selection_data_get_format(sd) == 8)) {
 		/* Well, it looks like the drag event was cool.
 		 * Let's do something with it */
 		if (!g_ascii_strncasecmp(name, "file://", 7)) {
@@ -375,7 +375,7 @@ icon_box_dnd_cb(GtkWidget *widget, GdkDragContext *dc, gint x, gint y,
 static gboolean
 icon_box_enter_cb(GtkWidget *widget, GdkEventCrossing *event, PidginStatusBox *box)
 {
-	gdk_window_set_cursor(widget->window, box->hand_cursor);
+	gdk_window_set_cursor(gtk_widget_get_window(widget), box->hand_cursor);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(box->icon), box->buddy_icon_hover);
 	return FALSE;
 }
@@ -383,7 +383,7 @@ icon_box_enter_cb(GtkWidget *widget, GdkEventCrossing *event, PidginStatusBox *b
 static gboolean
 icon_box_leave_cb(GtkWidget *widget, GdkEventCrossing *event, PidginStatusBox *box)
 {
-	gdk_window_set_cursor(widget->window, box->arrow_cursor);
+	gdk_window_set_cursor(gtk_widget_get_window(widget), box->arrow_cursor);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(box->icon), box->buddy_icon) ;
 	return FALSE;
 }
@@ -1217,9 +1217,10 @@ spellcheck_prefs_cb(const char *name, PurplePrefType type,
 		pidgin_setup_gtkspell(GTK_TEXT_VIEW(status_box->imhtml));
 	else
 	{
-		GtkSpell *spell;
-		spell = gtkspell_get_from_text_view(GTK_TEXT_VIEW(status_box->imhtml));
-		gtkspell_detach(spell);
+		GtkSpellChecker *spell;
+		spell = gtk_spell_checker_get_from_text_view(GTK_TEXT_VIEW(status_box->imhtml));
+		if (spell)
+			gtk_spell_checker_detach(spell);
 	}
 #endif
 }
@@ -1257,13 +1258,15 @@ pidgin_status_box_list_position (PidginStatusBox *status_box, int *x, int *y, in
   GdkRectangle monitor;
   GtkRequisition popup_req;
   GtkPolicyType hpolicy, vpolicy;
+  GtkAllocation allocation;
 
-  gdk_window_get_origin (GTK_WIDGET(status_box)->window, x, y);
+  gtk_widget_get_allocation(GTK_WIDGET(status_box), &allocation);
+  gdk_window_get_origin (gtk_widget_get_window(GTK_WIDGET(status_box)), x, y);
 
-  *x += GTK_WIDGET(status_box)->allocation.x;
-  *y += GTK_WIDGET(status_box)->allocation.y;
+  *x += allocation.x;
+  *y += allocation.y;
 
-  *width = GTK_WIDGET(status_box)->allocation.width;
+  *width = allocation.width;
 
   hpolicy = vpolicy = GTK_POLICY_NEVER;
 	g_object_set(G_OBJECT(status_box->scrolled_window),
@@ -1286,7 +1289,7 @@ pidgin_status_box_list_position (PidginStatusBox *status_box, int *x, int *y, in
 
   screen = gtk_widget_get_screen (GTK_WIDGET (status_box));
   monitor_num = gdk_screen_get_monitor_at_window (screen,
-						  GTK_WIDGET (status_box)->window);
+						  gtk_widget_get_window(GTK_WIDGET (status_box)));
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
   if (*x < monitor.x)
@@ -1294,13 +1297,13 @@ pidgin_status_box_list_position (PidginStatusBox *status_box, int *x, int *y, in
   else if (*x + *width > monitor.x + monitor.width)
     *x = monitor.x + monitor.width - *width;
 
-  if (*y + GTK_WIDGET(status_box)->allocation.height + *height <= monitor.y + monitor.height)
-	  *y += GTK_WIDGET(status_box)->allocation.height;
+  if (*y + allocation.height + *height <= monitor.y + monitor.height)
+	  *y += allocation.height;
   else if (*y - *height >= monitor.y)
 	  *y -= *height;
-  else if (monitor.y + monitor.height - (*y + GTK_WIDGET(status_box)->allocation.height) > *y - monitor.y)
+  else if (monitor.y + monitor.height - (*y + allocation.height) > *y - monitor.y)
     {
-	    *y += GTK_WIDGET(status_box)->allocation.height;
+	    *y += allocation.height;
 	    *height = monitor.y + monitor.height - *y;
     }
   else
@@ -1352,7 +1355,7 @@ pidgin_status_box_popup(PidginStatusBox *box)
 	gtk_window_move (GTK_WINDOW (box->popup_window), x, y);
 	gtk_widget_show(box->popup_window);
 	gtk_widget_grab_focus (box->tree_view);
-	if (!popup_grab_on_window (box->popup_window->window,
+	if (!popup_grab_on_window (gtk_widget_get_window(box->popup_window),
 				   GDK_CURRENT_TIME, TRUE)) {
 		gtk_widget_hide (box->popup_window);
 		return;
@@ -1708,7 +1711,7 @@ pidgin_status_box_init (PidginStatusBox *status_box,
 	GtkWidget *toplevel;
 	GtkTreeSelection *sel;
 
-	GTK_WIDGET_SET_FLAGS (status_box, GTK_NO_WINDOW);
+	gtk_widget_set_has_window(GTK_WIDGET(status_box), FALSE);
 	status_box->imhtml_visible = FALSE;
 	status_box->network_available = purple_network_is_available();
 	status_box->connecting = FALSE;
@@ -1801,7 +1804,7 @@ pidgin_status_box_init (PidginStatusBox *status_box,
 	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(status_box->cell_view), emblem_rend, "pixbuf", EMBLEM_COLUMN, "visible", EMBLEM_VISIBLE_COLUMN, NULL);
 	g_object_set(status_box->text_rend, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 
-	status_box->vbox = gtk_vbox_new(0, FALSE);
+	status_box->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	status_box->sw = pidgin_create_imhtml(FALSE, &status_box->imhtml, NULL, NULL);
 	gtk_imhtml_set_editable(GTK_IMHTML(status_box->imhtml), TRUE);
 
@@ -1965,7 +1968,7 @@ pidgin_status_box_size_allocate(GtkWidget *widget,
 	PidginStatusBox *status_box = PIDGIN_STATUS_BOX(widget);
 	GtkRequisition req = {0,0};
 	GtkAllocation parent_alc, box_alc, icon_alc;
-	gint border_width = GTK_CONTAINER (widget)->border_width;
+	gint border_width = gtk_container_get_border_width(GTK_CONTAINER (widget));
 
 	gtk_widget_get_preferred_size_compat(status_box->toggle_button, &req);
 	/* Make this icon the same size as other buddy icons in the list; unless it already wants to be bigger */
@@ -2004,20 +2007,24 @@ pidgin_status_box_size_allocate(GtkWidget *widget,
 		gtk_widget_size_allocate(status_box->icon_box, &icon_alc);
 	}
 	gtk_widget_size_allocate(status_box->toggle_button, &parent_alc);
-	widget->allocation = *allocation;
+	gtk_widget_set_allocation(widget, allocation);
 }
 
 static gboolean
-pidgin_status_box_expose_event(GtkWidget *widget,
-				 GdkEventExpose *event)
+pidgin_status_box_draw(GtkWidget *widget, cairo_t *cr)
 {
 	PidginStatusBox *status_box = PIDGIN_STATUS_BOX(widget);
-	gtk_container_propagate_expose(GTK_CONTAINER(widget), status_box->vbox, event);
-	gtk_container_propagate_expose(GTK_CONTAINER(widget), status_box->toggle_button, event);
+	gtk_container_propagate_draw(GTK_CONTAINER(widget), status_box->vbox, cr);
+	gtk_container_propagate_draw(GTK_CONTAINER(widget), status_box->toggle_button, cr);
 	if (status_box->icon_box && status_box->icon_opaque) {
-		gtk_paint_box(widget->style, widget->window, GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL,
-				status_box->icon_box, "button", status_box->icon_box->allocation.x-1, status_box->icon_box->allocation.y-1,
-				34, 34);
+		GtkStyleContext *context = gtk_widget_get_style_context(widget);
+		GtkAllocation icon_alc;
+		gtk_widget_get_allocation(status_box->icon_box, &icon_alc);
+		gtk_style_context_save(context);
+		gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
+		gtk_render_frame(context, cr, icon_alc.x-1, icon_alc.y-1, 34, 34);
+		gtk_render_background(context, cr, icon_alc.x-1, icon_alc.y-1, 34, 34);
+		gtk_style_context_restore(context);
 	}
 	return FALSE;
 }
