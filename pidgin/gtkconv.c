@@ -2564,8 +2564,7 @@ pidgin_conv_get_icon(PurpleConversation *conv, GtkWidget *parent, const char *ic
 	stock = pidgin_conv_get_icon_stock(conv);
 	size = gtk_icon_size_from_name(icon_size);
 	(void)size;
-	status = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-			pidgin_stock_icon_name(stock), 16, 0, NULL);
+	status = pidgin_pixbuf_from_stock(stock, 16);
 	return status;
 }
 
@@ -3073,7 +3072,7 @@ pidgin_conversations_fill_menu(GtkWidget *menu, GList *convs)
 		PurpleConversation *conv = (PurpleConversation*)l->data;
 		PidginConversation *gtkconv = PIDGIN_CONVERSATION(conv);
 
-		GtkWidget *icon = gtk_image_new_from_icon_name(pidgin_stock_icon_name(pidgin_conv_get_icon_stock(conv)),
+		GtkWidget *icon = pidgin_image_new_from_stock(pidgin_conv_get_icon_stock(conv),
 				gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_MICROSCOPIC));
 		GtkWidget *item;
 		gchar *text = g_strdup_printf("%s (%d)",
@@ -5092,7 +5091,15 @@ setup_common_pane(PidginConversation *gtkconv)
 
 	/* Setup the gtkimhtml widget */
 	frame = pidgin_create_imhtml(FALSE, &gtkconv->imhtml, NULL, &imhtml_sw);
-	gtk_widget_set_size_request(gtkconv->imhtml, -1, 0);
+	/* GTK2 set a min-height of 0 here so the imhtml could be shrunk freely by
+	 * the old size-request machinery.  Under GTK3's height-for-width geometry a
+	 * 0 natural/min height lets a GtkBox hand the history pane (packed expand)
+	 * essentially no space -- the conversation history collapses and the
+	 * surplus shows up as an empty void below the entry.  Request a small but
+	 * non-zero minimum so the expand-child actually claims the leftover height. */
+	gtk_widget_set_size_request(gtkconv->imhtml, -1, 32);
+	gtk_widget_set_vexpand(imhtml_sw, TRUE);
+	gtk_widget_set_hexpand(imhtml_sw, TRUE);
 	if (chat) {
 		GtkWidget *hpaned;
 
@@ -9305,14 +9312,10 @@ make_status_icon_list(const char *stock, GtkWidget *w)
 {
 	GList *l = NULL;
 	(void)w;
-	l = g_list_append(l, gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-                                       pidgin_stock_icon_name(stock), 16, 0, NULL));
-	l = g_list_append(l, gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-                                       pidgin_stock_icon_name(stock), 24, 0, NULL));
-	l = g_list_append(l, gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-                                       pidgin_stock_icon_name(stock), 32, 0, NULL));
-	l = g_list_append(l, gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-                                       pidgin_stock_icon_name(stock), 48, 0, NULL));
+	l = g_list_append(l, pidgin_pixbuf_from_stock(stock, 16));
+	l = g_list_append(l, pidgin_pixbuf_from_stock(stock, 24));
+	l = g_list_append(l, pidgin_pixbuf_from_stock(stock, 32));
+	l = g_list_append(l, pidgin_pixbuf_from_stock(stock, 48));
 	return l;
 }
 
