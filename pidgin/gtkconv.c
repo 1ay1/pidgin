@@ -4746,9 +4746,15 @@ static gboolean resize_imhtml_cb(PidginConversation *gtkconv)
 	if (ABS(diff) < oneline.height / 2)
 		diff = 0;
 
-	gtk_widget_get_allocation(gtkconv->lower_hbox, &lower_alloc);
-	gtk_widget_set_size_request(gtkconv->lower_hbox, -1,
-		diff + lower_alloc.height);
+	/* GTK3: force-sizing lower_hbox left a dead void above the toolbar,
+	 * because the box was pinned to a height computed from a stale entry
+	 * allocation while the entry itself only drew its actual line(s).
+	 * Instead request the height on the entry widget directly and let the
+	 * box shrink-wrap it -- no phantom gap.  (void)lower_alloc keeps the
+	 * unused variable from warning. */
+	(void) lower_alloc;
+	(void) diff;
+	gtk_widget_set_size_request(gtkconv->entry, -1, height);
 
 	return FALSE;
 }
