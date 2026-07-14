@@ -45,6 +45,8 @@ GtkItemFactory *gtk_item_factory_new(GType container_type,
                                      const gchar *path,
                                      GtkAccelGroup *accel_group);
 
+const gchar *pidgin_item_factory_get_path(GtkItemFactory *ifactory);
+
 void gtk_item_factory_set_translate_func(GtkItemFactory *ifactory,
                                          GtkTranslateFunc func,
                                          gpointer data,

@@ -18,6 +18,7 @@ struct _PidginItemFactory
 	gpointer         translate_data;
 	GDestroyNotify   translate_notify;
 	GHashTable      *widgets;       /* untranslated path -> GtkWidget* */
+	gchar           *path;          /* factory root path, e.g. "<PurpleMain>" */
 };
 
 /* Trampoline: adapt a GtkMenuItem "activate" to the 3-arg Pidgin callback. */
@@ -60,11 +61,20 @@ gtk_item_factory_new(GType container_type, const gchar *path,
 	ift->widgets = g_hash_table_new_full(g_str_hash, g_str_equal,
 	                                     g_free, NULL);
 	/* The root itself is retrievable by its factory path. */
-	if (path)
+	if (path) {
+		ift->path = g_strdup(path);
 		g_hash_table_insert(ift->widgets, g_strdup(path), ift->toplevel);
+	}
 
 	g_object_ref_sink(ift->toplevel);
 	return ift;
+}
+
+const gchar *
+pidgin_item_factory_get_path(GtkItemFactory *ift)
+{
+	g_return_val_if_fail(ift != NULL, NULL);
+	return ift->path;
 }
 
 void
