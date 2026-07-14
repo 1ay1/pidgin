@@ -8311,21 +8311,23 @@ static gboolean tab_color_fuse = TRUE;
 static void
 pidgin_conversations_set_tab_colors(void)
 {
-	/* Set default tab colors */
+	/* GTK3: gtk_rc_get_style_by_paths()/gtk_rc_parse_string() are no-ops, so the
+	 * old RC-style tab-label colouring never applied. Install a screen-level CSS
+	 * provider that colours each named tab-label widget for its unseen state.
+	 * The label widgets are named via gtk_widget_set_name() in
+	 * pidgin_conv_update_fields(); a #name selector matches that here. */
+	static GtkCssProvider *provider = NULL;
 	GString *str;
-	GtkSettings *settings = gtk_settings_get_default();
-	GtkStyle *parent = gtk_rc_get_style_by_paths(settings, "tab-container.tab-label*", NULL, G_TYPE_NONE), *now;
 	struct {
-		const char *stylename;
 		const char *labelname;
 		const char *color;
 	} styles[] = {
-		{"pidgin_tab_label_typing_default", "tab-label-typing", "#4e9a06"},
-		{"pidgin_tab_label_typed_default", "tab-label-typed", "#c4a000"},
-		{"pidgin_tab_label_attention_default", "tab-label-attention", "#006aff"},
-		{"pidgin_tab_label_unreadchat_default", "tab-label-unreadchat", "#cc0000"},
-		{"pidgin_tab_label_event_default", "tab-label-event", "#888a85"},
-		{NULL, NULL, NULL}
+		{"tab-label-typing", "#4e9a06"},
+		{"tab-label-typed", "#c4a000"},
+		{"tab-label-attention", "#006aff"},
+		{"tab-label-unreadchat", "#cc0000"},
+		{"tab-label-event", "#888a85"},
+		{NULL, NULL}
 	};
 	int iter;
 
@@ -8334,31 +8336,29 @@ pidgin_conversations_set_tab_colors(void)
 		return;
 	}
 
+	if (provider == NULL) {
+		provider = gtk_css_provider_new();
+		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+			GTK_STYLE_PROVIDER(provider),
+			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	}
+
 	str = g_string_new(NULL);
 
-	for (iter = 0; styles[iter].stylename; iter++) {
-		now = gtk_rc_get_style_by_paths(settings, styles[iter].labelname, NULL, G_TYPE_NONE);
-		if (parent == now ||
-				(parent && now && parent->rc_style == now->rc_style)) {
-			GdkColor color;
-			gchar *color_str;
-			gdk_color_parse(styles[iter].color, &color);
-			pidgin_style_adjust_contrast(gtk_widget_get_default_style(), &color);
-			color_str = gdk_color_to_string(&color);
+	for (iter = 0; styles[iter].labelname; iter++) {
+		GdkColor color;
+		gchar *color_str;
+		gdk_color_parse(styles[iter].color, &color);
+		pidgin_style_adjust_contrast(NULL, &color);
+		color_str = gdk_color_to_string(&color);
 
-			g_string_append_printf(str, "style \"%s\" {\n"
-					"fg[ACTIVE] = \"%s\"\n"
-					"}\n"
-					"widget \"*%s\" style \"%s\"\n",
-					styles[iter].stylename,
-					color_str,
-					styles[iter].labelname, styles[iter].stylename);
-			g_free(color_str);
-		}
+		g_string_append_printf(str, "#%s { color: %s; }\n",
+				styles[iter].labelname, color_str);
+		g_free(color_str);
 	}
-	gtk_rc_parse_string(str->str);
+
+	gtk_css_provider_load_from_data(provider, str->str, -1, NULL);
 	g_string_free(str, TRUE);
-	gtk_rc_reset_styles(settings);
 }
 
 void

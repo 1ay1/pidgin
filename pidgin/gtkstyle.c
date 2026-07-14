@@ -28,12 +28,42 @@
 
 /* Assume light mode */
 static gboolean dark_mode_cache = FALSE;
+static gboolean dark_mode_seeded = FALSE;
+
+/* GTK3: seed the dark-mode cache from the active CSS theme by reading the
+ * background colour a GtkTextView would get from its style context. The legacy
+ * GtkStyle passed to pidgin_style_is_dark() is not theme-filled under GTK3, so
+ * without this a dark theme would be mis-detected as light. */
+static void
+pidgin_style_seed_dark_from_theme(void)
+{
+	GtkWidget *scratch;
+	GtkStyleContext *context;
+	GdkRGBA bg;
+
+	scratch = gtk_text_view_new();
+	g_object_ref_sink(scratch);
+	context = gtk_widget_get_style_context(scratch);
+	gtk_style_context_get_background_color(context,
+		GTK_STATE_FLAG_NORMAL, &bg);
+
+	/* Ignore a fully-transparent report (common for text views): keep the
+	 * light-mode default in that case. */
+	if (bg.alpha != 0.0) {
+		dark_mode_cache = (bg.red + bg.green + bg.blue) < 1.5;
+	}
+	dark_mode_seeded = TRUE;
+
+	g_object_unref(scratch);
+}
 
 gboolean
 pidgin_style_is_dark(GtkStyle *style) {
 	GdkColor bg;
 
 	if (!style) {
+		if (!dark_mode_seeded)
+			pidgin_style_seed_dark_from_theme();
 		return dark_mode_cache;
 	}
 
@@ -41,6 +71,7 @@ pidgin_style_is_dark(GtkStyle *style) {
 
 	if (bg.red != 0xFFFF || bg.green != 0xFFFF || bg.blue != 0xFFFF) {
 		dark_mode_cache =  ((int) bg.red + (int) bg.green + (int) bg.blue) < (65536 * 3 / 2);
+		dark_mode_seeded = TRUE;
 	}
 
 	return dark_mode_cache;

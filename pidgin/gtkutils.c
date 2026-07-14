@@ -3973,18 +3973,25 @@ void pidgin_utils_init(void)
 	if (purple_running_gnome())
 		register_gnome_url_handlers();
 
-	/* Used to make small buttons */
-	gtk_rc_parse_string("style \"pidgin-small-close-button\"\n"
-	                    "{\n"
-	                    "GtkWidget::focus-padding = 0\n"
-	                    "GtkWidget::focus-line-width = 0\n"
-	                    "xthickness = 0\n"
-	                    "ythickness = 0\n"
-	                    "GtkContainer::border-width = 0\n"
-	                    "GtkButton::inner-border = {0, 0, 0, 0}\n"
-	                    "GtkButton::default-border = {0, 0, 0, 0}\n"
-	                    "}\n"
-	                    "widget \"*.pidgin-small-close-button\" style \"pidgin-small-close-button\"");
+	/* Used to make small buttons.
+	 * GTK3: gtk_rc_parse_string() is a no-op, so install a CSS provider on the
+	 * default screen that zeroes the padding/border of the named close button. */
+	{
+		GtkCssProvider *provider = gtk_css_provider_new();
+		gtk_css_provider_load_from_data(provider,
+			"#pidgin-small-close-button {\n"
+			"  padding: 0;\n"
+			"  margin: 0;\n"
+			"  border: 0;\n"
+			"  min-width: 0;\n"
+			"  min-height: 0;\n"
+			"  outline-width: 0;\n"
+			"}\n", -1, NULL);
+		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+			GTK_STYLE_PROVIDER(provider),
+			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+		g_object_unref(provider);
+	}
 
 #ifdef _WIN32
 	winpidgin_register_win32_url_handlers();
