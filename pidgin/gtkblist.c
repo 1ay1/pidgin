@@ -4413,18 +4413,21 @@ static void pidgin_blist_restore_position(void)
 	if (gtkblist && gtkblist->window &&
 		!gtk_widget_get_visible(gtkblist->window) && blist_width != 0) {
 
+		int mon_w = 0, mon_h = 0;
+
 		blist_x      = purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/x");
 		blist_y      = purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/y");
 		blist_height = purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/height");
 
-		/* ...check position is on screen... */
-		if (blist_x >= gdk_screen_width())
-			blist_x = gdk_screen_width() - 100;
+		/* ...check position is on screen (GTK3: per-monitor geometry)... */
+		pidgin_widget_get_monitor_size(gtkblist->window, &mon_w, &mon_h);
+		if (blist_x >= mon_w)
+			blist_x = mon_w - 100;
 		else if (blist_x + blist_width < 0)
 			blist_x = 100;
 
-		if (blist_y >= gdk_screen_height())
-			blist_y = gdk_screen_height() - 100;
+		if (blist_y >= mon_h)
+			blist_y = mon_h - 100;
 		else if (blist_y + blist_height < 0)
 			blist_y = 100;
 
