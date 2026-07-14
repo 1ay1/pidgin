@@ -658,7 +658,7 @@ sort_smileys(struct smiley_button_list *ls, GtkIMHtmlToolbar *toolbar,
 	g_object_set_data(G_OBJECT(button), "smiley_text", face);
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(insert_smiley_text), toolbar);
 
-	gtk_tooltips_set_tip(toolbar->tooltips, button, face, NULL);
+	gtk_widget_set_tooltip_text(button, face);
 
 	/* these look really weird with borders */
 	gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
@@ -672,7 +672,7 @@ sort_smileys(struct smiley_button_list *ls, GtkIMHtmlToolbar *toolbar,
 		g_snprintf(tip, sizeof(tip),
 			_("This smiley is disabled because a custom smiley exists for this shortcut:\n %s"),
 			face);
-		gtk_tooltips_set_tip(toolbar->tooltips, button, tip, NULL);
+		gtk_widget_set_tooltip_text(button, tip);
 		gtk_widget_set_sensitive(button, FALSE);
 	} else if (psmiley) {
 		/* Remove the button if the smiley is destroyed */
@@ -1155,7 +1155,7 @@ gtk_imhtmltoolbar_finalize (GObject *object)
 	}
 
 	g_free(toolbar->sml);
-	gtk_object_sink(GTK_OBJECT(toolbar->tooltips));
+	g_object_ref_sink(G_OBJECT(toolbar->tooltips));
 
 	menu = g_object_get_data(object, "font_menu");
 	if (menu)
@@ -1252,7 +1252,7 @@ static void gtk_imhtmltoolbar_create_old_buttons(GtkIMHtmlToolbar *toolbar)
 			g_signal_connect(G_OBJECT(button), "clicked",
 					 G_CALLBACK(buttons[iter].callback), toolbar);
 			*(buttons[iter].button) = button;
-			gtk_tooltips_set_tip(toolbar->tooltips, button, buttons[iter].tooltip, NULL);
+			gtk_widget_set_tooltip_text(button, buttons[iter].tooltip);
 		} else
 			button = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
 		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
@@ -1263,7 +1263,7 @@ static void gtk_imhtmltoolbar_create_old_buttons(GtkIMHtmlToolbar *toolbar)
 	g_signal_connect(G_OBJECT(button), "clicked",
 		G_CALLBACK(send_attention_cb), toolbar);
 	g_object_set_data(G_OBJECT(toolbar), "attention", button);
-	gtk_tooltips_set_tip(toolbar->tooltips, button, _("Send Attention"), NULL);
+	gtk_widget_set_tooltip_text(button, _("Send Attention"));
 	gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 
 	gtk_box_pack_start(GTK_BOX(toolbar), hbox, FALSE, FALSE, 0);
@@ -1361,7 +1361,7 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	toolbar->smiley_dialog = NULL;
 	toolbar->image_dialog = NULL;
 
-	toolbar->tooltips = gtk_tooltips_new();
+	toolbar->tooltips = NULL;
 
 	gtk_box_set_spacing(GTK_BOX(toolbar), 3);
 

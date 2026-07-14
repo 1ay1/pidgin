@@ -5053,7 +5053,7 @@ image_expose(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 }
 
 /* In case the smiley gets removed from the imhtml before it gets removed from the queue */
-static void animated_smiley_destroy_cb(GtkObject *widget, GtkIMHtml *imhtml)
+static void animated_smiley_destroy_cb(GObject *widget, GtkIMHtml *imhtml)
 {
 	GList *l = imhtml->animations->head;
 	while (l) {

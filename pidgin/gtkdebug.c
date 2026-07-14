@@ -186,7 +186,7 @@ find_cb(GtkWidget *w, DebugWindow *win)
 
 	gtk_container_set_border_width(GTK_CONTAINER(win->find), PIDGIN_HIG_BOX_SPACE);
 	gtk_window_set_resizable(GTK_WINDOW(win->find), FALSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(win->find), FALSE);
+	/* set_has_separator removed */;
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(win->find)->vbox), PIDGIN_HIG_BORDER);
 	gtk_container_set_border_width(
 		GTK_CONTAINER(GTK_DIALOG(win->find)->vbox), PIDGIN_HIG_BOX_SPACE);
@@ -787,7 +787,7 @@ debug_window_new(void)
 		/* Setup our top button bar thingie. */
 		toolbar = gtk_toolbar_new();
 #if !GTK_CHECK_VERSION(2,12,0)
-		tooltips = gtk_tooltips_new();
+		tooltips = NULL;
 #endif
 #if !GTK_CHECK_VERSION(2,14,0)
 		gtk_toolbar_set_tooltips(GTK_TOOLBAR(toolbar), TRUE);
@@ -866,7 +866,7 @@ debug_window_new(void)
 #if GTK_CHECK_VERSION(2,12,0)
 		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(win->filter), _("Filter"));
 #else
-		gtk_tooltips_set_tip(tooltips, win->filter, _("Filter"), NULL);
+		gtk_widget_set_tooltip_text(win->filter, _("Filter"));
 #endif
 		g_signal_connect(G_OBJECT(win->filter), "clicked", G_CALLBACK(regex_filter_toggled_cb), win);
 		gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(win->filter));
@@ -888,7 +888,7 @@ debug_window_new(void)
 #if GTK_CHECK_VERSION(2,12,0)
 		gtk_widget_set_tooltip_text(win->expression, _("Right click for more options."));
 #else
-		gtk_tooltips_set_tip(tooltips, win->expression, _("Right click for more options."), NULL);
+		gtk_widget_set_tooltip_text(win->expression, _("Right click for more options."));
 #endif
 		gtk_container_add(GTK_CONTAINER(item), GTK_WIDGET(win->expression));
 		gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(item));
@@ -930,7 +930,7 @@ debug_window_new(void)
 #if GTK_CHECK_VERSION(2,12,0)
 		gtk_widget_set_tooltip_text(win->filterlevel, _("Select the debug filter level."));
 #else
-		gtk_tooltips_set_tip(tooltips, win->filterlevel, _("Select the debug filter level."), NULL);
+		gtk_widget_set_tooltip_text(win->filterlevel, _("Select the debug filter level."));
 #endif
 		gtk_container_add(GTK_CONTAINER(item), win->filterlevel);
 		gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(item));

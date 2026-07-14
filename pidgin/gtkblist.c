@@ -1085,7 +1085,7 @@ rebuild_chat_entries(PidginChatData *data, const char *default_chat_name)
 
 		if (pce->is_int)
 		{
-			GtkObject *adjust;
+			GObject *adjust;
 			adjust = gtk_adjustment_new(pce->min, pce->min, pce->max,
 										1, 10, 10);
 			input = gtk_spin_button_new(GTK_ADJUSTMENT(adjust), 1, 0);
@@ -3196,7 +3196,7 @@ static gboolean pidgin_blist_expand_timeout(GtkWidget *tv)
 		pidgin_blist_expand_contact_cb(NULL, node);
 
 		gtk_tree_view_get_cell_area(GTK_TREE_VIEW(tv), path, NULL, &gtkblist->contact_rect);
-		gdk_drawable_get_size(GDK_DRAWABLE(tv->window), &(gtkblist->contact_rect.width), NULL);
+		pidgin_gdk_window_get_size(GDK_DRAWABLE(tv->window), &(gtkblist->contact_rect.width), NULL);
 		gtkblist->mouseover_contact = node;
 		gtk_tree_path_down (path);
 		while (gtk_tree_model_get_iter(GTK_TREE_MODEL(gtkblist->treemodel), &i, path)) {
@@ -4964,7 +4964,7 @@ gtk_blist_window_key_press_cb(GtkWidget *w, GdkEventKey *event, PidginBuddyList 
 	widget = gtk_window_get_focus(GTK_WINDOW(gtkblist->window));
 
 	if (GTK_IS_IMHTML(widget) || GTK_IS_ENTRY(widget)) {
-		if (gtk_bindings_activate(GTK_OBJECT(widget), event->keyval, event->state))
+		if (gtk_bindings_activate(G_OBJECT(widget), event->keyval, event->state))
 			return TRUE;
 	}
 	return FALSE;
@@ -5114,7 +5114,7 @@ generic_error_enable_cb(PurpleAccount *account)
 }
 
 static void
-generic_error_destroy_cb(GtkObject *dialog,
+generic_error_destroy_cb(GObject *dialog,
                          PurpleAccount *account)
 {
 	g_hash_table_remove(gtkblist->connection_errors, account);
@@ -5516,7 +5516,7 @@ headline_style_set (GtkWidget *widget,
 	if (gtkblist->changing_style)
 		return;
 
-	tooltips = gtk_tooltips_new ();
+	tooltips = NULL;
 	g_object_ref_sink (tooltips);
 
 	gtk_tooltips_force_window (tooltips);
@@ -8059,7 +8059,7 @@ static void sort_method_log_activity(PurpleBlistNode *node, PurpleBuddyList *bli
 }
 
 static void
-plugin_act(GtkObject *obj, PurplePluginAction *pam)
+plugin_act(GObject *obj, PurplePluginAction *pam)
 {
 	if (pam && pam->callback)
 		pam->callback(pam);

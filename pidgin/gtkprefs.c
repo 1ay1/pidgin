@@ -145,7 +145,7 @@ pidgin_prefs_labeled_spin_button(GtkWidget *box, const gchar *title,
 		const char *key, int min, int max, GtkSizeGroup *sg)
 {
 	GtkWidget *spin;
-	GtkObject *adjust;
+	GObject *adjust;
 	int val;
 
 	val = purple_prefs_get_int(key);

@@ -91,6 +91,15 @@ gtk_widget_get_preferred_size_compat(GtkWidget *widget, GtkRequisition *requisit
 	gtk_widget_get_preferred_size(widget, NULL, requisition);
 }
 
+void
+pidgin_gdk_window_get_size(GdkWindow *window, gint *width, gint *height)
+{
+	if (width)
+		*width = gdk_window_get_width(window);
+	if (height)
+		*height = gdk_window_get_height(window);
+}
+
 static gboolean
 url_clicked_idle_cb(gpointer data)
 {
@@ -2153,7 +2162,7 @@ void pidgin_set_cursor(GtkWidget *widget, GdkCursorType cursor_type)
 	gdk_window_set_cursor(widget->window, cursor);
 	gdk_cursor_unref(cursor);
 
-	gdk_display_flush(gdk_drawable_get_display(GDK_DRAWABLE(widget->window)));
+	gdk_display_flush(gdk_window_get_display(GDK_DRAWABLE(widget->window)));
 }
 
 void pidgin_clear_cursor(GtkWidget *widget)

@@ -98,7 +98,7 @@ get_widget_coords(GtkWidget *w, gint *x1, gint *y1, gint *x2, gint *y2)
 	else
 	{
 		gdk_window_get_origin(w->window, &ox, &oy);
-		gdk_drawable_get_size(w->window, &width, &height);
+		pidgin_gdk_window_get_size(w->window, &width, &height);
 	}
 
 	if (x1) *x1 = ox;

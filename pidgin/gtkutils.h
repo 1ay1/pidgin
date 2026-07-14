@@ -93,6 +93,7 @@ typedef gboolean (*PidginFilterBuddyCompletionEntryFunc) (const PidginBuddyCompl
  */
 GtkWidget *pidgin_box_new_homogeneous(GtkOrientation orientation, gint spacing);
 void gtk_widget_get_preferred_size_compat(GtkWidget *widget, GtkRequisition *requisition);
+void pidgin_gdk_window_get_size(GdkWindow *window, gint *width, gint *height);
 
 
 /**

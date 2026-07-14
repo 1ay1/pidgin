@@ -886,7 +886,7 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		                                GTK_RESPONSE_OK);
 		gtk_container_set_border_width(GTK_CONTAINER(invite_dialog), PIDGIN_HIG_BOX_SPACE);
 		gtk_window_set_resizable(GTK_WINDOW(invite_dialog), FALSE);
-		gtk_dialog_set_has_separator(GTK_DIALOG(invite_dialog), FALSE);
+		/* set_has_separator removed */;
 
 		info->window = GTK_WIDGET(invite_dialog);
 
@@ -1087,7 +1087,7 @@ menu_view_log_cb(gpointer data, guint action, GtkWidget *widget)
 	gdk_window_set_cursor(gtkblist->window->window, cursor);
 	gdk_window_set_cursor(win->window->window, cursor);
 	gdk_cursor_unref(cursor);
-	gdk_display_flush(gdk_drawable_get_display(GDK_DRAWABLE(widget->window)));
+	gdk_display_flush(gdk_window_get_display(GDK_DRAWABLE(widget->window)));
 
 	name = purple_conversation_get_name(conv);
 	account = purple_conversation_get_account(conv);
@@ -2696,7 +2696,7 @@ redraw_icon(gpointer data)
 }
 
 static void
-start_anim(GtkObject *obj, PidginConversation *gtkconv)
+start_anim(GObject *obj, PidginConversation *gtkconv)
 {
 	int delay;
 
@@ -2872,7 +2872,7 @@ icon_menu_save_cb(GtkWidget *widget, PidginConversation *gtkconv)
 }
 
 static void
-stop_anim(GtkObject *obj, PidginConversation *gtkconv)
+stop_anim(GObject *obj, PidginConversation *gtkconv)
 {
 	if (gtkconv->u.im->icon_timer != 0)
 		g_source_remove(gtkconv->u.im->icon_timer);
@@ -2894,7 +2894,7 @@ toggle_icon_animate_cb(GtkWidget *w, PidginConversation *gtkconv)
 }
 
 static gboolean
-icon_menu(GtkObject *obj, GdkEventButton *e, PidginConversation *gtkconv)
+icon_menu(GObject *obj, GdkEventButton *e, PidginConversation *gtkconv)
 {
 	static GtkWidget *menu = NULL;
 	PurpleConversation *conv;
@@ -4734,7 +4734,7 @@ setup_chat_topic(PidginConversation *gtkconv, GtkWidget *vbox)
 		if(prpl_info->set_chat_topic == NULL) {
 			gtk_editable_set_editable(GTK_EDITABLE(gtkchat->topic_text), FALSE);
 		} else {
-			g_signal_connect(GTK_OBJECT(gtkchat->topic_text), "activate",
+			g_signal_connect(G_OBJECT(gtkchat->topic_text), "activate",
 					G_CALLBACK(topic_callback), gtkconv);
 		}
 
@@ -4941,8 +4941,7 @@ pidgin_conv_setup_quickfind(PidginConversation *gtkconv, GtkWidget *container)
 
 	close = pidgin_create_small_button(gtk_label_new("×"));
 	gtk_box_pack_start(GTK_BOX(widget), close, FALSE, FALSE, 0);
-	gtk_tooltips_set_tip(gtkconv->tooltips, close,
-	                     _("Close Find bar"), NULL);
+	gtk_widget_set_tooltip_text(close, _("Close Find bar"));
 
 	label = gtk_label_new(_("Find:"));
 	gtk_box_pack_start(GTK_BOX(widget), label, FALSE, FALSE, 10);
@@ -5395,7 +5394,7 @@ private_gtkconv_new(PurpleConversation *conv, gboolean hidden)
 	gtkconv->send_history = g_list_append(NULL, NULL);
 
 	/* Setup some initial variables. */
-	gtkconv->tooltips = gtk_tooltips_new();
+	gtkconv->tooltips = NULL;
 	gtkconv->unseen_state = PIDGIN_UNSEEN_NONE;
 	gtkconv->unseen_count = 0;
 
@@ -5598,7 +5597,7 @@ pidgin_conv_destroy(PurpleConversation *conv)
 		g_free(gtkconv->u.chat);
 	}
 
-	gtk_object_sink(GTK_OBJECT(gtkconv->tooltips));
+	g_object_ref_sink(G_OBJECT(gtkconv->tooltips));
 
 	gtkconv->send_history = g_list_first(gtkconv->send_history);
 	g_list_free_full(gtkconv->send_history, (GDestroyNotify)g_free);
@@ -6815,8 +6814,7 @@ pidgin_conv_update_fields(PurpleConversation *conv, PidginConvFields fields)
 			g_free(tmp1);
 
 			gtk_entry_set_text(GTK_ENTRY(gtkchat->topic_text), tmp2 ? tmp2 : "");
-			gtk_tooltips_set_tip(gtkconv->tooltips, gtkchat->topic_text,
-			                     tmp2 ? tmp2 : "", NULL);
+			gtk_widget_set_tooltip_text(gtkchat->topic_text, tmp2 ? tmp2 : "");
 
 			g_free(tmp2);
 		}
@@ -8399,8 +8397,7 @@ build_warn_close_dialog(PidginWindow *gtkwin)
 	gtk_container_set_border_width(GTK_CONTAINER(warn_close_dialog),
 	                               6);
 	gtk_window_set_resizable(GTK_WINDOW(warn_close_dialog), FALSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(warn_close_dialog),
-	                             FALSE);
+	/* set_has_separator removed */;
 
 	/* Setup the outside spacing. */
 	vbox = GTK_DIALOG(warn_close_dialog)->vbox;
@@ -9566,7 +9563,7 @@ static gboolean
 gtkconv_tab_set_tip(GtkWidget *widget, GdkEventCrossing *event, PidginConversation *gtkconv)
 {
 #if GTK_CHECK_VERSION(2, 12, 0)
-#define gtk_tooltips_set_tip(tips, w, l, p)  gtk_widget_set_tooltip_text(w, l)
+#define gtk_widget_set_tooltip_text(w, l)  gtk_widget_set_tooltip_text(w, l)
 #endif
 /* PANGO_VERSION_CHECK macro was introduced in 1.15. So we need this double check. */
 #ifndef PANGO_VERSION_CHECK
@@ -9577,9 +9574,7 @@ gtkconv_tab_set_tip(GtkWidget *widget, GdkEventCrossing *event, PidginConversati
 	PangoLayout *layout;
 
 	layout = gtk_label_get_layout(GTK_LABEL(gtkconv->tab_label));
-	gtk_tooltips_set_tip(gtkconv->tooltips, widget,
-			pango_layout_is_ellipsized(layout) ? gtk_label_get_text(GTK_LABEL(gtkconv->tab_label)) : NULL,
-			NULL);
+	gtk_widget_set_tooltip_text(widget, pango_layout_is_ellipsized(layout) ? gtk_label_get_text(GTK_LABEL(gtkconv->tab_label)) : NULL);
 	return FALSE;
 #if GTK_CHECK_VERSION(2, 12, 0)
 #undef gtk_tooltips_set_tip
@@ -9608,8 +9603,7 @@ pidgin_conv_window_add_gtkconv(PidginWindow *win, PidginConversation *gtkconv)
 
 	/* Close button. */
 	gtkconv->close = pidgin_create_small_button(gtk_label_new("×"));
-	gtk_tooltips_set_tip(gtkconv->tooltips, gtkconv->close,
-	                     _("Close conversation"), NULL);
+	gtk_widget_set_tooltip_text(gtkconv->close, _("Close conversation"));
 
 	g_signal_connect(gtkconv->close, "clicked", G_CALLBACK (close_conv_cb), gtkconv);
 
@@ -9794,7 +9788,7 @@ pidgin_conv_window_remove_gtkconv(PidginWindow *win, PidginConversation *gtkconv
 	index = gtk_notebook_page_num(GTK_NOTEBOOK(win->notebook), gtkconv->tab_cont);
 
 	g_object_ref(gtkconv->tab_cont);
-	gtk_object_sink(GTK_OBJECT(gtkconv->tab_cont));
+	g_object_ref_sink(G_OBJECT(gtkconv->tab_cont));
 
 	gtk_notebook_remove_page(GTK_NOTEBOOK(win->notebook), index);
 

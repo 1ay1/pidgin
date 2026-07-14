@@ -115,8 +115,8 @@ pidgin_widget_decorate_account(GtkWidget *cont, PurpleAccount *account)
 	image = gtk_image_new_from_pixbuf(pixbuf);
 	g_object_unref(G_OBJECT(pixbuf));
 
-	tips = gtk_tooltips_new();
-	gtk_tooltips_set_tip(tips, image, purple_account_get_username(account), NULL);
+	tips = NULL;
+	gtk_widget_set_tooltip_text(image, purple_account_get_username(account));
 
 	if (GTK_IS_DIALOG(cont)) {
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(cont)->action_area), image, FALSE, TRUE, 0);
@@ -376,7 +376,7 @@ pidgin_request_input(const char *title, const char *primary,
 	gtk_container_set_border_width(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER/2);
 	if (!multiline)
 		gtk_window_set_resizable(GTK_WINDOW(dialog), FALSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
+	/* set_has_separator removed */;
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), 0);
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
 
@@ -542,7 +542,7 @@ pidgin_request_choice(const char *title, const char *primary,
 	gtk_container_set_border_width(GTK_CONTAINER(dialog), PIDGIN_HIG_BORDER/2);
 	gtk_container_set_border_width(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER/2);
 	gtk_window_set_resizable(GTK_WINDOW(dialog), FALSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
+	/* set_has_separator removed */;
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
 
 	/* Setup the main horizontal box */
@@ -664,7 +664,7 @@ pidgin_request_action_with_icon(const char *title, const char *primary,
 	gtk_container_set_border_width(GTK_CONTAINER(dialog), PIDGIN_HIG_BORDER/2);
 	gtk_container_set_border_width(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER/2);
 	gtk_window_set_resizable(GTK_WINDOW(dialog), FALSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
+	/* set_has_separator removed */;
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
 
 	/* Setup the main horizontal box */
@@ -2354,7 +2354,7 @@ static void *pidgin_request_screenshare_media(const char *title, const char *pri
 	gtk_container_set_border_width(GTK_CONTAINER(dialog), PIDGIN_HIG_BORDER/2);
 	gtk_container_set_border_width(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER/2);
 	gtk_window_set_resizable(GTK_WINDOW(dialog), FALSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
+	/* set_has_separator removed */;
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
 
 	/* Setup the main horizontal box */

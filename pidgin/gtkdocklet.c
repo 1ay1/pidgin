@@ -595,7 +595,7 @@ docklet_status_submenu(void)
 
 
 static void
-plugin_act(GtkObject *obj, PurplePluginAction *pam)
+plugin_act(GObject *obj, PurplePluginAction *pam)
 {
 	if (pam && pam->callback)
 		pam->callback(pam);

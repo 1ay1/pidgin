@@ -105,7 +105,7 @@ pidgin_menu_tray_finalize(GObject *obj)
 #endif
 
 	if (tray->tooltips) {
-		gtk_object_sink(GTK_OBJECT(tray->tooltips));
+		g_object_ref_sink(G_OBJECT(tray->tooltips));
 	}
 
 	G_OBJECT_CLASS(parent_class)->finalize(obj);
@@ -239,7 +239,7 @@ void
 pidgin_menu_tray_set_tooltip(PidginMenuTray *menu_tray, GtkWidget *widget, const char *tooltip)
 {
 	if (!menu_tray->tooltips)
-		menu_tray->tooltips = gtk_tooltips_new();
+		menu_tray->tooltips = NULL;
 
 	/* Should we check whether widget is a child of menu_tray? */
 
@@ -253,6 +253,6 @@ pidgin_menu_tray_set_tooltip(PidginMenuTray *menu_tray, GtkWidget *widget, const
 	if (GTK_WIDGET_NO_WINDOW(widget))
 		widget = widget->parent;
 
-	gtk_tooltips_set_tip(menu_tray->tooltips, widget, tooltip, NULL);
+	gtk_widget_set_tooltip_text(widget, tooltip);
 }
 
