@@ -363,9 +363,9 @@ static void
 account_dnd_recv(GtkWidget *widget, GdkDragContext *dc, gint x, gint y,
 		 GtkSelectionData *sd, guint info, guint t, AccountPrefsDialog *dialog)
 {
-	gchar *name = (gchar *)sd->data;
+	gchar *name = (gchar *)gtk_selection_data_get_data(sd);
 
-	if ((sd->length >= 0) && (sd->format == 8)) {
+	if ((gtk_selection_data_get_length(sd) >= 0) && (gtk_selection_data_get_format(sd) == 8)) {
 		/* Well, it looks like the drag event was cool.
 		 * Let's do something with it */
 		if (!g_ascii_strncasecmp(name, "file://", 7)) {
@@ -396,7 +396,6 @@ account_dnd_recv(GtkWidget *widget, GdkDragContext *dc, gint x, gint y,
 static void
 update_editable(PurpleConnection *gc, AccountPrefsDialog *dialog)
 {
-	GtkStyle *style;
 	gboolean set;
 	GList *l;
 
@@ -409,16 +408,10 @@ update_editable(PurpleConnection *gc, AccountPrefsDialog *dialog)
 	set = !(purple_account_is_connected(dialog->account) || purple_account_is_connecting(dialog->account));
 	gtk_widget_set_sensitive(dialog->protocol_menu, set);
 	gtk_editable_set_editable(GTK_EDITABLE(dialog->username_entry), set);
-	style = set ? NULL : gtk_widget_get_style(dialog->username_entry);
-	gtk_widget_modify_base(dialog->username_entry, GTK_STATE_NORMAL,
-			style ? &style->base[GTK_STATE_INSENSITIVE] : NULL);
 
 	for (l = dialog->user_split_entries ; l != NULL ; l = l->next) {
 		if (GTK_IS_EDITABLE(l->data)) {
 			gtk_editable_set_editable(GTK_EDITABLE(l->data), set);
-			style = set ? NULL : gtk_widget_get_style(GTK_WIDGET(l->data));
-			gtk_widget_modify_base(GTK_WIDGET(l->data), GTK_STATE_NORMAL,
-					style ? &style->base[GTK_STATE_INSENSITIVE] : NULL);
 		} else {
 			gtk_widget_set_sensitive(GTK_WIDGET(l->data), set);
 		}
@@ -498,9 +491,10 @@ add_login_options(AccountPrefsDialog *dialog, GtkWidget *parent)
 
 	if (!username && dialog->prpl_info
 			&& PURPLE_PROTOCOL_PLUGIN_HAS_FUNC(dialog->prpl_info, get_account_text_table)) {
-		GdkColor color = {0, 34952, 35466, 34181};
+		GdkRGBA color;
 		GHashTable *table;
 		const char *label;
+		gdk_rgba_parse(&color, "#888988");
 		table = dialog->prpl_info->get_account_text_table(NULL);
 		label = g_hash_table_lookup(table, "login_label");
 
@@ -509,7 +503,7 @@ add_login_options(AccountPrefsDialog *dialog, GtkWidget *parent)
 				G_CALLBACK(username_focus_cb), dialog);
 		g_signal_connect(G_OBJECT(dialog->username_entry), "focus-out-event",
 				G_CALLBACK(username_nofocus_cb), dialog);
-		gtk_widget_modify_text(dialog->username_entry, GTK_STATE_NORMAL, &color);
+		gtk_widget_override_color(dialog->username_entry, GTK_STATE_FLAG_NORMAL, &color);
 		g_hash_table_destroy(table);
 	}
 
@@ -572,11 +566,14 @@ add_login_options(AccountPrefsDialog *dialog, GtkWidget *parent)
 			value = purple_account_user_split_get_default_value(split);
 
 		/* Google Talk default domain hackery! */
-		menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(dialog->protocol_menu));
-		item = gtk_menu_get_active(GTK_MENU(menu));
-		if (value == NULL && g_object_get_data(G_OBJECT(item), "fakegoogle") &&
-			purple_strequal(purple_account_user_split_get_text(split), _("Domain")))
-			value = "gmail.com";
+		{
+			const char *proto_id = pidgin_protocol_option_menu_get_selected(dialog->protocol_menu);
+			if (value == NULL &&
+				purple_strequal(dialog->protocol_id, "prpl-gtalk") &&
+				purple_strequal(purple_account_user_split_get_text(split), _("Domain")))
+				value = "gmail.com";
+			(void)proto_id;
+		}
 
 		if (value != NULL)
 			gtk_entry_set_text(GTK_ENTRY(entry), value);
@@ -1755,7 +1752,7 @@ drag_data_get_cb(GtkWidget *widget, GdkDragContext *ctx,
 				 GtkSelectionData *data, guint info, guint time,
 				 AccountsWindow *dialog)
 {
-	if (data->target == gdk_atom_intern("PURPLE_ACCOUNT", FALSE)) {
+	if (gtk_selection_data_get_target(data) == gdk_atom_intern("PURPLE_ACCOUNT", FALSE)) {
 		GtkTreeRowReference *ref;
 		GtkTreePath *source_row;
 		GtkTreeIter iter;
@@ -1826,13 +1823,13 @@ drag_data_received_cb(GtkWidget *widget, GdkDragContext *ctx,
 					  guint x, guint y, GtkSelectionData *sd,
 					  guint info, guint t, AccountsWindow *dialog)
 {
-	if (sd->target == gdk_atom_intern("PURPLE_ACCOUNT", FALSE) && sd->data) {
+	if (gtk_selection_data_get_target(sd) == gdk_atom_intern("PURPLE_ACCOUNT", FALSE) && gtk_selection_data_get_data(sd)) {
 		gint dest_index;
 		PurpleAccount *a = NULL;
 		GtkTreePath *path = NULL;
 		GtkTreeViewDropPosition position;
 
-		memcpy(&a, sd->data, sizeof(a));
+		memcpy(&a, gtk_selection_data_get_data(sd), sizeof(a));
 
 		if (gtk_tree_view_get_dest_row_at_pos(GTK_TREE_VIEW(widget), x, y,
 											  &path, &position)) {
