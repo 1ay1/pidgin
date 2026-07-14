@@ -103,6 +103,18 @@ static const gchar *widget_bool_names[] = {
 static GtkWidget *widget_bool_widgets[G_N_ELEMENTS(widget_bool_prefs)];
 */
 
+/* GTK3: legacy gtkrc "GtkIMHtml::send-name" custom style property names map to
+ * CSS custom-property syntax "-GtkIMHtml-send-name". The pref basenames already
+ * carry the property name, so we just splice on the class prefix. */
+static gchar *
+css_property_name(const gchar *pref_path)
+{
+	gchar *base = g_path_get_basename(pref_path);
+	gchar *ret = g_strdup_printf("-GtkIMHtml-%s", base);
+	g_free(base);
+	return ret;
+}
+
 static GString *
 make_gtkrc_string(void)
 {
@@ -110,30 +122,13 @@ make_gtkrc_string(void)
 	gchar *prefbase = NULL;
 	GString *style_string = g_string_new("");
 
-	if (purple_prefs_get_bool("/plugins/gtk/purplerc/set/gtk-font-name")) {
-		const gchar *pref = purple_prefs_get_string("/plugins/gtk/purplerc/gtk-font-name");
-
-		if (pref && *pref) {
-			g_string_append_printf(style_string,
-			                       "gtk-font-name = \"%s\"\n",
-			                       pref);
-		}
-	}
-
-	if (purple_prefs_get_bool("/plugins/gtk/purplerc/set/gtk-key-theme-name")) {
-		const gchar *pref = purple_prefs_get_string("/plugins/gtk/purplerc/gtk-key-theme-name");
-
-		if (pref && *pref) {
-			g_string_append_printf(style_string,
-			                       "gtk-key-theme-name = \"%s\"\n",
-			                       pref);
-		}
-	}
-
-	g_string_append(style_string, "style \"purplerc_style\"\n{");
+	/* Style properties installed by GtkIMHtml are addressed in GTK3 CSS as
+	 * "-GtkIMHtml-<name>" inside a selector matching the widget. Applying them
+	 * globally via "* { ... }" mirrors the old widget_class "*" catch-all. */
+	g_string_append(style_string, "* {\n");
 
 	if(purple_prefs_get_bool("/plugins/gtk/purplerc/set/disable-typing-notification")) {
-		g_string_append(style_string, "\tGtkIMHtml::typing-notification-enable = 0\n");
+		g_string_append(style_string, "\t-GtkIMHtml-typing-notification-enable: 0;\n");
 	}
 
 	for (i = 0; i < G_N_ELEMENTS(color_prefs); i++) {
@@ -142,22 +137,22 @@ make_gtkrc_string(void)
 
 			pref = purple_prefs_get_string(color_prefs[i]);
 			if (pref && *pref) {
-				prefbase = g_path_get_basename(color_prefs[i]);
+				gchar *prop = css_property_name(color_prefs[i]);
 				g_string_append_printf(style_string,
-				                       "\n\t%s = \"%s\"",
-				                       prefbase, pref);
-				g_free(prefbase);
+				                       "\t%s: %s;\n",
+				                       prop, pref);
+				g_free(prop);
 			}
 		}
 	}
 
 	for (i = 0; i < G_N_ELEMENTS(widget_size_prefs); i++) {
 		if (purple_prefs_get_bool(widget_size_prefs_set[i])) {
-			prefbase = g_path_get_basename(widget_size_prefs[i]);
+			gchar *prop = css_property_name(widget_size_prefs[i]);
 			g_string_append_printf(style_string,
-			                       "\n\t%s = %d", prefbase,
+			                       "\t%s: %d;\n", prop,
 			                       purple_prefs_get_int(widget_size_prefs[i]));
-			g_free(prefbase);
+			g_free(prop);
 		}
 	}
 
@@ -173,7 +168,7 @@ make_gtkrc_string(void)
 	}
 	*/
 
-	g_string_append(style_string, "\n}\nwidget_class \"*\" style \"purplerc_style\"\n");
+	g_string_append(style_string, "}\n");
 
 	for (i = 0; i < G_N_ELEMENTS(font_prefs); i++) {
 		if (purple_prefs_get_bool(font_prefs_set[i])) {
@@ -181,14 +176,14 @@ make_gtkrc_string(void)
 
 			pref = purple_prefs_get_string(font_prefs[i]);
 			if (pref && *pref) {
+				/* font_prefs paths carry a widget name in the basename
+				 * (e.g. "pidgin_conv_entry"). In GTK3 CSS a named widget is
+				 * selected with "#name" and the font set via the shorthand
+				 * "font" property. */
 				prefbase = g_path_get_basename(font_prefs[i]);
 				g_string_append_printf(style_string,
-				                       "style \"%s_style\"\n{\n"
-				                       "\tfont_name = \"%s\"\n}"
-				                       "\nwidget \"%s\" "
-				                       "style \"%s_style\"\n",
-				                       prefbase, pref,
-				                       prefbase, prefbase);
+				                       "#%s {\n\tfont: %s;\n}\n",
+			                       prefbase, pref);
 				g_free(prefbase);
 			}
 		}
@@ -201,29 +196,50 @@ static void
 purplerc_make_changes(void)
 {
 	GString *str = make_gtkrc_string();
-	GtkSettings *setting = NULL;
+	GtkSettings *setting = gtk_settings_get_default();
+	static GtkCssProvider *provider = NULL;
+	GdkScreen *screen = gdk_screen_get_default();
 
-	gtk_rc_parse_string(str->str);
+	/* gtk-font-name and gtk-key-theme-name are GtkSettings properties in GTK3,
+	 * not CSS. Apply (or clear) them directly on the default settings. */
+	if (purple_prefs_get_bool("/plugins/gtk/purplerc/set/gtk-font-name")) {
+		const gchar *pref = purple_prefs_get_string("/plugins/gtk/purplerc/gtk-font-name");
+		if (pref && *pref)
+			g_object_set(setting, "gtk-font-name", pref, NULL);
+	}
+	if (purple_prefs_get_bool("/plugins/gtk/purplerc/set/gtk-key-theme-name")) {
+		const gchar *pref = purple_prefs_get_string("/plugins/gtk/purplerc/gtk-key-theme-name");
+		if (pref && *pref)
+			g_object_set(setting, "gtk-key-theme-name", pref, NULL);
+	}
+
+	/* GTK3: gtk_rc_parse_string() is a no-op. Feed the generated CSS to a
+	 * screen-level GtkCssProvider instead, replacing any previous one. */
+	if (provider == NULL) {
+		provider = gtk_css_provider_new();
+		if (screen)
+			gtk_style_context_add_provider_for_screen(screen,
+				GTK_STYLE_PROVIDER(provider),
+				GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	}
+	gtk_css_provider_load_from_data(provider, str->str, -1, NULL);
+
 	g_string_free(str, TRUE);
-
-	setting = gtk_settings_get_default();
-	gtk_rc_reset_styles(setting);
 }
 
 static void
 purplerc_write(GtkWidget *widget, gpointer data)
 {
 	GString *str = make_gtkrc_string();
-	str = g_string_prepend(str, "# This file automatically written by the Pidgin GTK+ Theme Control plugin.\n# Any changes to this file will be overwritten by the plugin when told to\n# write the settings again.\n# The FAQ (http://developer.pidgin.im/wiki/FAQ) contains some further examples\n# of possible pidgin gtkrc settings.\n");
-	purple_util_write_data_to_file("gtkrc-2.0", str->str, -1);
+	str = g_string_prepend(str, "/* This file automatically written by the Pidgin GTK+ Theme Control plugin.\n * Any changes to this file will be overwritten by the plugin when told to\n * write the settings again. This is GTK3 CSS. */\n");
+	purple_util_write_data_to_file("gtk-3.0.css", str->str, -1);
 	g_string_free(str, TRUE);
 }
 
 static void
 purplerc_reread(GtkWidget *widget, gpointer data)
 {
-	gtk_rc_reparse_all();
-	/* I don't know if this is necessary but if not it shouldn't hurt. */
+	/* GTK3: gtk_rc_reparse_all() is a no-op; just re-apply our provider. */
 	purplerc_make_changes();
 }
 
