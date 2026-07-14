@@ -186,7 +186,10 @@ struct _mini_dialog_button_clicked_cb_data
 guint
 pidgin_mini_dialog_get_num_children(PidginMiniDialog *mini_dialog)
 {
-	return g_list_length(mini_dialog->contents->children);
+	GList *children = gtk_container_get_children(GTK_CONTAINER(mini_dialog->contents));
+	guint n = g_list_length(children);
+	g_list_free(children);
+	return n;
 }
 
 static gboolean

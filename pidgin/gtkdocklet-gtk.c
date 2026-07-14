@@ -176,7 +176,7 @@ docklet_gtk_status_update_icon(PurpleStatusPrimitive status, gboolean connecting
 static void
 docklet_gtk_status_set_tooltip(gchar *tooltip)
 {
-	gtk_status_icon_set_tooltip(docklet, tooltip);
+	gtk_status_icon_set_tooltip_text(docklet, tooltip);
 }
 
 static void

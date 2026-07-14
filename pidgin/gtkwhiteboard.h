@@ -49,7 +49,7 @@ typedef struct _PidginWhiteboard
 	GtkWidget *window;       /**< Window for the Doodle session */
 	GtkWidget *drawing_area; /**< Drawing area */
 
-	GdkPixmap *pixmap;       /**< Memory for drawing area */
+	cairo_surface_t *pixmap;       /**< Memory for drawing area */
 
 	int  width;              /**< Canvas width */
 	int  height;             /**< Canvas height */
