@@ -4694,6 +4694,20 @@ static gboolean resize_imhtml_cb(PidginConversation *gtkconv)
 	gboolean interior_focus;
 	int focus_width;
 
+	/* GTK3 re-entrancy guard.  This callback is wired to the entry's
+	 * "size-allocate" signal and it ends by calling
+	 * gtk_widget_set_size_request() on that same entry -- which queues a
+	 * fresh size-allocate, re-entering here.  Under GTK2 the old
+	 * gtkimhtml size-request machinery bumped "resize-count" so the guard
+	 * below eventually tripped; that machinery is gone under GTK3, so the
+	 * counter never advances and the guard can never fire.  The result is
+	 * an unbounded allocate->request->allocate storm that pegs the CPU and
+	 * freezes the UI whenever the computed height oscillates by a pixel
+	 * (focus width / padding rounding).  Bail immediately if we're already
+	 * inside a resize for this entry. */
+	if (g_object_get_data(G_OBJECT(gtkconv->entry), "resize-in-progress"))
+		return FALSE;
+
 	gtk_widget_get_allocation(gtkconv->imhtml, &imhtml_alloc);
 	gtk_widget_get_allocation(gtkconv->entry, &entry_alloc);
 	total_height = (imhtml_alloc.height + entry_alloc.height);
@@ -4754,7 +4768,26 @@ static gboolean resize_imhtml_cb(PidginConversation *gtkconv)
 	 * unused variable from warning. */
 	(void) lower_alloc;
 	(void) diff;
-	gtk_widget_set_size_request(gtkconv->entry, -1, height);
+
+	/* Only touch the size request when the target height actually differs
+	 * from what the entry is already requesting.  A redundant
+	 * set_size_request to the same value still queues a resize under GTK3,
+	 * which -- combined with the size-allocate wiring -- is exactly what
+	 * spun the main loop.  Comparing against the current request makes the
+	 * common (steady-state) case a true no-op, and the re-entrancy flag
+	 * above bounds the transient case to a single extra pass. */
+	{
+		int cur_w = -1, cur_h = -1;
+		gtk_widget_get_size_request(gtkconv->entry, &cur_w, &cur_h);
+		if (cur_h != height) {
+			g_object_set_data(G_OBJECT(gtkconv->entry),
+					  "resize-in-progress",
+					  GINT_TO_POINTER(1));
+			gtk_widget_set_size_request(gtkconv->entry, -1, height);
+			g_object_set_data(G_OBJECT(gtkconv->entry),
+					  "resize-in-progress", NULL);
+		}
+	}
 
 	return FALSE;
 }

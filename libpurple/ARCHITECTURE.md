@@ -205,6 +205,35 @@ public signature or the on-disk cache format:
 The two pure decision functions (the size gate and the shrink-only clamp) are
 covered exactly by `tests/test_pixbuf_guard.c`.
 
+## Frontend hardening: GTK3 relayout loop could freeze the conversation UI
+
+`resize_imhtml_cb()` (`pidgin/gtkconv.c`) keeps the message-entry box sized to
+its text. It is wired to the entry's **`size-allocate`** signal *and* ends by
+calling `gtk_widget_set_size_request()` on that same entry -- which queues a
+fresh `size-allocate`, re-entering the callback.
+
+Under GTK2 this terminated because the old `gtkimhtml` size-request machinery
+(`gtk_imhtml_size_allocate`) bumped a `"resize-count"` object-data counter that
+the callback's guard checked against `GTK_IMHTML_MAX_CONSEC_RESIZES`. Under
+GTK3's height-for-width geometry that counter no longer advances in step with
+the handler, so the guard can never fire: any 1-pixel oscillation in the
+computed height (focus-width / padding rounding) produces an unbounded
+`allocate -> request -> allocate` storm that pegs the CPU and **freezes the
+UI**.
+
+The fix is self-contained and needs no counter cooperation:
+
+1. **Re-entrancy flag.** A `"resize-in-progress"` marker is set on the entry
+   across the `set_size_request()` call; the handler returns immediately if it
+   sees the marker, so the nested allocate can't recurse.
+2. **Change-gated request.** The size request is only issued when the target
+   height actually differs from the entry's current request
+   (`gtk_widget_get_size_request()`), making the steady state a true no-op
+   instead of a redundant resize that still queues a relayout.
+
+The legacy `"resize-count"` damper is left in place as a secondary cap; the two
+guards above are what make the loop provably terminate.
+
 ## The protocol subsystem (modernized)
 
 Historically a protocol was located with an O(n) linear scan
