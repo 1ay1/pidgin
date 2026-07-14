@@ -537,7 +537,11 @@ pidgin_roomlist_dialog_new_with_account(PurpleAccount *account)
 	vbox = pidgin_dialog_get_vbox_with_properties(GTK_DIALOG(window), FALSE, PIDGIN_HIG_BORDER);
 
 	vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
-	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
+	/* GTK3: gtk_container_add() on a GtkBox packs expand=FALSE (GTK2 packed
+	 * expand=TRUE), which would collapse this whole body -- the room-list
+	 * scroller lives inside vbox2 -- to its minimum and leave a void when the
+	 * dialog is resized taller. Pack it as the expanding child explicitly. */
+	gtk_box_pack_start(GTK_BOX(vbox), vbox2, TRUE, TRUE, 0);
 	gtk_widget_show(vbox2);
 
 	/* accounts dropdown list */
