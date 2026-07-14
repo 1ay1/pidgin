@@ -560,7 +560,15 @@ pidgin_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **tool
 	 * itself, not box-packing flags buried inside. Without this the frame
 	 * can stay pinned to its minimum while the sibling eats all the space. */
 	gtk_widget_set_hexpand(frame, TRUE);
-	gtk_widget_set_vexpand(frame, TRUE);
+	/* GTK3: vexpand is "compute-expand" and propagates up through GtkBox
+	 * regardless of the child's pack expand=FALSE flag. The editable entry
+	 * frame lives in the conversation's lower_hbox (packed expand=FALSE so it
+	 * shrink-wraps the typed lines); if it advertised vexpand the parent vbox
+	 * would split the surplus 50/50 between the history and the entry, leaving
+	 * a dead void between the history pane and the toolbar. Only the read-only
+	 * history/log frame should claim the vertical surplus. */
+	if (!editable)
+		gtk_widget_set_vexpand(frame, TRUE);
 
 	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(frame), vbox);
