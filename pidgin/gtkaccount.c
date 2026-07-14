@@ -2335,6 +2335,19 @@ pidgin_accounts_window_show(void)
 	dialog->window = win = pidgin_create_dialog(_("Accounts"), PIDGIN_HIG_BORDER, "accounts", TRUE);
 	gtk_window_set_default_size(GTK_WINDOW(win), width, height);
 
+	/* Tie this dialog to the buddy list rather than letting it float as an
+	 * independent top-level.  Being transient-for the blist keeps the window
+	 * manager from giving it a separate taskbar/pager entry, stacks it above
+	 * its parent, and lets it center on the blist. */
+	{
+		PidginBuddyList *gtkblist = pidgin_blist_get_default_gtk_blist();
+		if (gtkblist != NULL && gtkblist->window != NULL) {
+			gtk_window_set_transient_for(GTK_WINDOW(win),
+			                             GTK_WINDOW(gtkblist->window));
+			gtk_window_set_destroy_with_parent(GTK_WINDOW(win), TRUE);
+		}
+	}
+
 	g_signal_connect(G_OBJECT(win), "delete_event",
 					 G_CALLBACK(accedit_win_destroy_cb), accounts_window);
 
