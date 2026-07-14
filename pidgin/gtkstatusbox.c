@@ -2203,9 +2203,13 @@ pidgin_status_box_redisplay_buddy_icon(PidginStatusBox *status_box)
 	if (status_box->icon_size <= 0)
 		return;
 
-	if (status_box->buddy_icon)
+	/* Guard the unrefs: on a rapid connect/disconnect/status flip these can
+	 * be re-entered and drop the last ref on a pixbuf that was already
+	 * cleared, tripping "g_object_unref: G_IS_OBJECT failed" and the NULL
+	 * class-pointer assertion that follows. */
+	if (status_box->buddy_icon && G_IS_OBJECT(status_box->buddy_icon))
 		g_object_unref(status_box->buddy_icon);
-	if (status_box->buddy_icon_hover)
+	if (status_box->buddy_icon_hover && G_IS_OBJECT(status_box->buddy_icon_hover))
 		g_object_unref(status_box->buddy_icon_hover);
 	status_box->buddy_icon = NULL;
 	status_box->buddy_icon_hover = NULL;
@@ -2263,7 +2267,12 @@ pidgin_status_box_redisplay_buddy_icon(PidginStatusBox *status_box)
 
 	if (status_box->buddy_icon != NULL) {
 		status_box->icon_opaque = pidgin_gdk_pixbuf_is_opaque(status_box->buddy_icon);
-		gtk_image_set_from_pixbuf(GTK_IMAGE(status_box->icon), status_box->buddy_icon);
+		/* status_box->icon is the GtkImage in the toggle button; on a torn
+		 * down status box (disconnect racing the redisplay) it may already
+		 * be finalized, which turns gtk_image_set_from_pixbuf into an
+		 * "instance with invalid (NULL) class pointer" assertion. */
+		if (status_box->icon && GTK_IS_IMAGE(status_box->icon))
+			gtk_image_set_from_pixbuf(GTK_IMAGE(status_box->icon), status_box->buddy_icon);
 		status_box->buddy_icon_hover = gdk_pixbuf_copy(status_box->buddy_icon);
 		do_colorshift(status_box->buddy_icon_hover, status_box->buddy_icon_hover, 32);
 		gtk_widget_queue_resize(GTK_WIDGET(status_box));
