@@ -122,13 +122,6 @@ destroy_toolbar_font(GtkWidget *widget, GdkEvent *event,
 static void
 realize_toolbar_font(GtkWidget *widget, GtkIMHtmlToolbar *toolbar)
 {
-	GtkFontSelection *sel;
-
-	sel = GTK_FONT_SELECTION(GTK_FONT_SELECTION_DIALOG(toolbar->font_dialog)->fontsel);
-	gtk_widget_hide(gtk_widget_get_parent(sel->size_entry));
-	gtk_widget_show_all(sel->family_list);
-	gtk_widget_show(gtk_widget_get_parent(sel->family_list));
-	gtk_widget_show(gtk_widget_get_parent(gtk_widget_get_parent(sel->family_list)));
 }
 
 static void
@@ -138,28 +131,28 @@ cancel_toolbar_font(GtkWidget *widget, GtkIMHtmlToolbar *toolbar)
 }
 
 static void
-apply_font(GtkWidget *widget, GtkFontSelectionDialog *fontsel)
+apply_font(GtkWidget *widget, gint response, GtkIMHtmlToolbar *toolbar)
 {
 	/* this could be expanded to include font size, weight, etc.
 	   but for now only works with font face */
-	gchar *fontname = gtk_font_selection_dialog_get_font_name(fontsel);
-	GtkIMHtmlToolbar *toolbar = g_object_get_data(G_OBJECT(fontsel),
-	                                              "purple_toolbar");
+	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY) {
+		gchar *fontname = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(widget));
 
-	if (fontname) {
-		const gchar *family_name = NULL;
-		PangoFontDescription *desc = NULL;
+		if (fontname) {
+			const gchar *family_name = NULL;
+			PangoFontDescription *desc = NULL;
 
-		desc = pango_font_description_from_string(fontname);
-		family_name = pango_font_description_get_family(desc);
+			desc = pango_font_description_from_string(fontname);
+			family_name = pango_font_description_get_family(desc);
 
-		if (family_name) {
-			gtk_imhtml_toggle_fontface(GTK_IMHTML(toolbar->imhtml),
-			                           family_name);
+			if (family_name) {
+				gtk_imhtml_toggle_fontface(GTK_IMHTML(toolbar->imhtml),
+				                           family_name);
+			}
+
+			pango_font_description_free(desc);
+			g_free(fontname);
 		}
-
-		pango_font_description_free(desc);
-		g_free(fontname);
 	}
 
 	cancel_toolbar_font(NULL, toolbar);
@@ -174,27 +167,25 @@ toggle_font(GtkWidget *font, GtkIMHtmlToolbar *toolbar)
 		char *fontname = gtk_imhtml_get_current_fontface(GTK_IMHTML(toolbar->imhtml));
 
 		if (!toolbar->font_dialog) {
-			toolbar->font_dialog = gtk_font_selection_dialog_new(_("Select Font"));
+			toolbar->font_dialog = gtk_font_chooser_dialog_new(_("Select Font"), NULL);
 
 			g_object_set_data(G_OBJECT(toolbar->font_dialog), "purple_toolbar", toolbar);
 
 			if(fontname) {
 				char *fonttif = g_strdup_printf("%s 12", fontname);
 				g_free(fontname);
-				gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(toolbar->font_dialog),
-														fonttif);
+				gtk_font_chooser_set_font(GTK_FONT_CHOOSER(toolbar->font_dialog),
+										fonttif);
 				g_free(fonttif);
 			} else {
-				gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(toolbar->font_dialog),
-														DEFAULT_FONT_FACE);
+				gtk_font_chooser_set_font(GTK_FONT_CHOOSER(toolbar->font_dialog),
+										DEFAULT_FONT_FACE);
 			}
 
 			g_signal_connect(G_OBJECT(toolbar->font_dialog), "delete_event",
 							 G_CALLBACK(destroy_toolbar_font), toolbar);
-			g_signal_connect(G_OBJECT(GTK_FONT_SELECTION_DIALOG(toolbar->font_dialog)->ok_button), "clicked",
-							 G_CALLBACK(apply_font), toolbar->font_dialog);
-			g_signal_connect(G_OBJECT(GTK_FONT_SELECTION_DIALOG(toolbar->font_dialog)->cancel_button), "clicked",
-							 G_CALLBACK(cancel_toolbar_font), toolbar);
+			g_signal_connect(G_OBJECT(toolbar->font_dialog), "response",
+							 G_CALLBACK(apply_font), toolbar);
 			g_signal_connect_after(G_OBJECT(toolbar->font_dialog), "realize",
 							 G_CALLBACK(realize_toolbar_font), toolbar);
 		}
@@ -226,20 +217,21 @@ static void cancel_toolbar_fgcolor(GtkWidget *widget,
 	destroy_toolbar_fgcolor(widget, NULL, toolbar);
 }
 
-static void do_fgcolor(GtkWidget *widget, GtkColorSelection *colorsel)
+static void do_fgcolor(GtkWidget *widget, gint response, GtkIMHtmlToolbar *toolbar)
 {
-	GdkColor text_color;
-	GtkIMHtmlToolbar *toolbar = g_object_get_data(G_OBJECT(colorsel), "purple_toolbar");
+	GdkRGBA text_color;
 	char *open_tag;
 
-	open_tag = g_malloc(30);
-	gtk_color_selection_get_current_color(colorsel, &text_color);
-	g_snprintf(open_tag, 23, "#%02X%02X%02X",
-			   text_color.red / 256,
-			   text_color.green / 256,
-			   text_color.blue / 256);
-	gtk_imhtml_toggle_forecolor(GTK_IMHTML(toolbar->imhtml), open_tag);
-	g_free(open_tag);
+	if (response == GTK_RESPONSE_OK) {
+		open_tag = g_malloc(30);
+		gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &text_color);
+		g_snprintf(open_tag, 23, "#%02X%02X%02X",
+				   (unsigned)(text_color.red * 255),
+				   (unsigned)(text_color.green * 255),
+				   (unsigned)(text_color.blue * 255));
+		gtk_imhtml_toggle_forecolor(GTK_IMHTML(toolbar->imhtml), open_tag);
+		g_free(open_tag);
+	}
 
 	cancel_toolbar_fgcolor(NULL, toolbar);
 }
@@ -248,28 +240,22 @@ static void
 toggle_fg_color(GtkWidget *color, GtkIMHtmlToolbar *toolbar)
 {
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(color))) {
-		GtkWidget *colorsel;
-		GdkColor fgcolor;
+		GdkRGBA fgcolor;
 		char *color = gtk_imhtml_get_current_forecolor(GTK_IMHTML(toolbar->imhtml));
 
 		if (!toolbar->fgcolor_dialog) {
 
-			toolbar->fgcolor_dialog = gtk_color_selection_dialog_new(_("Select Text Color"));
-			colorsel = GTK_COLOR_SELECTION_DIALOG(toolbar->fgcolor_dialog)->colorsel;
+			toolbar->fgcolor_dialog = gtk_color_chooser_dialog_new(_("Select Text Color"), NULL);
 			if (color) {
-				gdk_color_parse(color, &fgcolor);
-				gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel), &fgcolor);
+				gdk_rgba_parse(&fgcolor, color);
+				gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(toolbar->fgcolor_dialog), &fgcolor);
 				g_free(color);
 			}
 
-			g_object_set_data(G_OBJECT(colorsel), "purple_toolbar", toolbar);
-
 			g_signal_connect(G_OBJECT(toolbar->fgcolor_dialog), "delete_event",
 							 G_CALLBACK(destroy_toolbar_fgcolor), toolbar);
-			g_signal_connect(G_OBJECT(GTK_COLOR_SELECTION_DIALOG(toolbar->fgcolor_dialog)->ok_button), "clicked",
-							 G_CALLBACK(do_fgcolor), colorsel);
-			g_signal_connect(G_OBJECT (GTK_COLOR_SELECTION_DIALOG(toolbar->fgcolor_dialog)->cancel_button), "clicked",
-							 G_CALLBACK(cancel_toolbar_fgcolor), toolbar);
+			g_signal_connect(G_OBJECT(toolbar->fgcolor_dialog), "response",
+							 G_CALLBACK(do_fgcolor), toolbar);
 		}
 		gtk_window_present(GTK_WINDOW(toolbar->fgcolor_dialog));
 	} else {
@@ -303,23 +289,24 @@ cancel_toolbar_bgcolor(GtkWidget *widget, GtkIMHtmlToolbar *toolbar)
 	destroy_toolbar_bgcolor(widget, NULL, toolbar);
 }
 
-static void do_bgcolor(GtkWidget *widget, GtkColorSelection *colorsel)
+static void do_bgcolor(GtkWidget *widget, gint response, GtkIMHtmlToolbar *toolbar)
 {
-	GdkColor text_color;
-	GtkIMHtmlToolbar *toolbar = g_object_get_data(G_OBJECT(colorsel), "purple_toolbar");
+	GdkRGBA text_color;
 	char *open_tag;
 
-	open_tag = g_malloc(30);
-	gtk_color_selection_get_current_color(colorsel, &text_color);
-	g_snprintf(open_tag, 23, "#%02X%02X%02X",
-			   text_color.red / 256,
-			   text_color.green / 256,
-			   text_color.blue / 256);
-	if (gtk_text_buffer_get_selection_bounds(GTK_IMHTML(toolbar->imhtml)->text_buffer, NULL, NULL))
-		gtk_imhtml_toggle_backcolor(GTK_IMHTML(toolbar->imhtml), open_tag);
-	else
-		gtk_imhtml_toggle_background(GTK_IMHTML(toolbar->imhtml), open_tag);
-	g_free(open_tag);
+	if (response == GTK_RESPONSE_OK) {
+		open_tag = g_malloc(30);
+		gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &text_color);
+		g_snprintf(open_tag, 23, "#%02X%02X%02X",
+				   (unsigned)(text_color.red * 255),
+				   (unsigned)(text_color.green * 255),
+				   (unsigned)(text_color.blue * 255));
+		if (gtk_text_buffer_get_selection_bounds(GTK_IMHTML(toolbar->imhtml)->text_buffer, NULL, NULL))
+			gtk_imhtml_toggle_backcolor(GTK_IMHTML(toolbar->imhtml), open_tag);
+		else
+			gtk_imhtml_toggle_background(GTK_IMHTML(toolbar->imhtml), open_tag);
+		g_free(open_tag);
+	}
 
 	cancel_toolbar_bgcolor(NULL, toolbar);
 }
@@ -328,28 +315,22 @@ static void
 toggle_bg_color(GtkWidget *color, GtkIMHtmlToolbar *toolbar)
 {
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(color))) {
-		GtkWidget *colorsel;
-		GdkColor bgcolor;
+		GdkRGBA bgcolor;
 		char *color = gtk_imhtml_get_current_backcolor(GTK_IMHTML(toolbar->imhtml));
 
 		if (!toolbar->bgcolor_dialog) {
 
-			toolbar->bgcolor_dialog = gtk_color_selection_dialog_new(_("Select Background Color"));
-			colorsel = GTK_COLOR_SELECTION_DIALOG(toolbar->bgcolor_dialog)->colorsel;
+			toolbar->bgcolor_dialog = gtk_color_chooser_dialog_new(_("Select Background Color"), NULL);
 			if (color) {
-				gdk_color_parse(color, &bgcolor);
-				gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel), &bgcolor);
+				gdk_rgba_parse(&bgcolor, color);
+				gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(toolbar->bgcolor_dialog), &bgcolor);
 				g_free(color);
 			}
 
-			g_object_set_data(G_OBJECT(colorsel), "purple_toolbar", toolbar);
-
 			g_signal_connect(G_OBJECT(toolbar->bgcolor_dialog), "delete_event",
 							 G_CALLBACK(destroy_toolbar_bgcolor), toolbar);
-			g_signal_connect(G_OBJECT(GTK_COLOR_SELECTION_DIALOG(toolbar->bgcolor_dialog)->ok_button), "clicked",
-							 G_CALLBACK(do_bgcolor), colorsel);
-			g_signal_connect(G_OBJECT(GTK_COLOR_SELECTION_DIALOG(toolbar->bgcolor_dialog)->cancel_button), "clicked",
-							 G_CALLBACK(cancel_toolbar_bgcolor), toolbar);
+			g_signal_connect(G_OBJECT(toolbar->bgcolor_dialog), "response",
+							 G_CALLBACK(do_bgcolor), toolbar);
 
 		}
 		gtk_window_present(GTK_WINDOW(toolbar->bgcolor_dialog));
@@ -1084,19 +1065,26 @@ menu_position_func (GtkMenu           *menu,
 {
 	GtkWidget *widget = GTK_WIDGET(data);
 	GtkRequisition menu_req;
-	gint ythickness = widget->style->ythickness;
+	GtkStyleContext *context = gtk_widget_get_style_context(widget);
+	GtkBorder padding;
+	GtkAllocation allocation;
+	gint ythickness;
 	int savy;
 
+	gtk_style_context_get_padding(context, gtk_widget_get_state_flags(widget), &padding);
+	ythickness = padding.top;
+
 	gtk_widget_get_preferred_size_compat(GTK_WIDGET (menu), &menu_req);
-	gdk_window_get_origin(widget->window, x, y);
-	*x += widget->allocation.x;
-	*y += widget->allocation.y + widget->allocation.height;
+	gtk_widget_get_allocation(widget, &allocation);
+	gdk_window_get_origin(gtk_widget_get_window(widget), x, y);
+	*x += allocation.x;
+	*y += allocation.y + allocation.height;
 	savy = *y;
 
 	pidgin_menu_position_func_helper(menu, x, y, push_in, data);
 
 	if (savy > *y + ythickness + 1)
-		*y -= widget->allocation.height;
+		*y -= allocation.height;
 }
 
 static gboolean
