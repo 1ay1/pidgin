@@ -193,6 +193,52 @@ GtkWidget *pidgin_dialog_add_button(GtkDialog *dialog, const char *label,
 		GCallback callback, gpointer callbackdata);
 
 /**
+ * GTK3 stock-item compatibility: resolves a deprecated GTK_STOCK_* id to a
+ * translatable mnemonic label and/or a themed icon-name.
+ *
+ * GTK+ stock items no longer supply a label or icon in GTK3, so any UI code
+ * that still refers to a stock id must translate it before use.  Non-stock
+ * strings are not matched (the function returns @c FALSE).
+ *
+ * @param id         A GTK_STOCK_* id (e.g. "gtk-close"), or any other string.
+ * @param label      Return location for the translated mnemonic label, or
+ *                   @c NULL.  Set to @c NULL for stock ids with no label.
+ * @param icon_name  Return location for the themed icon-name, or @c NULL.
+ *                   Set to @c NULL for stock ids with no icon.
+ *
+ * @return @c TRUE if @a id is a known stock id, @c FALSE otherwise.
+ */
+gboolean pidgin_stock_lookup(const char *id, const char **label,
+		const char **icon_name);
+
+/**
+ * Returns the translated mnemonic label for a GTK_STOCK_* id, or @a id itself
+ * if it is not a known stock id (or has no label).  Never returns @c NULL for
+ * a non-NULL @a id.  The returned string is owned by the library.
+ */
+const char *pidgin_stock_label(const char *id);
+
+/**
+ * Returns the themed icon-name for a GTK_STOCK_* id, or @a id itself if it is
+ * not a known stock id.  Suitable for gtk_image_new_from_icon_name().
+ */
+const char *pidgin_stock_icon_name(const char *id);
+
+/**
+ * GTK3-safe replacement for gtk_button_new_from_stock().  Creates a button
+ * with the proper mnemonic label and themed icon for a GTK_STOCK_* id.  For
+ * non-stock ids the icon-factory behaviour is preserved.
+ */
+GtkWidget *pidgin_button_new_from_stock(const char *stock_id);
+
+/**
+ * GTK3-safe replacement for gtk_image_new_from_stock(): resolves a GTK_STOCK_*
+ * id to a themed icon and a PIDGIN_STOCK_* id via the icon factory, so neither
+ * renders as a broken image under GTK3.
+ */
+GtkWidget *pidgin_image_new_from_stock(const char *stock_id, GtkIconSize size);
+
+/**
  * Retrieves the action area (button box) from a pidgin dialog window
  *
  * @param dialog       The dialog window

@@ -473,7 +473,7 @@ tls_peers_mgmt_build(void)
 	/* Import button */
 	/* TODO: This is the wrong stock button */
 	tpm_dat->importbutton = importbutton =
-		gtk_button_new_from_stock(GTK_STOCK_ADD);
+		pidgin_button_new_from_stock(GTK_STOCK_ADD);
 	gtk_box_pack_start(GTK_BOX(bbox), importbutton, FALSE, FALSE, 0);
 	gtk_widget_show(importbutton);
 	g_signal_connect(G_OBJECT(importbutton), "clicked",
@@ -483,7 +483,7 @@ tls_peers_mgmt_build(void)
 	/* Export button */
 	/* TODO: This is the wrong stock button */
 	tpm_dat->exportbutton = exportbutton =
-		gtk_button_new_from_stock(GTK_STOCK_SAVE);
+		pidgin_button_new_from_stock(GTK_STOCK_SAVE);
 	gtk_box_pack_start(GTK_BOX(bbox), exportbutton, FALSE, FALSE, 0);
 	gtk_widget_show(exportbutton);
 	g_signal_connect(G_OBJECT(exportbutton), "clicked",
@@ -492,7 +492,7 @@ tls_peers_mgmt_build(void)
 
 	/* Info button */
 	tpm_dat->infobutton = infobutton =
-		gtk_button_new_from_stock(PIDGIN_STOCK_INFO);
+		pidgin_button_new_from_stock(PIDGIN_STOCK_INFO);
 	gtk_box_pack_start(GTK_BOX(bbox), infobutton, FALSE, FALSE, 0);
 	gtk_widget_show(infobutton);
 	g_signal_connect(G_OBJECT(infobutton), "clicked",
@@ -501,7 +501,7 @@ tls_peers_mgmt_build(void)
 
 	/* Delete button */
 	tpm_dat->deletebutton = deletebutton =
-		gtk_button_new_from_stock(GTK_STOCK_DELETE);
+		pidgin_button_new_from_stock(GTK_STOCK_DELETE);
 	gtk_box_pack_start(GTK_BOX(bbox), deletebutton, FALSE, FALSE, 0);
 	gtk_widget_show(deletebutton);
 	g_signal_connect(G_OBJECT(deletebutton), "clicked",

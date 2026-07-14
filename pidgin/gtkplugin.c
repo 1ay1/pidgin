@@ -521,7 +521,7 @@ static void plugin_dialog_response_cb(GtkWidget *d, int response, GtkTreeSelecti
 
 		dialog = gtk_dialog_new_with_buttons(PIDGIN_ALERT_TITLE, GTK_WINDOW(d),
 					     GTK_DIALOG_DESTROY_WITH_PARENT,
-					     GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					     pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE,
 					     NULL);
 		if (plugin_pref_dialogs == NULL)
 			plugin_pref_dialogs = g_hash_table_new(NULL, NULL);
@@ -729,7 +729,7 @@ void pidgin_plugin_dialog_show()
 	pref_button = gtk_dialog_add_button(GTK_DIALOG(plugin_dialog),
 						_("Configure Pl_ugin"), PIDGIN_RESPONSE_CONFIGURE);
 	gtk_dialog_add_button(GTK_DIALOG(plugin_dialog),
-						GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+						pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE);
 	gtk_widget_set_sensitive(pref_button, FALSE);
 	gtk_window_set_role(GTK_WINDOW(plugin_dialog), "plugins");
 

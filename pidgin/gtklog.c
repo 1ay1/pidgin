@@ -575,7 +575,7 @@ static PidginLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList *
 
 	/* Window ***********/
 	lv->window = gtk_dialog_new_with_buttons(title, NULL, 0,
-					     GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+					     pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE, NULL);
 #ifdef _WIN32
 	/* Steal the "HELP" response and use it to trigger browsing to the logs folder */
 	gtk_dialog_add_button(GTK_DIALOG(lv->window), _("_Browse logs folder"), GTK_RESPONSE_HELP);
@@ -666,7 +666,7 @@ static PidginLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList *
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 	lv->entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox), lv->entry, TRUE, TRUE, 0);
-	find_button = gtk_button_new_from_stock(GTK_STOCK_FIND);
+	find_button = pidgin_button_new_from_stock(GTK_STOCK_FIND);
 	gtk_box_pack_start(GTK_BOX(hbox), find_button, FALSE, FALSE, 0);
 	g_signal_connect(GTK_ENTRY(lv->entry), "activate", G_CALLBACK(search_cb), lv);
 	g_signal_connect(GTK_BUTTON(find_button), "clicked", G_CALLBACK(search_cb), lv);
@@ -774,8 +774,9 @@ void pidgin_log_show_contact(PurpleContact *contact) {
 	logs = g_list_sort(logs, purple_log_compare);
 
 	image = gtk_image_new();
-	pixbuf = gtk_widget_render_icon(image, PIDGIN_STOCK_STATUS_PERSON,
-					gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_SMALL), "GtkWindow");
+	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+					pidgin_stock_icon_name(PIDGIN_STOCK_STATUS_PERSON),
+					24, 0, NULL);
 	if (pixbuf) {
 		gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
 		g_object_unref(pixbuf);

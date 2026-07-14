@@ -1151,13 +1151,14 @@ cache_pixbufs(PidginStatusBox *status_box)
 
 	g_object_set(G_OBJECT(status_box->icon_rend), "xpad", 3, NULL);
 	icon_size = gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL);
+	(void)icon_size;
 
 	for (i = 0; i < G_N_ELEMENTS(status_box->connecting_pixbufs); i++) {
 		if (status_box->connecting_pixbufs[i] != NULL)
 			g_object_unref(G_OBJECT(status_box->connecting_pixbufs[i]));
 		if (connecting_stock_ids[i])
-			status_box->connecting_pixbufs[i] = gtk_widget_render_icon (GTK_WIDGET(status_box->vbox),
-					connecting_stock_ids[i], icon_size, "PidginStatusBox");
+			status_box->connecting_pixbufs[i] = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+					pidgin_stock_icon_name(connecting_stock_ids[i]), 16, 0, NULL);
 		else
 			status_box->connecting_pixbufs[i] = NULL;
 	}
@@ -1168,8 +1169,8 @@ cache_pixbufs(PidginStatusBox *status_box)
 		if (status_box->typing_pixbufs[i] != NULL)
 			g_object_unref(G_OBJECT(status_box->typing_pixbufs[i]));
 		if (typing_stock_ids[i])
-			status_box->typing_pixbufs[i] =  gtk_widget_render_icon (GTK_WIDGET(status_box->vbox),
-					typing_stock_ids[i], icon_size, "PidginStatusBox");
+			status_box->typing_pixbufs[i] =  gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+					pidgin_stock_icon_name(typing_stock_ids[i]), 16, 0, NULL);
 		else
 			status_box->typing_pixbufs[i] = NULL;
 	}
@@ -2250,10 +2251,9 @@ pidgin_status_box_redisplay_buddy_icon(PidginStatusBox *status_box)
 	if (status_box->buddy_icon == NULL)
 	{
 		/* Show a placeholder icon */
-		GtkIconSize icon_size = gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_SMALL);
-		status_box->buddy_icon = gtk_widget_render_icon(GTK_WIDGET(status_box),
-		                                                PIDGIN_STOCK_TOOLBAR_SELECT_AVATAR,
-		                                                icon_size, "PidginStatusBox");
+		status_box->buddy_icon = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+		                                                pidgin_stock_icon_name(PIDGIN_STOCK_TOOLBAR_SELECT_AVATAR),
+		                                                24, 0, NULL);
 	}
 
 	if (status_box->buddy_icon != NULL) {

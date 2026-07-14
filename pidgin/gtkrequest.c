@@ -309,7 +309,7 @@ destroy_multifield_cb(GtkWidget *dialog, GdkEvent *event,
 
 #define STOCK_ITEMIZE(r, l) \
 	if (purple_strequal((r), text)) \
-		return (l);
+		return pidgin_stock_label(l);
 
 static const char *
 text_to_stock(const char *text)
@@ -384,8 +384,8 @@ pidgin_request_input(const char *title, const char *primary,
 	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), hbox);
 
 	/* Dialog icon. */
-	img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
-					gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
+	img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
+				gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 
@@ -699,7 +699,7 @@ pidgin_request_action_with_icon(const char *title, const char *primary,
 	}
 
 	if (!img) {
-		img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
+		img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
 				       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 	}
 	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
@@ -1231,8 +1231,8 @@ pidgin_request_fields(const char *title, const char *primary,
 	gtk_widget_show(hbox);
 
 	/* Dialog icon. */
-	img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
-					gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
+	img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
+				gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 	gtk_widget_show(img);
@@ -1631,9 +1631,9 @@ pidgin_request_file(const char *title, const char *filename,
 						NULL,
 						savedialog ? GTK_FILE_CHOOSER_ACTION_SAVE
 								   : GTK_FILE_CHOOSER_ACTION_OPEN,
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						savedialog ? GTK_STOCK_SAVE
-								   : GTK_STOCK_OPEN,
+						pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+						savedialog ? pidgin_stock_label(GTK_STOCK_SAVE)
+								   : pidgin_stock_label(GTK_STOCK_OPEN),
 						GTK_RESPONSE_ACCEPT,
 						NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(filesel), GTK_RESPONSE_ACCEPT);
@@ -1703,8 +1703,8 @@ pidgin_request_folder(const char *title, const char *dirname,
 						title ? title : _("Select Folder..."),
 						NULL,
 						GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+						pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+						pidgin_stock_label(GTK_STOCK_OK), GTK_RESPONSE_ACCEPT,
 						NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dirsel), GTK_RESPONSE_ACCEPT);
 

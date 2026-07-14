@@ -3976,8 +3976,8 @@ gtk_imhtml_image_save(GtkWidget *w, GtkIMHtmlImageSave *save)
 	image->filesel = gtk_file_chooser_dialog_new(_("Save Image"),
 						NULL,
 						GTK_FILE_CHOOSER_ACTION_SAVE,
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+						pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+						pidgin_stock_label(GTK_STOCK_SAVE), GTK_RESPONSE_ACCEPT,
 						NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(image->filesel), GTK_RESPONSE_ACCEPT);
 	if (image->filename != NULL)
@@ -4018,7 +4018,7 @@ static gboolean gtk_imhtml_image_clicked(GtkWidget *w, GdkEvent *event, GtkIMHtm
 			menu = gtk_menu_new();
 
 			/* buttons and such */
-			img = gtk_image_new_from_stock(GTK_STOCK_SAVE, GTK_ICON_SIZE_MENU);
+			img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_SAVE), GTK_ICON_SIZE_MENU);
 			item = gtk_image_menu_item_new_with_mnemonic(_("_Save Image..."));
 			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 			g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(gtk_imhtml_image_save), save);
@@ -4028,7 +4028,7 @@ static gboolean gtk_imhtml_image_clicked(GtkWidget *w, GdkEvent *event, GtkIMHtm
 			/* we only add the menu if the image is of "custom smiley size"
 			  <= 96x96 pixels */
 			if (image->width <= 96 && image->height <= 96) {
-				img = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU);
+				img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_ADD), GTK_ICON_SIZE_MENU);
 				item = gtk_image_menu_item_new_with_mnemonic(_("_Add Custom Smiley..."));
 				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 				g_signal_connect(G_OBJECT(item), "activate",
@@ -5198,7 +5198,7 @@ void gtk_imhtml_insert_smiley_at_iter(GtkIMHtml *imhtml, const char *sml, char *
 		anchor = gtk_text_buffer_create_child_anchor(imhtml->text_buffer, iter);
 		imhtml_smiley->anchors = g_slist_append(imhtml_smiley->anchors, g_object_ref(anchor));
 		if (ebox) {
-			GtkWidget *img = gtk_image_new_from_stock(GTK_STOCK_MISSING_IMAGE, GTK_ICON_SIZE_MENU);
+			GtkWidget *img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_MISSING_IMAGE), GTK_ICON_SIZE_MENU);
 			gtk_container_add(GTK_CONTAINER(ebox), img);
 			gtk_widget_show(img);
 			g_object_set_data_full(G_OBJECT(anchor), "gtkimhtml_plaintext", g_strdup(unescaped), g_free);
@@ -5260,8 +5260,9 @@ void gtk_imhtml_insert_image_at_iter(GtkIMHtml *imhtml, int id, GtkTextIter *ite
 		g_object_unref(G_OBJECT(anim));
 	} else {
 		GdkPixbuf *pixbuf;
-		pixbuf = gtk_widget_render_icon(GTK_WIDGET(imhtml), GTK_STOCK_MISSING_IMAGE,
-						GTK_ICON_SIZE_BUTTON, "gtkimhtml-missing-image");
+		pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+				pidgin_stock_icon_name(GTK_STOCK_MISSING_IMAGE),
+				24, 0, NULL);
 		scalable = gtk_imhtml_image_new(pixbuf, filename, id);
 		g_object_unref(G_OBJECT(pixbuf));
 	}

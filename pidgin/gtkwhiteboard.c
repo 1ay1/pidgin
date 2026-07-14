@@ -234,14 +234,14 @@ static void pidgin_whiteboard_create(PurpleWhiteboard *wb)
 	gtk_widget_show(vbox_controls);
 
 	/* Add a clear button */
-	clear_button = gtk_button_new_from_stock(GTK_STOCK_CLEAR);
+	clear_button = pidgin_button_new_from_stock(GTK_STOCK_CLEAR);
 	gtk_box_pack_start(GTK_BOX(vbox_controls), clear_button, FALSE, FALSE, PIDGIN_HIG_BOX_SPACE);
 	gtk_widget_show(clear_button);
 	g_signal_connect(G_OBJECT(clear_button), "clicked",
 					 G_CALLBACK(pidgin_whiteboard_button_clear_press), gtkwb);
 
 	/* Add a save button */
-	save_button = gtk_button_new_from_stock(GTK_STOCK_SAVE);
+	save_button = pidgin_button_new_from_stock(GTK_STOCK_SAVE);
 	gtk_box_pack_start(GTK_BOX(vbox_controls), save_button, FALSE, FALSE, PIDGIN_HIG_BOX_SPACE);
 	gtk_widget_show(save_button);
 
@@ -249,7 +249,7 @@ static void pidgin_whiteboard_create(PurpleWhiteboard *wb)
 					 G_CALLBACK(pidgin_whiteboard_button_save_press), gtkwb);
 
 	/* Add a color selector */
-	color_button = gtk_button_new_from_stock(GTK_STOCK_SELECT_COLOR);
+	color_button = pidgin_button_new_from_stock(GTK_STOCK_SELECT_COLOR);
 	gtk_box_pack_start(GTK_BOX(vbox_controls), color_button, FALSE, FALSE, PIDGIN_HIG_BOX_SPACE);
 	gtk_widget_show(color_button);
 	g_signal_connect(G_OBJECT(color_button), "clicked",
@@ -762,8 +762,8 @@ static void pidgin_whiteboard_button_save_press(GtkWidget *widget, gpointer data
 	dialog = gtk_file_chooser_dialog_new (_("Save File"),
 										  GTK_WINDOW(gtkwb->window),
 										  GTK_FILE_CHOOSER_ACTION_SAVE,
-										  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-										  GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+										  pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+										  pidgin_stock_label(GTK_STOCK_SAVE), GTK_RESPONSE_ACCEPT,
 										  NULL);
 
 	/* gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), (gboolean)(TRUE)); */

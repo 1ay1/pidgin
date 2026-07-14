@@ -518,12 +518,12 @@ pidgin_notify_message(PurpleNotifyMsgType type, const char *title,
 
 	if (icon_name != NULL)
 	{
-		img = gtk_image_new_from_stock(icon_name, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
+		img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(icon_name), gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 		gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
 	}
 
 	dialog = gtk_dialog_new_with_buttons(title ? title : PIDGIN_ALERT_TITLE,
-										 NULL, 0, GTK_STOCK_CLOSE,
+										 NULL, 0, pidgin_stock_label(GTK_STOCK_CLOSE),
 										 GTK_RESPONSE_CLOSE, NULL);
 
 	gtk_window_set_role(GTK_WINDOW(dialog), "notify_dialog");
@@ -778,8 +778,8 @@ pidgin_notify_emails(PurpleConnection *gc, size_t count, gboolean detailed,
 	}
 
 	if (!gtk_widget_get_visible(mail_dialog->dialog)) {
-		GdkPixbuf *pixbuf = gtk_widget_render_icon(mail_dialog->dialog, PIDGIN_STOCK_DIALOG_MAIL,
-							   gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL), NULL);
+		GdkPixbuf *pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+						   pidgin_stock_icon_name(PIDGIN_STOCK_DIALOG_MAIL), 16, 0, NULL);
 		char *label_text = g_strdup_printf(ngettext("<b>%d new email.</b>",
 							    "<b>%d new emails.</b>",
 							    mail_dialog->total_count), mail_dialog->total_count);
@@ -881,7 +881,7 @@ pidgin_notify_formatted(const char *title, const char *primary,
 	gtk_widget_show(frame);
 
 	/* Add the Close button. */
-	button = gtk_dialog_add_button(GTK_DIALOG(window), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+	button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE);
 	gtk_widget_grab_focus(button);
 
 	g_signal_connect_swapped(G_OBJECT(button), "clicked",
@@ -1074,22 +1074,22 @@ pidgin_notify_searchresults(PurpleConnection *gc, const char *title,
 				}
 				break;
 			case PURPLE_NOTIFY_BUTTON_CONTINUE:
-				button = gtk_dialog_add_button(GTK_DIALOG(window), GTK_STOCK_GO_FORWARD, GTK_RESPONSE_NONE);
+				button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(GTK_STOCK_GO_FORWARD), GTK_RESPONSE_NONE);
 				break;
 			case PURPLE_NOTIFY_BUTTON_ADD:
-				button = gtk_dialog_add_button(GTK_DIALOG(window), GTK_STOCK_ADD, GTK_RESPONSE_NONE);
+				button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(GTK_STOCK_ADD), GTK_RESPONSE_NONE);
 				break;
 			case PURPLE_NOTIFY_BUTTON_INFO:
-				button = gtk_dialog_add_button(GTK_DIALOG(window), PIDGIN_STOCK_TOOLBAR_USER_INFO, GTK_RESPONSE_NONE);
+				button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(PIDGIN_STOCK_TOOLBAR_USER_INFO), GTK_RESPONSE_NONE);
 				break;
 			case PURPLE_NOTIFY_BUTTON_IM:
-				button = gtk_dialog_add_button(GTK_DIALOG(window), PIDGIN_STOCK_TOOLBAR_MESSAGE_NEW, GTK_RESPONSE_NONE);
+				button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(PIDGIN_STOCK_TOOLBAR_MESSAGE_NEW), GTK_RESPONSE_NONE);
 				break;
 			case PURPLE_NOTIFY_BUTTON_JOIN:
-				button = gtk_dialog_add_button(GTK_DIALOG(window), PIDGIN_STOCK_CHAT, GTK_RESPONSE_NONE);
+				button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(PIDGIN_STOCK_CHAT), GTK_RESPONSE_NONE);
 				break;
 			case PURPLE_NOTIFY_BUTTON_INVITE:
-				button = gtk_dialog_add_button(GTK_DIALOG(window), PIDGIN_STOCK_INVITE, GTK_RESPONSE_NONE);
+				button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(PIDGIN_STOCK_INVITE), GTK_RESPONSE_NONE);
 				break;
 			default:
 				purple_debug_warning("gtknotify", "Incorrect button type: %d\n", b->type);
@@ -1108,7 +1108,7 @@ pidgin_notify_searchresults(PurpleConnection *gc, const char *title,
 	}
 
 	/* Add the Close button */
-	close_button = gtk_dialog_add_button(GTK_DIALOG(window), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+	close_button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE);
 
 	g_signal_connect_swapped(G_OBJECT(close_button), "clicked",
 	                         G_CALLBACK(searchresults_close_cb), data);
@@ -1613,7 +1613,7 @@ pidgin_create_notification_dialog(PidginNotifyType type)
 					 _("Open All Messages"), GTK_RESPONSE_ACCEPT);
 
 		button = gtk_dialog_add_button(GTK_DIALOG(dialog),
-						 PIDGIN_STOCK_OPEN_MAIL, GTK_RESPONSE_YES);
+						 pidgin_stock_label(PIDGIN_STOCK_OPEN_MAIL), GTK_RESPONSE_YES);
 		spec_dialog->open_button = button;
 
 		gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(spec_dialog->treeview), FALSE);
@@ -1651,7 +1651,7 @@ pidgin_create_notification_dialog(PidginNotifyType type)
 		spec_dialog->open_button = button;
 
 		button = gtk_dialog_add_button(GTK_DIALOG(dialog),
-						PIDGIN_STOCK_MODIFY, GTK_RESPONSE_APPLY);
+						pidgin_stock_label(PIDGIN_STOCK_MODIFY), GTK_RESPONSE_APPLY);
 		gtk_widget_set_sensitive(button, FALSE);
 		spec_dialog->edit_button = button;
 
@@ -1718,7 +1718,7 @@ pidgin_create_notification_dialog(PidginNotifyType type)
 	}
 
 	gtk_dialog_add_button(GTK_DIALOG(dialog),
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+		pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE);
 
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);

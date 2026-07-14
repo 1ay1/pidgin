@@ -997,7 +997,7 @@ make_blist_request_dialog(PidginBlistRequestData *data, PurpleAccount *account,
 
 	data->account = account;
 
-	img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
+	img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
 		gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 
 	gtkblist = PIDGIN_BLIST(purple_get_blist());
@@ -1167,8 +1167,8 @@ pidgin_blist_joinchat_show(void)
 		chat_account_filter_func, (GCallback)do_joinchat);
 	gtk_dialog_add_buttons(GTK_DIALOG(data->rq_data.window),
 		_("Room _List"), 1,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		PIDGIN_STOCK_CHAT, GTK_RESPONSE_OK, NULL);
+		pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+		pidgin_stock_label(PIDGIN_STOCK_CHAT), GTK_RESPONSE_OK, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(data->rq_data.window),
 		GTK_RESPONSE_OK);
 	data->default_chat_name = NULL;
@@ -4092,7 +4092,9 @@ pidgin_blist_get_status_icon(PurpleBlistNode *node, PidginStatusIconSize size)
 	PurpleBuddy *buddy = NULL;
 	PurpleChat *chat = NULL;
 	GtkIconSize icon_size = gtk_icon_size_from_name((size == PIDGIN_STATUS_ICON_LARGE) ? PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL :
-											 PIDGIN_ICON_SIZE_TANGO_MICROSCOPIC);
+							 PIDGIN_ICON_SIZE_TANGO_MICROSCOPIC);
+	gint icon_px = (size == PIDGIN_STATUS_ICON_LARGE) ? 16 : 11;
+	(void)icon_size;
 
 	if(PURPLE_BLIST_NODE_IS_CONTACT(node)) {
 		if(!gtknode->contact_expanded) {
@@ -4133,8 +4135,8 @@ pidgin_blist_get_status_icon(PurpleBlistNode *node, PidginStatusIconSize size)
 			if (gtkconv == NULL && size == PIDGIN_STATUS_ICON_SMALL) {
 				PidginBlistNode *ui = buddy->node.ui_data;
 				if (ui == NULL || (ui->conv.flags & PIDGIN_BLIST_NODE_HAS_PENDING_MESSAGE))
-					return gtk_widget_render_icon (GTK_WIDGET(gtkblist->treeview),
-							PIDGIN_STOCK_STATUS_MESSAGE, icon_size, "GtkTreeView");
+					return gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+							pidgin_stock_icon_name(PIDGIN_STOCK_STATUS_MESSAGE), icon_px, 0, NULL);
 			}
 		}
 
@@ -4174,8 +4176,8 @@ pidgin_blist_get_status_icon(PurpleBlistNode *node, PidginStatusIconSize size)
 		icon = PIDGIN_STOCK_STATUS_PERSON;
 	}
 
-	ret = gtk_widget_render_icon (GTK_WIDGET(gtkblist->treeview), icon,
-			icon_size, "GtkTreeView");
+	ret = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+			pidgin_stock_icon_name(icon), icon_px, 0, NULL);
 	return ret;
 }
 
@@ -4665,8 +4667,8 @@ conversation_updated_cb(PurpleConversation *conv, PurpleConvUpdateType type,
 		if(tooltip_text->len > 0) {
 			/* get rid of the last newline */
 			g_string_truncate(tooltip_text, tooltip_text->len -1);
-			img = gtk_image_new_from_stock(PIDGIN_STOCK_TOOLBAR_PENDING,
-							gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+			img = pidgin_image_new_from_stock(PIDGIN_STOCK_TOOLBAR_PENDING,
+						gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 
 			gtkblist->menutrayicon = gtk_event_box_new();
 			gtk_container_add(GTK_CONTAINER(gtkblist->menutrayicon), img);
@@ -5961,13 +5963,13 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 			  NULL);
 	gtk_widget_set_name(gtkblist->headline_hbox, "gtk-tooltips");
 
-	gtkblist->headline_close = gtk_widget_render_icon(ebox, GTK_STOCK_CLOSE,
-		gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_MICROSCOPIC), NULL);
+	gtkblist->headline_close = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+		pidgin_stock_icon_name(GTK_STOCK_CLOSE), 11, 0, NULL);
 	gtkblist->hand_cursor = gdk_cursor_new (GDK_HAND2);
 	gtkblist->arrow_cursor = gdk_cursor_new (GDK_LEFT_PTR);
 
 	/* Close button. */
-	close = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+	close = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_CLOSE), GTK_ICON_SIZE_MENU);
 	close = pidgin_create_small_button(close);
 	gtk_box_pack_start(GTK_BOX(gtkblist->headline_hbox), close, FALSE, FALSE, 0);
 #if GTK_CHECK_VERSION(2,12,0)
@@ -7202,8 +7204,8 @@ pidgin_blist_request_add_buddy(PurpleAccount *account, const char *username,
 		G_CALLBACK(add_buddy_select_account_cb), add_buddy_account_filter_func,
 		G_CALLBACK(add_buddy_cb));
 	gtk_dialog_add_buttons(GTK_DIALOG(data->rq_data.window),
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_ADD, GTK_RESPONSE_OK,
+			pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+			pidgin_stock_label(GTK_STOCK_ADD), GTK_RESPONSE_OK,
 			NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(data->rq_data.window),
 			GTK_RESPONSE_OK);
@@ -7382,8 +7384,8 @@ pidgin_blist_request_add_chat(PurpleAccount *account, PurpleGroup *group,
 			G_CALLBACK(add_chat_resp_cb)));
 	gtk_dialog_add_buttons(GTK_DIALOG(data->chat_data.rq_data.window),
 		_("Room List"), 1,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_ADD, GTK_RESPONSE_OK,
+		pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+		pidgin_stock_label(GTK_STOCK_ADD), GTK_RESPONSE_OK,
 		NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(data->chat_data.rq_data.window),
 			GTK_RESPONSE_OK);

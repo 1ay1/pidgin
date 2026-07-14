@@ -1077,13 +1077,13 @@ pidgin_media_ready_cb(PurpleMedia *media, PidginMedia *gtkmedia, const gchar *si
 
 	/* set the window icon according to the type */
 	if (type & PURPLE_MEDIA_VIDEO) {
-		icon = gtk_widget_render_icon(GTK_WIDGET(gtkmedia),
-			PIDGIN_STOCK_TOOLBAR_VIDEO_CALL,
-			gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_LARGE), NULL);
+		icon = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+			pidgin_stock_icon_name(PIDGIN_STOCK_TOOLBAR_VIDEO_CALL),
+			48, 0, NULL);
 	} else if (type & PURPLE_MEDIA_AUDIO) {
-		icon = gtk_widget_render_icon(GTK_WIDGET(gtkmedia),
-			PIDGIN_STOCK_TOOLBAR_AUDIO_CALL,
-			gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_LARGE), NULL);
+		icon = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+			pidgin_stock_icon_name(PIDGIN_STOCK_TOOLBAR_AUDIO_CALL),
+			48, 0, NULL);
 	}
 
 	if (icon) {

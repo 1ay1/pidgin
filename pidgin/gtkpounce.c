@@ -841,13 +841,13 @@ pidgin_pounce_editor_show(PurpleAccount *account, const char *name,
 	gtk_widget_show(dialog->save_pounce);
 
 	/* Cancel button */
-	button = gtk_dialog_add_button(GTK_DIALOG(window), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+	button = gtk_dialog_add_button(GTK_DIALOG(window), pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL);
 	g_signal_connect(G_OBJECT(button), "clicked",
 					 G_CALLBACK(cancel_cb), dialog);
 
 	/* Save/Add button */
 	dialog->save_button = button = gtk_dialog_add_button(GTK_DIALOG(window),
-	                                                     (cur_pounce == NULL ? GTK_STOCK_ADD : GTK_STOCK_SAVE),
+	                                                     (cur_pounce == NULL ? pidgin_stock_label(GTK_STOCK_ADD) : pidgin_stock_label(GTK_STOCK_SAVE)),
 	                                                     GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(button), "clicked",
 	                 G_CALLBACK(save_pounce_cb), dialog);

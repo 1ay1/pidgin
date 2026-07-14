@@ -177,8 +177,8 @@ find_cb(GtkWidget *w, DebugWindow *win)
 	f->window = win;
 	win->find = gtk_dialog_new_with_buttons(_("Find"),
 					GTK_WINDOW(win->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-					GTK_STOCK_FIND, GTK_RESPONSE_OK, NULL);
+					pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE,
+					pidgin_stock_label(GTK_STOCK_FIND), GTK_RESPONSE_OK, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(win->find),
 					 GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(win->find), "response",
@@ -806,7 +806,7 @@ debug_window_new(void)
 
 #ifndef USE_REGEX
 		/* Find button */
-		item = gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
+		item = gtk_tool_button_new(gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_FIND), GTK_ICON_SIZE_LARGE_TOOLBAR), pidgin_stock_label(GTK_STOCK_FIND));
 		gtk_tool_item_set_is_important(item, TRUE);
 #if GTK_CHECK_VERSION(2,12,0)
 		gtk_tool_item_set_tooltip_text(item, _("Find"));
@@ -818,7 +818,7 @@ debug_window_new(void)
 #endif /* USE_REGEX */
 
 		/* Save */
-		item = gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
+		item = gtk_tool_button_new(gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_SAVE), GTK_ICON_SIZE_LARGE_TOOLBAR), pidgin_stock_label(GTK_STOCK_SAVE));
 		gtk_tool_item_set_is_important(item, TRUE);
 #if GTK_CHECK_VERSION(2,12,0)
 		gtk_tool_item_set_tooltip_text(item, _("Save"));
@@ -829,7 +829,7 @@ debug_window_new(void)
 		gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(item));
 
 		/* Clear button */
-		item = gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR);
+		item = gtk_tool_button_new(gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_CLEAR), GTK_ICON_SIZE_LARGE_TOOLBAR), pidgin_stock_label(GTK_STOCK_CLEAR));
 		gtk_tool_item_set_is_important(item, TRUE);
 #if GTK_CHECK_VERSION(2,12,0)
 		gtk_tool_item_set_tooltip_text(item, _("Clear"));

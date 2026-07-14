@@ -36,7 +36,7 @@ static guint embed_timeout = 0;
 /* protos */
 static void docklet_gtk_status_create(gboolean);
 
-static gboolean
+static gboolean G_GNUC_UNUSED
 docklet_gtk_recreate_cb(gpointer data)
 {
 	docklet_gtk_status_create(TRUE);
@@ -102,7 +102,7 @@ docklet_gtk_embedded_cb(GtkWidget *widget, gpointer data)
 }
 #endif
 
-static void
+static void G_GNUC_UNUSED
 docklet_gtk_destroyed_cb(GtkWidget *widget, gpointer data)
 {
 	purple_debug_info("docklet", "destroyed\n");
@@ -137,7 +137,11 @@ static void
 docklet_gtk_status_update_icon(PurpleStatusPrimitive status, gboolean connecting, gboolean pending)
 {
 	const gchar *icon_name = NULL;
-	const gchar *current_icon_name = gtk_status_icon_get_icon_name(docklet);
+	const gchar *current_icon_name;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+	current_icon_name = gtk_status_icon_get_icon_name(docklet);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 	switch (status) {
 		case PURPLE_STATUS_OFFLINE:
@@ -169,14 +173,18 @@ docklet_gtk_status_update_icon(PurpleStatusPrimitive status, gboolean connecting
 	}
 
 	if (icon_name) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 		gtk_status_icon_set_from_icon_name(docklet, icon_name);
+G_GNUC_END_IGNORE_DEPRECATIONS
 	}
 }
 
 static void
 docklet_gtk_status_set_tooltip(gchar *tooltip)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	gtk_status_icon_set_tooltip_text(docklet, tooltip);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -184,7 +192,9 @@ docklet_gtk_status_position_menu(GtkMenu *menu,
                                  int *x, int *y, gboolean *push_in,
                                  gpointer user_data)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	gtk_status_icon_position_menu(menu, x, y, push_in, docklet);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -200,7 +210,6 @@ docklet_gtk_status_destroy(void)
 	}
 
 	gtk_status_icon_set_visible(docklet, FALSE);
-	g_signal_handlers_disconnect_by_func(G_OBJECT(docklet), G_CALLBACK(docklet_gtk_destroyed_cb), NULL);
 	g_object_unref(G_OBJECT(docklet));
 	docklet = NULL;
 
@@ -218,17 +227,35 @@ docklet_gtk_status_create(gboolean recreate)
 		docklet_gtk_status_destroy();
 	}
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	docklet = gtk_status_icon_new();
-	g_return_if_fail(docklet != NULL);
+G_GNUC_END_IGNORE_DEPRECATIONS
+	if (docklet == NULL || !G_IS_OBJECT(docklet)) {
+		/* GtkStatusIcon is deprecated and does not work on some display
+		 * servers (e.g. Wayland with no XEmbed tray); bail out cleanly so we
+		 * don't connect signals to a non-object or leave the buddy list
+		 * permanently hidden waiting for an embed that never happens. */
+		purple_debug_warning("docklet",
+			"gtk_status_icon_new() unavailable; disabling tray icon\n");
+		docklet = NULL;
+		if (!recreate)
+			pidgin_docklet_remove();
+		return;
+	}
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	g_signal_connect(G_OBJECT(docklet), "activate", G_CALLBACK(docklet_gtk_status_activated_cb), NULL);
 	g_signal_connect(G_OBJECT(docklet), "popup-menu", G_CALLBACK(docklet_gtk_status_clicked_cb), NULL);
 #if GTK_CHECK_VERSION(2,12,0)
 	g_signal_connect(G_OBJECT(docklet), "notify::embedded", G_CALLBACK(docklet_gtk_embedded_cb), NULL);
 #endif
-	g_signal_connect(G_OBJECT(docklet), "destroy", G_CALLBACK(docklet_gtk_destroyed_cb), NULL);
+	/* NOTE: GtkStatusIcon is a GObject, not a GtkWidget, and has no "destroy"
+	 * signal in GTK3 — connecting one throws a g_signal critical and the
+	 * handler (which unrefs the icon) can never fire.  The icon's lifetime is
+	 * managed explicitly in docklet_gtk_status_destroy(). */
 
 	gtk_status_icon_set_visible(docklet, TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 	/* This is a hack to avoid a race condition between the docklet getting
 	 * embedded in the notification area and the gtkblist restoring its

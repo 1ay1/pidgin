@@ -256,13 +256,13 @@ update_detailed_info(PidginXferDialog *dialog, PurpleXfer *xfer)
 
 		GdkPixbuf *pixbuf = NULL;
 
-		pixbuf = gtk_widget_render_icon(xfer_dialog->window,
-										PIDGIN_STOCK_FILE_DONE,
-										GTK_ICON_SIZE_MENU, NULL);
+		pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+						pidgin_stock_icon_name(PIDGIN_STOCK_FILE_DONE),
+						16, 0, NULL);
 
 		gtk_list_store_set(GTK_LIST_STORE(xfer_dialog->model), &data->iter,
-						   COLUMN_STATUS, pixbuf,
-						   -1);
+					   COLUMN_STATUS, pixbuf,
+					   -1);
 
 		g_object_unref(pixbuf);
 	}
@@ -782,7 +782,7 @@ pidgin_xfer_dialog_new(void)
 	gtk_widget_show(bbox);
 
 #define ADD_BUTTON(b, label, callback, callbackdata) do { \
-		GtkWidget *button = gtk_button_new_from_stock(label); \
+		GtkWidget *button = pidgin_button_new_from_stock(label); \
 		gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0); \
 		g_signal_connect(G_OBJECT(button), "clicked", callback, callbackdata); \
 		gtk_widget_show(button); \
@@ -881,11 +881,11 @@ pidgin_xfer_dialog_add_xfer(PidginXferDialog *dialog, PurpleXfer *xfer)
 	size_str      = purple_str_size_to_units(purple_xfer_get_size(xfer));
 	remaining_str = purple_str_size_to_units(purple_xfer_get_bytes_remaining(xfer));
 
-	pixbuf = gtk_widget_render_icon(dialog->window,
-									(type == PURPLE_XFER_RECEIVE
-									 ? PIDGIN_STOCK_DOWNLOAD
-									 : PIDGIN_STOCK_UPLOAD),
-									GTK_ICON_SIZE_MENU, NULL);
+	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+					(type == PURPLE_XFER_RECEIVE
+					 ? pidgin_stock_icon_name(PIDGIN_STOCK_DOWNLOAD)
+					 : pidgin_stock_icon_name(PIDGIN_STOCK_UPLOAD)),
+					16, 0, NULL);
 
 	gtk_list_store_append(dialog->model, &data->iter);
 	lfilename = g_path_get_basename(purple_xfer_get_local_filename(xfer));
@@ -975,9 +975,9 @@ pidgin_xfer_dialog_cancel_xfer(PidginXferDialog *dialog,
 	update_detailed_info(dialog, xfer);
 	update_title_progress(dialog);
 
-	pixbuf = gtk_widget_render_icon(dialog->window,
-									PIDGIN_STOCK_FILE_CANCELED,
-									GTK_ICON_SIZE_MENU, NULL);
+	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+					pidgin_stock_icon_name(PIDGIN_STOCK_FILE_CANCELED),
+					16, 0, NULL);
 
 	if (purple_xfer_is_canceled(xfer))
 		status = _("Cancelled");
@@ -1038,13 +1038,13 @@ pidgin_xfer_dialog_update_xfer(PidginXferDialog *dialog,
 	{
 		GdkPixbuf *pixbuf;
 
-		pixbuf = gtk_widget_render_icon(dialog->window,
-										PIDGIN_STOCK_FILE_DONE,
-										GTK_ICON_SIZE_MENU, NULL);
+		pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+						pidgin_stock_icon_name(PIDGIN_STOCK_FILE_DONE),
+						16, 0, NULL);
 
 		gtk_list_store_set(GTK_LIST_STORE(xfer_dialog->model), &data->iter,
-						   COLUMN_STATUS, pixbuf,
-						   COLUMN_REMAINING, _("Finished"),
+					   COLUMN_STATUS, pixbuf,
+					   COLUMN_REMAINING, _("Finished"),
 						   -1);
 
 		g_object_unref(pixbuf);

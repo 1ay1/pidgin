@@ -97,6 +97,41 @@ pidgin_if_translate(GtkItemFactory *ift, const gchar *path)
 	return path;
 }
 
+/*
+ * Canonicalise a menu path for use as a cache key: strip mnemonic underscores
+ * ('_') from each component so that a branch declared as "/_Buddies" and a
+ * child referenced as "/Buddies/..." resolve to the SAME node.  Without this,
+ * the child's parent lookup misses and the shim creates a duplicate top-level
+ * menu ("Buddies Buddies").  A literal underscore in a label is written "__"
+ * in GTK item-factory paths and is preserved as a single '_'.  Caller frees.
+ */
+static gchar *
+pidgin_if_strip_uline(const gchar *path)
+{
+	GString *out = g_string_new(NULL);
+	const gchar *p = path;
+
+	if (path == NULL)
+		return NULL;
+
+	while (*p) {
+		if (*p == '_') {
+			if (p[1] == '_') {
+				/* Escaped literal underscore. */
+				g_string_append_c(out, '_');
+				p += 2;
+				continue;
+			}
+			/* Mnemonic marker: drop it. */
+			p++;
+			continue;
+		}
+		g_string_append_c(out, *p);
+		p++;
+	}
+	return g_string_free(out, FALSE);
+}
+
 /* Parse "<CTL><SHIFT>M" style accelerators into key+mods. */
 static void
 pidgin_if_parse_accel(const gchar *accel, guint *key, GdkModifierType *mods)
@@ -147,20 +182,24 @@ pidgin_if_ensure_parent(GtkItemFactory *ift, const gchar *path, gchar **leaf)
 	/* parts[0] == "" (before leading slash). Walk parts[1..n-2] as branches. */
 	for (i = 1; i + 1 < n; i++) {
 		GtkWidget *item, *submenu;
+		gchar *key;
 		g_string_append_c(acc, '/');
 		g_string_append(acc, parts[i]);
 
-		item = g_hash_table_lookup(ift->widgets, acc->str);
+		/* Cache key ignores mnemonic underscores so "/_Buddies" (declared
+		 * by the <Branch> entry) and "/Buddies" (used by children) match. */
+		key = pidgin_if_strip_uline(acc->str);
+		item = g_hash_table_lookup(ift->widgets, key);
 		if (item == NULL) {
 			/* Should have been created by a <Branch> entry, but be tolerant. */
-			const gchar *lbl = pidgin_if_translate(ift, acc->str);
-			const gchar *disp = strrchr(lbl, '/');
-			disp = disp ? disp + 1 : lbl;
+			const gchar *disp = strrchr(acc->str, '/');
+			disp = disp ? disp + 1 : acc->str;
 			item = gtk_menu_item_new_with_mnemonic(disp);
 			gtk_menu_shell_append(GTK_MENU_SHELL(shell), item);
 			gtk_widget_show(item);
-			g_hash_table_insert(ift->widgets, g_strdup(acc->str), item);
+			g_hash_table_insert(ift->widgets, g_strdup(key), item);
 		}
+		g_free(key);
 		submenu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
 		if (submenu == NULL) {
 			submenu = gtk_menu_new();
@@ -238,10 +277,10 @@ pidgin_if_create_one(GtkItemFactory *ift, GtkItemFactoryEntry *e,
 		                      pidgin_if_closure_free, 0);
 	}
 
-	g_hash_table_insert(ift->widgets, g_strdup(tpath), item);
+	g_hash_table_insert(ift->widgets, pidgin_if_strip_uline(tpath), item);
 	/* Also index by the untranslated path so get_widget(N_("...")) works. */
 	if (g_strcmp0(tpath, e->path) != 0)
-		g_hash_table_insert(ift->widgets, g_strdup(e->path), item);
+		g_hash_table_insert(ift->widgets, pidgin_if_strip_uline(e->path), item);
 
 	g_free(leaf);
 }
@@ -260,20 +299,63 @@ GtkWidget *
 gtk_item_factory_get_widget(GtkItemFactory *ift, const gchar *path)
 {
 	GtkWidget *w;
+	gchar *key;
 	g_return_val_if_fail(ift != NULL, NULL);
 
 	/* The root branch is requested by its "<...Main>" path. */
 	w = g_hash_table_lookup(ift->widgets, path);
-	if (w)
-		return w;
+	if (w == NULL)
+		w = g_hash_table_lookup(ift->widgets, pidgin_if_translate(ift, path));
+	if (w == NULL) {
+		/* Items are cached under mnemonic-stripped keys; strip the query. */
+		key = pidgin_if_strip_uline(path);
+		w = g_hash_table_lookup(ift->widgets, key);
+		g_free(key);
+	}
+	if (w == NULL) {
+		key = pidgin_if_strip_uline(pidgin_if_translate(ift, path));
+		w = g_hash_table_lookup(ift->widgets, key);
+		g_free(key);
+	}
 
-	/* Fall back to the translated form. */
-	return g_hash_table_lookup(ift->widgets, pidgin_if_translate(ift, path));
+	/*
+	 * GtkItemFactory semantics: get_widget() on a <Branch> path returns the
+	 * branch's SUBMENU (a GtkMenu), not the menu-item.  Callers append items
+	 * to it and query its accel group, so we must unwrap the submenu here.
+	 * The toplevel menu bar/menu is returned as-is.
+	 */
+	if (w != NULL && GTK_IS_MENU_ITEM(w)) {
+		GtkWidget *submenu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(w));
+		if (submenu != NULL)
+			return submenu;
+	}
+	return w;
 }
 
 GtkWidget *
 gtk_item_factory_get_item(GtkItemFactory *ift, const gchar *path)
 {
-	/* Identical semantics for our uses. */
-	return gtk_item_factory_get_widget(ift, path);
+	GtkWidget *w;
+	gchar *key;
+	g_return_val_if_fail(ift != NULL, NULL);
+
+	/*
+	 * get_item() returns the menu-ITEM for a path (unlike get_widget(),
+	 * which unwraps a <Branch> to its submenu).  Look up the cached item
+	 * directly, trying the raw, translated, and mnemonic-stripped keys.
+	 */
+	w = g_hash_table_lookup(ift->widgets, path);
+	if (w == NULL)
+		w = g_hash_table_lookup(ift->widgets, pidgin_if_translate(ift, path));
+	if (w == NULL) {
+		key = pidgin_if_strip_uline(path);
+		w = g_hash_table_lookup(ift->widgets, key);
+		g_free(key);
+	}
+	if (w == NULL) {
+		key = pidgin_if_strip_uline(pidgin_if_translate(ift, path));
+		w = g_hash_table_lookup(ift->widgets, key);
+		g_free(key);
+	}
+	return w;
 }

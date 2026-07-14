@@ -401,8 +401,8 @@ pidgin_smiley_edit(GtkWidget *widget, PurpleSmiley *smiley)
 	window = gtk_dialog_new_with_buttons(smiley ? _("Edit Smiley") : _("Add Smiley"),
 			widget ? GTK_WINDOW(widget) : NULL,
 			GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			smiley ? GTK_STOCK_SAVE : GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT,
+			pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+			smiley ? pidgin_stock_label(GTK_STOCK_SAVE) : pidgin_stock_label(GTK_STOCK_ADD), GTK_RESPONSE_ACCEPT,
 			NULL);
 	s->parent = window;
 	if (smiley)
@@ -865,10 +865,10 @@ void pidgin_smiley_manager_show(void)
 			_("Custom Smiley Manager"),
 			NULL,
 			GTK_DIALOG_DESTROY_WITH_PARENT,
-			PIDGIN_STOCK_ADD, GTK_RESPONSE_YES,
-			PIDGIN_STOCK_MODIFY, PIDGIN_RESPONSE_MODIFY,
-			GTK_STOCK_DELETE, GTK_RESPONSE_NO,
-			GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+			pidgin_stock_label(PIDGIN_STOCK_ADD), GTK_RESPONSE_YES,
+			pidgin_stock_label(PIDGIN_STOCK_MODIFY), PIDGIN_RESPONSE_MODIFY,
+			pidgin_stock_label(GTK_STOCK_DELETE), GTK_RESPONSE_NO,
+			pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE,
 			NULL);
 
 	gtk_window_set_default_size(GTK_WINDOW(win), 50, 400);

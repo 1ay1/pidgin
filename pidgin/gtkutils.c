@@ -239,11 +239,191 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
+/*
+ * GTK3 stock-item compatibility.
+ *
+ * GTK+ stock items (GTK_STOCK_*) are deprecated and no longer supply a label
+ * or an icon in GTK3 themes; passing an id like "gtk-close" to a button label
+ * setter renders the literal text "gtk-close".  Pidgin's UI still refers to a
+ * bounded set of stock ids, so we resolve them here to a translatable mnemonic
+ * label and a freedesktop icon-name that GTK3 icon themes actually provide.
+ * Non-stock strings are returned/handled unchanged, so callers may pass either.
+ */
+static const struct {
+	const char *stock;      /* the GTK_STOCK_* string, e.g. "gtk-close"   */
+	const char *label;      /* translatable mnemonic label               */
+	const char *icon_name;  /* themed icon-name, or NULL                  */
+} pidgin_stock_compat[] = {
+	{ "gtk-about",         N_("_About"),          "help-about"            },
+	{ "gtk-add",           N_("_Add"),            "list-add"              },
+	{ "gtk-apply",         N_("_Apply"),          "gtk-apply"             },
+	{ "gtk-bold",          N_("_Bold"),           "format-text-bold"      },
+	{ "gtk-cancel",        N_("_Cancel"),         "process-stop"          },
+	{ "gtk-clear",         N_("C_lear"),          "edit-clear"            },
+	{ "gtk-close",         N_("_Close"),          "window-close"          },
+	{ "gtk-copy",          N_("_Copy"),           "edit-copy"             },
+	{ "gtk-delete",        N_("_Delete"),         "edit-delete"           },
+	{ "gtk-dialog-error",  NULL,                  "dialog-error"          },
+	{ "gtk-directory",     NULL,                  "folder"                },
+	{ "gtk-disconnect",    N_("_Disconnect"),     "network-offline"       },
+	{ "gtk-edit",          N_("_Edit"),           "gtk-edit"              },
+	{ "gtk-execute",       N_("E_xecute"),        "system-run"            },
+	{ "gtk-find",          N_("_Find"),           "edit-find"             },
+	{ "gtk-go-down",       N_("_Down"),           "go-down"               },
+	{ "gtk-go-forward",    N_("_Forward"),        "go-next"               },
+	{ "gtk-go-up",         N_("_Up"),             "go-up"                 },
+	{ "gtk-help",          N_("_Help"),           "help-browser"          },
+	{ "gtk-index",         N_("_Index"),          "help-contents"         },
+	{ "gtk-info",          N_("_Information"),     "dialog-information"     },
+	{ "gtk-italic",        N_("_Italic"),         "format-text-italic"    },
+	{ "gtk-jump-to",       N_("_Jump to"),        "go-jump"               },
+	{ "gtk-media-pause",   N_("P_ause"),          "media-playback-pause"  },
+	{ "gtk-media-play",    N_("_Play"),           "media-playback-start"  },
+	{ "gtk-missing-image", NULL,                  "image-missing"         },
+	{ "gtk-no",            N_("_No"),             NULL                    },
+	{ "gtk-ok",            N_("_OK"),             "gtk-ok"                },
+	{ "gtk-open",          N_("_Open"),           "document-open"         },
+	{ "gtk-preferences",   N_("_Preferences"),    "preferences-system"    },
+	{ "gtk-properties",    N_("_Properties"),     "document-properties"   },
+	{ "gtk-quit",          N_("_Quit"),           "application-exit"      },
+	{ "gtk-redo",          N_("_Redo"),           "edit-redo"             },
+	{ "gtk-refresh",       N_("_Refresh"),        "view-refresh"          },
+	{ "gtk-remove",        N_("_Remove"),         "list-remove"           },
+	{ "gtk-save",          N_("_Save"),           "document-save"         },
+	{ "gtk-save-as",       N_("Save _As"),        "document-save-as"      },
+	{ "gtk-select-color",  N_("_Color"),          "gtk-select-color"      },
+	{ "gtk-stop",          N_("_Stop"),           "process-stop"          },
+	{ "gtk-strikethrough", N_("_Strikethrough"),  "format-text-strikethrough" },
+	{ "gtk-underline",     N_("_Underline"),      "format-text-underline" },
+	{ "gtk-yes",           N_("_Yes"),            NULL                    },
+	{ "gtk-zoom-in",       N_("Zoom _In"),        "zoom-in"               },
+	{ "gtk-zoom-out",      N_("Zoom _Out"),      "zoom-out"              },
+	{ "pidgin-alias",      N_("_Alias"),         "gtk-edit"              },
+	{ "pidgin-chat",       N_("_Join"),          "pidgin-chat"           },
+	{ "pidgin-close-tab",  N_("Close _tabs"),     "pidgin-close-tab"      },
+	{ "pidgin-message-new", N_("I_M"),            "pidgin-message-new"    },
+	{ "pidgin-info",       N_("_Get Info"),       "pidgin-info"           },
+	{ "pidgin-invite",     N_("_Invite"),         "pidgin-invite"         },
+	{ "pidgin-modify",     N_("_Modify..."),      "pidgin-modify"         },
+	{ "pidgin-add",        N_("_Add..."),         "pidgin-add"            },
+	{ "pidgin-stock-open-mail", N_("_Open Mail"),  "pidgin-stock-open-mail" },
+	{ "pidgin-pause",      N_("_Pause"),          "pidgin-pause"          },
+	{ "pidgin-edit",       N_("_Edit"),           "pidgin-edit"           },
+};
+
+/*
+ * Look up a GTK stock id.  Returns TRUE (and fills the out-params, either of
+ * which may be NULL) when @id is a known stock id; FALSE otherwise.  On FALSE
+ * the out-params are left untouched.  The returned label is already translated.
+ */
+gboolean
+pidgin_stock_lookup(const char *id, const char **label, const char **icon_name)
+{
+	gsize i;
+
+	if (id == NULL)
+		return FALSE;
+
+	for (i = 0; i < G_N_ELEMENTS(pidgin_stock_compat); i++) {
+		if (purple_strequal(id, pidgin_stock_compat[i].stock)) {
+			if (label)
+				*label = pidgin_stock_compat[i].label
+					? _(pidgin_stock_compat[i].label) : NULL;
+			if (icon_name)
+				*icon_name = pidgin_stock_compat[i].icon_name;
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+const char *
+pidgin_stock_label(const char *id)
+{
+	const char *label = NULL;
+	if (pidgin_stock_lookup(id, &label, NULL) && label != NULL)
+		return label;
+	return id;
+}
+
+const char *
+pidgin_stock_icon_name(const char *id)
+{
+	const char *icon_name = NULL;
+	if (pidgin_stock_lookup(id, NULL, &icon_name))
+		return icon_name;
+	return id;
+}
+
+/*
+ * GTK3-safe image from a stock/icon id: uses the (deprecated but functional)
+ * icon factory for Pidgin's own "pidgin-*" ids, and a themed icon-name for
+ * everything else.  Prevents PIDGIN_STOCK_* dialog/toolbar ids from rendering
+ * as the broken "image-missing" glyph under gtk_image_new_from_icon_name().
+ */
+GtkWidget *
+pidgin_image_new_from_stock(const char *stock_id, GtkIconSize size)
+{
+	const char *icon_name = pidgin_stock_icon_name(stock_id);
+	if (icon_name != NULL && g_str_has_prefix(icon_name, "pidgin-")) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+		return gtk_image_new_from_stock(stock_id, size);
+G_GNUC_END_IGNORE_DEPRECATIONS
+	}
+	return gtk_image_new_from_icon_name(icon_name, size);
+}
+
+GtkWidget *
+pidgin_button_new_from_stock(const char *stock_id)
+{
+	const char *label = NULL;
+	const char *icon_name = NULL;
+	GtkWidget *button;
+
+	if (pidgin_stock_lookup(stock_id, &label, &icon_name)) {
+		button = gtk_button_new_with_mnemonic(label ? label : stock_id);
+		if (icon_name != NULL) {
+			GtkWidget *image;
+			if (g_str_has_prefix(icon_name, "pidgin-")) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+				image = gtk_image_new_from_stock(icon_name, GTK_ICON_SIZE_BUTTON);
+G_GNUC_END_IGNORE_DEPRECATIONS
+			} else {
+				image = gtk_image_new_from_icon_name(icon_name, GTK_ICON_SIZE_BUTTON);
+			}
+			gtk_button_set_image(GTK_BUTTON(button), image);
+			gtk_button_set_always_show_image(GTK_BUTTON(button), TRUE);
+		}
+		return button;
+	}
+
+	/* Not a known GTK stock id (e.g. a PIDGIN_STOCK_* icon-factory id): keep
+	 * the icon-factory behaviour but supply no bogus label text. */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+	return gtk_button_new_from_stock(stock_id);
+G_GNUC_END_IGNORE_DEPRECATIONS
+}
+
 GtkWidget *pidgin_dialog_add_button(GtkDialog *dialog, const char *label,
 		GCallback callback, gpointer callbackdata)
 {
-	GtkWidget *button = gtk_button_new_with_mnemonic(label);
+	const char *btn_label = NULL;
+	const char *icon_name = NULL;
+	GtkWidget *button;
 	GtkWidget *bbox = pidgin_dialog_get_action_area(dialog);
+
+	if (pidgin_stock_lookup(label, &btn_label, &icon_name)) {
+		button = gtk_button_new_with_mnemonic(btn_label ? btn_label : label);
+		if (icon_name != NULL) {
+			GtkWidget *image = gtk_image_new_from_icon_name(icon_name,
+					GTK_ICON_SIZE_BUTTON);
+			gtk_button_set_image(GTK_BUTTON(button), image);
+			gtk_button_set_always_show_image(GTK_BUTTON(button), TRUE);
+		}
+	} else {
+		button = gtk_button_new_with_mnemonic(label);
+	}
+
 	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 	if (callback)
 		g_signal_connect(G_OBJECT(button), "clicked", callback, callbackdata);
@@ -426,7 +606,13 @@ pidgin_pixbuf_toolbar_button_from_stock(const char *icon)
 
 	gtk_container_add (GTK_CONTAINER(button), bbox);
 
-	image = gtk_image_new_from_stock(icon, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+	if (g_str_has_prefix(pidgin_stock_icon_name(icon), "pidgin-")) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+		image = gtk_image_new_from_stock(icon, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+G_GNUC_END_IGNORE_DEPRECATIONS
+	} else {
+		image = gtk_image_new_from_icon_name(pidgin_stock_icon_name(icon), gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+	}
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 0);
 
 	gtk_widget_show_all(bbox);
@@ -458,14 +644,14 @@ pidgin_pixbuf_button_from_stock(const char *text, const char *icon,
 
 	if (icon) {
 		gtk_box_pack_start(GTK_BOX(bbox), ibox, TRUE, TRUE, 0);
-		image = gtk_image_new_from_stock(icon, GTK_ICON_SIZE_BUTTON);
+		image = gtk_image_new_from_icon_name(pidgin_stock_icon_name(icon), GTK_ICON_SIZE_BUTTON);
 		gtk_box_pack_end(GTK_BOX(ibox), image, FALSE, TRUE, 0);
 	}
 
 	if (text) {
 		gtk_box_pack_start(GTK_BOX(bbox), lbox, TRUE, TRUE, 0);
 		label = gtk_label_new(NULL);
-		gtk_label_set_text_with_mnemonic(GTK_LABEL(label), text);
+		gtk_label_set_text_with_mnemonic(GTK_LABEL(label), pidgin_stock_label(text));
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), button);
 		gtk_box_pack_start(GTK_BOX(lbox), label, FALSE, TRUE, 0);
 		pidgin_set_accessible_label (button, label);
@@ -498,7 +684,14 @@ GtkWidget *pidgin_new_item_from_stock(GtkWidget *menu, const char *str, const ch
 		g_signal_connect(G_OBJECT(menuitem), "activate", cb, data);
 
 	if (icon != NULL) {
-		image = gtk_image_new_from_stock(icon, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+		const char *resolved = pidgin_stock_icon_name(icon);
+		if (g_str_has_prefix(resolved, "pidgin-")) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+			image = gtk_image_new_from_stock(resolved, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+G_GNUC_END_IGNORE_DEPRECATIONS
+		} else {
+			image = gtk_image_new_from_icon_name(resolved, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+		}
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
 	}
 /* FIXME: this isn't right
@@ -2260,8 +2453,8 @@ GtkWidget *pidgin_buddy_icon_chooser_new(GtkWindow *parent, void(*callback)(cons
 	dialog->icon_filesel = gtk_file_chooser_dialog_new(_("Buddy Icon"),
 							   parent,
 							   GTK_FILE_CHOOSER_ACTION_OPEN,
-							   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-							   GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+							   pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+							   pidgin_stock_label(GTK_STOCK_OPEN), GTK_RESPONSE_ACCEPT,
 							   NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog->icon_filesel), GTK_RESPONSE_ACCEPT);
 	if ((current_folder != NULL) && (*current_folder != '\0'))
@@ -3185,14 +3378,14 @@ link_context_menu(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 	url = gtk_imhtml_link_get_url(link);
 
 	/* Open Link */
-	img = gtk_image_new_from_stock(GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_MENU);
+	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_JUMP_TO), GTK_ICON_SIZE_MENU);
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Open Link"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 	g_signal_connect_swapped(G_OBJECT(item), "activate", G_CALLBACK(gtk_imhtml_link_activate), link);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Copy Link Location */
-	img = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
+	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_COPY), GTK_ICON_SIZE_MENU);
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Copy Link Location"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(url_copy), (gpointer)url);
@@ -3214,7 +3407,7 @@ copy_email_address(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 	address = (char*)text + MAILTOSIZE;
 
 	/* Copy Email Address */
-	img = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
+	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_COPY), GTK_ICON_SIZE_MENU);
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Copy Email Address"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(url_copy), address);
@@ -3334,14 +3527,14 @@ file_context_menu(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 	url = gtk_imhtml_link_get_url(link);
 
 	/* Open File */
-	img = gtk_image_new_from_stock(GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_MENU);
+	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_JUMP_TO), GTK_ICON_SIZE_MENU);
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Open File"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 	g_signal_connect_swapped(G_OBJECT(item), "activate", G_CALLBACK(gtk_imhtml_link_activate), link);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Open Containing Directory */
-	img = gtk_image_new_from_stock(GTK_STOCK_DIRECTORY, GTK_ICON_SIZE_MENU);
+	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_DIRECTORY), GTK_ICON_SIZE_MENU);
 	item = gtk_image_menu_item_new_with_mnemonic(_("Open _Containing Directory"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 
@@ -3410,7 +3603,7 @@ audio_context_menu(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 	url = gtk_imhtml_link_get_url(link);
 
 	/* Play Sound */
-	img = gtk_image_new_from_stock(GTK_STOCK_MEDIA_PLAY, GTK_ICON_SIZE_MENU);
+	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_MEDIA_PLAY), GTK_ICON_SIZE_MENU);
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Play Sound"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 
@@ -3418,7 +3611,7 @@ audio_context_menu(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Save File */
-	img = gtk_image_new_from_stock(GTK_STOCK_SAVE, GTK_ICON_SIZE_MENU);
+	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_SAVE), GTK_ICON_SIZE_MENU);
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Save File"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
 	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(save_file_cb), (gpointer)(url+AUDIOLINKSIZE));

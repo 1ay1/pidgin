@@ -888,7 +888,7 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		GtkWidget *table;
 		GtkWidget *img;
 
-		img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
+		img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
 		                               gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 
 		info = g_new0(InviteBuddyInfo, 1);
@@ -900,8 +900,8 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		invite_dialog = gtk_dialog_new_with_buttons(
 			_("Invite Buddy Into Chat Room"),
 			GTK_WINDOW(gtkwin->window), 0,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			PIDGIN_STOCK_INVITE, GTK_RESPONSE_OK, NULL);
+			pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+			pidgin_stock_label(PIDGIN_STOCK_INVITE), GTK_RESPONSE_OK, NULL);
 
 		gtk_dialog_set_default_response(GTK_DIALOG(invite_dialog),
 		                                GTK_RESPONSE_OK);
@@ -2563,7 +2563,9 @@ pidgin_conv_get_icon(PurpleConversation *conv, GtkWidget *parent, const char *ic
 
 	stock = pidgin_conv_get_icon_stock(conv);
 	size = gtk_icon_size_from_name(icon_size);
-	status = gtk_widget_render_icon (parent, stock, size, "GtkWidget");
+	(void)size;
+	status = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+			pidgin_stock_icon_name(stock), 16, 0, NULL);
 	return status;
 }
 
@@ -3071,7 +3073,7 @@ pidgin_conversations_fill_menu(GtkWidget *menu, GList *convs)
 		PurpleConversation *conv = (PurpleConversation*)l->data;
 		PidginConversation *gtkconv = PIDGIN_CONVERSATION(conv);
 
-		GtkWidget *icon = gtk_image_new_from_stock(pidgin_conv_get_icon_stock(conv),
+		GtkWidget *icon = gtk_image_new_from_icon_name(pidgin_stock_icon_name(pidgin_conv_get_icon_stock(conv)),
 				gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_MICROSCOPIC));
 		GtkWidget *item;
 		gchar *text = g_strdup_printf("%s (%d)",
@@ -3674,7 +3676,7 @@ typing_animation(gpointer data) {
 		break;
 	}
 	if (gtkwin->menu.typing_icon == NULL) {
-		 gtkwin->menu.typing_icon = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_MENU);
+		 gtkwin->menu.typing_icon = gtk_image_new_from_icon_name(pidgin_stock_icon_name(stock_id), GTK_ICON_SIZE_MENU);
 		 pidgin_menu_tray_append(PIDGIN_MENU_TRAY(gtkwin->menu.tray),
                                                                   gtkwin->menu.typing_icon,
                                                                   _("User is typing..."));
@@ -8420,8 +8422,8 @@ build_warn_close_dialog(PidginWindow *gtkwin)
 
 	warn_close_dialog = gtk_dialog_new_with_buttons(_("Confirm close"),
 							GTK_WINDOW(gtkwin->window), GTK_DIALOG_MODAL,
-							GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-							GTK_STOCK_CLOSE, GTK_RESPONSE_OK, NULL);
+							pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+							pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_OK, NULL);
 
 	gtk_dialog_set_default_response(GTK_DIALOG(warn_close_dialog),
 	                                GTK_RESPONSE_OK);
@@ -8437,7 +8439,7 @@ build_warn_close_dialog(PidginWindow *gtkwin)
 	gtk_box_set_spacing(GTK_BOX(vbox), 12);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
 
-	img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_WARNING,
+	img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_WARNING,
 	                               gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 	/* Setup the inner hbox and put the dialog's icon in it. */
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
@@ -9305,14 +9307,15 @@ static GList*
 make_status_icon_list(const char *stock, GtkWidget *w)
 {
 	GList *l = NULL;
-	l = g_list_append(l, gtk_widget_render_icon (w, stock,
-                                       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL), "GtkWindow"));
-	l = g_list_append(l, gtk_widget_render_icon (w, stock,
-                                       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_SMALL), "GtkWindow"));
-	l = g_list_append(l, gtk_widget_render_icon (w, stock,
-                                       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_MEDIUM), "GtkWindow"));
-	l = g_list_append(l, gtk_widget_render_icon (w, stock,
-                                       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_LARGE), "GtkWindow"));
+	(void)w;
+	l = g_list_append(l, gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+                                       pidgin_stock_icon_name(stock), 16, 0, NULL));
+	l = g_list_append(l, gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+                                       pidgin_stock_icon_name(stock), 24, 0, NULL));
+	l = g_list_append(l, gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+                                       pidgin_stock_icon_name(stock), 32, 0, NULL));
+	l = g_list_append(l, gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+                                       pidgin_stock_icon_name(stock), 48, 0, NULL));
 	return l;
 }
 

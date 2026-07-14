@@ -210,9 +210,9 @@ set_dialog_icon(AccountPrefsDialog *dialog, gpointer data, size_t len, gchar *ne
 	if (pixbuf == NULL)
 	{
 		/* Show a placeholder icon */
-		GtkIconSize icon_size = gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_SMALL);
-		pixbuf = gtk_widget_render_icon(dialog->window, PIDGIN_STOCK_TOOLBAR_SELECT_AVATAR,
-		                                icon_size, "PidginAccount");
+		pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+		                                pidgin_stock_icon_name(PIDGIN_STOCK_TOOLBAR_SELECT_AVATAR),
+		                                24, 0, NULL);
 	}
 
 	gtk_image_set_from_pixbuf(GTK_IMAGE(dialog->icon_entry), pixbuf);
@@ -710,7 +710,7 @@ add_user_options(AccountPrefsDialog *dialog, GtkWidget *parent)
 	gtk_box_pack_start(GTK_BOX(vbox2), hbox2, FALSE, FALSE, PIDGIN_HIG_BORDER);
 	gtk_widget_show(hbox2);
 
-	button = gtk_button_new_from_stock(GTK_STOCK_REMOVE);
+	button = pidgin_button_new_from_stock(GTK_STOCK_REMOVE);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			 G_CALLBACK(icon_reset_cb), dialog);
 	gtk_box_pack_start(GTK_BOX(hbox2), button, FALSE, FALSE, 0);

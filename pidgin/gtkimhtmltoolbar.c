@@ -521,8 +521,8 @@ insert_image_cb(GtkWidget *save, GtkIMHtmlToolbar *toolbar)
 		window = gtk_file_chooser_dialog_new(_("Insert Image"),
 						NULL,
 						GTK_FILE_CHOOSER_ACTION_OPEN,
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+						pidgin_stock_label(GTK_STOCK_CANCEL), GTK_RESPONSE_CANCEL,
+						pidgin_stock_label(GTK_STOCK_OPEN), GTK_RESPONSE_ACCEPT,
 						NULL);
 		gtk_dialog_set_default_response(GTK_DIALOG(window), GTK_RESPONSE_ACCEPT);
 		g_signal_connect(G_OBJECT(GTK_FILE_CHOOSER(window)),
@@ -1360,7 +1360,7 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	gtk_button_set_relief(GTK_BUTTON(font_button), GTK_RELIEF_NONE);
 	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_add(GTK_CONTAINER(font_button), bbox);
-	image = gtk_image_new_from_stock(GTK_STOCK_BOLD, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+	image = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_BOLD), gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 0);
 	label = gtk_label_new_with_mnemonic(_("_Font"));
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
@@ -1405,7 +1405,9 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	gtk_button_set_relief(GTK_BUTTON(insert_button), GTK_RELIEF_NONE);
 	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_add(GTK_CONTAINER(insert_button), bbox);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	image = gtk_image_new_from_stock(PIDGIN_STOCK_TOOLBAR_INSERT, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+G_GNUC_END_IGNORE_DEPRECATIONS
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 0);
 	label = gtk_label_new_with_mnemonic(_("_Insert"));
 	gtk_box_pack_start(GTK_BOX(bbox), label, FALSE, FALSE, 0);
@@ -1451,7 +1453,9 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	gtk_button_set_relief(GTK_BUTTON(smiley_button), GTK_RELIEF_NONE);
 	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_add(GTK_CONTAINER(smiley_button), bbox);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	image = gtk_image_new_from_stock(PIDGIN_STOCK_TOOLBAR_SMILEY, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+G_GNUC_END_IGNORE_DEPRECATIONS
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 0);
 	label = gtk_label_new_with_mnemonic(_("_Smile!"));
 	gtk_box_pack_start(GTK_BOX(bbox), label, FALSE, FALSE, 0);
@@ -1472,8 +1476,10 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	gtk_button_set_relief(GTK_BUTTON(attention_button), GTK_RELIEF_NONE);
 	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_add(GTK_CONTAINER(attention_button), bbox);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	image = gtk_image_new_from_stock(PIDGIN_STOCK_TOOLBAR_SEND_ATTENTION,
 		gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+G_GNUC_END_IGNORE_DEPRECATIONS
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 0);
 	label = gtk_label_new_with_mnemonic(_("_Attention!"));
 	gtk_box_pack_start(GTK_BOX(bbox), label, FALSE, FALSE, 0);
