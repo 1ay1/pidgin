@@ -164,7 +164,7 @@ do_find_cb(GtkWidget *widget, gint response, struct _find *f)
 static void
 find_cb(GtkWidget *w, DebugWindow *win)
 {
-	GtkWidget *hbox, *img, *label;
+	GtkWidget *hbox, *img, *label, *findvbox;
 	struct _find *f;
 
 	if(win->find)
@@ -187,12 +187,13 @@ find_cb(GtkWidget *w, DebugWindow *win)
 	gtk_container_set_border_width(GTK_CONTAINER(win->find), PIDGIN_HIG_BOX_SPACE);
 	gtk_window_set_resizable(GTK_WINDOW(win->find), FALSE);
 	/* set_has_separator removed */;
-	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(win->find)->vbox), PIDGIN_HIG_BORDER);
+	findvbox = gtk_dialog_get_content_area(GTK_DIALOG(win->find));
+	gtk_box_set_spacing(GTK_BOX(findvbox), PIDGIN_HIG_BORDER);
 	gtk_container_set_border_width(
-		GTK_CONTAINER(GTK_DIALOG(win->find)->vbox), PIDGIN_HIG_BOX_SPACE);
+		GTK_CONTAINER(findvbox), PIDGIN_HIG_BOX_SPACE);
 
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(win->find)->vbox),
+	gtk_container_add(GTK_CONTAINER(findvbox),
 					  hbox);
 	img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
 				       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
