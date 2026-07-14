@@ -1466,7 +1466,7 @@ apply_custom_font(void)
 		desc = pango_font_description_from_string(font);
 	}
 
-	gtk_widget_modify_font(sample_imhtml, desc);
+	pidgin_widget_set_custom_font(sample_imhtml, desc);
 	if (desc)
 		pango_font_description_free(desc);
 

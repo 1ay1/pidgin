@@ -152,7 +152,7 @@ pidgin_setup_imhtml(GtkWidget *imhtml)
 		const char *font = purple_prefs_get_string(PIDGIN_PREFS_ROOT "/conversations/custom_font");
 		desc = pango_font_description_from_string(font);
 		if (desc) {
-			gtk_widget_modify_font(imhtml, desc);
+			pidgin_widget_set_custom_font(imhtml, desc);
 			pango_font_description_free(desc);
 		}
 	}
@@ -3984,6 +3984,50 @@ pidgin_widget_set_text_color(GtkWidget *widget, const GdkColor *color)
 {
 	pidgin_widget_set_css_color(widget, color, "color",
 	                            "pidgin-text-css-provider");
+}
+
+void
+pidgin_widget_set_custom_font(GtkWidget *widget, const PangoFontDescription *desc)
+{
+	GtkStyleContext *context;
+	GtkCssProvider *provider;
+	const char *data_key = "pidgin-font-css-provider";
+
+	if (widget == NULL)
+		return;
+
+	context = gtk_widget_get_style_context(widget);
+	provider = g_object_get_data(G_OBJECT(widget), data_key);
+
+	if (desc == NULL) {
+		/* Reset to the theme default. */
+		if (provider) {
+			gtk_style_context_remove_provider(context,
+			                                  GTK_STYLE_PROVIDER(provider));
+			g_object_set_data(G_OBJECT(widget), data_key, NULL);
+		}
+		return;
+	}
+
+	if (provider == NULL) {
+		provider = gtk_css_provider_new();
+		gtk_style_context_add_provider(context,
+		                               GTK_STYLE_PROVIDER(provider),
+		                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+		g_object_set_data_full(G_OBJECT(widget), data_key, provider,
+		                       g_object_unref);
+	}
+
+	{
+		/* Turn the PangoFontDescription into a CSS "font:" shorthand.
+		 * pango_font_description_to_string() yields e.g. "Sans Bold 10",
+		 * which is exactly what the CSS font shorthand accepts. */
+		char *fontstr = pango_font_description_to_string(desc);
+		char *css = g_strdup_printf("* { font: %s; }", fontstr);
+		gtk_css_provider_load_from_data(provider, css, -1, NULL);
+		g_free(css);
+		g_free(fontstr);
+	}
 }
 
 void

@@ -1068,6 +1068,17 @@ void pidgin_widget_set_bg_color(GtkWidget *widget, const GdkColor *color);
 void pidgin_widget_set_text_color(GtkWidget *widget, const GdkColor *color);
 
 /**
+ * Apply (or clear) a custom font on a widget the GTK3 way, via a per-widget
+ * #GtkCssProvider. This replaces the deprecated gtk_widget_modify_font().
+ *
+ * @param widget The widget to restyle.
+ * @param desc   The font to apply, or @c NULL to reset to the theme default.
+ *
+ * @since 2.15.0
+ */
+void pidgin_widget_set_custom_font(GtkWidget *widget, const PangoFontDescription *desc);
+
+/**
  * Get the geometry of the monitor a widget's window is on, the GTK3 way.
  * This replaces the deprecated gdk_screen_width()/gdk_screen_height(),
  * which report the union of all monitors and give wrong answers on
