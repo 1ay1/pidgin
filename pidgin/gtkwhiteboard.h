@@ -50,6 +50,7 @@ typedef struct _PidginWhiteboard
 	GtkWidget *drawing_area; /**< Drawing area */
 
 	cairo_surface_t *pixmap;       /**< Memory for drawing area */
+	cairo_t *cr;             /**< Cairo context for the backing surface */
 
 	int  width;              /**< Canvas width */
 	int  height;             /**< Canvas height */

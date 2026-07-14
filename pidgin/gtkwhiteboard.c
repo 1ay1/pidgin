@@ -39,7 +39,7 @@ static gboolean whiteboard_close_cb(GtkWidget *widget, GdkEvent *event, PidginWh
 /*static void pidginwhiteboard_button_start_press(GtkButton *button, gpointer data); */
 
 static gboolean pidgin_whiteboard_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data);
-static gboolean pidgin_whiteboard_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data);
+static gboolean pidgin_whiteboard_expose_event(GtkWidget *widget, cairo_t *cr, gpointer data);
 
 static gboolean pidgin_whiteboard_brush_down(GtkWidget *widget, GdkEventButton *event, gpointer data);
 static gboolean pidgin_whiteboard_brush_motion(GtkWidget *widget, GdkEventMotion *event, gpointer data);
@@ -203,7 +203,7 @@ static void pidgin_whiteboard_create(PurpleWhiteboard *wb)
 	gtk_widget_show(drawing_area);
 
 	/* Signals used to handle backing pixmap */
-	g_signal_connect(G_OBJECT(drawing_area), "expose_event",
+	g_signal_connect(G_OBJECT(drawing_area), "draw",
 					 G_CALLBACK(pidgin_whiteboard_expose_event), gtkwb);
 
 	g_signal_connect(G_OBJECT(drawing_area), "configure_event",
@@ -280,12 +280,14 @@ static void pidgin_whiteboard_destroy(PurpleWhiteboard *wb)
 	/* TODO Ask if user wants to save picture before the session is closed */
 
 	/* Clear graphical memory */
+	if(gtkwb->cr)
+	{
+		cairo_destroy(gtkwb->cr);
+		gtkwb->cr = NULL;
+	}
 	if(gtkwb->pixmap)
 	{
-		cairo_t *cr = g_object_get_data(G_OBJECT(gtkwb->pixmap), "cairo-context");
-		if (cr)
-			cairo_destroy(cr);
-		g_object_unref(gtkwb->pixmap);
+		cairo_surface_destroy(gtkwb->pixmap);
 		gtkwb->pixmap = NULL;
 	}
 
@@ -356,46 +358,40 @@ static void pidginwhiteboard_button_start_press(GtkButton *button, gpointer data
 static gboolean pidgin_whiteboard_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	PidginWhiteboard *gtkwb = (PidginWhiteboard*)data;
-	GdkPixmap *pixmap = gtkwb->pixmap;
+	GtkAllocation allocation;
 	cairo_t *cr;
 
-	if (pixmap) {
-		cr = g_object_get_data(G_OBJECT(pixmap), "cairo-context");
-		if (cr)
-			cairo_destroy(cr);
-		g_object_unref(pixmap);
-	}
+	if (gtkwb->cr)
+		cairo_destroy(gtkwb->cr);
+	if (gtkwb->pixmap)
+		cairo_surface_destroy(gtkwb->pixmap);
 
-	pixmap = gdk_pixmap_new(widget->window,
-							widget->allocation.width,
-							widget->allocation.height,
-							-1);
-	gtkwb->pixmap = pixmap;
+	gtk_widget_get_allocation(widget, &allocation);
 
-	cr = gdk_cairo_create(GDK_DRAWABLE(pixmap));
-	g_object_set_data(G_OBJECT(pixmap), "cairo-context", cr);
-	gdk_cairo_set_source_color(cr, &widget->style->white);
+	gtkwb->pixmap = gdk_window_create_similar_surface(
+			gtk_widget_get_window(widget),
+			CAIRO_CONTENT_COLOR,
+			allocation.width, allocation.height);
+
+	cr = cairo_create(gtkwb->pixmap);
+	gtkwb->cr = cr;
+	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 	cairo_rectangle(cr,
 	                0, 0,
-	                widget->allocation.width, widget->allocation.height);
+	                allocation.width, allocation.height);
 	cairo_fill(cr);
 
 	return TRUE;
 }
 
-static gboolean pidgin_whiteboard_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean pidgin_whiteboard_expose_event(GtkWidget *widget, cairo_t *cr, gpointer data)
 {
 	PidginWhiteboard *gtkwb = (PidginWhiteboard*)(data);
-	GdkPixmap *pixmap = gtkwb->pixmap;
-	cairo_t *cr;
 
-	cr = gdk_cairo_create(GDK_DRAWABLE(widget->window));
-	gdk_cairo_set_source_pixmap(cr, pixmap, 0, 0);
-	cairo_rectangle(cr,
-	                event->area.x, event->area.y,
-	                event->area.width, event->area.height);
-	cairo_fill(cr);
-	cairo_destroy(cr);
+	if (gtkwb->pixmap) {
+		cairo_set_source_surface(cr, gtkwb->pixmap, 0, 0);
+		cairo_paint(cr);
+	}
 
 	return FALSE;
 }
@@ -403,7 +399,7 @@ static gboolean pidgin_whiteboard_expose_event(GtkWidget *widget, GdkEventExpose
 static gboolean pidgin_whiteboard_brush_down(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	PidginWhiteboard *gtkwb = (PidginWhiteboard*)data;
-	GdkPixmap *pixmap = gtkwb->pixmap;
+	cairo_surface_t *pixmap = gtkwb->pixmap;
 
 	PurpleWhiteboard *wb = gtkwb->wb;
 	GList *draw_list = wb->draw_list;
@@ -456,13 +452,16 @@ static gboolean pidgin_whiteboard_brush_motion(GtkWidget *widget, GdkEventMotion
 	GdkModifierType state;
 
 	PidginWhiteboard *gtkwb = (PidginWhiteboard*)data;
-	GdkPixmap *pixmap = gtkwb->pixmap;
+	cairo_surface_t *pixmap = gtkwb->pixmap;
 
 	PurpleWhiteboard *wb = gtkwb->wb;
 	GList *draw_list = wb->draw_list;
 
-	if(event->is_hint)
-		gdk_window_get_pointer(event->window, &x, &y, &state);
+	if(event->is_hint) {
+		GdkDeviceManager *dm = gdk_display_get_device_manager(gdk_window_get_display(event->window));
+		GdkDevice *dev = gdk_device_manager_get_client_pointer(dm);
+		gdk_window_get_device_position(event->window, dev, &x, &y, &state);
+	}
 	else
 	{
 		x = event->x;
@@ -536,7 +535,7 @@ static gboolean pidgin_whiteboard_brush_motion(GtkWidget *widget, GdkEventMotion
 static gboolean pidgin_whiteboard_brush_up(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	PidginWhiteboard *gtkwb = (PidginWhiteboard*)data;
-	GdkPixmap *pixmap = gtkwb->pixmap;
+	cairo_surface_t *pixmap = gtkwb->pixmap;
 
 	PurpleWhiteboard *wb = gtkwb->wb;
 	GList *draw_list = wb->draw_list;
@@ -593,15 +592,19 @@ static void pidgin_whiteboard_draw_brush_point(PurpleWhiteboard *wb, int x, int 
 {
 	PidginWhiteboard *gtkwb = wb->ui_data;
 	GtkWidget *widget = gtkwb->drawing_area;
-	GdkPixmap *pixmap = gtkwb->pixmap;
-
-	cairo_t *gfx_con = g_object_get_data(G_OBJECT(pixmap), "cairo-context");
+	cairo_t *gfx_con = gtkwb->cr;
 	GdkColor col;
+
+	if (gfx_con == NULL)
+		return;
 
 	/* Interpret and convert color */
 	pidgin_whiteboard_rgb24_to_rgb48(color, &col);
 
-	gdk_cairo_set_source_color(gfx_con, &col);
+	cairo_set_source_rgb(gfx_con,
+	                     col.red / 65535.0,
+	                     col.green / 65535.0,
+	                     col.blue / 65535.0);
 
 	/* Draw a circle */
 	cairo_arc(gfx_con,
@@ -701,21 +704,26 @@ static void pidgin_whiteboard_set_brush(PurpleWhiteboard *wb, int size, int colo
 static void pidgin_whiteboard_clear(PurpleWhiteboard *wb)
 {
 	PidginWhiteboard *gtkwb = wb->ui_data;
-	GdkPixmap *pixmap = gtkwb->pixmap;
 	GtkWidget *drawing_area = gtkwb->drawing_area;
-	cairo_t *cr = g_object_get_data(G_OBJECT(pixmap), "cairo-context");
+	cairo_t *cr = gtkwb->cr;
+	GtkAllocation allocation;
 
-	gdk_cairo_set_source_color(cr, &drawing_area->style->white);
+	if (cr == NULL)
+		return;
+
+	gtk_widget_get_allocation(drawing_area, &allocation);
+
+	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 	cairo_rectangle(cr,
 	                0, 0,
-	                drawing_area->allocation.width,
-	                drawing_area->allocation.height);
+	                allocation.width,
+	                allocation.height);
 	cairo_fill(cr);
 
 	gtk_widget_queue_draw_area(drawing_area,
-							   0, 0,
-							   drawing_area->allocation.width,
-							   drawing_area->allocation.height);
+						   0, 0,
+						   allocation.width,
+						   allocation.height);
 }
 
 static void pidgin_whiteboard_button_clear_press(GtkWidget *widget, gpointer data)
@@ -781,12 +789,9 @@ static void pidgin_whiteboard_button_save_press(GtkWidget *widget, gpointer data
 		gtk_widget_destroy(dialog);
 
 		/* Makes an icon from the whiteboard's canvas 'image' */
-		pixbuf = gdk_pixbuf_get_from_drawable(NULL,
-											  (GdkDrawable*)(gtkwb->pixmap),
-											  gdk_drawable_get_colormap(gtkwb->pixmap),
-											  0, 0,
-											  0, 0,
-											  gtkwb->width, gtkwb->height);
+		pixbuf = gdk_pixbuf_get_from_surface(gtkwb->pixmap,
+										  0, 0,
+										  gtkwb->width, gtkwb->height);
 
 		if(gdk_pixbuf_save(pixbuf, filename, "jpeg", NULL, "quality", "100", NULL))
 			purple_debug_info("gtkwhiteboard", "File Saved...\n");
@@ -807,10 +812,7 @@ static void pidgin_whiteboard_set_canvas_as_icon(PidginWhiteboard *gtkwb)
 	GdkPixbuf *pixbuf;
 
 	/* Makes an icon from the whiteboard's canvas 'image' */
-	pixbuf = gdk_pixbuf_get_from_drawable(NULL,
-										  (GdkDrawable*)(gtkwb->pixmap),
-										  gdk_drawable_get_colormap(gtkwb->pixmap),
-										  0, 0,
+	pixbuf = gdk_pixbuf_get_from_surface(gtkwb->pixmap,
 										  0, 0,
 										  gtkwb->width, gtkwb->height);
 
@@ -825,18 +827,16 @@ static void pidgin_whiteboard_rgb24_to_rgb48(int color_rgb, GdkColor *color)
 }
 
 static void
-change_color_cb(GtkColorSelection *selection, PidginWhiteboard *gtkwb)
+change_color_cb(GtkColorChooser *selection, GdkRGBA *rgba, PidginWhiteboard *gtkwb)
 {
-	GdkColor color;
 	int old_size = 5;
 	int old_color = 0;
 	int new_color;
 	PurpleWhiteboard *wb = gtkwb->wb;
 
-	gtk_color_selection_get_current_color(selection, &color);
-	new_color = (color.red & 0xFF00) << 8;
-	new_color |= (color.green & 0xFF00);
-	new_color |= (color.blue & 0xFF00) >> 8;
+	new_color = ((int)(rgba->red * 255) & 0xFF) << 16;
+	new_color |= ((int)(rgba->green * 255) & 0xFF) << 8;
+	new_color |= ((int)(rgba->blue * 255) & 0xFF);
 
 	purple_whiteboard_get_brush(wb, &old_size, &old_color);
 	purple_whiteboard_send_brush(wb, old_size, new_color);
@@ -849,27 +849,36 @@ static void color_selection_dialog_destroy(GtkWidget *w, PidginWhiteboard *gtkwb
 	g_object_set_data(G_OBJECT(gtkwb->window), "colour-dialog", NULL);
 }
 
+static void color_response_cb(GtkDialog *dialog, gint response, PidginWhiteboard *gtkwb)
+{
+	if (response == GTK_RESPONSE_OK) {
+		GdkRGBA rgba;
+		gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(dialog), &rgba);
+		change_color_cb(GTK_COLOR_CHOOSER(dialog), &rgba, gtkwb);
+	}
+	color_selection_dialog_destroy(NULL, gtkwb);
+}
+
 static void color_select_dialog(GtkWidget *widget, PidginWhiteboard *gtkwb)
 {
 	GdkColor color;
-	GtkColorSelectionDialog *dialog;
+	GdkRGBA rgba;
+	GtkWidget *dialog;
 
-	dialog = (GtkColorSelectionDialog *)gtk_color_selection_dialog_new(_("Select color"));
+	dialog = gtk_color_chooser_dialog_new(_("Select color"), GTK_WINDOW(gtkwb->window));
 	g_object_set_data(G_OBJECT(gtkwb->window), "colour-dialog", dialog);
 
-	g_signal_connect(G_OBJECT(dialog->colorsel), "color-changed",
+	g_signal_connect(G_OBJECT(dialog), "response",
+					G_CALLBACK(color_response_cb), gtkwb);
+	g_signal_connect(G_OBJECT(dialog), "color-activated",
 					G_CALLBACK(change_color_cb), gtkwb);
 
-	gtk_widget_destroy(dialog->cancel_button);
-	gtk_widget_destroy(dialog->help_button);
-
-	g_signal_connect(G_OBJECT(dialog->ok_button), "clicked",
-					G_CALLBACK(color_selection_dialog_destroy), gtkwb);
-
-	gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(dialog->colorsel), TRUE);
-
 	pidgin_whiteboard_rgb24_to_rgb48(gtkwb->brush_color, &color);
-	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(dialog->colorsel), &color);
+	rgba.red = color.red / 65535.0;
+	rgba.green = color.green / 65535.0;
+	rgba.blue = color.blue / 65535.0;
+	rgba.alpha = 1.0;
+	gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(dialog), &rgba);
 
 	gtk_widget_show_all(GTK_WIDGET(dialog));
 }
