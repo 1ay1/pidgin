@@ -1753,8 +1753,16 @@ pidgin_status_box_init (PidginStatusBox *status_box,
 	}
 
 	gtk_window_set_resizable (GTK_WINDOW (status_box->popup_window), FALSE);
+	/* Use the COMBO hint, not POPUP_MENU: with POPUP_MENU some window
+	 * managers/compositors treat the window as a context menu and place it
+	 * at the pointer (or clamp it to a monitor edge), ignoring our
+	 * gtk_window_move() -- which made the status dropdown appear far away
+	 * from the status selector.  COMBO is exactly the GtkComboBox popup
+	 * case: the app positions it and the WM leaves it alone. */
 	gtk_window_set_type_hint (GTK_WINDOW (status_box->popup_window),
-			GDK_WINDOW_TYPE_HINT_POPUP_MENU);
+			GDK_WINDOW_TYPE_HINT_COMBO);
+	gtk_window_set_gravity (GTK_WINDOW (status_box->popup_window),
+			GDK_GRAVITY_NORTH_WEST);
 	gtk_window_set_screen (GTK_WINDOW (status_box->popup_window),
 			gtk_widget_get_screen (GTK_WIDGET (status_box)));
 	status_box->popup_frame = gtk_frame_new (NULL);
