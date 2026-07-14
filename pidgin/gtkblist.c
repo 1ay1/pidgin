@@ -5933,8 +5933,12 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	pretty = pidgin_make_pretty_arrows(tmp);
 	g_free(tmp);
 	label = gtk_label_new(NULL);
-	gtk_widget_set_size_request(label, purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/width") - 12, -1);
+	/* GTK3: a fixed size_request on a wrapping label becomes a hard minimum
+	 * width, which pins the whole window and blocks horizontal shrinking. Let
+	 * the label wrap within whatever width it's given instead. */
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+	gtk_label_set_width_chars(GTK_LABEL(label), 20);
+	gtk_label_set_max_width_chars(GTK_LABEL(label), 40);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.2);
 	gtk_label_set_markup(GTK_LABEL(label), pretty);
 	g_free(pretty);
@@ -5952,9 +5956,9 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	gtkblist->headline_image = gtk_image_new_from_pixbuf(NULL);
 	gtk_misc_set_alignment(GTK_MISC(gtkblist->headline_image), 0.0, 0);
 	gtkblist->headline_label = gtk_label_new(NULL);
-	gtk_widget_set_size_request(gtkblist->headline_label,
-				    purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/width")-25,-1);
+	/* GTK3: avoid a hard min-width from size_request; wrap within the given width. */
 	gtk_label_set_line_wrap(GTK_LABEL(gtkblist->headline_label), TRUE);
+	gtk_label_set_width_chars(GTK_LABEL(gtkblist->headline_label), 20);
 	gtk_box_pack_start(GTK_BOX(gtkblist->headline_hbox), gtkblist->headline_image, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gtkblist->headline_hbox), gtkblist->headline_label, TRUE, TRUE, 0);
 	g_signal_connect(gtkblist->headline_label,   /* connecting on headline_hbox doesn't work, because
