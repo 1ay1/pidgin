@@ -44,6 +44,7 @@
 #include "privacy.h"
 #include "protocols.h"
 #include "proxy.h"
+#include "ratelimit.h"
 #include "reconnect.h"
 #include "savedstatuses.h"
 #include "signals.h"
@@ -189,6 +190,8 @@ purple_core_init(const char *ui)
 	/* Automatic reconnection observes account/connection/network signals, so
 	 * bring it up after those subsystems exist. */
 	purple_reconnect_init();
+	/* Outbound flood control keys buckets off live connections. */
+	purple_ratelimit_init();
 	/* The outgoing message queue rides on top of the reconnect subsystem
 	 * (it only parks a message when a reconnect is pending), so start it
 	 * after reconnect. */
@@ -240,6 +243,7 @@ purple_core_quit(void)
 
 	/* Save .xml files, remove signals, etc. */
 	purple_msgqueue_uninit();
+	purple_ratelimit_uninit();
 	purple_reconnect_uninit();
 	purple_smileys_uninit();
 	purple_idle_uninit();

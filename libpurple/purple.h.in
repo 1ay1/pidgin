@@ -81,6 +81,7 @@
 #include <protocols.h>
 #include <proxy.h>
 #include <prpl.h>
+#include <ratelimit.h>
 #include <reconnect.h>
 #include <request.h>
 #include <roomlist.h>

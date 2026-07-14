@@ -24,6 +24,7 @@ plug in through `*UiOps` vtables; protocols plug in as plugins exposing a
 | Protocols     | `prpl.c`, `protocols.c`, `plugin.c`              | Protocol plugin vtable, registry, dispatch |
 | Reconnection  | `reconnect.c`                                    | Core auto-reconnect with exponential backoff |
 | Message queue | `msgqueue.c`                                      | Store-and-forward outgoing IMs across reconnects |
+| Rate limiting | `ratelimit.c`                                     | Per-connection outbound token bucket (anti-flood) |
 | Signals       | `signals.c`, `value.c`                           | Hand-rolled string-keyed signal bus |
 | Async I/O     | `eventloop.c`, `proxy.c`, `dnsquery.c`, `dnssrv.c` | fd-watch callbacks over a pluggable event loop |
 | Media         | `media*.c`, `media/`                             | GStreamer voice/video (GObject-based) |
@@ -72,6 +73,34 @@ store-and-forward, riding on top of the reconnect subsystem:
 
 The cap-eviction and stale-expiry invariants are covered by
 `tests/test_msgqueue.c`.
+
+## Outbound rate limiting (new)
+
+Many servers enforce anti-flood policies — send too fast and they drop
+messages, throttle you, or (IRC-style) disconnect with "Excess Flood".
+Before, each protocol plugin either ignored this and got its users kicked or
+hand-rolled its own pacing. `ratelimit.{c,h}` provides a shared **per-connection
+token bucket** in the core:
+
+- Each connection accrues send credits at a steady `refill_per_sec` up to a
+  `burst` ceiling; a send spends one credit. `purple_ratelimit_try_consume`
+  returns whether a credit was available; `purple_ratelimit_next_delay`
+  reports the fractional seconds until the next credit, so a caller (server
+  layer, protocol plugin, or the msgqueue flusher) can pace itself instead of
+  tripping the server's detector. Buckets start **full**, so a normal
+  conversation is never penalized.
+- The limiter is **advisory and opt-in per caller** — no protocol change is
+  required, and it is a no-op when disabled. A protocol that knows its
+  server's exact threshold can set an explicit policy with
+  `purple_ratelimit_set_connection`; otherwise a conservative default applies
+  (burst 5, 0.75/s). Bucket state is keyed off the live `PurpleConnection` in
+  a side table (no ABI change to the public struct) and reclaimed on
+  `signed-off`.
+- Policy API: `purple_ratelimit_set_enabled` / `set_default` /
+  `set_connection` / `try_consume` / `next_delay` / `reset_connection`.
+
+The token-accrual, burst, and next-delay math is covered by
+`tests/test_ratelimit.c` against a synthetic clock.
 
 ## The protocol subsystem (modernized)
 
