@@ -7000,8 +7000,24 @@ static void pidgin_blist_destroy(PurpleBuddyList *list)
 
 	purple_signals_disconnect_by_handle(gtkblist);
 
-	if (gtkblist->headline_close)
+	if (gtkblist->headline_close && G_IS_OBJECT(gtkblist->headline_close))
 		g_object_unref(gtkblist->headline_close);
+	gtkblist->headline_close = NULL;
+
+	/* The tree model, item factory and empty-avatar pixbuf are unref'd below
+	 * AFTER gtk_widget_destroy(window). Destroying the window finalizes the
+	 * whole widget tree, which can also drop the last reference on some of
+	 * these (notably the GtkItemFactory, whose menu widgets live in the
+	 * window). Take our own guaranteed reference on each now so the unrefs
+	 * below act on live objects instead of already-finalized ones -- the
+	 * source of the object_ref/g_object_unref '!object_already_finalized' and
+	 * 'G_IS_OBJECT' assertion trio at shutdown. */
+	if (gtkblist->treemodel && G_IS_OBJECT(gtkblist->treemodel))
+		g_object_ref(gtkblist->treemodel);
+	if (gtkblist->ift && G_IS_OBJECT(gtkblist->ift))
+		g_object_ref(gtkblist->ift);
+	if (gtkblist->empty_avatar && G_IS_OBJECT(gtkblist->empty_avatar))
+		g_object_ref(gtkblist->empty_avatar);
 
 	/* GTK3: tearing down the menu/item-factory makes the window's accel group
 	 * emit "accel-changed" for every removed accelerator. Our handler defers a
@@ -7035,10 +7051,26 @@ static void pidgin_blist_destroy(PurpleBuddyList *list)
 	gtkblist->timeout = 0;
 	gtkblist->drag_timeout = 0;
 	gtkblist->window = gtkblist->vbox = gtkblist->treeview = NULL;
-	g_object_unref(G_OBJECT(gtkblist->treemodel));
+	/* Drop the safety ref taken above, then our original ref. Each guarded
+	 * so a spurious extra finalize never trips a G_IS_OBJECT assertion. */
+	if (gtkblist->treemodel && G_IS_OBJECT(gtkblist->treemodel)) {
+		g_object_unref(G_OBJECT(gtkblist->treemodel)); /* safety ref */
+		if (G_IS_OBJECT(gtkblist->treemodel))
+			g_object_unref(G_OBJECT(gtkblist->treemodel)); /* original */
+	}
 	gtkblist->treemodel = NULL;
-	g_object_unref(G_OBJECT(gtkblist->ift));
-	g_object_unref(G_OBJECT(gtkblist->empty_avatar));
+	if (gtkblist->ift && G_IS_OBJECT(gtkblist->ift)) {
+		g_object_unref(G_OBJECT(gtkblist->ift)); /* safety ref */
+		if (G_IS_OBJECT(gtkblist->ift))
+			g_object_unref(G_OBJECT(gtkblist->ift)); /* original */
+	}
+	gtkblist->ift = NULL;
+	if (gtkblist->empty_avatar && G_IS_OBJECT(gtkblist->empty_avatar)) {
+		g_object_unref(G_OBJECT(gtkblist->empty_avatar)); /* safety ref */
+		if (G_IS_OBJECT(gtkblist->empty_avatar))
+			g_object_unref(G_OBJECT(gtkblist->empty_avatar)); /* original */
+	}
+	gtkblist->empty_avatar = NULL;
 
 	gdk_cursor_unref(gtkblist->hand_cursor);
 	gdk_cursor_unref(gtkblist->arrow_cursor);
