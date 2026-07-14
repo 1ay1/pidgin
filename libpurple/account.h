@@ -593,6 +593,10 @@ void purple_account_remove_setting(PurpleAccount *account, const char *setting);
 /**
  * Sets a protocol-specific integer setting for an account.
  *
+ * If the setting already holds this exact value the call is a no-op (no
+ * signal, no disk flush). Otherwise the @c account-setting-changed signal is
+ * emitted with the account and setting name.
+ *
  * @param account The account.
  * @param name    The name of the setting.
  * @param value   The setting's value.
@@ -601,6 +605,10 @@ void purple_account_set_int(PurpleAccount *account, const char *name, int value)
 
 /**
  * Sets a protocol-specific string setting for an account.
+ *
+ * If the setting already holds this exact value the call is a no-op (no
+ * signal, no disk flush). Otherwise the @c account-setting-changed signal is
+ * emitted with the account and setting name.
  *
  * @param account The account.
  * @param name    The name of the setting.
@@ -611,6 +619,10 @@ void purple_account_set_string(PurpleAccount *account, const char *name,
 
 /**
  * Sets a protocol-specific boolean setting for an account.
+ *
+ * If the setting already holds this exact value the call is a no-op (no
+ * signal, no disk flush). Otherwise the @c account-setting-changed signal is
+ * emitted with the account and setting name.
  *
  * @param account The account.
  * @param name    The name of the setting.

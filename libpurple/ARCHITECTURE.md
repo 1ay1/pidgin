@@ -132,6 +132,29 @@ protocol-agnostic observability:
 The idle-to-grade thresholds and latency EWMA are covered by
 `tests/test_connhealth.c`.
 
+## Existing object modernization: PurpleAccount settings
+
+The most exercised object machinery in the tree is the per-account
+protocol/UI settings store (`PurpleAccountSetting` in `account.c`), read and
+written thousands of times per login. It had three long-standing rough
+edges, all now fixed **without any ABI or storage-format change**:
+
+- **Redundant-write elision.** `set_int` / `set_string` / `set_bool` (and
+  their `set_ui_*` twins) previously freed and reallocated the setting,
+  notified the UI, and rescheduled an `accounts.xml` flush on *every* call —
+  including the very common case of a prpl re-applying a value it already
+  holds on reconnect. A pure `setting_unchanged()` helper now short-circuits
+  those no-op writes (covered by `tests/test_account_setting.c`).
+- **Change signal.** Setting a value now emits `account-setting-changed`
+  `(PurpleAccount*, const char *name)`, so a UI or plugin can react to a
+  changed account option instead of polling. The signal fires only on an
+  actual change, precisely because of the elision above.
+- **Type-mismatch tolerance.** The getters used `g_return_val_if_fail` on the
+  stored type, which spat a CRITICAL into the log whenever a setting was read
+  as a different type than it was stored (e.g. after a prpl changed an
+  option's type between versions). They now log a single `debug_warning` and
+  quietly return the caller's default.
+
 ## The protocol subsystem (modernized)
 
 Historically a protocol was located with an O(n) linear scan

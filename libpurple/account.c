@@ -1051,6 +1051,35 @@ delete_setting(void *data)
 	g_free(setting);
 }
 
+/*
+ * Returns TRUE if the setting already stored under @a name in @a table holds
+ * exactly the value being written -- i.e. the write is a no-op. Used to skip
+ * needless work (freeing/reallocating the setting, notifying the UI, and
+ * rescheduling an accounts.xml flush) when a protocol re-sets a value to what
+ * it already was, which happens constantly on every login.
+ */
+static gboolean
+setting_unchanged(GHashTable *table, const char *name, PurplePrefType type,
+                  gconstpointer value)
+{
+	PurpleAccountSetting *setting = g_hash_table_lookup(table, name);
+
+	if (setting == NULL || setting->type != type)
+		return FALSE;
+
+	switch (type) {
+		case PURPLE_PREF_INT:
+			return setting->value.integer == *(const int *)value;
+		case PURPLE_PREF_BOOLEAN:
+			return setting->value.boolean == *(const gboolean *)value;
+		case PURPLE_PREF_STRING:
+			return purple_strequal(setting->value.string,
+			                       (const char *)value);
+		default:
+			return FALSE;
+	}
+}
+
 PurpleAccount *
 purple_account_new(const char *username, const char *protocol_id)
 {
@@ -2037,6 +2066,11 @@ purple_account_set_int(PurpleAccount *account, const char *name, int value)
 	g_return_if_fail(account != NULL);
 	g_return_if_fail(name    != NULL);
 
+	/* Re-setting a value to what it already is happens all the time on
+	 * login; skip the churn (realloc, UI notify, disk flush, signal). */
+	if (setting_unchanged(account->settings, name, PURPLE_PREF_INT, &value))
+		return;
+
 	setting = g_new0(PurpleAccountSetting, 1);
 
 	setting->type          = PURPLE_PREF_INT;
@@ -2049,6 +2083,9 @@ purple_account_set_int(PurpleAccount *account, const char *name, int value)
 	if (ui_ops != NULL && ui_ops->set_int != NULL) {
 		ui_ops->set_int(account, name, value);
 	}
+
+	purple_signal_emit(purple_accounts_get_handle(),
+			"account-setting-changed", account, name);
 
 	schedule_accounts_save();
 }
@@ -2063,6 +2100,9 @@ purple_account_set_string(PurpleAccount *account, const char *name,
 	g_return_if_fail(account != NULL);
 	g_return_if_fail(name    != NULL);
 
+	if (setting_unchanged(account->settings, name, PURPLE_PREF_STRING, value))
+		return;
+
 	setting = g_new0(PurpleAccountSetting, 1);
 
 	setting->type         = PURPLE_PREF_STRING;
@@ -2076,6 +2116,9 @@ purple_account_set_string(PurpleAccount *account, const char *name,
 		ui_ops->set_string(account, name, value);
 	}
 
+	purple_signal_emit(purple_accounts_get_handle(),
+			"account-setting-changed", account, name);
+
 	schedule_accounts_save();
 }
 
@@ -2087,6 +2130,9 @@ purple_account_set_bool(PurpleAccount *account, const char *name, gboolean value
 
 	g_return_if_fail(account != NULL);
 	g_return_if_fail(name    != NULL);
+
+	if (setting_unchanged(account->settings, name, PURPLE_PREF_BOOLEAN, &value))
+		return;
 
 	setting = g_new0(PurpleAccountSetting, 1);
 
@@ -2100,6 +2146,9 @@ purple_account_set_bool(PurpleAccount *account, const char *name, gboolean value
 	if (ui_ops != NULL && ui_ops->set_bool != NULL) {
 		ui_ops->set_bool(account, name, value);
 	}
+
+	purple_signal_emit(purple_accounts_get_handle(),
+			"account-setting-changed", account, name);
 
 	schedule_accounts_save();
 }
@@ -2131,13 +2180,16 @@ purple_account_set_ui_int(PurpleAccount *account, const char *ui,
 	g_return_if_fail(ui      != NULL);
 	g_return_if_fail(name    != NULL);
 
+	table = get_ui_settings_table(account, ui);
+
+	if (setting_unchanged(table, name, PURPLE_PREF_INT, &value))
+		return;
+
 	setting = g_new0(PurpleAccountSetting, 1);
 
 	setting->type          = PURPLE_PREF_INT;
 	setting->ui            = g_strdup(ui);
 	setting->value.integer = value;
-
-	table = get_ui_settings_table(account, ui);
 
 	g_hash_table_insert(table, g_strdup(name), setting);
 
@@ -2155,13 +2207,16 @@ purple_account_set_ui_string(PurpleAccount *account, const char *ui,
 	g_return_if_fail(ui      != NULL);
 	g_return_if_fail(name    != NULL);
 
+	table = get_ui_settings_table(account, ui);
+
+	if (setting_unchanged(table, name, PURPLE_PREF_STRING, value))
+		return;
+
 	setting = g_new0(PurpleAccountSetting, 1);
 
 	setting->type         = PURPLE_PREF_STRING;
 	setting->ui           = g_strdup(ui);
 	setting->value.string = g_strdup(value);
-
-	table = get_ui_settings_table(account, ui);
 
 	g_hash_table_insert(table, g_strdup(name), setting);
 
@@ -2179,13 +2234,16 @@ purple_account_set_ui_bool(PurpleAccount *account, const char *ui,
 	g_return_if_fail(ui      != NULL);
 	g_return_if_fail(name    != NULL);
 
+	table = get_ui_settings_table(account, ui);
+
+	if (setting_unchanged(table, name, PURPLE_PREF_BOOLEAN, &value))
+		return;
+
 	setting = g_new0(PurpleAccountSetting, 1);
 
 	setting->type       = PURPLE_PREF_BOOLEAN;
 	setting->ui         = g_strdup(ui);
 	setting->value.boolean = value;
-
-	table = get_ui_settings_table(account, ui);
 
 	g_hash_table_insert(table, g_strdup(name), setting);
 
@@ -2462,7 +2520,12 @@ purple_account_get_int(const PurpleAccount *account, const char *name,
 	if (setting == NULL)
 		return default_value;
 
-	g_return_val_if_fail(setting->type == PURPLE_PREF_INT, default_value);
+	if (setting->type != PURPLE_PREF_INT) {
+		purple_debug_warning("account",
+				"setting '%s' requested as int but stored as type %d; "
+				"returning default\n", name, setting->type);
+		return default_value;
+	}
 
 	return setting->value.integer;
 }
@@ -2481,7 +2544,12 @@ purple_account_get_string(const PurpleAccount *account, const char *name,
 	if (setting == NULL)
 		return default_value;
 
-	g_return_val_if_fail(setting->type == PURPLE_PREF_STRING, default_value);
+	if (setting->type != PURPLE_PREF_STRING) {
+		purple_debug_warning("account",
+				"setting '%s' requested as string but stored as type %d; "
+				"returning default\n", name, setting->type);
+		return default_value;
+	}
 
 	return setting->value.string;
 }
@@ -2500,7 +2568,12 @@ purple_account_get_bool(const PurpleAccount *account, const char *name,
 	if (setting == NULL)
 		return default_value;
 
-	g_return_val_if_fail(setting->type == PURPLE_PREF_BOOLEAN, default_value);
+	if (setting->type != PURPLE_PREF_BOOLEAN) {
+		purple_debug_warning("account",
+				"setting '%s' requested as bool but stored as type %d; "
+				"returning default\n", name, setting->type);
+		return default_value;
+	}
 
 	return setting->value.boolean;
 }
@@ -3259,6 +3332,12 @@ purple_accounts_init(void)
 						 purple_value_new(PURPLE_TYPE_SUBTYPE, PURPLE_SUBTYPE_ACCOUNT));
 
 	purple_signal_register(handle, "account-alias-changed",
+						 purple_marshal_VOID__POINTER_POINTER, NULL, 2,
+						 purple_value_new(PURPLE_TYPE_SUBTYPE,
+							 			PURPLE_SUBTYPE_ACCOUNT),
+						 purple_value_new(PURPLE_TYPE_STRING));
+
+	purple_signal_register(handle, "account-setting-changed",
 						 purple_marshal_VOID__POINTER_POINTER, NULL, 2,
 						 purple_value_new(PURPLE_TYPE_SUBTYPE,
 							 			PURPLE_SUBTYPE_ACCOUNT),
