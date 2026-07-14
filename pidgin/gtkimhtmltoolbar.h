@@ -46,7 +46,7 @@ struct _GtkIMHtmlToolbar {
 
 	GtkWidget *imhtml;
 
-	GtkTooltips *tooltips;
+	gpointer tooltips; /* GTK3: GtkTooltips removed; kept as unused placeholder */
 
 	GtkWidget *bold;
 	GtkWidget *italic;

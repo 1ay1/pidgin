@@ -82,9 +82,10 @@ static void pidgin_status_box_refresh(PidginStatusBox *status_box);
 static void status_menu_refresh_iter(PidginStatusBox *status_box, gboolean status_changed);
 static void pidgin_status_box_regenerate(PidginStatusBox *status_box, gboolean status_changed);
 static void pidgin_status_box_changed(PidginStatusBox *box);
-static void pidgin_status_box_size_request (GtkWidget *widget, GtkRequisition *requisition);
+static void pidgin_status_box_get_preferred_width (GtkWidget *widget, gint *minimal, gint *natural);
+static void pidgin_status_box_get_preferred_height (GtkWidget *widget, gint *minimal, gint *natural);
 static void pidgin_status_box_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
-static gboolean pidgin_status_box_expose_event (GtkWidget *widget, GdkEventExpose *event);
+static gboolean pidgin_status_box_draw (GtkWidget *widget, cairo_t *cr);
 static void pidgin_status_box_redisplay_buddy_icon(PidginStatusBox *status_box);
 static void pidgin_status_box_forall (GtkContainer *container, gboolean include_internals, GtkCallback callback, gpointer callback_data);
 static void pidgin_status_box_popup(PidginStatusBox *box);
@@ -571,9 +572,10 @@ pidgin_status_box_class_init (PidginStatusBoxClass *klass,
 	parent_class = g_type_class_peek_parent(klass);
 
 	widget_class = (GtkWidgetClass*)klass;
-	widget_class->size_request = pidgin_status_box_size_request;
+	widget_class->get_preferred_width = pidgin_status_box_get_preferred_width;
+	widget_class->get_preferred_height = pidgin_status_box_get_preferred_height;
 	widget_class->size_allocate = pidgin_status_box_size_allocate;
-	widget_class->expose_event = pidgin_status_box_expose_event;
+	widget_class->draw = pidgin_status_box_draw;
 
 	container_class->child_type = pidgin_status_box_child_type;
 	container_class->forall = pidgin_status_box_forall;
@@ -1879,11 +1881,10 @@ pidgin_status_box_init (PidginStatusBox *status_box,
 }
 
 static void
-pidgin_status_box_size_request(GtkWidget *widget,
-								 GtkRequisition *requisition)
+pidgin_status_box_get_requisition(GtkWidget *widget, GtkRequisition *requisition)
 {
 	GtkRequisition box_req;
-	gint border_width = GTK_CONTAINER (widget)->border_width;
+	guint border_width = gtk_container_get_border_width(GTK_CONTAINER(widget));
 
 	gtk_widget_get_preferred_size_compat(PIDGIN_STATUS_BOX(widget)->toggle_button, requisition);
 
@@ -1897,6 +1898,24 @@ pidgin_status_box_size_request(GtkWidget *widget,
 		requisition->height += box_req.height + border_width * 2;
 
 	requisition->width = 1;
+}
+
+static void
+pidgin_status_box_get_preferred_width(GtkWidget *widget,
+				      gint *minimal, gint *natural)
+{
+	GtkRequisition requisition;
+	pidgin_status_box_get_requisition(widget, &requisition);
+	*minimal = *natural = requisition.width;
+}
+
+static void
+pidgin_status_box_get_preferred_height(GtkWidget *widget,
+				       gint *minimal, gint *natural)
+{
+	GtkRequisition requisition;
+	pidgin_status_box_get_requisition(widget, &requisition);
+	*minimal = *natural = requisition.height;
 }
 
 /* From gnome-panel */

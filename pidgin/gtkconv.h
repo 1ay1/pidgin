@@ -122,7 +122,9 @@ struct _PidginConversation
 
 	gboolean make_sound;
 
-	GtkTooltips *tooltips;
+	/* GtkTooltips was removed in GTK3; kept as an opaque pointer for ABI/source
+	 * compatibility. Native tooltips (gtk_widget_set_tooltip_text) are used now. */
+	GtkWidget *tooltips;
 
 	GtkWidget *tab_cont;
 	GtkWidget *tabby;

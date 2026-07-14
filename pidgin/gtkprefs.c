@@ -145,12 +145,12 @@ pidgin_prefs_labeled_spin_button(GtkWidget *box, const gchar *title,
 		const char *key, int min, int max, GtkSizeGroup *sg)
 {
 	GtkWidget *spin;
-	GObject *adjust;
+	GtkAdjustment *adjust;
 	int val;
 
 	val = purple_prefs_get_int(key);
 
-	adjust = gtk_adjustment_new(val, min, max, 1, 1, 0);
+	adjust = GTK_ADJUSTMENT(gtk_adjustment_new(val, min, max, 1, 1, 0));
 	spin = gtk_spin_button_new(GTK_ADJUSTMENT(adjust), 1, 0);
 	g_object_set_data(G_OBJECT(spin), "val", (char *)key);
 	if (max < 10000)
