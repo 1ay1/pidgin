@@ -671,8 +671,8 @@ docklet_plugin_actions(GtkWidget *menu)
 		pidgin_separator(menu);
 }
 
-static void
-docklet_menu(void)
+static GtkWidget *
+docklet_build_menu(void)
 {
 	static GtkWidget *menu = NULL;
 	GtkWidget *menuitem;
@@ -753,6 +753,13 @@ docklet_menu(void)
 	g_signal_connect(menu, "enter-notify-event", G_CALLBACK(docklet_menu_leave_enter), NULL);
 #endif
 	gtk_widget_show_all(menu);
+	return menu;
+}
+
+static void
+docklet_menu(void)
+{
+	GtkWidget *menu = docklet_build_menu();
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL,
 		       ui_ops->position_menu,
 		       NULL, 0, gtk_get_current_event_time());
@@ -766,6 +773,15 @@ pidgin_docklet_update_icon()
 {
 	if (ui_ops && ui_ops->update_icon)
 		ui_ops->update_icon(status, connecting, pending);
+}
+
+GtkWidget *
+pidgin_docklet_build_menu(void)
+{
+	/* Build the full context menu and return it WITHOUT popping it up.
+	 * Used by the AppIndicator/StatusNotifierItem backend, which owns the menu
+	 * (the panel shows it itself) rather than having us gtk_menu_popup() it. */
+	return docklet_build_menu();
 }
 
 void

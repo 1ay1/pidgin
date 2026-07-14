@@ -26,12 +26,28 @@
 #include "pidginstock.h"
 #include "gtkdocklet.h"
 
+#ifdef USE_APPINDICATOR
+# ifdef HAVE_AYATANA_APPINDICATOR
+#  include <libayatana-appindicator/app-indicator.h>
+# else
+#  include <libappindicator/app-indicator.h>
+# endif
+#endif
+
 #define SHORT_EMBED_TIMEOUT 5
 #define LONG_EMBED_TIMEOUT 15
 
 /* globals */
 static GtkStatusIcon *docklet = NULL;
 static guint embed_timeout = 0;
+
+#ifdef USE_APPINDICATOR
+/* When an AppIndicator (StatusNotifierItem) host is present we use it instead
+ * of the deprecated GtkStatusIcon, which does not work on modern desktops
+ * (GNOME, Wayland, KDE without XEmbed, ...). The indicator is created lazily
+ * and, once created, is used for the whole session. */
+static AppIndicator *app_indicator = NULL;
+#endif
 
 /* protos */
 static void docklet_gtk_status_create(gboolean);
@@ -137,11 +153,18 @@ static void
 docklet_gtk_status_update_icon(PurpleStatusPrimitive status, gboolean connecting, gboolean pending)
 {
 	const gchar *icon_name = NULL;
-	const gchar *current_icon_name;
+	const gchar *current_icon_name = NULL;
 
+#ifdef USE_APPINDICATOR
+	if (app_indicator != NULL) {
+		current_icon_name = app_indicator_get_icon(app_indicator);
+	} else
+#endif
+	{
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-	current_icon_name = gtk_status_icon_get_icon_name(docklet);
+		current_icon_name = gtk_status_icon_get_icon_name(docklet);
 G_GNUC_END_IGNORE_DEPRECATIONS
+	}
 
 	switch (status) {
 		case PURPLE_STATUS_OFFLINE:
@@ -173,15 +196,37 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	}
 
 	if (icon_name) {
+#ifdef USE_APPINDICATOR
+		if (app_indicator != NULL) {
+			app_indicator_set_icon_full(app_indicator, icon_name, icon_name);
+			/* The context menu content is status-dependent (Unread Messages
+			 * submenu, New Message/Join Chat sensitivity, status checkmarks),
+			 * and the SNI menu is owned by the host rather than rebuilt per
+			 * click. Rebuild and re-attach it so it stays current. */
+			app_indicator_set_menu(app_indicator,
+				GTK_MENU(pidgin_docklet_build_menu()));
+		} else
+#endif
+		{
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-		gtk_status_icon_set_from_icon_name(docklet, icon_name);
+			gtk_status_icon_set_from_icon_name(docklet, icon_name);
 G_GNUC_END_IGNORE_DEPRECATIONS
+		}
 	}
 }
 
 static void
 docklet_gtk_status_set_tooltip(gchar *tooltip)
 {
+#ifdef USE_APPINDICATOR
+	if (app_indicator != NULL) {
+		/* AppIndicator/SNI hosts show the title as the tooltip; there is no
+		 * separate free-text tooltip API. Setting the title is the closest
+		 * GTK3-idiomatic equivalent. */
+		app_indicator_set_title(app_indicator, tooltip);
+		return;
+	}
+#endif
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	gtk_status_icon_set_tooltip_text(docklet, tooltip);
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -200,6 +245,17 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 static void
 docklet_gtk_status_destroy(void)
 {
+#ifdef USE_APPINDICATOR
+	if (app_indicator != NULL) {
+		pidgin_docklet_remove();
+		app_indicator_set_status(app_indicator, APP_INDICATOR_STATUS_PASSIVE);
+		g_object_unref(G_OBJECT(app_indicator));
+		app_indicator = NULL;
+		purple_debug_info("docklet", "AppIndicator destroyed\n");
+		return;
+	}
+#endif
+
 	g_return_if_fail(docklet != NULL);
 
 	pidgin_docklet_remove();
@@ -219,6 +275,58 @@ docklet_gtk_status_destroy(void)
 static void
 docklet_gtk_status_create(gboolean recreate)
 {
+#ifdef USE_APPINDICATOR
+	/* Prefer the AppIndicator (StatusNotifierItem) backend: it works on all
+	 * modern desktops (GNOME, KDE, Wayland, Unity, ...) where the deprecated
+	 * GtkStatusIcon XEmbed tray is unavailable. It is always "embedded" as far
+	 * as we are concerned (the panel/host owns visibility), so there is no
+	 * embed-timeout dance. */
+	if (app_indicator != NULL) {
+		purple_debug_warning("docklet",
+			"trying to create indicator but it already exists?\n");
+		docklet_gtk_status_destroy();
+	}
+
+	app_indicator = app_indicator_new("pidgin",
+			PIDGIN_STOCK_TRAY_AVAILABLE,
+			APP_INDICATOR_CATEGORY_COMMUNICATIONS);
+
+	if (app_indicator != NULL && APP_IS_INDICATOR(app_indicator)) {
+		GtkWidget *menu;
+
+		/* Point the indicator at our bundled tray icon theme so the SNI host
+		 * can resolve the pidgin-tray-* icon names. */
+		app_indicator_set_icon_theme_path(app_indicator,
+			DATADIR G_DIR_SEPARATOR_S "pixmaps" G_DIR_SEPARATOR_S "pidgin"
+			G_DIR_SEPARATOR_S "tray" G_DIR_SEPARATOR_S "hicolor");
+
+		app_indicator_set_status(app_indicator, APP_INDICATOR_STATUS_ACTIVE);
+
+		/* The SNI protocol has no separate "activate" (left-click) action that
+		 * is honoured everywhere, so the context menu is the primary UI. Build
+		 * the same menu the GtkStatusIcon path uses and hand it to the host;
+		 * app_indicator_set_secondary_activate_target lets left-click on hosts
+		 * that support it toggle the buddy list via the Show/Hide item. */
+		menu = pidgin_docklet_build_menu();
+		app_indicator_set_menu(app_indicator, GTK_MENU(menu));
+
+		if (!recreate)
+			pidgin_docklet_embedded();
+
+		purple_debug_info("docklet", "AppIndicator created\n");
+		return;
+	}
+
+	/* app_indicator_new() failed (no SNI host / library problem): fall through
+	 * to the legacy GtkStatusIcon path. */
+	if (app_indicator != NULL) {
+		g_object_unref(G_OBJECT(app_indicator));
+		app_indicator = NULL;
+	}
+	purple_debug_info("docklet",
+		"AppIndicator unavailable; falling back to GtkStatusIcon\n");
+#endif /* USE_APPINDICATOR */
+
 	if (docklet) {
 		/* if this is being called when a tray icon exists, it's because
 		   something messed up. try destroying it before we proceed,

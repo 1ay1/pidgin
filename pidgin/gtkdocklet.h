@@ -40,6 +40,7 @@ struct docklet_ui_ops
 
 /* functions in gtkdocklet.c */
 void pidgin_docklet_update_icon(void);
+GtkWidget *pidgin_docklet_build_menu(void);
 void pidgin_docklet_clicked(int);
 void pidgin_docklet_embedded(void);
 void pidgin_docklet_remove(void);

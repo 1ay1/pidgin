@@ -72,6 +72,9 @@ endif
 if have_x11
   pidgin_deps += x11_dep
 endif
+if have_appindicator
+  pidgin_deps += appindicator_dep
+endif
 if gio_unix_dep.found()
   pidgin_deps += gio_unix_dep
 endif

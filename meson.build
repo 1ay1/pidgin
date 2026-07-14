@@ -124,6 +124,21 @@ have_gtkspell = gtkspell_dep.found() and have_gtk
 x11_dep = dependency('x11', required : false)
 have_x11 = x11_dep.found() and have_gtk
 
+# AppIndicator / StatusNotifierItem system tray icon.
+# Prefer the maintained Ayatana fork; fall back to the legacy libappindicator.
+# This gives Pidgin a tray icon that works on modern desktops (GNOME, KDE,
+# Wayland, Unity, ...) where the deprecated GtkStatusIcon XEmbed tray is gone.
+appindicator_dep = dependency('ayatana-appindicator3-0.1', required : false)
+have_ayatana_appindicator = appindicator_dep.found()
+if not appindicator_dep.found()
+  appindicator_dep = dependency('appindicator3-0.1',
+                                required : get_option('appindicator'))
+else
+  # Satisfy an explicitly-required option even though we already found Ayatana.
+  dummy = get_option('appindicator').require(true)
+endif
+have_appindicator = appindicator_dep.found() and have_gtk
+
 # libgnt (Finch)
 gnt_dep = dependency('gnt', required : get_option('gnt'))
 have_gnt = gnt_dep.found()
@@ -302,6 +317,12 @@ endif
 if have_x11
   conf.set('HAVE_X11', 1)
 endif
+if have_appindicator
+  conf.set('USE_APPINDICATOR', 1)
+  if have_ayatana_appindicator
+    conf.set('HAVE_AYATANA_APPINDICATOR', 1)
+  endif
+endif
 if gio_unix_dep.found()
   conf.set('HAVE_GIOUNIX', 1)
 endif
@@ -373,6 +394,12 @@ if have_nls
   subdir('po')
 endif
 
+if have_appindicator
+  appindicator_summary = have_ayatana_appindicator ? 'yes (Ayatana)' : 'yes (legacy)'
+else
+  appindicator_summary = 'no (GtkStatusIcon)'
+endif
+
 # ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
@@ -388,6 +415,7 @@ summary({
   'Avahi/Bonjour' : have_avahi,
   'NetworkManager': have_nm,
   'GtkSpell'      : have_gtkspell,
+  'Tray (AppIndicator)' : appindicator_summary,
   'Plugins'       : get_option('plugins'),
 }, section : 'Core')
 

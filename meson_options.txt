@@ -22,6 +22,7 @@ option('mono',           type : 'feature', value : 'disabled', description : 'Mo
 option('sqlite3',        type : 'feature', value : 'auto', description : 'SQLite3 (Contact Availability Prediction plugin)')
 option('evolution',      type : 'feature', value : 'disabled', description : 'Evolution addressbook integration')
 option('unity-integration',          type : 'feature', value : 'disabled', description : 'Unity messaging-menu integration')
+option('appindicator',    type : 'feature', value : 'auto', description : 'AppIndicator/StatusNotifierItem system tray icon (Ayatana)')
 option('doc',            type : 'boolean', value : false, description : 'Build Doxygen API documentation')
 option('install-ssl-certs', type : 'boolean', value : true, description : 'Install the bundled CA certificate bundle')
 
