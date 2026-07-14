@@ -512,6 +512,13 @@ void pidgin_save_accels_cb(GtkAccelGroup *accel_group, guint arg1,
 gboolean pidgin_save_accels(gpointer data);
 
 /**
+ * Cancel any pending deferred accelerator save, flushing it once first.
+ * Call before tearing down the windows that own the accel groups so the
+ * timer can't fire against finalized objects.
+ */
+void pidgin_accels_stop(void);
+
+/**
  * Load menu accelerators
  */
 void pidgin_load_accels(void);

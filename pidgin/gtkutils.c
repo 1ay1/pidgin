@@ -1278,6 +1278,19 @@ pidgin_save_accels_cb(GtkAccelGroup *accel_group, guint arg1,
 		                                  NULL);
 }
 
+void
+pidgin_accels_stop(void)
+{
+	/* Cancel any pending deferred save so the timer can't fire (and touch
+	 * accel objects) after the owning windows have been torn down. If a save
+	 * was pending, flush it once synchronously so nothing is lost. */
+	if (accels_save_timer) {
+		purple_timeout_remove(accels_save_timer);
+		accels_save_timer = 0;
+		pidgin_save_accels(NULL);
+	}
+}
+
 gboolean
 pidgin_save_accels(gpointer data)
 {

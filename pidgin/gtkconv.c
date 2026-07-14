@@ -9602,6 +9602,19 @@ pidgin_conv_window_destroy(PidginWindow *win)
 	if (win->dialogs.search)
 		gtk_widget_destroy(win->dialogs.search);
 
+	/* GTK3: detach the accel-changed save handler before the menu is torn
+	 * down so it can't fire against finalized accel objects (see the matching
+	 * comment in pidgin_blist_destroy). */
+	{
+		GSList *ag;
+		for (ag = gtk_accel_groups_from_object(G_OBJECT(win->window));
+		     ag != NULL; ag = ag->next) {
+			g_signal_handlers_disconnect_by_func(ag->data,
+				G_CALLBACK(pidgin_save_accels_cb), NULL);
+		}
+	}
+	pidgin_accels_stop();
+
 	gtk_widget_destroy(win->window);
 
 	g_object_unref(G_OBJECT(win->menu.item_factory));

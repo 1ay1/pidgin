@@ -6999,6 +6999,22 @@ static void pidgin_blist_destroy(PurpleBuddyList *list)
 	if (gtkblist->headline_close)
 		g_object_unref(gtkblist->headline_close);
 
+	/* GTK3: tearing down the menu/item-factory makes the window's accel group
+	 * emit "accel-changed" for every removed accelerator. Our handler defers a
+	 * save on a timer; if that (or the emission itself) runs while the menu
+	 * items are being finalized, GObject complains about ref/unref on
+	 * already-finalized objects. Detach the handler and flush the pending save
+	 * before we destroy the window. */
+	{
+		GSList *ag;
+		for (ag = gtk_accel_groups_from_object(G_OBJECT(gtkblist->window));
+		     ag != NULL; ag = ag->next) {
+			g_signal_handlers_disconnect_by_func(ag->data,
+				G_CALLBACK(pidgin_save_accels_cb), NULL);
+		}
+	}
+	pidgin_accels_stop();
+
 	gtk_widget_destroy(gtkblist->window);
 
 	pidgin_blist_tooltip_destroy();
