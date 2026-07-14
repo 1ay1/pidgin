@@ -650,6 +650,19 @@ gtk_imhtml_tip (gpointer data)
 	gtk_widget_set_name (imhtml->tip_window, "gtk-tooltips");
 	gtk_window_set_type_hint (GTK_WINDOW (imhtml->tip_window),
 		GDK_WINDOW_TYPE_HINT_TOOLTIP);
+	/*
+	 * Wayland can't place a parentless override-redirect popup; anchor the
+	 * link tooltip to the imhtml's toplevel so the compositor can position
+	 * it (otherwise: "temporary window without parent" + the transient_for
+	 * assertion in gdk_wayland_window_handle_configure_popup).
+	 */
+	{
+		GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (imhtml));
+		if (toplevel != NULL && GTK_IS_WINDOW (toplevel)) {
+			gtk_window_set_transient_for (GTK_WINDOW (imhtml->tip_window),
+				GTK_WINDOW (toplevel));
+		}
+	}
 	g_signal_connect (G_OBJECT (imhtml->tip_window), "draw",
 							  G_CALLBACK (gtk_imhtml_tip_paint), imhtml);
 

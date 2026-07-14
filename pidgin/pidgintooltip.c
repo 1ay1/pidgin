@@ -137,6 +137,17 @@ setup_tooltip_window(void)
 	tipwindow = gtk_window_new(GTK_WINDOW_POPUP);
 	name = gtk_window_get_title(GTK_WINDOW(pidgin_tooltip.widget));
 	gtk_window_set_type_hint(GTK_WINDOW(tipwindow), GDK_WINDOW_TYPE_HINT_TOOLTIP);
+	/*
+	 * Wayland cannot position a parentless override-redirect popup: it
+	 * emits "temporary window without parent" and fails the
+	 * transient_for assertion in gdk_wayland_window_handle_configure_popup.
+	 * Anchor the tooltip to the toplevel window it belongs to so the
+	 * compositor can place it relative to a real surface.
+	 */
+	if (pidgin_tooltip.widget != NULL && GTK_IS_WINDOW(pidgin_tooltip.widget)) {
+		gtk_window_set_transient_for(GTK_WINDOW(tipwindow),
+				GTK_WINDOW(pidgin_tooltip.widget));
+	}
 	gtk_widget_set_app_paintable(tipwindow, TRUE);
 	gtk_window_set_title(GTK_WINDOW(tipwindow), name ? name : _("Pidgin Tooltip"));
 	gtk_window_set_resizable(GTK_WINDOW(tipwindow), FALSE);

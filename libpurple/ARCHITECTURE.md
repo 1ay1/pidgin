@@ -234,6 +234,32 @@ The fix is self-contained and needs no counter cooperation:
 The legacy `"resize-count"` damper is left in place as a secondary cap; the two
 guards above are what make the loop provably terminate.
 
+## Frontend hardening: Wayland could not position parentless tooltip popups
+
+Pidgin's link/buddy tooltips are override-redirect `GTK_WINDOW_POPUP`
+toplevels created on demand (`pidgin/pidgintooltip.c`,
+`gtk_imhtml_tip()` in `pidgin/gtkimhtml.c`). Under X11 a popup can float
+unparented and be positioned by absolute root coordinates, so these windows
+never set a transient parent.
+
+Wayland has no global coordinate space: an override-redirect surface must be a
+**subsurface/popup of a real parent** to be placed at all. Mapping a
+parentless one makes GDK log
+
+```
+Window ... is a temporary window without parent, application will not be able
+to position it on screen.
+gdk_wayland_window_handle_configure_popup: assertion 'impl->transient_for' failed
+```
+
+and the tooltip either fails to appear or spams the assertion on every hover.
+
+The fix anchors each tooltip popup to the toplevel `GtkWindow` of the widget it
+describes via `gtk_window_set_transient_for()` before it is mapped
+(guarded by `GTK_IS_WINDOW`). The compositor then positions the popup relative
+to that surface; the placement math (which still computes absolute pointer
+coordinates) is unchanged and remains correct on X11.
+
 ## The protocol subsystem (modernized)
 
 Historically a protocol was located with an O(n) linear scan
