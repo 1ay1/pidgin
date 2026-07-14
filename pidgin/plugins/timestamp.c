@@ -134,7 +134,7 @@ get_config_frame(PurplePlugin *plugin)
 	GtkWidget *ret;
 	GtkWidget *frame, *label;
 	GtkWidget *vbox, *hbox;
-	GtkObject *adj;
+	GtkAdjustment *adj;
 	GtkWidget *spinner;
 
 	ret = gtk_vbox_new(FALSE, 18);
@@ -148,8 +148,8 @@ get_config_frame(PurplePlugin *plugin)
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 5);
 
 	/* XXX limit to divisors of 60? */
-	adj = gtk_adjustment_new(interval / 60, 1, 60, 1, 0, 0);
-	spinner = gtk_spin_button_new(GTK_ADJUSTMENT(adj), 0, 0);
+	adj = GTK_ADJUSTMENT(gtk_adjustment_new(interval / 60, 1, 60, 1, 0, 0));
+	spinner = gtk_spin_button_new(adj, 0, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), spinner, TRUE, TRUE, 0);
 	g_signal_connect(G_OBJECT(spinner), "value-changed",
 		G_CALLBACK(set_timestamp), NULL);

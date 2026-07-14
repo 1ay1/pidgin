@@ -42,18 +42,23 @@
 #define PREF_CHATS      PREF_PREFIX "/chats"
 
 static int
-imhtml_expose_cb(GtkWidget *widget, GdkEventExpose *event, PidginConversation *gtkconv)
+imhtml_expose_cb(GtkWidget *widget, cairo_t *cr, PidginConversation *gtkconv)
 {
 	int y, last_y, offset;
 	GdkRectangle visible_rect;
 	GtkTextIter iter;
 	GdkRectangle buf;
 	int pad;
+	GdkWindow *text_window;
 	PurpleConversation *conv = gtkconv->active_conv;
 	PurpleConversationType type = purple_conversation_get_type(conv);
 
 	if ((type == PURPLE_CONV_TYPE_CHAT && !purple_prefs_get_bool(PREF_CHATS)) ||
 			(type == PURPLE_CONV_TYPE_IM && !purple_prefs_get_bool(PREF_IMS)))
+		return FALSE;
+
+	text_window = gtk_text_view_get_window(GTK_TEXT_VIEW(widget), GTK_TEXT_WINDOW_TEXT);
+	if (!gtk_cairo_should_draw_window(cr, text_window))
 		return FALSE;
 
 	gtk_text_view_get_visible_rect(GTK_TEXT_VIEW(widget), &visible_rect);
@@ -74,19 +79,17 @@ imhtml_expose_cb(GtkWidget *widget, GdkEventExpose *event, PidginConversation *g
 		last_y = 0;
 
 	gtk_text_view_buffer_to_window_coords(GTK_TEXT_VIEW(widget), GTK_TEXT_WINDOW_TEXT,
-										0, last_y, 0, &y);
+						0, last_y, 0, &y);
 
-	if (y >= event->area.y)
 	{
-		GdkColor red = {0, 0xffff, 0, 0};
-		cairo_t *cr = gdk_cairo_create(GDK_DRAWABLE(event->window));
+		GdkRGBA red = {1.0, 0.0, 0.0, 1.0};
 
-		gdk_cairo_set_source_color(cr, &red);
+		gtk_cairo_transform_to_window(cr, widget, text_window);
+		gdk_cairo_set_source_rgba(cr, &red);
 		cairo_move_to(cr, 0.0, y + 0.5);
 		cairo_rel_line_to(cr, visible_rect.width, 0.0);
 		cairo_set_line_width(cr, 1.0);
 		cairo_stroke(cr);
-		cairo_destroy(cr);
 	}
 	return FALSE;
 }
@@ -173,7 +176,7 @@ static void
 attach_to_gtkconv(PidginConversation *gtkconv, gpointer null)
 {
 	detach_from_gtkconv(gtkconv, NULL);
-	g_signal_connect(G_OBJECT(gtkconv->imhtml), "expose_event",
+	g_signal_connect(G_OBJECT(gtkconv->imhtml), "draw",
 					 G_CALLBACK(imhtml_expose_cb), gtkconv);
 }
 

@@ -430,15 +430,10 @@ static gboolean
 disco_paint_tooltip(GtkWidget *tipwindow, gpointer data)
 {
 	PangoLayout *layout = g_object_get_data(G_OBJECT(tipwindow), "tooltip-plugin");
-#if GTK_CHECK_VERSION(2,14,0)
-	gtk_paint_layout(gtk_widget_get_style(tipwindow),
-			gtk_widget_get_window(tipwindow),
-			GTK_STATE_NORMAL, FALSE,
-#else
-	gtk_paint_layout(tipwindow->style, tipwindow->window, GTK_STATE_NORMAL, FALSE,
-#endif
-			NULL, tipwindow, "tooltip",
-			6, 6, layout);
+	GtkStyleContext *context = gtk_widget_get_style_context(tipwindow);
+	cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(tipwindow));
+	gtk_render_layout(context, cr, 6, 6, layout);
+	cairo_destroy(cr);
 	return TRUE;
 }
 
