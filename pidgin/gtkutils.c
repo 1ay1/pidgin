@@ -3375,13 +3375,75 @@ gboolean pidgin_auto_parent_window(GtkWidget *widget)
 #endif
 }
 
+/*
+ * Upper bound on the *encoded* size we will feed to the pixbuf loader. A
+ * legitimate buddy icon / inline image is a few hundred KB at most; anything
+ * past this is either corrupt or hostile, and handing it to the loader risks
+ * a very slow (or, with the glycin-backed gdk-pixbuf, subprocess-sandboxed)
+ * decode that blocks the GTK main loop and freezes the whole UI. 16 MiB is
+ * comfortably above any real avatar while still bounding the work. */
+#define PIDGIN_PIXBUF_MAX_ENCODED_BYTES (16 * 1024 * 1024)
+
+/*
+ * Upper bound on the decoded dimensions. A "decompression bomb" image declares
+ * enormous width/height so the loader tries to allocate width*height*4 bytes
+ * up front -- gigabytes for a tiny encoded payload -- stalling or OOM-killing
+ * us on the main thread. We clamp via the size-prepared signal; real icons are
+ * scaled down for display anyway, so clamping to 4096 px is loss-free in
+ * practice. */
+#define PIDGIN_PIXBUF_MAX_DIMENSION 4096
+
+static void
+pidgin_pixbuf_size_prepared_cb(GdkPixbufLoader *loader, gint width, gint height,
+                               gpointer user_data)
+{
+	/* Only ever shrink: if the declared size is already sane, leave it. */
+	if (width <= PIDGIN_PIXBUF_MAX_DIMENSION &&
+	    height <= PIDGIN_PIXBUF_MAX_DIMENSION)
+		return;
+
+	if (width >= height) {
+		height = (gint)((gint64)height * PIDGIN_PIXBUF_MAX_DIMENSION / width);
+		width = PIDGIN_PIXBUF_MAX_DIMENSION;
+	} else {
+		width = (gint)((gint64)width * PIDGIN_PIXBUF_MAX_DIMENSION / height);
+		height = PIDGIN_PIXBUF_MAX_DIMENSION;
+	}
+
+	if (width < 1)
+		width = 1;
+	if (height < 1)
+		height = 1;
+
+	purple_debug_warning("gtkutils", "clamping oversized image to %dx%d "
+			"to avoid a main-loop stall\n", width, height);
+	gdk_pixbuf_loader_set_size(loader, width, height);
+}
+
 static GObject *pidgin_pixbuf_from_data_helper(const guchar *buf, gsize count, gboolean animated)
 {
 	GObject *pixbuf;
 	GdkPixbufLoader *loader;
 	GError *error = NULL;
 
+	if (buf == NULL || count == 0) {
+		purple_debug_warning("gtkutils", "refusing to decode empty image "
+				"data (buf=%p, count=%zu)\n", buf, count);
+		return NULL;
+	}
+
+	if (count > PIDGIN_PIXBUF_MAX_ENCODED_BYTES) {
+		purple_debug_warning("gtkutils", "refusing to decode oversized "
+				"image of %zu bytes (cap %d); this would risk a "
+				"main-loop stall\n", count,
+				PIDGIN_PIXBUF_MAX_ENCODED_BYTES);
+		return NULL;
+	}
+
 	loader = gdk_pixbuf_loader_new();
+
+	g_signal_connect(G_OBJECT(loader), "size-prepared",
+			G_CALLBACK(pidgin_pixbuf_size_prepared_cb), NULL);
 
 	if (!gdk_pixbuf_loader_write(loader, buf, count, &error) || error) {
 		purple_debug_warning("gtkutils", "gdk_pixbuf_loader_write() "

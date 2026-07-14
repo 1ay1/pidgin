@@ -174,6 +174,37 @@ checksumless update (can't prove equality), or an icon *removal*
 (`data == NULL`/`len == 0`). Those boundary conditions are covered by
 `tests/test_buddyicon.c`.
 
+## Frontend hardening: image decode can no longer freeze the UI
+
+`pidgin_pixbuf_from_data()` / `pidgin_pixbuf_anim_from_data()`
+(`pidgin/gtkutils.c`) decode **protocol-supplied, untrusted** bytes — buddy
+icons and inline images — by feeding them straight into a `GdkPixbufLoader` on
+the **GTK main thread**. On a modern gdk-pixbuf backed by **glycin**, that
+decode forks a sandboxed subprocess and blocks on `wait4()`; a huge, animated,
+or malformed avatar (or a slow sandbox spawn) therefore stalls the whole event
+loop — observed as Pidgin *"hanging suddenly"* right after a buddy's icon
+arrives. A backtrace of the frozen process shows the main thread parked in the
+loader while `gly-hdl-loader` / `async-io` / `typefind:sink` worker threads sit
+in `wait4()`.
+
+`pidgin_pixbuf_from_data_helper()` now guards the decode without changing any
+public signature or the on-disk cache format:
+
+1. **Encoded-size gate.** `NULL`/empty payloads and anything larger than
+   `PIDGIN_PIXBUF_MAX_ENCODED_BYTES` (16 MiB — far above any real avatar) are
+   rejected *before* the loader is created, so a hostile multi-hundred-MB blob
+   never reaches the decoder.
+2. **Dimension clamp against decompression bombs.** A `size-prepared` handler
+   caps decoded dimensions at `PIDGIN_PIXBUF_MAX_DIMENSION` (4096 px) via
+   `gdk_pixbuf_loader_set_size()`. This is **shrink-only** and
+   **aspect-preserving** (and floors each side at 1 px), so a tiny encoded
+   payload that declares 60000×60000 can no longer make the loader try to
+   allocate gigabytes up front. Real icons are scaled down for display anyway,
+   so the clamp is loss-free in practice.
+
+The two pure decision functions (the size gate and the shrink-only clamp) are
+covered exactly by `tests/test_pixbuf_guard.c`.
+
 ## The protocol subsystem (modernized)
 
 Historically a protocol was located with an O(n) linear scan
