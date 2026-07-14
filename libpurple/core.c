@@ -28,6 +28,7 @@
 #include "certificate.h"
 #include "cmds.h"
 #include "connection.h"
+#include "connhealth.h"
 #include "conversation.h"
 #include "core.h"
 #include "debug.h"
@@ -192,6 +193,8 @@ purple_core_init(const char *ui)
 	purple_reconnect_init();
 	/* Outbound flood control keys buckets off live connections. */
 	purple_ratelimit_init();
+	/* Health telemetry samples live connections' liveness markers. */
+	purple_connhealth_init();
 	/* The outgoing message queue rides on top of the reconnect subsystem
 	 * (it only parks a message when a reconnect is pending), so start it
 	 * after reconnect. */
@@ -243,6 +246,7 @@ purple_core_quit(void)
 
 	/* Save .xml files, remove signals, etc. */
 	purple_msgqueue_uninit();
+	purple_connhealth_uninit();
 	purple_ratelimit_uninit();
 	purple_reconnect_uninit();
 	purple_smileys_uninit();

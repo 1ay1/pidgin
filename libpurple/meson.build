@@ -51,6 +51,7 @@ purple_coresources = files(
   'circbuffer.c',
   'cmds.c',
   'connection.c',
+  'connhealth.c',
   'conversation.c',
   'core.c',
   'debug.c',
@@ -128,7 +129,8 @@ if have_dbus
   # Core headers consumed by the type/function analyzers.
   dbus_coreheaders = files(
     'account.h', 'accountopt.h', 'blist.h', 'buddyicon.h', 'certificate.h',
-    'cipher.h', 'circbuffer.h', 'cmds.h', 'connection.h', 'conversation.h',
+    'cipher.h', 'circbuffer.h', 'cmds.h', 'connection.h', 'connhealth.h',
+    'conversation.h',
     'core.h', 'dbus-maybe.h', 'debug.h', 'desktopitem.h', 'eventloop.h',
     'ft.h', 'gaim-compat.h', 'glibcompat.h', 'idle.h', 'imgstore.h', 'log.h',
     'media.h', 'media-gst.h', 'mediamanager.h', 'mime.h', 'msgqueue.h',
@@ -242,7 +244,8 @@ libpurple_dep = declare_dependency(
 # public headers
 install_headers([
     'account.h', 'accountopt.h', 'blist.h', 'buddyicon.h', 'certificate.h',
-    'cipher.h', 'circbuffer.h', 'cmds.h', 'connection.h', 'conversation.h',
+    'cipher.h', 'circbuffer.h', 'cmds.h', 'connection.h', 'connhealth.h',
+    'conversation.h',
     'core.h', 'dbus-maybe.h', 'debug.h', 'desktopitem.h', 'eventloop.h',
     'ft.h', 'gaim-compat.h', 'glibcompat.h', 'idle.h', 'imgstore.h', 'log.h',
     'media.h', 'media-gst.h', 'mediamanager.h', 'mime.h', 'msgqueue.h',

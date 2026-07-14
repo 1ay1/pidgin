@@ -54,6 +54,7 @@
 #include <circbuffer.h>
 #include <cmds.h>
 #include <connection.h>
+#include <connhealth.h>
 #include <conversation.h>
 #include <core.h>
 #include <debug.h>

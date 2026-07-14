@@ -25,6 +25,7 @@ plug in through `*UiOps` vtables; protocols plug in as plugins exposing a
 | Reconnection  | `reconnect.c`                                    | Core auto-reconnect with exponential backoff |
 | Message queue | `msgqueue.c`                                      | Store-and-forward outgoing IMs across reconnects |
 | Rate limiting | `ratelimit.c`                                     | Per-connection outbound token bucket (anti-flood) |
+| Health        | `connhealth.c`                                    | Connection liveness/latency telemetry + signal |
 | Signals       | `signals.c`, `value.c`                           | Hand-rolled string-keyed signal bus |
 | Async I/O     | `eventloop.c`, `proxy.c`, `dnsquery.c`, `dnssrv.c` | fd-watch callbacks over a pluggable event loop |
 | Media         | `media*.c`, `media/`                             | GStreamer voice/video (GObject-based) |
@@ -101,6 +102,35 @@ token bucket** in the core:
 
 The token-accrual, burst, and next-delay math is covered by
 `tests/test_ratelimit.c` against a synthetic clock.
+
+## Connection health telemetry (new)
+
+Before, libpurple exposed only two coarse connection states (connected /
+disconnected) plus a private keepalive timer buried in `connection.c`. There
+was no way for a UI or plugin to observe latency or notice a silently-wedged
+link before the socket actually failed. `connhealth.{c,h}` adds lightweight,
+protocol-agnostic observability:
+
+- A 5s sampler walks every live connection and reads the inbound-liveness
+  marker each prpl already maintains (`gc->last_received`). From it it derives
+  an **idle time**, a coarse **health grade** (good / idle / stalled by
+  tunable thresholds — defaults 45s / 90s, chosen so a healthy 30s-keepalive
+  link is never worse than IDLE), and a smoothed **latency** estimate (EWMA of
+  each silence→next-activity gap — a keepalive-round-trip proxy that needs no
+  protocol cooperation).
+- It registers a `connection-health-changed` signal
+  `(PurpleConnection*, int old, int new)` emitted on every grade transition,
+  so a UI can show a signal-strength indicator or a "reconnecting soon" hint
+  without polling. Query API: `purple_connection_get_health` /
+  `health_to_string` / `get_idle_time` / `get_latency`; policy:
+  `purple_connhealth_set_enabled` / `set_thresholds`.
+- Per-connection state lives in a side table keyed off the live
+  `PurpleConnection` (no ABI change to the public struct) and is reclaimed on
+  `signed-off`. Everything is derived from existing state — no protocol, ABI,
+  or wire change.
+
+The idle-to-grade thresholds and latency EWMA are covered by
+`tests/test_connhealth.c`.
 
 ## The protocol subsystem (modernized)
 
