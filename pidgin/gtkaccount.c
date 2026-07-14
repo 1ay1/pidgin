@@ -210,9 +210,7 @@ set_dialog_icon(AccountPrefsDialog *dialog, gpointer data, size_t len, gchar *ne
 	if (pixbuf == NULL)
 	{
 		/* Show a placeholder icon */
-		pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-		                                pidgin_stock_icon_name(PIDGIN_STOCK_TOOLBAR_SELECT_AVATAR),
-		                                24, 0, NULL);
+		pixbuf = pidgin_pixbuf_from_stock(PIDGIN_STOCK_TOOLBAR_SELECT_AVATAR, 24);
 	}
 
 	gtk_image_set_from_pixbuf(GTK_IMAGE(dialog->icon_entry), pixbuf);
@@ -280,7 +278,7 @@ username_focus_cb(GtkWidget *widget, GdkEventFocus *event, AccountPrefsDialog *d
 
 	if(purple_strequal(gtk_entry_get_text(GTK_ENTRY(widget)), label)) {
 		gtk_entry_set_text(GTK_ENTRY(widget), "");
-		gtk_widget_modify_text(widget, GTK_STATE_NORMAL,NULL);
+		gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, NULL);
 	}
 
 	g_hash_table_destroy(table);
@@ -306,9 +304,11 @@ username_changed_cb(GtkEntry *entry, AccountPrefsDialog *dialog)
 static gboolean
 username_nofocus_cb(GtkWidget *widget, GdkEventFocus *event, AccountPrefsDialog *dialog)
 {
-	GdkColor color = {0, 34952, 35466, 34181};
+	GdkRGBA color;
 	GHashTable *table = NULL;
 	const char *label = NULL;
+
+	gdk_rgba_parse(&color, "#888988");
 
 	if(PURPLE_PROTOCOL_PLUGIN_HAS_FUNC(dialog->prpl_info, get_account_text_table)) {
 		table = dialog->prpl_info->get_account_text_table(NULL);
@@ -322,7 +322,7 @@ username_nofocus_cb(GtkWidget *widget, GdkEventFocus *event, AccountPrefsDialog 
 			gtk_entry_set_text(GTK_ENTRY(widget), label);
 			/* Make sure we can hit it again */
 			g_signal_handlers_unblock_by_func(widget, G_CALLBACK(username_changed_cb), dialog);
-			gtk_widget_modify_text(widget, GTK_STATE_NORMAL, &color);
+			gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, &color);
 		}
 
 		g_hash_table_destroy(table);

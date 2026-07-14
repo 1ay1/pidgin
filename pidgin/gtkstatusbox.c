@@ -619,8 +619,7 @@ pidgin_status_box_class_init (PidginStatusBoxClass *klass,
 static void
 pidgin_status_box_refresh(PidginStatusBox *status_box)
 {
-	GtkStyle *style;
-	char aa_color[8];
+	const char *aa_color;
 	PurpleSavedStatus *saved_status;
 	char *primary, *secondary, *text;
 	const char *stock = NULL;
@@ -629,11 +628,9 @@ pidgin_status_box_refresh(PidginStatusBox *status_box)
 	gboolean account_status = FALSE;
 	PurpleAccount *acct = (status_box->account) ? status_box->account : status_box->token_status_account;
 
-	style = gtk_widget_get_style(GTK_WIDGET(status_box));
-	snprintf(aa_color, sizeof(aa_color), "#%02x%02x%02x",
-		 style->text_aa[GTK_STATE_NORMAL].red >> 8,
-		 style->text_aa[GTK_STATE_NORMAL].green >> 8,
-		 style->text_aa[GTK_STATE_NORMAL].blue >> 8);
+	/* GTK3: derive the dimmed text colour from the theme (GtkStyleContext)
+	 * rather than the legacy GtkStyle->text_aa, which is not theme-filled. */
+	aa_color = pidgin_get_dim_grey_string(GTK_WIDGET(status_box));
 
 	saved_status = purple_savedstatus_get_current();
 
@@ -1161,8 +1158,8 @@ cache_pixbufs(PidginStatusBox *status_box)
 		if (status_box->connecting_pixbufs[i] != NULL)
 			g_object_unref(G_OBJECT(status_box->connecting_pixbufs[i]));
 		if (connecting_stock_ids[i])
-			status_box->connecting_pixbufs[i] = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-					pidgin_stock_icon_name(connecting_stock_ids[i]), 16, 0, NULL);
+			status_box->connecting_pixbufs[i] = pidgin_pixbuf_from_stock(
+					connecting_stock_ids[i], 16);
 		else
 			status_box->connecting_pixbufs[i] = NULL;
 	}
@@ -1173,8 +1170,8 @@ cache_pixbufs(PidginStatusBox *status_box)
 		if (status_box->typing_pixbufs[i] != NULL)
 			g_object_unref(G_OBJECT(status_box->typing_pixbufs[i]));
 		if (typing_stock_ids[i])
-			status_box->typing_pixbufs[i] =  gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-					pidgin_stock_icon_name(typing_stock_ids[i]), 16, 0, NULL);
+			status_box->typing_pixbufs[i] = pidgin_pixbuf_from_stock(
+					typing_stock_ids[i], 16);
 		else
 			status_box->typing_pixbufs[i] = NULL;
 	}
@@ -2101,15 +2098,11 @@ pidgin_status_box_add(PidginStatusBox *status_box, PidginStatusBoxItemType type,
 	}
 	else
 	{
-		GtkStyle *style;
-		char aa_color[8];
+		const char *aa_color;
 		gchar *escaped_title, *escaped_desc;
 
-		style = gtk_widget_get_style(GTK_WIDGET(status_box));
-		snprintf(aa_color, sizeof(aa_color), "#%02x%02x%02x",
-			 style->text_aa[GTK_STATE_NORMAL].red >> 8,
-			 style->text_aa[GTK_STATE_NORMAL].green >> 8,
-			 style->text_aa[GTK_STATE_NORMAL].blue >> 8);
+		/* GTK3: theme-aware dimmed colour instead of legacy GtkStyle->text_aa. */
+		aa_color = pidgin_get_dim_grey_string(GTK_WIDGET(status_box));
 
 		escaped_title = g_markup_escape_text(title, -1);
 		escaped_desc = g_markup_escape_text(desc, -1);
@@ -2255,9 +2248,8 @@ pidgin_status_box_redisplay_buddy_icon(PidginStatusBox *status_box)
 	if (status_box->buddy_icon == NULL)
 	{
 		/* Show a placeholder icon */
-		status_box->buddy_icon = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-		                                                pidgin_stock_icon_name(PIDGIN_STOCK_TOOLBAR_SELECT_AVATAR),
-		                                                24, 0, NULL);
+		status_box->buddy_icon = pidgin_pixbuf_from_stock(
+		                                                PIDGIN_STOCK_TOOLBAR_SELECT_AVATAR, 24);
 	}
 
 	if (status_box->buddy_icon != NULL) {

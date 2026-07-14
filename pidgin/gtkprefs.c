@@ -1632,11 +1632,11 @@ network_ip_changed(GtkEntry *entry, gpointer data)
 			color.blue = 0xAFFF;
 		}
 
-		gtk_widget_modify_base(GTK_WIDGET(entry), GTK_STATE_NORMAL, &color);
+		pidgin_widget_set_bg_color(GTK_WIDGET(entry), &color);
 
 	} else {
 		purple_network_set_public_ip("");
-		gtk_widget_modify_base(GTK_WIDGET(entry), GTK_STATE_NORMAL, NULL);
+		pidgin_widget_set_bg_color(GTK_WIDGET(entry), NULL);
 	}
 }
 

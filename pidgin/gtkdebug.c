@@ -279,7 +279,7 @@ pause_cb(GtkWidget *w, DebugWindow *win)
 #ifdef USE_REGEX
 static void
 regex_clear_color(GtkWidget *w) {
-	gtk_widget_modify_base(w, GTK_STATE_NORMAL, NULL);
+	pidgin_widget_set_bg_color(w, NULL);
 }
 
 static void
@@ -290,7 +290,7 @@ regex_change_color(GtkWidget *w, guint16 r, guint16 g, guint16 b) {
 	color.green = g;
 	color.blue = b;
 
-	gtk_widget_modify_base(w, GTK_STATE_NORMAL, &color);
+	pidgin_widget_set_bg_color(w, &color);
 }
 
 static void

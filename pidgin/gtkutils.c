@@ -3891,6 +3891,70 @@ pidgin_make_scrollable(GtkWidget *child, GtkPolicyType hscrollbar_policy, GtkPol
 	return child;
 }
 
+/*
+ * GTK3: gtk_widget_modify_base()/_text() are deprecated no-ops under CSS
+ * theming. Apply an ad-hoc colour through a per-widget GtkCssProvider that we
+ * cache on the widget so repeated calls replace rather than stack.
+ */
+static void
+pidgin_widget_set_css_color(GtkWidget *widget, const GdkColor *color,
+                            const char *prop, const char *data_key)
+{
+	GtkStyleContext *context;
+	GtkCssProvider *provider;
+
+	if (widget == NULL)
+		return;
+
+	context = gtk_widget_get_style_context(widget);
+	provider = g_object_get_data(G_OBJECT(widget), data_key);
+
+	if (color == NULL) {
+		/* Reset to the theme default. */
+		if (provider) {
+			gtk_style_context_remove_provider(context,
+			                                  GTK_STYLE_PROVIDER(provider));
+			g_object_set_data(G_OBJECT(widget), data_key, NULL);
+		}
+		return;
+	}
+
+	if (provider == NULL) {
+		provider = gtk_css_provider_new();
+		gtk_style_context_add_provider(context,
+		                               GTK_STYLE_PROVIDER(provider),
+		                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+		/* The style context keeps its own ref; stash ours for reuse and
+		 * let it be dropped when the widget is finalized. */
+		g_object_set_data_full(G_OBJECT(widget), data_key, provider,
+		                       g_object_unref);
+	}
+
+	{
+		char *css = g_strdup_printf(
+			"* { %s: #%02x%02x%02x; }", prop,
+			color->red   >> 8,
+			color->green >> 8,
+			color->blue  >> 8);
+		gtk_css_provider_load_from_data(provider, css, -1, NULL);
+		g_free(css);
+	}
+}
+
+void
+pidgin_widget_set_bg_color(GtkWidget *widget, const GdkColor *color)
+{
+	pidgin_widget_set_css_color(widget, color, "background-color",
+	                            "pidgin-bg-css-provider");
+}
+
+void
+pidgin_widget_set_text_color(GtkWidget *widget, const GdkColor *color)
+{
+	pidgin_widget_set_css_color(widget, color, "color",
+	                            "pidgin-text-css-provider");
+}
+
 void pidgin_utils_init(void)
 {
 	gtk_imhtml_class_register_protocol("http://", url_clicked_cb, link_context_menu);

@@ -195,15 +195,47 @@ static void pidgin_conv_set_position_size(PidginWindow *win, int x, int y,
 		int width, int height);
 static gboolean pidgin_conv_xy_to_right_infopane(PidginWindow *win, int x, int y);
 
+/* GTK3: fetch a widget's effective background colour from its style context
+ * (theme-aware) as a 16-bit GdkColor. Falls back to white if the theme reports
+ * a fully transparent background, which is the common case for text views. */
+static void
+pidgin_conv_get_theme_bg(GtkWidget *widget, GdkColor *color)
+{
+	GtkStyleContext *context;
+	GdkRGBA rgba;
+
+	context = gtk_widget_get_style_context(widget);
+	gtk_style_context_get_background_color(context,
+		gtk_style_context_get_state(context), &rgba);
+
+	if (rgba.alpha == 0.0) {
+		/* Transparent -- assume the default light text-view background. */
+		rgba.red = rgba.green = rgba.blue = 1.0;
+	}
+
+	color->red   = (guint16)(CLAMP(rgba.red,   0.0, 1.0) * 65535.0);
+	color->green = (guint16)(CLAMP(rgba.green, 0.0, 1.0) * 65535.0);
+	color->blue  = (guint16)(CLAMP(rgba.blue,  0.0, 1.0) * 65535.0);
+}
+
 static const GdkColor *get_nick_color(PidginConversation *gtkconv, const char *name)
 {
 	static GdkColor col;
-	GtkStyle *style = gtk_widget_get_style(gtkconv->imhtml);
+	GdkColor base;
+	float luminance_base, luminance_white;
 	float scale;
 
+	pidgin_conv_get_theme_bg(gtkconv->imhtml, &base);
+
 	col = nick_colors[g_str_hash(name) % nbr_nick_colors];
-	scale = ((1-(LUMINANCE(style->base[GTK_STATE_NORMAL]) / LUMINANCE(style->white))) *
-		       (LUMINANCE(style->white)/MAX(MAX(col.red, col.blue), col.green)));
+
+	/* GTK3: read the actual theme background rather than the legacy
+	 * GtkStyle->base, which is not filled from the CSS theme. "White" is a
+	 * fixed reference (65535) matching the palette the colors were tuned on. */
+	luminance_base = LUMINANCE(base);
+	luminance_white = (float)((0.3 + 0.59 + 0.11) * 65535.0);
+	scale = ((1 - (luminance_base / luminance_white)) *
+		       (luminance_white / MAX(MAX(col.red, col.blue), col.green)));
 
 	/* The colors are chosen to look fine on white; we should never have to darken */
 	if (scale > 1) {
@@ -4926,7 +4958,7 @@ pidgin_conv_create_tooltip(GtkWidget *tipwindow, gpointer userdata, int *w, int 
 static gboolean
 pidgin_conv_end_quickfind(PidginConversation *gtkconv)
 {
-	gtk_widget_modify_base(gtkconv->quickfind.entry, GTK_STATE_NORMAL, NULL);
+	pidgin_widget_set_bg_color(gtkconv->quickfind.entry, NULL);
 
 	gtk_imhtml_search_clear(GTK_IMHTML(gtkconv->imhtml));
 	gtk_widget_hide(gtkconv->quickfind.container);
@@ -4942,13 +4974,13 @@ quickfind_process_input(GtkWidget *entry, GdkEventKey *event, PidginConversation
 		case GDK_KEY_Return:
 		case GDK_KEY_KP_Enter:
 			if (gtk_imhtml_search_find(GTK_IMHTML(gtkconv->imhtml), gtk_entry_get_text(GTK_ENTRY(entry)))) {
-				gtk_widget_modify_base(gtkconv->quickfind.entry, GTK_STATE_NORMAL, NULL);
+				pidgin_widget_set_bg_color(gtkconv->quickfind.entry, NULL);
 			} else {
 				GdkColor col;
 				col.red = 0xffff;
 				col.green = 0xafff;
 				col.blue = 0xafff;
-				gtk_widget_modify_base(gtkconv->quickfind.entry, GTK_STATE_NORMAL, &col);
+				pidgin_widget_set_bg_color(gtkconv->quickfind.entry, &col);
 			}
 			break;
 		case GDK_KEY_Escape:
@@ -5529,8 +5561,10 @@ private_gtkconv_new(PurpleConversation *conv, gboolean hidden)
 		pidgin_conv_placement_place(gtkconv);
 
 	if (nick_colors == NULL) {
+		GdkColor bg;
+		pidgin_conv_get_theme_bg(gtkconv->imhtml, &bg);
 		nbr_nick_colors = NUM_NICK_COLORS;
-		nick_colors = generate_nick_colors(&nbr_nick_colors, gtk_widget_get_style(gtkconv->imhtml)->base[GTK_STATE_NORMAL]);
+		nick_colors = generate_nick_colors(&nbr_nick_colors, bg);
 	}
 
 	if (conv->features & PURPLE_CONNECTION_ALLOW_CUSTOM_SMILEY)

@@ -239,6 +239,17 @@ GtkWidget *pidgin_button_new_from_stock(const char *stock_id);
 GtkWidget *pidgin_image_new_from_stock(const char *stock_id, GtkIconSize size);
 
 /**
+ * GTK3-safe way to obtain a GdkPixbuf for a stock/icon id.  PIDGIN_STOCK_*
+ * ("pidgin-*") ids are rendered from the (populated) default GtkIconFactory;
+ * GTK_STOCK_* / themed ids are loaded from the current icon theme.  Callers
+ * that fed a "pidgin-*" id straight to gtk_icon_theme_load_icon() got NULL
+ * back (the factory ids aren't in the theme), which then triggered
+ * g_object_ref/unref(NULL) assertion storms.  Returns a new reference the
+ * caller must g_object_unref(), or NULL if the icon can't be resolved.
+ */
+GdkPixbuf *pidgin_pixbuf_from_stock(const char *stock_id, gint size);
+
+/**
  * Retrieves the action area (button box) from a pidgin dialog window
  *
  * @param dialog       The dialog window
@@ -1024,6 +1035,30 @@ GdkPixbuf *pidgin_pixbuf_new_from_file_at_scale(const char *filename, int width,
  * @since 2.8.0
  */
 GtkWidget *pidgin_make_scrollable(GtkWidget *child, GtkPolicyType hscrollbar_policy, GtkPolicyType vscrollbar_policy, GtkShadowType shadow_type, int width, int height);
+
+/**
+ * Set (or clear) the background "base" colour of a widget the GTK3 way,
+ * via a per-widget #GtkCssProvider. This replaces the deprecated
+ * gtk_widget_modify_base(), which is ignored under CSS theming.
+ *
+ * @param widget The widget to recolour.
+ * @param color  The colour to apply, or @c NULL to reset to the theme default.
+ *
+ * @since 2.15.0
+ */
+void pidgin_widget_set_bg_color(GtkWidget *widget, const GdkColor *color);
+
+/**
+ * Set (or clear) the foreground "text" colour of a widget the GTK3 way,
+ * via a per-widget #GtkCssProvider. This replaces the deprecated
+ * gtk_widget_modify_text().
+ *
+ * @param widget The widget to recolour.
+ * @param color  The colour to apply, or @c NULL to reset to the theme default.
+ *
+ * @since 2.15.0
+ */
+void pidgin_widget_set_text_color(GtkWidget *widget, const GdkColor *color);
 
 /**
  * Initialize some utility functions.
