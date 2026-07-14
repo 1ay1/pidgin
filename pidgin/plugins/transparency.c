@@ -251,8 +251,8 @@ static void add_slider(GtkWidget *win) {
 		g_list_free(wl1);
 
 		slider_box = wintrans_slider(win);
-		/* Figure out how tall the slider wants to be */
-		gtk_widget_size_request(slider_box, &slidereq);
+		/* Figure out how tall the slider wants to be (GTK3: natural size) */
+		gtk_widget_get_preferred_size_compat(slider_box, &slidereq);
 		gtk_window_get_size(GTK_WINDOW(win), &width, &height);
 		gtk_box_pack_start(GTK_BOX(vbox),
 			slider_box, FALSE, FALSE, 0);
