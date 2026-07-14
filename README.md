@@ -119,14 +119,3 @@ directory's `meson.build` and rebuild with `ninja -C build`.
 
 For upstream Pidgin issues, see <https://issues.imfreedom.org/>. For problems
 specific to this GTK 3 fork, use this repository's issue tracker.
-
-## Star history
-
-If this fork is useful to you, a ⭐ helps others discover it and signals that
-Pidgin 2 is still worth maintaining.
-
-<a href="https://star-history.com/#1ay1/pidgin&Date">
-  <img src="https://api.star-history.com/svg?repos=1ay1/pidgin&type=Date" alt="Star History Chart" width="600">
-</a>
-
-<p align="center"><b>⭐ <a href="https://github.com/1ay1/pidgin">Star this repo</a> to keep classic Pidgin alive.</b></p>
