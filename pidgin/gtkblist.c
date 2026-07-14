@@ -7005,18 +7005,16 @@ static void pidgin_blist_destroy(PurpleBuddyList *list)
 		g_object_unref(gtkblist->headline_close);
 	gtkblist->headline_close = NULL;
 
-	/* The tree model, item factory and empty-avatar pixbuf are unref'd below
-	 * AFTER gtk_widget_destroy(window). Destroying the window finalizes the
-	 * whole widget tree, which can also drop the last reference on some of
-	 * these (notably the GtkItemFactory, whose menu widgets live in the
-	 * window). Take our own guaranteed reference on each now so the unrefs
-	 * below act on live objects instead of already-finalized ones -- the
-	 * source of the object_ref/g_object_unref '!object_already_finalized' and
-	 * 'G_IS_OBJECT' assertion trio at shutdown. */
+	/* The tree model and empty-avatar pixbuf are unref'd below AFTER
+	 * gtk_widget_destroy(window). Destroying the window finalizes the whole
+	 * widget tree, which can also drop the last reference on these. Take our
+	 * own guaranteed reference on each now so the unrefs below act on live
+	 * objects instead of already-finalized ones -- the source of the
+	 * object_ref/g_object_unref '!object_already_finalized' and 'G_IS_OBJECT'
+	 * assertion trio at shutdown. (The GtkItemFactory is handled separately,
+	 * unref'd BEFORE the window destroy -- see below.) */
 	if (gtkblist->treemodel && G_IS_OBJECT(gtkblist->treemodel))
 		g_object_ref(gtkblist->treemodel);
-	if (gtkblist->ift && G_IS_OBJECT(gtkblist->ift))
-		g_object_ref(gtkblist->ift);
 	if (gtkblist->empty_avatar && G_IS_OBJECT(gtkblist->empty_avatar))
 		g_object_ref(gtkblist->empty_avatar);
 
@@ -7035,6 +7033,21 @@ static void pidgin_blist_destroy(PurpleBuddyList *list)
 		}
 	}
 	pidgin_accels_stop();
+
+	/* Drop the GtkItemFactory BEFORE destroying the window. The item factory
+	 * owns the menubar/menu widgets and their accelerators, which live inside
+	 * the window. If we let gtk_widget_destroy(window) finalize that widget
+	 * tree first and only unref the item factory afterwards, the factory's own
+	 * dispose then re-touches (ref/unref, signal-disconnect) menu items and an
+	 * accel group that the window destroy already finalized -- exactly the
+	 * '!object_already_finalized' / 'G_IS_OBJECT' / NULL-class /
+	 * g_signal_handlers_disconnect_matched assertion trio seen at shutdown.
+	 * Unref'ing here lets the factory tear its accelerators down while the
+	 * menus are still live; the subsequent window destroy then only drops
+	 * already-orphaned widgets. */
+	if (gtkblist->ift && G_IS_OBJECT(gtkblist->ift))
+		g_object_unref(G_OBJECT(gtkblist->ift));
+	gtkblist->ift = NULL;
 
 	gtk_widget_destroy(gtkblist->window);
 
@@ -7060,12 +7073,6 @@ static void pidgin_blist_destroy(PurpleBuddyList *list)
 			g_object_unref(G_OBJECT(gtkblist->treemodel)); /* original */
 	}
 	gtkblist->treemodel = NULL;
-	if (gtkblist->ift && G_IS_OBJECT(gtkblist->ift)) {
-		g_object_unref(G_OBJECT(gtkblist->ift)); /* safety ref */
-		if (G_IS_OBJECT(gtkblist->ift))
-			g_object_unref(G_OBJECT(gtkblist->ift)); /* original */
-	}
-	gtkblist->ift = NULL;
 	if (gtkblist->empty_avatar && G_IS_OBJECT(gtkblist->empty_avatar)) {
 		g_object_unref(G_OBJECT(gtkblist->empty_avatar)); /* safety ref */
 		if (G_IS_OBJECT(gtkblist->empty_avatar))

@@ -138,6 +138,9 @@ struct _PidginStatusBox
 	GtkTreeViewColumn *column;
 	GtkWidget *tree_view;
 	gboolean popup_in_progress;
+	/* Set in dispose() so destroy_icon_box() (called from finalize) skips
+	 * re-destroying child widgets GTK is already finalizing. */
+	gboolean disposing;
 	GtkTreeRowReference *active_row;
 };
 

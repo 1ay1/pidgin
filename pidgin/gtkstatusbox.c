@@ -459,10 +459,26 @@ setup_icon_box(PidginStatusBox *status_box)
 static void
 destroy_icon_box(PidginStatusBox *statusbox)
 {
+	gboolean in_destruction;
+
 	if (statusbox->icon_box == NULL)
 		return;
 
-	gtk_widget_destroy(statusbox->icon_box);
+	/* When the status box itself is being torn down (buddy list window
+	 * destroyed at shutdown), GTK is already disposing our whole child widget
+	 * tree -- icon_box and everything under it. Re-entering gtk_widget_destroy()
+	 * on those children from here then does gtk_container_remove()/g_object_ref()
+	 * on instances GTK has already finalized, which is the exact
+	 * '!object_already_finalized' / 'G_IS_OBJECT' / NULL-class /
+	 * g_signal_handlers_disconnect_matched assertion trio seen at shutdown.
+	 * In that case let GTK finalize the widgets and only release our own
+	 * non-widget resources (pixbufs, cursors, imgstore) below. When called from
+	 * the property setter at runtime (tree still live), destroy as before. */
+	in_destruction = statusbox->disposing ||
+	                 gtk_widget_in_destruction(GTK_WIDGET(statusbox));
+
+	if (!in_destruction && GTK_IS_WIDGET(statusbox->icon_box))
+		gtk_widget_destroy(statusbox->icon_box);
 	if (statusbox->hand_cursor)
 		gdk_cursor_unref(statusbox->hand_cursor);
 	if (statusbox->arrow_cursor)
@@ -470,15 +486,15 @@ destroy_icon_box(PidginStatusBox *statusbox)
 
 	purple_imgstore_unref(statusbox->buddy_icon_img);
 
-	if (statusbox->buddy_icon)
+	if (statusbox->buddy_icon && G_IS_OBJECT(statusbox->buddy_icon))
 		g_object_unref(G_OBJECT(statusbox->buddy_icon));
-	if (statusbox->buddy_icon_hover)
+	if (statusbox->buddy_icon_hover && G_IS_OBJECT(statusbox->buddy_icon_hover))
 		g_object_unref(G_OBJECT(statusbox->buddy_icon_hover));
 
-	if (statusbox->buddy_icon_sel)
+	if (!in_destruction && GTK_IS_WIDGET(statusbox->buddy_icon_sel))
 		gtk_widget_destroy(statusbox->buddy_icon_sel);
 
-	if (statusbox->icon_box_menu)
+	if (!in_destruction && GTK_IS_WIDGET(statusbox->icon_box_menu))
 		gtk_widget_destroy(statusbox->icon_box_menu);
 
 	statusbox->icon = NULL;
@@ -531,6 +547,31 @@ pidgin_status_box_set_property(GObject *object, guint param_id,
 }
 
 static void
+pidgin_status_box_dispose(GObject *obj)
+{
+	PidginStatusBox *statusbox = PIDGIN_STATUS_BOX(obj);
+
+	/* dispose runs (possibly more than once) before finalize, while the widget
+	 * tree is being torn down. Mark that we are disposing so destroy_icon_box()
+	 * (reached from finalize) does NOT re-destroy child widgets GTK is already
+	 * finalizing -- the source of the object_ref/g_object_unref
+	 * '!object_already_finalized' / NULL-class assertion trio at shutdown.
+	 * Also drop the standalone popup toplevel + any grab here, while things are
+	 * still coherent, rather than in finalize. */
+	statusbox->disposing = TRUE;
+
+	if (statusbox->popup_window != NULL) {
+		if (statusbox->popup_in_progress)
+			gtk_grab_remove(statusbox->popup_window);
+		gtk_widget_destroy(statusbox->popup_window);
+		statusbox->popup_window = NULL;
+		statusbox->popup_in_progress = FALSE;
+	}
+
+	G_OBJECT_CLASS(parent_class)->dispose(obj);
+}
+
+static void
 pidgin_status_box_finalize(GObject *obj)
 {
 	PidginStatusBox *statusbox = PIDGIN_STATUS_BOX(obj);
@@ -539,23 +580,34 @@ pidgin_status_box_finalize(GObject *obj)
 	purple_signals_disconnect_by_handle(statusbox);
 	purple_prefs_disconnect_by_handle(statusbox);
 
+	/* The popup toplevel + grab were already dropped in dispose. */
+
 	destroy_icon_box(statusbox);
 
 	if (statusbox->active_row)
 		gtk_tree_row_reference_free(statusbox->active_row);
 
 	for (i = 0; i < G_N_ELEMENTS(statusbox->connecting_pixbufs); i++) {
-		if (statusbox->connecting_pixbufs[i] != NULL)
+		if (statusbox->connecting_pixbufs[i] != NULL
+		    && G_IS_OBJECT(statusbox->connecting_pixbufs[i]))
 			g_object_unref(G_OBJECT(statusbox->connecting_pixbufs[i]));
 	}
 
 	for (i = 0; i < G_N_ELEMENTS(statusbox->typing_pixbufs); i++) {
-		if (statusbox->typing_pixbufs[i] != NULL)
+		if (statusbox->typing_pixbufs[i] != NULL
+		    && G_IS_OBJECT(statusbox->typing_pixbufs[i]))
 			g_object_unref(G_OBJECT(statusbox->typing_pixbufs[i]));
 	}
 
-	g_object_unref(G_OBJECT(statusbox->store));
-	g_object_unref(G_OBJECT(statusbox->dropdown_store));
+	/* Guard the store unrefs: the cell_view / tree_view that referenced these
+	 * models were finalized when the buddy list window's widget tree was torn
+	 * down, which can already have dropped the last reference. Unref'ing again
+	 * here on a finalized instance is the residual 'g_object_unref: G_IS_OBJECT'
+	 * / NULL-class / g_signal_handlers_disconnect_matched assertion trio. */
+	if (statusbox->store != NULL && G_IS_OBJECT(statusbox->store))
+		g_object_unref(G_OBJECT(statusbox->store));
+	if (statusbox->dropdown_store != NULL && G_IS_OBJECT(statusbox->dropdown_store))
+		g_object_unref(G_OBJECT(statusbox->dropdown_store));
 	G_OBJECT_CLASS(parent_class)->finalize(obj);
 }
 
@@ -588,6 +640,7 @@ pidgin_status_box_class_init (PidginStatusBoxClass *klass,
 	object_class = (GObjectClass *)klass;
 
 	object_class->finalize = pidgin_status_box_finalize;
+	object_class->dispose = pidgin_status_box_dispose;
 
 	object_class->get_property = pidgin_status_box_get_property;
 	object_class->set_property = pidgin_status_box_set_property;
@@ -1351,15 +1404,35 @@ static void
 pidgin_status_box_popup(PidginStatusBox *box)
 {
 	int width, height, x, y;
+
+	/* Re-entrancy guard: showing/mapping the popup can, on some GTK3
+	 * WM/compositor combinations, re-emit map/size-allocate synchronously.
+	 * Without this guard a second popup() re-enters here before the first has
+	 * finished mapping, and the two fight over map state -- a tight
+	 * show/map loop that spins gtk_widget_map() -> gdk_window_get_effective_toplevel()
+	 * (which then floods g_return_if_fail warnings) and hangs the UI right
+	 * after the window opens. */
+	if (box->popup_in_progress)
+		return;
+
 	pidgin_status_box_list_position (box, &x, &y, &width, &height);
 
 	gtk_widget_set_size_request (box->popup_window, width, height);
 	gtk_window_move (GTK_WINDOW (box->popup_window), x, y);
+	/* GTK3: realize the popup BEFORE gtk_widget_show(). Showing an
+	 * unrealized GTK_WINDOW_POPUP maps it while its GdkWindow is not yet a
+	 * valid toplevel, so the "map" handler's gdk_window_get_effective_toplevel()
+	 * fails a g_return_if_fail and GTK can re-run the map -- the source of the
+	 * repeated "gdk_window_get_effective_toplevel" assertion storm. Realizing
+	 * first guarantees a live toplevel GdkWindow before the map emission. */
+	gtk_widget_realize(box->popup_window);
+	box->popup_in_progress = TRUE;
 	gtk_widget_show(box->popup_window);
 	gtk_widget_grab_focus (box->tree_view);
 	if (!popup_grab_on_window (gtk_widget_get_window(box->popup_window),
 				   GDK_CURRENT_TIME, TRUE)) {
 		gtk_widget_hide (box->popup_window);
+		box->popup_in_progress = FALSE;
 		return;
 	}
 	gtk_grab_add (box->popup_window);
