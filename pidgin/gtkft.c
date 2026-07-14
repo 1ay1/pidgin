@@ -256,9 +256,7 @@ update_detailed_info(PidginXferDialog *dialog, PurpleXfer *xfer)
 
 		GdkPixbuf *pixbuf = NULL;
 
-		pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-						pidgin_stock_icon_name(PIDGIN_STOCK_FILE_DONE),
-						16, 0, NULL);
+		pixbuf = pidgin_pixbuf_from_stock(PIDGIN_STOCK_FILE_DONE, 16);
 
 		gtk_list_store_set(GTK_LIST_STORE(xfer_dialog->model), &data->iter,
 					   COLUMN_STATUS, pixbuf,
@@ -703,7 +701,6 @@ pidgin_xfer_dialog_new(void)
 	GtkWidget *window;
 	GtkWidget *vbox1, *vbox2;
 	GtkWidget *expander;
-	GtkWidget *alignment;
 	GtkWidget *table;
 	GtkWidget *checkbox;
 	GtkWidget *bbox;
@@ -764,15 +761,14 @@ pidgin_xfer_dialog_new(void)
 
 	gtk_widget_set_sensitive(expander, FALSE);
 
-	/* Small indent make table fall under GtkExpander's label */
-	alignment = gtk_alignment_new(1, 0, 1, 1);
-	gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 20, 0);
-	gtk_container_add(GTK_CONTAINER(expander), alignment);
-	gtk_widget_show(alignment);
-
-	/* The table of information. */
+	/* The table of information. Small indent (via margin-start) makes the
+	 * table fall under the GtkExpander's label. GtkAlignment is deprecated
+	 * in GTK3; use the widget's own margin/halign properties instead. */
 	table = make_info_table(dialog);
-	gtk_container_add(GTK_CONTAINER(alignment), table);
+	gtk_widget_set_margin_start(table, 20);
+	gtk_widget_set_halign(table, GTK_ALIGN_FILL);
+	gtk_widget_set_valign(table, GTK_ALIGN_START);
+	gtk_container_add(GTK_CONTAINER(expander), table);
 	gtk_widget_show(table);
 
 	bbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
@@ -881,11 +877,11 @@ pidgin_xfer_dialog_add_xfer(PidginXferDialog *dialog, PurpleXfer *xfer)
 	size_str      = purple_str_size_to_units(purple_xfer_get_size(xfer));
 	remaining_str = purple_str_size_to_units(purple_xfer_get_bytes_remaining(xfer));
 
-	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+	pixbuf = pidgin_pixbuf_from_stock(
 					(type == PURPLE_XFER_RECEIVE
-					 ? pidgin_stock_icon_name(PIDGIN_STOCK_DOWNLOAD)
-					 : pidgin_stock_icon_name(PIDGIN_STOCK_UPLOAD)),
-					16, 0, NULL);
+					 ? PIDGIN_STOCK_DOWNLOAD
+					 : PIDGIN_STOCK_UPLOAD),
+					16);
 
 	gtk_list_store_append(dialog->model, &data->iter);
 	lfilename = g_path_get_basename(purple_xfer_get_local_filename(xfer));
@@ -975,9 +971,7 @@ pidgin_xfer_dialog_cancel_xfer(PidginXferDialog *dialog,
 	update_detailed_info(dialog, xfer);
 	update_title_progress(dialog);
 
-	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-					pidgin_stock_icon_name(PIDGIN_STOCK_FILE_CANCELED),
-					16, 0, NULL);
+	pixbuf = pidgin_pixbuf_from_stock(PIDGIN_STOCK_FILE_CANCELED, 16);
 
 	if (purple_xfer_is_canceled(xfer))
 		status = _("Cancelled");
@@ -1038,9 +1032,7 @@ pidgin_xfer_dialog_update_xfer(PidginXferDialog *dialog,
 	{
 		GdkPixbuf *pixbuf;
 
-		pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-						pidgin_stock_icon_name(PIDGIN_STOCK_FILE_DONE),
-						16, 0, NULL);
+		pixbuf = pidgin_pixbuf_from_stock(PIDGIN_STOCK_FILE_DONE, 16);
 
 		gtk_list_store_set(GTK_LIST_STORE(xfer_dialog->model), &data->iter,
 					   COLUMN_STATUS, pixbuf,
