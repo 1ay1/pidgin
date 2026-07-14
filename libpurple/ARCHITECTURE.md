@@ -260,6 +260,27 @@ describes via `gtk_window_set_transient_for()` before it is mapped
 to that surface; the placement math (which still computes absolute pointer
 coordinates) is unchanged and remains correct on X11.
 
+## Frontend hardening: status-box message entry claimed too much height
+
+The blist status selector (`PidginStatusBox`, `pidgin/gtkstatusbox.c`) is a
+custom-allocated widget: a toggle button on top and, when the selected status
+carries a message, an editable `gtkimhtml` entry (`status_box->vbox`) below it.
+`update_size()` computes how tall that entry should be (one to four text lines)
+and pins it with `gtk_widget_set_size_request()`.
+
+Under GTK3, `gtk_widget_set_size_request()` sets only the widget's *minimum*
+size; a widget's *natural* size can still be larger. The text view's natural
+height is unbounded, so when `pidgin_status_box_get_requisition()` measured the
+vbox with `gtk_widget_get_preferred_size()` it read that large natural height.
+The status box is packed `expand=FALSE` in the buddy-list vbox, so it received
+exactly its requested height -- yielding a message entry several lines tall for
+a one-line "I'm not here right now".
+
+The fix clamps the measured vbox height in the requisition to the height
+`update_size()` explicitly requested (`gtk_widget_get_size_request()`), when one
+is set. The entry now stays exactly as tall as the text it holds; if no
+request is pinned yet the old natural-size behaviour is used unchanged.
+
 ## The protocol subsystem (modernized)
 
 Historically a protocol was located with an O(n) linear scan

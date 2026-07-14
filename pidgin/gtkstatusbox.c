@@ -1999,8 +1999,22 @@ pidgin_status_box_get_requisition(GtkWidget *widget, GtkRequisition *requisition
 
 	/* If the gtkimhtml is visible, then add some additional padding */
 	gtk_widget_get_preferred_size_compat(PIDGIN_STATUS_BOX(widget)->vbox, &box_req);
-	if (box_req.height > 1)
+	if (box_req.height > 1) {
+		/*
+		 * GTK3: the vbox's *natural* height is the imhtml text view's
+		 * natural height (potentially many lines), while update_size()
+		 * only pins its *minimum* via gtk_widget_set_size_request().
+		 * Using the natural height here makes the status box request --
+		 * and, packed expand=FALSE in the blist, actually receive -- a
+		 * message entry far taller than the one or two lines of text it
+		 * holds.  Clamp to the explicitly requested height so the entry
+		 * stays exactly as tall as update_size() asked. */
+		gint req_h = -1;
+		gtk_widget_get_size_request(PIDGIN_STATUS_BOX(widget)->vbox, NULL, &req_h);
+		if (req_h > 0 && box_req.height > req_h)
+			box_req.height = req_h;
 		requisition->height += box_req.height + border_width * 2;
+	}
 
 	requisition->width = 1;
 }
