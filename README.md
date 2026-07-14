@@ -1,4 +1,15 @@
-# Pidgin 2.x — GTK 3 port
+# 🐦 Pidgin 2.x — GTK 3 port
+
+> **Keep the classic Pidgin 2 buddy list alive on modern Linux desktops.**
+
+<p align="center">
+  <a href="https://github.com/1ay1/pidgin/stargazers"><img src="https://img.shields.io/github/stars/1ay1/pidgin?style=for-the-badge&logo=github&color=gold" alt="Stars"></a>
+  <a href="https://github.com/1ay1/pidgin/network/members"><img src="https://img.shields.io/github/forks/1ay1/pidgin?style=for-the-badge&logo=github&color=blue" alt="Forks"></a>
+  <a href="https://github.com/1ay1/pidgin/issues"><img src="https://img.shields.io/github/issues/1ay1/pidgin?style=for-the-badge&logo=github&color=success" alt="Issues"></a>
+  <img src="https://img.shields.io/badge/GTK-3-729FCF?style=for-the-badge&logo=gnome&logoColor=white" alt="GTK 3">
+  <img src="https://img.shields.io/badge/language-C-555?style=for-the-badge&logo=c&logoColor=white" alt="C">
+  <img src="https://img.shields.io/badge/license-GPL--2.0-orange?style=for-the-badge" alt="License">
+</p>
 
 A fork of **Pidgin 2.15.0dev** (the `2.x` line) ported from GTK+ 2 to
 **GTK 3**. It keeps the classic Pidgin 2 experience — the same buddy list,
@@ -7,6 +18,8 @@ modern, still-maintained toolkit.
 
 > This is **not** Pidgin 3. The goal is to keep the mature 2.x UI alive on
 > current systems, not to migrate to the 3.x codebase.
+
+> **⭐ Like keeping Pidgin 2 alive? [Star the repo](https://github.com/1ay1/pidgin) — it genuinely helps others find it.**
 
 See `AUTHORS` and `COPYRIGHT` for the list of contributors.
 
@@ -106,3 +119,14 @@ directory's `meson.build` and rebuild with `ninja -C build`.
 
 For upstream Pidgin issues, see <https://issues.imfreedom.org/>. For problems
 specific to this GTK 3 fork, use this repository's issue tracker.
+
+## Star history
+
+If this fork is useful to you, a ⭐ helps others discover it and signals that
+Pidgin 2 is still worth maintaining.
+
+<a href="https://star-history.com/#1ay1/pidgin&Date">
+  <img src="https://api.star-history.com/svg?repos=1ay1/pidgin&type=Date" alt="Star History Chart" width="600">
+</a>
+
+<p align="center"><b>⭐ <a href="https://github.com/1ay1/pidgin">Star this repo</a> to keep classic Pidgin alive.</b></p>
