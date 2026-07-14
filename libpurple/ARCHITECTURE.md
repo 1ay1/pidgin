@@ -155,6 +155,25 @@ edges, all now fixed **without any ABI or storage-format change**:
   option's type between versions). They now log a single `debug_warning` and
   quietly return the caller's default.
 
+## Existing object modernization: PurpleBuddyIcon
+
+`purple_buddy_icon_set_data()` (buddyicon.c) is called every time a protocol
+delivers a buddy's avatar — which prpls do afresh on **every reconnect**, for
+every buddy. It previously always re-ran the full path: `purple_buddy_icon_data_new()`
+SHA-1-hashes the entire image payload to derive its cache filename, and
+`purple_buddy_icon_update()` makes the buddy list and every open conversation
+re-render the icon and re-take references.
+
+The protocol's own **checksum** is precisely its "has this changed?" token.
+The setter now short-circuits when the incoming checksum equals the one
+already held **and** the image is already in memory: it frees the (redundant)
+incoming data and returns, skipping both the re-hash and the re-render. The
+guard is deliberately conservative — it never skips a first load
+(`img == NULL`, the `purple_buddy_icons_find` disk path), a checksum change, a
+checksumless update (can't prove equality), or an icon *removal*
+(`data == NULL`/`len == 0`). Those boundary conditions are covered by
+`tests/test_buddyicon.c`.
+
 ## The protocol subsystem (modernized)
 
 Historically a protocol was located with an O(n) linear scan

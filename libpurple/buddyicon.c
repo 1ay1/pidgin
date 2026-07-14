@@ -470,6 +470,21 @@ purple_buddy_icon_set_data(PurpleBuddyIcon *icon, guchar *data,
 
 	g_return_if_fail(icon != NULL);
 
+	/*
+	 * Protocols re-deliver a buddy's icon on every reconnect. When the
+	 * incoming checksum matches the one we already hold and we already have
+	 * the image data in memory, nothing has changed: skip re-hashing the
+	 * image (purple_buddy_icon_data_new SHA-1s the whole payload) and skip
+	 * purple_buddy_icon_update (which makes the buddy list and every open
+	 * conversation re-render the icon). We still own `data`, so free it.
+	 */
+	if (data != NULL && len > 0 && icon->img != NULL &&
+	    checksum != NULL && purple_strequal(icon->checksum, checksum))
+	{
+		g_free(data);
+		return;
+	}
+
 	old_img = icon->img;
 	icon->img = NULL;
 
