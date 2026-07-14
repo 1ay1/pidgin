@@ -819,6 +819,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 			image = gtk_image_new_from_icon_name(resolved, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 		}
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+		/* GTK3 lays out the image gutter independently from the check/radio
+		 * toggle gutter, so a menu that mixes image items with check items
+		 * (e.g. the tray menu: New Message vs. Show Buddy List) ended up with
+		 * the two kinds of labels in different columns. Forcing the image to
+		 * always show makes GtkImageMenuItem reserve the toggle-size gutter,
+		 * which GTK then aligns with the check items -- one shared column. */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+		gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menuitem), TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
 	}
 /* FIXME: this isn't right
 	if (mod) {

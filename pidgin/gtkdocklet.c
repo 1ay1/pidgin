@@ -502,6 +502,9 @@ new_menu_item_with_status_icon(GtkWidget *menu, const char *str, PurpleStatusPri
 	image = gtk_image_new_from_pixbuf(pixbuf);
 	g_object_unref(pixbuf);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+	gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menuitem), TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 	gtk_widget_show_all(menuitem);
 
