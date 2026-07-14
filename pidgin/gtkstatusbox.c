@@ -1808,6 +1808,15 @@ pidgin_status_box_init (PidginStatusBox *status_box,
 
 	status_box->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	status_box->sw = pidgin_create_imhtml(FALSE, &status_box->imhtml, NULL, NULL);
+	/* pidgin_create_imhtml sets vexpand=TRUE on its frame so a history pane
+	 * inside a GtkPaned claims leftover height.  The status-box message
+	 * entry is the opposite case: it is a small fixed-height box whose
+	 * height is driven explicitly by update_size().  Leaving vexpand set
+	 * makes the status box advertise expand to the buddy-list vbox and its
+	 * custom size_allocate then hands the whole surplus to this entry --
+	 * producing a huge empty message box filling the lower half of the
+	 * buddy list.  Clear it so the box stays the size update_size() asks. */
+	gtk_widget_set_vexpand(status_box->sw, FALSE);
 	gtk_imhtml_set_editable(GTK_IMHTML(status_box->imhtml), TRUE);
 
 	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(status_box->imhtml));
