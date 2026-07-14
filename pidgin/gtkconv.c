@@ -9401,11 +9401,15 @@ static gboolean gtk_conv_configure_cb(GtkWidget *w, GdkEventConfigure *event, gp
 		return FALSE;
 
 	/* don't save off-screen positioning */
-	if (x + event->width < 0 ||
-	    y + event->height < 0 ||
-	    x > gdk_screen_width() ||
-	    y > gdk_screen_height())
-		return FALSE; /* carry on normally */
+	{
+		int mon_w = 0, mon_h = 0;
+		pidgin_widget_get_monitor_size(w, &mon_w, &mon_h);
+		if (x + event->width < 0 ||
+		    y + event->height < 0 ||
+		    x > mon_w ||
+		    y > mon_h)
+			return FALSE; /* carry on normally */
+	}
 
 	/* store the position */
 	purple_prefs_set_int(PIDGIN_PREFS_ROOT "/conversations/im/x", x);
@@ -10095,11 +10099,15 @@ conv_placement_last_created_win_type_configured_cb(GtkWidget *w,
 		return FALSE;
 
 	/* don't save off-screen positioning */
-	if (x + event->width < 0 ||
-	    y + event->height < 0 ||
-	    x > gdk_screen_width() ||
-	    y > gdk_screen_height())
-		return FALSE; /* carry on normally */
+	{
+		int mon_w = 0, mon_h = 0;
+		pidgin_widget_get_monitor_size(w, &mon_w, &mon_h);
+		if (x + event->width < 0 ||
+		    y + event->height < 0 ||
+		    x > mon_w ||
+		    y > mon_h)
+			return FALSE; /* carry on normally */
+	}
 
 	for (all = conv->convs; all != NULL; all = all->next) {
 		if (type != purple_conversation_get_type(all->data)) {

@@ -1061,6 +1061,21 @@ void pidgin_widget_set_bg_color(GtkWidget *widget, const GdkColor *color);
 void pidgin_widget_set_text_color(GtkWidget *widget, const GdkColor *color);
 
 /**
+ * Get the geometry of the monitor a widget's window is on, the GTK3 way.
+ * This replaces the deprecated gdk_screen_width()/gdk_screen_height(),
+ * which report the union of all monitors and give wrong answers on
+ * multi-monitor setups. If the widget is not yet realized the primary
+ * monitor of its screen (or the default screen) is used.
+ *
+ * @param widget The widget whose monitor to query (may be @c NULL).
+ * @param width  Return location for the monitor width, or @c NULL.
+ * @param height Return location for the monitor height, or @c NULL.
+ *
+ * @since 2.15.0
+ */
+void pidgin_widget_get_monitor_size(GtkWidget *widget, int *width, int *height);
+
+/**
  * Initialize some utility functions.
  *
  * @since 2.6.0

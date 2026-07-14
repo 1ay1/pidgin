@@ -3961,6 +3961,50 @@ pidgin_widget_set_text_color(GtkWidget *widget, const GdkColor *color)
 	                            "pidgin-text-css-provider");
 }
 
+void
+pidgin_widget_get_monitor_size(GtkWidget *widget, int *width, int *height)
+{
+	GdkScreen *screen = NULL;
+	GdkRectangle geometry = { 0, 0, 0, 0 };
+	GdkWindow *gdkwin = NULL;
+#if GTK_CHECK_VERSION(3,22,0)
+	GdkDisplay *display;
+	GdkMonitor *monitor = NULL;
+#else
+	int mon;
+#endif
+
+	if (widget != NULL) {
+		screen = gtk_widget_get_screen(widget);
+		gdkwin = gtk_widget_get_window(widget);
+	}
+	if (screen == NULL)
+		screen = gdk_screen_get_default();
+
+#if GTK_CHECK_VERSION(3,22,0)
+	display = gdk_screen_get_display(screen);
+	if (gdkwin != NULL)
+		monitor = gdk_display_get_monitor_at_window(display, gdkwin);
+	if (monitor == NULL)
+		monitor = gdk_display_get_primary_monitor(display);
+	if (monitor == NULL)
+		monitor = gdk_display_get_monitor(display, 0);
+	if (monitor != NULL)
+		gdk_monitor_get_geometry(monitor, &geometry);
+#else
+	if (gdkwin != NULL)
+		mon = gdk_screen_get_monitor_at_window(screen, gdkwin);
+	else
+		mon = gdk_screen_get_primary_monitor(screen);
+	gdk_screen_get_monitor_geometry(screen, mon, &geometry);
+#endif
+
+	if (width != NULL)
+		*width = geometry.width;
+	if (height != NULL)
+		*height = geometry.height;
+}
+
 void pidgin_utils_init(void)
 {
 	gtk_imhtml_class_register_protocol("http://", url_clicked_cb, link_context_menu);

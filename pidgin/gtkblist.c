@@ -271,12 +271,16 @@ static gboolean gtk_blist_configure_cb(GtkWidget *w, GdkEventConfigure *event, g
 	}
 
 	/* don't save off-screen positioning */
-	if (x + event->width < 0 ||
-		y + event->height < 0 ||
-		x > gdk_screen_width() ||
-		y > gdk_screen_height()) {
+	{
+		int mon_w = 0, mon_h = 0;
+		pidgin_widget_get_monitor_size(w, &mon_w, &mon_h);
+		if (x + event->width < 0 ||
+			y + event->height < 0 ||
+			x > mon_w ||
+			y > mon_h) {
 
-		return FALSE; /* carry on normally */
+			return FALSE; /* carry on normally */
+		}
 	}
 
 	/* ignore changes when maximized */
@@ -4135,8 +4139,7 @@ pidgin_blist_get_status_icon(PurpleBlistNode *node, PidginStatusIconSize size)
 			if (gtkconv == NULL && size == PIDGIN_STATUS_ICON_SMALL) {
 				PidginBlistNode *ui = buddy->node.ui_data;
 				if (ui == NULL || (ui->conv.flags & PIDGIN_BLIST_NODE_HAS_PENDING_MESSAGE))
-					return gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-							pidgin_stock_icon_name(PIDGIN_STOCK_STATUS_MESSAGE), icon_px, 0, NULL);
+					return pidgin_pixbuf_from_stock(PIDGIN_STOCK_STATUS_MESSAGE, icon_px);
 			}
 		}
 
@@ -4176,8 +4179,7 @@ pidgin_blist_get_status_icon(PurpleBlistNode *node, PidginStatusIconSize size)
 		icon = PIDGIN_STOCK_STATUS_PERSON;
 	}
 
-	ret = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-			pidgin_stock_icon_name(icon), icon_px, 0, NULL);
+	ret = pidgin_pixbuf_from_stock(icon, icon_px);
 	return ret;
 }
 

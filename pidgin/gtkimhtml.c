@@ -699,7 +699,8 @@ gtk_imhtml_tip (gpointer data)
 		y += alloc.y;
 	}
 
-	scr_w = gdk_screen_width();
+	scr_w = 0;
+	pidgin_widget_get_monitor_size(GTK_WIDGET(imhtml), &scr_w, NULL);
 
 	x -= ((w >> 1) + 4);
 
