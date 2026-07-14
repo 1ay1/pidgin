@@ -73,6 +73,15 @@ guint purple_reconnect_get_delay(PurpleAccount *account);
 guint purple_reconnect_get_attempts(PurpleAccount *account);
 
 /**
+ * @return @c TRUE if a reconnect is currently armed or parked for
+ *         @a account (i.e. the account dropped with a transient error and the
+ *         framework intends to bring it back). This is the signal other
+ *         subsystems (e.g. the outgoing message queue) use to decide whether
+ *         a transient-offline account is worth waiting for.
+ */
+gboolean purple_reconnect_is_pending(PurpleAccount *account);
+
+/**
  * Cancel any pending reconnect for @a account and clear its failure counter.
  */
 void purple_reconnect_cancel_account(PurpleAccount *account);

@@ -348,6 +348,19 @@ purple_reconnect_get_attempts(PurpleAccount *account)
 	return rd != NULL ? rd->attempts : 0;
 }
 
+gboolean
+purple_reconnect_is_pending(PurpleAccount *account)
+{
+	PurpleReconnectData *rd = data_for(account, FALSE);
+
+	if (!reconnect_enabled || rd == NULL)
+		return FALSE;
+
+	/* A reconnect is pending if a timer is armed, or the account is parked
+	 * waiting for the network to come back. */
+	return (rd->timeout > 0) || rd->waiting_net;
+}
+
 void
 purple_reconnect_cancel_account(PurpleAccount *account)
 {

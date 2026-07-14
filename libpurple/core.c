@@ -35,6 +35,7 @@
 #include "ft.h"
 #include "idle.h"
 #include "imgstore.h"
+#include "msgqueue.h"
 #include "network.h"
 #include "notify.h"
 #include "plugin.h"
@@ -188,6 +189,10 @@ purple_core_init(const char *ui)
 	/* Automatic reconnection observes account/connection/network signals, so
 	 * bring it up after those subsystems exist. */
 	purple_reconnect_init();
+	/* The outgoing message queue rides on top of the reconnect subsystem
+	 * (it only parks a message when a reconnect is pending), so start it
+	 * after reconnect. */
+	purple_msgqueue_init();
 	/*
 	 * Call this early on to try to auto-detect our IP address and
 	 * hopefully save some time later.
@@ -234,6 +239,7 @@ purple_core_quit(void)
 	purple_plugins_unload(PURPLE_PLUGIN_STANDARD);
 
 	/* Save .xml files, remove signals, etc. */
+	purple_msgqueue_uninit();
 	purple_reconnect_uninit();
 	purple_smileys_uninit();
 	purple_idle_uninit();

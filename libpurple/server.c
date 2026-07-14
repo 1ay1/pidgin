@@ -28,6 +28,7 @@
 #include "conversation.h"
 #include "debug.h"
 #include "log.h"
+#include "msgqueue.h"
 #include "notify.h"
 #include "prefs.h"
 #include "privacy.h"
@@ -144,6 +145,21 @@ int serv_send_im(PurpleConnection *gc, const char *name, const char *message,
 
 	if (prpl_info->send_im)
 		val = prpl_info->send_im(gc, name, message, flags);
+
+	/*
+	 * If the protocol could not send the message because the connection is
+	 * transiently offline (mid-reconnect), park it for store-and-forward
+	 * delivery instead of dropping it. The queue only accepts the message
+	 * when a reconnect is actually pending, so a permanently-offline account
+	 * still surfaces the failure to the caller.
+	 */
+	if (val < 0 &&
+			purple_connection_get_state(gc) != PURPLE_CONNECTED &&
+			purple_msgqueue_enqueue_im(account, name, message, flags))
+	{
+		/* Deferred, not failed: tell the caller we "sent" it. */
+		val = strlen(message);
+	}
 
 	/*
 	 * XXX - If "only auto-reply when away & idle" is set, then shouldn't

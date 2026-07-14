@@ -23,6 +23,7 @@ plug in through `*UiOps` vtables; protocols plug in as plugins exposing a
 | Connections   | `connection.c`, `server.c`                       | Live sessions + `serv_*` dispatch helpers |
 | Protocols     | `prpl.c`, `protocols.c`, `plugin.c`              | Protocol plugin vtable, registry, dispatch |
 | Reconnection  | `reconnect.c`                                    | Core auto-reconnect with exponential backoff |
+| Message queue | `msgqueue.c`                                      | Store-and-forward outgoing IMs across reconnects |
 | Signals       | `signals.c`, `value.c`                           | Hand-rolled string-keyed signal bus |
 | Async I/O     | `eventloop.c`, `proxy.c`, `dnsquery.c`, `dnssrv.c` | fd-watch callbacks over a pluggable event loop |
 | Media         | `media*.c`, `media/`                             | GStreamer voice/video (GObject-based) |
@@ -47,6 +48,30 @@ embedder shipped its own recovery logic with no shared backoff policy.
 
 The pure backoff calculation (`_purple_reconnect_backoff_base`) is factored
 out jitter-free and covered by `tests/test_reconnect.c`.
+
+## Outgoing message queue (new)
+
+Before, an IM sent the instant a connection blipped was simply lost: `serv_send_im`
+returned an error to the UI and the message was gone; the user had to notice
+and retype it once the account came back. `msgqueue.{c,h}` adds core
+store-and-forward, riding on top of the reconnect subsystem:
+
+- When `serv_send_im` cannot deliver (protocol returned `< 0` and the
+  connection is not `PURPLE_CONNECTED`), the message is offered to
+  `purple_msgqueue_enqueue_im`. It is parked **only if a reconnect is actually
+  pending** (`purple_reconnect_is_pending`) — a permanently-offline
+  (disabled/fatal) account still surfaces the failure immediately, exactly as
+  before. Auto-responses and system/no-log traffic are never queued.
+- On the next `signed-on` the account's parked messages are flushed **in FIFO
+  order** via `serv_send_im`. `account-removed`/`account-disabled` discard the
+  queue rather than flush it out of the blue later.
+- The queue is **bounded**: capped per account (oldest dropped once full) and
+  messages expire after a max age, so a long outage cannot grow memory without
+  bound. Policy API: `purple_msgqueue_set_enabled` / `set_limits` /
+  `get_count` / `clear_account`. Defaults: 64 messages/account, 1h expiry.
+
+The cap-eviction and stale-expiry invariants are covered by
+`tests/test_msgqueue.c`.
 
 ## The protocol subsystem (modernized)
 

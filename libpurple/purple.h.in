@@ -68,6 +68,7 @@
 #include <media.h>
 #include <mediamanager.h>
 #include <mime.h>
+#include <msgqueue.h>
 #include <nat-pmp.h>
 #include <network.h>
 #include <notify.h>
