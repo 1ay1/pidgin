@@ -60,6 +60,7 @@ typedef enum {
 
 #include "pidgin.h"
 #include "blist.h"
+#include "gtkitemfactory.h"
 #include "gtkblist-theme.h"
 
 /**************************************************************************

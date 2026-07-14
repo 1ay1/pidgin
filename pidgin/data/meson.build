@@ -4,9 +4,9 @@
 pkgconf.generate(
   name : 'Pidgin',
   filebase : 'pidgin',
-  description : 'Pidgin is a GTK2-based instant messenger application.',
+  description : 'Pidgin is a GTK3-based instant messenger application.',
   version : meson.project_version(),
-  requires : ['gtk+-2.0', 'purple'],
+  requires : ['gtk+-3.0', 'purple'],
   subdirs : 'pidgin',
   variables : ['plugindir=@0@'.format(pidgin_plugindir)],
 )

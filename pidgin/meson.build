@@ -5,6 +5,7 @@
 pidgin_sources = files(
   'pidginstock.c',
   'gtkaccount.c',
+  'gtkitemfactory.c',
   'gtkblist.c',
   'gtkblist-theme.c',
   'gtkblist-theme-loader.c',

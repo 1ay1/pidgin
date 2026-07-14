@@ -112,12 +112,12 @@ nm_dep = dependency('libnm', required : false)
 have_nm = nm_feat.enabled() or (nm_feat.auto() and nm_dep.found() and dbusglib_dep.found())
 have_nm = have_nm and nm_dep.found() and dbusglib_dep.found()
 
-# GTK+ 2 (Pidgin)
-gtk_dep = dependency('gtk+-2.0', version : '>=2.14.0', required : get_option('gtk'))
+# GTK+ 3 (Pidgin)
+gtk_dep = dependency('gtk+-3.0', version : '>=3.24.0', required : get_option('gtk'))
 have_gtk = gtk_dep.found()
 
 # GtkSpell (spell checking in Pidgin)
-gtkspell_dep = dependency('gtkspell-2.0', required : get_option('gtkspell'))
+gtkspell_dep = dependency('gtkspell3-3.0', required : get_option('gtkspell'))
 have_gtkspell = gtkspell_dep.found() and have_gtk
 
 # X11 (screensaver / session mgmt in Pidgin)

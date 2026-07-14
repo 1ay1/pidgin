@@ -81,6 +81,21 @@ typedef gboolean (*PidginFilterBuddyCompletionEntryFunc) (const PidginBuddyCompl
 
 
 /**
+ * GTK3 migration helpers.
+ *
+ * pidgin_box_new_homogeneous() replaces the rare gtk_[hv]box_new(TRUE, ...)
+ * call sites: create a GtkBox with the given orientation and mark it
+ * homogeneous, preserving the GTK2 behaviour.
+ *
+ * gtk_widget_get_preferred_size_compat() replaces gtk_widget_size_request():
+ * it fetches the widget's natural size via the GTK3 preferred-size API and
+ * writes it into a GtkRequisition, matching the old signature.
+ */
+GtkWidget *pidgin_box_new_homogeneous(GtkOrientation orientation, gint spacing);
+void gtk_widget_get_preferred_size_compat(GtkWidget *widget, GtkRequisition *requisition);
+
+
+/**
  * Sets up a gtkimhtml widget, loads it with smileys, and sets the
  * default signal handlers.
  *
@@ -414,7 +429,7 @@ void pidgin_setup_screenname_autocomplete(GtkWidget *entry, GtkWidget *optmenu, 
  *             been deprecated by GTK+. Use GtkFileChooser instead and ignore
  *             this function.
  */
-gboolean pidgin_check_if_dir(const char *path, GtkFileSelection *filesel);
+gboolean pidgin_check_if_dir(const char *path, GtkFileChooser *filesel);
 
 /**
  * Sets up GtkSpell for the given GtkTextView, reporting errors

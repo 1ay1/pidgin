@@ -26,6 +26,8 @@
 #ifndef _PIDGIN_CONVERSATION_WINDOW_H_
 #define _PIDGIN_CONVERSATION_WINDOW_H_
 
+#include "gtkitemfactory.h"
+
 typedef struct _PidginWindow       PidginWindow;
 
 

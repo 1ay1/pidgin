@@ -75,6 +75,22 @@ typedef struct {
 static guint accels_save_timer = 0;
 static GSList *registered_url_handlers = NULL;
 
+/* --- GTK3 migration helpers (see gtkutils.h) --- */
+GtkWidget *
+pidgin_box_new_homogeneous(GtkOrientation orientation, gint spacing)
+{
+	GtkWidget *box = gtk_box_new(orientation, spacing);
+	gtk_box_set_homogeneous(GTK_BOX(box), TRUE);
+	return box;
+}
+
+void
+gtk_widget_get_preferred_size_compat(GtkWidget *widget, GtkRequisition *requisition)
+{
+	/* GTK2's gtk_widget_size_request returned the natural size. */
+	gtk_widget_get_preferred_size(widget, NULL, requisition);
+}
+
 static gboolean
 url_clicked_idle_cb(gpointer data)
 {
@@ -227,7 +243,7 @@ pidgin_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **tool
 	frame = gtk_frame_new(NULL);
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_IN);
 
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(frame), vbox);
 	gtk_widget_show(vbox);
 
@@ -236,7 +252,7 @@ pidgin_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **tool
 		gtk_box_pack_start(GTK_BOX(vbox), toolbar, FALSE, FALSE, 0);
 		gtk_widget_show(toolbar);
 
-		sep = gtk_hseparator_new();
+		sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 		gtk_box_pack_start(GTK_BOX(vbox), sep, FALSE, FALSE, 0);
 		g_signal_connect_swapped(G_OBJECT(toolbar), "show", G_CALLBACK(gtk_widget_show), sep);
 		g_signal_connect_swapped(G_OBJECT(toolbar), "hide", G_CALLBACK(gtk_widget_hide), sep);
@@ -290,7 +306,7 @@ pidgin_toggle_sensitive(GtkWidget *widget, GtkWidget *to_toggle)
 	if (to_toggle == NULL)
 		return;
 
-	sensitivity = GTK_WIDGET_IS_SENSITIVE(to_toggle);
+	sensitivity = gtk_widget_is_sensitive(to_toggle);
 
 	gtk_widget_set_sensitive(to_toggle, !sensitivity);
 }
@@ -307,7 +323,7 @@ pidgin_toggle_sensitive_array(GtkWidget *w, GPtrArray *data)
 		if (element == NULL)
 			continue;
 
-		sensitivity = GTK_WIDGET_IS_SENSITIVE(element);
+		sensitivity = gtk_widget_is_sensitive(element);
 
 		gtk_widget_set_sensitive(element, !sensitivity);
 	}
@@ -319,7 +335,7 @@ pidgin_toggle_showhide(GtkWidget *widget, GtkWidget *to_toggle)
 	if (to_toggle == NULL)
 		return;
 
-	if (GTK_WIDGET_VISIBLE(to_toggle))
+	if (gtk_widget_get_visible(to_toggle))
 		gtk_widget_hide(to_toggle);
 	else
 		gtk_widget_show(to_toggle);
@@ -385,7 +401,7 @@ pidgin_pixbuf_toolbar_button_from_stock(const char *icon)
 	button = gtk_toggle_button_new();
 	gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
 
-	bbox = gtk_vbox_new(FALSE, 0);
+	bbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 	gtk_container_add (GTK_CONTAINER(button), bbox);
 
@@ -406,15 +422,15 @@ pidgin_pixbuf_button_from_stock(const char *text, const char *icon,
 	button = gtk_button_new();
 
 	if (style == PIDGIN_BUTTON_HORIZONTAL) {
-		bbox = gtk_hbox_new(FALSE, 0);
-		ibox = gtk_hbox_new(FALSE, 0);
+		bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+		ibox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		if (text)
-			lbox = gtk_hbox_new(FALSE, 0);
+			lbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	} else {
-		bbox = gtk_vbox_new(FALSE, 0);
-		ibox = gtk_vbox_new(FALSE, 0);
+		bbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+		ibox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		if (text)
-			lbox = gtk_vbox_new(FALSE, 0);
+			lbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	}
 
 	gtk_container_add(GTK_CONTAINER(button), bbox);
@@ -489,7 +505,7 @@ pidgin_make_frame(GtkWidget *parent, const char *title)
 	GtkWidget *vbox, *label, *hbox;
 	char *labeltitle;
 
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(parent), vbox, FALSE, FALSE, 0);
 	gtk_widget_show(vbox);
 
@@ -504,7 +520,7 @@ pidgin_make_frame(GtkWidget *parent, const char *title)
 	gtk_widget_show(label);
 	pidgin_set_accessible_label (vbox, label);
 
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 	gtk_widget_show(hbox);
 
@@ -512,7 +528,7 @@ pidgin_make_frame(GtkWidget *parent, const char *title)
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 	gtk_widget_show(label);
 
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 	gtk_widget_show(vbox);
 
@@ -553,7 +569,7 @@ aop_menu_item_new(GtkSizeGroup *sg, GdkPixbuf *pixbuf, const char *lbl, gpointer
 	item = gtk_menu_item_new();
 	gtk_widget_show(item);
 
-	hbox = gtk_hbox_new(FALSE, 4);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4);
 	gtk_widget_show(hbox);
 
 	/* Create the image */
@@ -1243,7 +1259,7 @@ pidgin_menu_position_func_helper(GtkMenu *menu,
 	 * if a size_request was queued while we weren't popped up,
 	 * the requisition won't have been recomputed yet.
 	 */
-	gtk_widget_size_request (widget, &requisition);
+	gtk_widget_get_preferred_size_compat(widget, &requisition);
 
 	monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
 
@@ -2254,7 +2270,7 @@ GtkWidget *pidgin_buddy_icon_chooser_new(GtkWindow *parent, void(*callback)(cons
 	dialog->icon_preview = gtk_image_new();
 	dialog->icon_text = gtk_label_new(NULL);
 
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_widget_set_size_request(GTK_WIDGET(vbox), -1, 50);
 	gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(dialog->icon_preview), TRUE, FALSE, 0);
 	gtk_box_pack_end(GTK_BOX(vbox), GTK_WIDGET(dialog->icon_text), FALSE, FALSE, 0);
@@ -2839,7 +2855,7 @@ combo_box_changed_cb(GtkComboBox *combo_box, GtkEntry *entry)
 static gboolean
 entry_key_pressed_cb(GtkWidget *entry, GdkEventKey *key, GtkComboBox *combo)
 {
-	if (key->keyval == GDK_Down || key->keyval == GDK_Up) {
+	if (key->keyval == GDK_KEY_Down || key->keyval == GDK_KEY_Up) {
 		gtk_combo_box_popup(combo);
 		return TRUE;
 	}
@@ -2888,7 +2904,7 @@ pidgin_add_widget_to_vbox(GtkBox *vbox, const char *widget_label, GtkSizeGroup *
 	GtkWidget *label = NULL;
 
 	if (widget_label) {
-		hbox = gtk_hbox_new(FALSE, 5);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 		gtk_widget_show(hbox);
 		gtk_box_pack_start(vbox, hbox, FALSE, FALSE, 0);
 
@@ -2945,7 +2961,7 @@ gboolean pidgin_auto_parent_window(GtkWidget *widget)
 		windows = g_list_delete_link(windows, windows);
 
 		if (window == widget ||
-				!GTK_WIDGET_VISIBLE(window))
+				!gtk_widget_get_visible(window))
 			continue;
 
 		if (!gdk_property_get(window->window, _WindowTime, _Cardinal, 0, sizeof(time_t), FALSE,
@@ -2999,7 +3015,7 @@ gboolean pidgin_auto_parent_window(GtkWidget *widget)
 		windows = g_list_delete_link(windows, windows);
 
 		if (window == widget ||
-				!GTK_WIDGET_VISIBLE(window)) {
+				!gtk_widget_get_visible(window)) {
 			continue;
 		}
 
