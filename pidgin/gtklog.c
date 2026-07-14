@@ -673,6 +673,10 @@ static PidginLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList *
 
 	select_first_log(lv);
 
+	/* Give the tree pane a sensible initial width; otherwise it opens
+	 * near-collapsed because only the imhtml side requests a size. */
+	gtk_paned_set_position(GTK_PANED(pane), 200);
+
 	gtk_widget_show_all(lv->window);
 
 	return lv;
@@ -774,9 +778,7 @@ void pidgin_log_show_contact(PurpleContact *contact) {
 	logs = g_list_sort(logs, purple_log_compare);
 
 	image = gtk_image_new();
-	pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-					pidgin_stock_icon_name(PIDGIN_STOCK_STATUS_PERSON),
-					24, 0, NULL);
+	pixbuf = pidgin_pixbuf_from_stock(PIDGIN_STOCK_STATUS_PERSON, 24);
 	if (pixbuf) {
 		gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
 		g_object_unref(pixbuf);

@@ -555,6 +555,12 @@ pidgin_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **tool
 
 	frame = gtk_frame_new(NULL);
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_IN);
+	/* When this frame is a direct child of a GtkPaned (chat history/userlist
+	 * split, log viewer, etc.) the paned honors expand flags on the child
+	 * itself, not box-packing flags buried inside. Without this the frame
+	 * can stay pinned to its minimum while the sibling eats all the space. */
+	gtk_widget_set_hexpand(frame, TRUE);
+	gtk_widget_set_vexpand(frame, TRUE);
 
 	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(frame), vbox);
