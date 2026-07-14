@@ -1795,13 +1795,15 @@ pidgin_status_box_init (PidginStatusBox *status_box,
 	status_box->hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	status_box->cell_view = gtk_cell_view_new();
 	status_box->vsep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
-	/* GTK3: GtkArrow is deprecated since 3.14 and draws nothing under most
-	 * GTK3 themes, which left the status selector's dropdown corner blank.
-	 * Use the themed "pan-down-symbolic" icon -- the same down-triangle GTK's
-	 * own GtkComboBox uses for its popup arrow -- so the Pidgin 2 look (a small
-	 * down arrow at the right of the status box) is preserved, theme-aware. */
-	status_box->arrow = gtk_image_new_from_icon_name("pan-down-symbolic",
-			GTK_ICON_SIZE_BUTTON);
+	/* GTK3: the dropdown triangle is no longer a child widget. GtkArrow is
+	 * deprecated (3.14) and draws nothing, and a symbolic GtkImage gets
+	 * recoloured to the fg colour -- invisible against a dark buddy list. We
+	 * instead paint the arrow ourselves with gtk_render_arrow() in the draw
+	 * handler (exactly how GtkComboBox does it): theme-aware and always
+	 * visible. status_box->arrow is now just a fixed-width placeholder box
+	 * that reserves the strip we paint the arrow into. */
+	status_box->arrow = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_widget_set_size_request(status_box->arrow, 14, -1);
 
 	status_box->store = gtk_list_store_new(NUM_COLUMNS, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_STRING,
 					       G_TYPE_STRING, G_TYPE_POINTER, GDK_TYPE_PIXBUF, G_TYPE_BOOLEAN);
@@ -1816,6 +1818,8 @@ pidgin_status_box_init (PidginStatusBox *status_box,
 	gtk_container_add(GTK_CONTAINER(status_box->toggle_button), status_box->hbox);
 	gtk_box_pack_start(GTK_BOX(status_box->hbox), status_box->cell_view, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(status_box->hbox), status_box->vsep, FALSE, FALSE, 0);
+	/* Reserve a fixed strip on the right of the button for the arrow we paint
+	 * ourselves in pidgin_status_box_draw(). */
 	gtk_box_pack_start(GTK_BOX(status_box->hbox), status_box->arrow, FALSE, FALSE, 0);
 	gtk_widget_show_all(status_box->toggle_button);
 	gtk_button_set_focus_on_click(GTK_BUTTON(status_box->toggle_button), FALSE);
@@ -2114,6 +2118,22 @@ pidgin_status_box_draw(GtkWidget *widget, cairo_t *cr)
 	PidginStatusBox *status_box = PIDGIN_STATUS_BOX(widget);
 	gtk_container_propagate_draw(GTK_CONTAINER(widget), status_box->vbox, cr);
 	gtk_container_propagate_draw(GTK_CONTAINER(widget), status_box->toggle_button, cr);
+
+	/* GTK3: paint the dropdown triangle ourselves into the strip reserved by
+	 * status_box->arrow. gtk_render_arrow() is theme-aware and, unlike a
+	 * symbolic GtkImage, is never recoloured to invisibility. */
+	if (status_box->arrow && gtk_widget_get_realized(status_box->arrow)) {
+		GtkStyleContext *context = gtk_widget_get_style_context(status_box->toggle_button);
+		GtkAllocation arrow_alc;
+		gdouble size;
+
+		gtk_widget_get_allocation(status_box->arrow, &arrow_alc);
+		size = MIN(arrow_alc.width, 12);
+		gtk_render_arrow(context, cr, G_PI,
+				arrow_alc.x + (arrow_alc.width - size) / 2.0,
+				arrow_alc.y + (arrow_alc.height - size) / 2.0,
+				size);
+	}
 	if (status_box->icon_box && status_box->icon_opaque) {
 		GtkStyleContext *context = gtk_widget_get_style_context(widget);
 		GtkAllocation icon_alc;
@@ -2139,7 +2159,8 @@ pidgin_status_box_forall(GtkContainer *container,
 	{
 	  	(* callback) (status_box->vbox, callback_data);
 		(* callback) (status_box->toggle_button, callback_data);
-		(* callback) (status_box->arrow, callback_data);
+		if (status_box->arrow)
+			(* callback) (status_box->arrow, callback_data);
 		if (status_box->icon_box)
 			(* callback) (status_box->icon_box, callback_data);
 	}
