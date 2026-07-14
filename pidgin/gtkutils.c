@@ -298,17 +298,27 @@ static const struct {
 	{ "gtk-yes",           N_("_Yes"),            NULL                    },
 	{ "gtk-zoom-in",       N_("Zoom _In"),        "zoom-in"               },
 	{ "gtk-zoom-out",      N_("Zoom _Out"),      "zoom-out"              },
-	{ "pidgin-alias",      N_("_Alias"),         "gtk-edit"              },
-	{ "pidgin-chat",       N_("_Join"),          "pidgin-chat"           },
-	{ "pidgin-close-tab",  N_("Close _tabs"),     "pidgin-close-tab"      },
+	/* PIDGIN_STOCK_* aliases that have NO installed PNG (dir==NULL in
+	 * pidginstock.c stock_icons[]) must resolve to a REAL freedesktop themed
+	 * name, else the button/menu image renders as a broken image-missing glyph.
+	 * Only ids backed by an actual pixmap keep their "pidgin-*" routing. */
+	{ "pidgin-alias",      N_("_Alias"),          "gtk-edit"              },
+	{ "pidgin-chat",       N_("_Join"),           "go-jump"               },
+	{ "pidgin-close-tab",  N_("Close _tabs"),     "window-close"          },
 	{ "pidgin-message-new", N_("I_M"),            "pidgin-message-new"    },
-	{ "pidgin-info",       N_("_Get Info"),       "pidgin-info"           },
-	{ "pidgin-invite",     N_("_Invite"),         "pidgin-invite"         },
-	{ "pidgin-modify",     N_("_Modify..."),      "pidgin-modify"         },
-	{ "pidgin-add",        N_("_Add..."),         "pidgin-add"            },
-	{ "pidgin-stock-open-mail", N_("_Open Mail"),  "pidgin-stock-open-mail" },
-	{ "pidgin-pause",      N_("_Pause"),          "pidgin-pause"          },
-	{ "pidgin-edit",       N_("_Edit"),           "pidgin-edit"           },
+	{ "pidgin-info",       N_("_Get Info"),       "dialog-information"    },
+	{ "pidgin-invite",     N_("_Invite"),         "go-jump"               },
+	{ "pidgin-modify",     N_("_Modify..."),      "preferences-system"    },
+	{ "pidgin-add",        N_("_Add..."),         "list-add"              },
+	{ "pidgin-stock-open-mail", N_("_Open Mail"),  "mail-message-new"      },
+	{ "pidgin-pause",      N_("_Pause"),          "media-playback-pause"  },
+	{ "pidgin-edit",       N_("_Edit"),           "gtk-edit"              },
+	/* File-transfer / misc PIDGIN_STOCK_* GTK-stock aliases (no PNG). */
+	{ "pidgin-file-done",  NULL,                  "gtk-apply"             },
+	{ "pidgin-file-canceled", NULL,               "process-stop"          },
+	{ "pidgin-download",   NULL,                  "go-down"               },
+	{ "pidgin-upload",     NULL,                  "go-up"                 },
+	{ "pidgin-clear",      N_("C_lear"),          "edit-clear"            },
 };
 
 /*
@@ -373,6 +383,100 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	return gtk_image_new_from_icon_name(icon_name, size);
 }
 
+GdkPixbuf *
+pidgin_pixbuf_from_stock(const char *stock_id, gint size)
+{
+	const char *icon_name;
+
+	if (stock_id == NULL)
+		return NULL;
+
+	icon_name = pidgin_stock_icon_name(stock_id);
+
+	/* PIDGIN_STOCK_* ids live only in the default GtkIconFactory, not in the
+	 * icon theme.  Render them from the factory's icon set; loading them via
+	 * gtk_icon_theme_load_icon() returns NULL and later blows up with
+	 * g_object_ref/unref(NULL) assertions. */
+	if (icon_name != NULL && g_str_has_prefix(icon_name, "pidgin-")) {
+		GdkPixbuf *pixbuf = NULL;
+
+		/* Pidgin's sized icon sets register their sources at fixed, custom
+		 * GtkIconSizes (11/16/22/32/48/64) with size-wildcarding OFF, so
+		 * gtk_icon_set_render_icon_pixbuf() returns NULL (-> the broken
+		 * image-missing glyph) for any size that has no registered source.
+		 * Not every icon is registered at every size (e.g. select-avatar is
+		 * only registered at 22px), so we can't just map the requested pixel
+		 * size to one Pidgin icon size and render that -- the mapped size may
+		 * have no source.  Build a candidate ladder starting with the best
+		 * match for the requested pixel size and try each until one renders. */
+		static const char * const size_names[] = {
+			PIDGIN_ICON_SIZE_TANGO_MICROSCOPIC,   /* 11 */
+			PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL,   /* 16 */
+			PIDGIN_ICON_SIZE_TANGO_SMALL,         /* 22 */
+			PIDGIN_ICON_SIZE_TANGO_MEDIUM,        /* 32 */
+			PIDGIN_ICON_SIZE_TANGO_LARGE,         /* 48 */
+			PIDGIN_ICON_SIZE_TANGO_HUGE           /* 64 */
+		};
+		static const gint size_px[] = { 11, 16, 22, 32, 48, 64 };
+		gsize start, i;
+
+		/* Pick the ladder rung whose pixel size best matches the request:
+		 * the smallest registered size that is >= the requested size, or the
+		 * largest if the request is bigger than everything. */
+		start = G_N_ELEMENTS(size_px) - 1;
+		for (i = 0; i < G_N_ELEMENTS(size_px); i++) {
+			if (size <= size_px[i]) {
+				start = i;
+				break;
+			}
+		}
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+		GtkIconSet *icon_set = gtk_icon_factory_lookup_default(stock_id);
+		if (icon_set != NULL) {
+			GtkWidgetPath *path = gtk_widget_path_new();
+			GtkStyleContext *context = gtk_style_context_new();
+			gtk_widget_path_append_type(path, GTK_TYPE_IMAGE);
+			gtk_style_context_set_path(context, path);
+
+			/* Try the best-match rung first, then walk outward through the
+			 * rest of the ladder until some size has a registered source. */
+			for (i = 0; i < G_N_ELEMENTS(size_names) && pixbuf == NULL; i++) {
+				gsize idx = (start + i) % G_N_ELEMENTS(size_names);
+				GtkIconSize icon_size =
+					gtk_icon_size_from_name(size_names[idx]);
+				if (icon_size == GTK_ICON_SIZE_INVALID)
+					continue;
+				pixbuf = gtk_icon_set_render_icon_pixbuf(icon_set,
+						context, icon_size);
+			}
+
+			g_object_unref(context);
+			gtk_widget_path_unref(path);
+		}
+G_GNUC_END_IGNORE_DEPRECATIONS
+		if (pixbuf != NULL && size > 0 &&
+				(gdk_pixbuf_get_width(pixbuf) != size ||
+				 gdk_pixbuf_get_height(pixbuf) != size)) {
+			/* gtk_icon_set_render_icon_pixbuf() does not honour the requested
+			 * GtkIconSize precisely (it can return the icon set's native or
+			 * largest source size), which would make buddy-list rows too tall
+			 * and overflow the window.  Force the result to exactly the pixel
+			 * size the caller asked for. */
+			GdkPixbuf *scaled = gdk_pixbuf_scale_simple(pixbuf,
+					size, size, GDK_INTERP_BILINEAR);
+			if (scaled != NULL) {
+				g_object_unref(pixbuf);
+				pixbuf = scaled;
+			}
+		}
+		return pixbuf;
+	}
+
+	return gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+			icon_name, size > 0 ? size : 16, 0, NULL);
+}
+
 GtkWidget *
 pidgin_button_new_from_stock(const char *stock_id)
 {
@@ -415,8 +519,16 @@ GtkWidget *pidgin_dialog_add_button(GtkDialog *dialog, const char *label,
 	if (pidgin_stock_lookup(label, &btn_label, &icon_name)) {
 		button = gtk_button_new_with_mnemonic(btn_label ? btn_label : label);
 		if (icon_name != NULL) {
-			GtkWidget *image = gtk_image_new_from_icon_name(icon_name,
-					GTK_ICON_SIZE_BUTTON);
+			GtkWidget *image;
+			if (g_str_has_prefix(icon_name, "pidgin-")) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+				image = gtk_image_new_from_stock(icon_name,
+						GTK_ICON_SIZE_BUTTON);
+G_GNUC_END_IGNORE_DEPRECATIONS
+			} else {
+				image = gtk_image_new_from_icon_name(icon_name,
+						GTK_ICON_SIZE_BUTTON);
+			}
 			gtk_button_set_image(GTK_BUTTON(button), image);
 			gtk_button_set_always_show_image(GTK_BUTTON(button), TRUE);
 		}
