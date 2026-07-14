@@ -463,13 +463,17 @@ destroy_icon_box(PidginStatusBox *statusbox)
 		return;
 
 	gtk_widget_destroy(statusbox->icon_box);
-	gdk_cursor_unref(statusbox->hand_cursor);
-	gdk_cursor_unref(statusbox->arrow_cursor);
+	if (statusbox->hand_cursor)
+		gdk_cursor_unref(statusbox->hand_cursor);
+	if (statusbox->arrow_cursor)
+		gdk_cursor_unref(statusbox->arrow_cursor);
 
 	purple_imgstore_unref(statusbox->buddy_icon_img);
 
-	g_object_unref(G_OBJECT(statusbox->buddy_icon));
-	g_object_unref(G_OBJECT(statusbox->buddy_icon_hover));
+	if (statusbox->buddy_icon)
+		g_object_unref(G_OBJECT(statusbox->buddy_icon));
+	if (statusbox->buddy_icon_hover)
+		g_object_unref(G_OBJECT(statusbox->buddy_icon_hover));
 
 	if (statusbox->buddy_icon_sel)
 		gtk_widget_destroy(statusbox->buddy_icon_sel);

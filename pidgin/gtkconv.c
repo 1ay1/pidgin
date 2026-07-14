@@ -5627,9 +5627,6 @@ pidgin_conv_destroy(PurpleConversation *conv)
 		g_free(gtkconv->u.chat);
 	}
 
-	g_object_ref_sink(G_OBJECT(gtkconv->tooltips));
-
-	gtkconv->send_history = g_list_first(gtkconv->send_history);
 	g_list_free_full(gtkconv->send_history, (GDestroyNotify)g_free);
 
 	if (gtkconv->attach.timer) {

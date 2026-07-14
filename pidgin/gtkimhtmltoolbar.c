@@ -53,6 +53,9 @@ static gboolean
 gtk_imhtmltoolbar_popup_menu(GtkWidget *widget,
 		GdkEventButton *event, GtkIMHtmlToolbar *toolbar);
 
+static void
+update_menuitem(GtkToggleButton *button, GtkCheckMenuItem *item);
+
 static void do_bold(GtkWidget *bold, GtkIMHtmlToolbar *toolbar)
 {
 	g_return_if_fail(toolbar != NULL);
@@ -1143,7 +1146,18 @@ gtk_imhtmltoolbar_finalize (GObject *object)
 	}
 
 	g_free(toolbar->sml);
-	g_object_ref_sink(G_OBJECT(toolbar->tooltips));
+
+	/* The font/insert menus hold check-menu-items that are wired to the
+	 * persistent format buttons (toolbar->bold, etc.) via notify::sensitive,
+	 * notify::visible and toggled handlers.  Destroying the menus without
+	 * first breaking those connections leaves the buttons emitting into
+	 * freed menu-items on the next conversation switch (GTK_IS_* / G_IS_OBJECT
+	 * assertion storms).  Disconnect every handler that closes over this
+	 * toolbar's buttons before tearing the menus down. */
+	if (toolbar->bold)
+		g_signal_handlers_disconnect_matched(toolbar->bold,
+			G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+			G_CALLBACK(update_menuitem), NULL);
 
 	menu = g_object_get_data(object, "font_menu");
 	if (menu)
