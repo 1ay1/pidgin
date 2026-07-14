@@ -1083,6 +1083,24 @@ void pidgin_widget_set_text_color(GtkWidget *widget, const GdkColor *color);
 void pidgin_widget_get_monitor_size(GtkWidget *widget, int *width, int *height);
 
 /**
+ * Set the alignment of a widget within its allocation the GTK3 way.
+ *
+ * This replaces the deprecated gtk_misc_set_alignment(). For a #GtkLabel it
+ * forwards to gtk_label_set_xalign()/gtk_label_set_yalign() so fractional
+ * alignments render identically; for any other widget it maps the fractions
+ * onto gtk_widget_set_halign()/gtk_widget_set_valign() (<0.5 -> START,
+ * ==0.5 -> CENTER, >0.5 -> END), which is exact for the 0.0/0.5/1.0 values
+ * used throughout Pidgin.
+ *
+ * @param widget The widget to align.
+ * @param xalign Horizontal alignment, 0.0 (left) .. 1.0 (right).
+ * @param yalign Vertical alignment, 0.0 (top) .. 1.0 (bottom).
+ *
+ * @since 2.15.0
+ */
+void pidgin_widget_set_alignment(GtkWidget *widget, gfloat xalign, gfloat yalign);
+
+/**
  * Initialize some utility functions.
  *
  * @since 2.6.0

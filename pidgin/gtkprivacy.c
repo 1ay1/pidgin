@@ -364,7 +364,7 @@ privacy_dialog_new(void)
 		_("Changes to privacy settings take effect immediately."));
 
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0.5);
 	gtk_widget_show(label);
 
 	/* Accounts drop-down */

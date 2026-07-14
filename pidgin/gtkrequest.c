@@ -121,7 +121,7 @@ pidgin_widget_decorate_account(GtkWidget *cont, PurpleAccount *account)
 		gtk_box_pack_start(GTK_BOX(action_area), image, FALSE, TRUE, 0);
 		gtk_box_reorder_child(GTK_BOX(action_area), image, 0);
 	} else if (GTK_IS_HBOX(cont)) {
-		gtk_misc_set_alignment(GTK_MISC(image), 0, 0);
+		pidgin_widget_set_alignment(GTK_WIDGET(image), 0, 0);
 		gtk_box_pack_end(GTK_BOX(cont), image, FALSE, TRUE, 0);
 	}
 	gtk_widget_show(image);
@@ -386,7 +386,7 @@ pidgin_request_input(const char *title, const char *primary,
 	/* Dialog icon. */
 	img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
 				gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
-	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(img), 0, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 
 	/* Vertical box */
@@ -411,7 +411,7 @@ pidgin_request_input(const char *title, const char *primary,
 
 	gtk_label_set_markup(GTK_LABEL(label), label_text);
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 	g_free(label_text);
@@ -551,7 +551,7 @@ pidgin_request_choice(const char *title, const char *primary,
 	/* Dialog icon. */
 	img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
 				       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
-	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(img), 0, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 
 	pidgin_widget_decorate_account(hbox, account);
@@ -575,7 +575,7 @@ pidgin_request_choice(const char *title, const char *primary,
 
 	gtk_label_set_markup(GTK_LABEL(label), label_text);
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 
 	g_free(label_text);
@@ -702,7 +702,7 @@ pidgin_request_action_with_icon(const char *title, const char *primary,
 		img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
 				       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 	}
-	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(img), 0, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 
 	/* Vertical box */
@@ -726,7 +726,7 @@ pidgin_request_action_with_icon(const char *title, const char *primary,
 
 	gtk_label_set_markup(GTK_LABEL(label), label_text);
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 
@@ -1233,7 +1233,7 @@ pidgin_request_fields(const char *title, const char *primary,
 	/* Dialog icon. */
 	img = pidgin_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
 				gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
-	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(img), 0, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 	gtk_widget_show(img);
 
@@ -1265,7 +1265,7 @@ pidgin_request_fields(const char *title, const char *primary,
 
 		gtk_label_set_markup(GTK_LABEL(label), label_text);
 		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 		gtk_widget_show(label);
 		g_free(label_text);
@@ -1304,7 +1304,7 @@ pidgin_request_fields(const char *title, const char *primary,
 		gtk_label_set_markup(GTK_LABEL(label), secondary_esc);
 		g_free(secondary_esc);
 		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 		gtk_box_pack_start(GTK_BOX(vbox2), label, TRUE, TRUE, 0);
 		gtk_widget_show(label);
 	}
@@ -1439,7 +1439,7 @@ pidgin_request_fields(const char *title, const char *primary,
 					gtk_label_set_markup_with_mnemonic(GTK_LABEL(label), text ? text : field_label);
 					g_free(text);
 
-					gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+					pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0.5);
 
 					gtk_size_group_add_widget(sg, label);
 
@@ -2382,7 +2382,7 @@ static void *pidgin_request_screenshare_media(const char *title, const char *pri
 
 	gtk_label_set_markup(GTK_LABEL(label), label_text);
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 

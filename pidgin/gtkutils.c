@@ -681,7 +681,7 @@ GtkWidget *pidgin_new_item(GtkWidget *menu, const char *str)
 	gtk_widget_show(menuitem);
 
 	label = gtk_label_new(str);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0.5);
 	gtk_label_set_pattern(GTK_LABEL(label), "_");
 	gtk_container_add(GTK_CONTAINER(menuitem), label);
 	gtk_widget_show(label);
@@ -847,7 +847,7 @@ pidgin_make_frame(GtkWidget *parent, const char *title)
 	gtk_label_set_markup(GTK_LABEL(label), labeltitle);
 	g_free(labeltitle);
 
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 	gtk_widget_show(label);
 	pidgin_set_accessible_label (vbox, label);
@@ -3234,7 +3234,7 @@ pidgin_add_widget_to_vbox(GtkBox *vbox, const char *widget_label, GtkSizeGroup *
 		label = gtk_label_new_with_mnemonic(widget_label);
 		gtk_widget_show(label);
 		if (sg) {
-			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+			pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0.5);
 			gtk_size_group_add_widget(sg, label);
 		}
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -4028,6 +4028,34 @@ pidgin_widget_get_monitor_size(GtkWidget *widget, int *width, int *height)
 		*width = geometry.width;
 	if (height != NULL)
 		*height = geometry.height;
+}
+
+static GtkAlign
+pidgin_align_from_fraction(gfloat frac)
+{
+	if (frac < 0.5)
+		return GTK_ALIGN_START;
+	if (frac > 0.5)
+		return GTK_ALIGN_END;
+	return GTK_ALIGN_CENTER;
+}
+
+void
+pidgin_widget_set_alignment(GtkWidget *widget, gfloat xalign, gfloat yalign)
+{
+	if (widget == NULL)
+		return;
+
+	if (GTK_IS_LABEL(widget)) {
+		/* Labels keep fractional alignment exactly. */
+		gtk_label_set_xalign(GTK_LABEL(widget), xalign);
+		gtk_label_set_yalign(GTK_LABEL(widget), yalign);
+	} else {
+		/* Everything else (images, etc.) maps onto the widget align
+		 * enum, which is exact for the 0.0/0.5/1.0 values in use. */
+		gtk_widget_set_halign(widget, pidgin_align_from_fraction(xalign));
+		gtk_widget_set_valign(widget, pidgin_align_from_fraction(yalign));
+	}
 }
 
 void pidgin_utils_init(void)

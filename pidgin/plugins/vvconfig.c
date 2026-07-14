@@ -585,7 +585,7 @@ show_config(PurplePluginAction *action)
 		GtkWidget *vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
 		GtkWidget *hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
 		GtkWidget *config_frame = create_frame(NULL);
-		GtkWidget *close = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+		GtkWidget *close = pidgin_button_new_from_stock(GTK_STOCK_CLOSE);
 
 		gtk_container_add(GTK_CONTAINER(vbox), config_frame);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);

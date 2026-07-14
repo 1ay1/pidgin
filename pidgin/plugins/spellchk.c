@@ -2245,7 +2245,7 @@ get_config_frame(PurplePlugin *plugin)
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 	gtk_widget_show(hbox);
 
-	button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
+	button = pidgin_button_new_from_stock(GTK_STOCK_DELETE);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			   G_CALLBACK(list_delete), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
@@ -2293,7 +2293,7 @@ get_config_frame(PurplePlugin *plugin)
 	gtk_widget_show(case_toggle);
 	gtk_box_pack_start(GTK_BOX(vbox2), case_toggle, FALSE, FALSE, 0);
 
-	button = gtk_button_new_from_stock(GTK_STOCK_ADD);
+	button = pidgin_button_new_from_stock(GTK_STOCK_ADD);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			   G_CALLBACK(list_add_new), NULL);
 	vbox3 = gtk_vbox_new(FALSE, 0);

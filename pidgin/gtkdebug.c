@@ -199,7 +199,7 @@ find_cb(GtkWidget *w, DebugWindow *win)
 				       gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 
-	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(img), 0, 0);
 	gtk_dialog_set_response_sensitive(GTK_DIALOG(win->find),
 									  GTK_RESPONSE_OK, FALSE);
 

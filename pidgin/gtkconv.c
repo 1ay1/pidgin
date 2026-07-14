@@ -953,7 +953,7 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 		gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
-		gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
+		pidgin_widget_set_alignment(GTK_WIDGET(img), 0, 0);
 
 		/* Setup the right vbox. */
 		vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -965,7 +965,7 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 								"message."));
 		gtk_widget_set_size_request(label, 350, -1);
 		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 		/* hbox for the table, and to give it some spacing on the left. */
@@ -982,7 +982,7 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		/* Now the Buddy label */
 		label = gtk_label_new(NULL);
 		gtk_label_set_markup_with_mnemonic(GTK_LABEL(label), _("_Buddy:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 		gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
 
 		/* Now the Buddy drop-down entry field. */
@@ -995,7 +995,7 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		/* Now the label for "Message" */
 		label = gtk_label_new(NULL);
 		gtk_label_set_markup_with_mnemonic(GTK_LABEL(label), _("_Message:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 		gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
 
 
@@ -8491,7 +8491,7 @@ build_warn_close_dialog(PidginWindow *gtkwin)
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
-	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(img), 0, 0);
 
 	/* Setup the right vbox. */
 	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
@@ -8500,7 +8500,7 @@ build_warn_close_dialog(PidginWindow *gtkwin)
 	label = gtk_label_new(_("You have unread messages. Are you sure you want to close the window?"));
 	gtk_widget_set_size_request(label, 350, -1);
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 	/* Connect the signals. */
@@ -9729,7 +9729,7 @@ pidgin_conv_window_add_gtkconv(PidginWindow *win, PidginConversation *gtkconv)
 
 	gtk_box_pack_start(GTK_BOX(gtkconv->menu_tabby), gtkconv->menu_label, TRUE, TRUE, 0);
 	gtk_widget_show(gtkconv->menu_label);
-	gtk_misc_set_alignment(GTK_MISC(gtkconv->menu_label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(gtkconv->menu_label), 0, 0);
 
 	gtk_widget_show(gtkconv->menu_tabby);
 
@@ -9811,7 +9811,7 @@ pidgin_conv_tab_pack(PidginWindow *win, PidginConversation *gtkconv)
 	gtk_label_set_angle(GTK_LABEL(gtkconv->tab_label), angle);
 
 #if 0
-	gtk_misc_set_alignment(GTK_MISC(gtkconv->tab_label), 0.00, 0.5);
+	pidgin_widget_set_alignment(GTK_WIDGET(gtkconv->tab_label), 0.00, 0.5);
 	gtk_misc_set_padding(GTK_MISC(gtkconv->tab_label), 4, 0);
 #endif
 

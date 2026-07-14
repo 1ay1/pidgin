@@ -671,13 +671,13 @@ make_info_table(PidginXferDialog *dialog)
 		*labels[i].desc_label = label = gtk_label_new(NULL);
 		gtk_label_set_markup(GTK_LABEL(label), buf);
 		gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_RIGHT);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, i, i + 1,
 						 GTK_FILL, 0, 0, 0);
 		gtk_widget_show(label);
 
 		*labels[i].val_label = label = gtk_label_new(NULL);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, i, i + 1,
 						 GTK_FILL | GTK_EXPAND, 0, 0, 0);
 		gtk_widget_show(label);

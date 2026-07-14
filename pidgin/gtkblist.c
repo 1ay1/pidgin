@@ -1022,7 +1022,7 @@ make_blist_request_dialog(PidginBlistRequestData *data, PurpleAccount *account,
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(data->window))), hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
-	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(img), 0, 0);
 
 	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 	gtk_container_add(GTK_CONTAINER(hbox), vbox);
@@ -1031,7 +1031,7 @@ make_blist_request_dialog(PidginBlistRequestData *data, PurpleAccount *account,
 
 	gtk_widget_set_size_request(label, 400, -1);
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 	data->sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
@@ -5317,7 +5317,7 @@ create_account_label(PurpleAccount *account)
 	markup = g_strdup_printf("<span size=\"smaller\">%s</span>", username);
 	gtk_label_set_markup(GTK_LABEL(label), markup);
 	g_free(markup);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0);
 	g_object_set(G_OBJECT(label), "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 #if GTK_CHECK_VERSION(2,12,0)
 	{ /* avoid unused variable warnings on pre-2.12 Gtk */
@@ -5549,14 +5549,14 @@ kiosk_page()
 
 	label = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label), _("<b>Username:</b>"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0.0, 0.5);
 	gtk_box_pack_start(GTK_BOX(ret), label, FALSE, FALSE, 0);
 	entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(ret), entry, FALSE, FALSE, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label), _("<b>Password:</b>"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0.0, 0.5);
 	gtk_box_pack_start(GTK_BOX(ret), label, FALSE, FALSE, 0);
 	entry = gtk_entry_new();
 	gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
@@ -5939,7 +5939,7 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
 	gtk_label_set_width_chars(GTK_LABEL(label), 20);
 	gtk_label_set_max_width_chars(GTK_LABEL(label), 40);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.2);
+	pidgin_widget_set_alignment(GTK_WIDGET(label), 0.5, 0.2);
 	gtk_label_set_markup(GTK_LABEL(label), pretty);
 	g_free(pretty);
 	gtk_notebook_append_page(GTK_NOTEBOOK(gtkblist->notebook),label, NULL);
@@ -5954,7 +5954,7 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	gtk_container_set_border_width(GTK_CONTAINER(gtkblist->headline_hbox), 6);
 	gtk_container_add(GTK_CONTAINER(ebox), gtkblist->headline_hbox);
 	gtkblist->headline_image = gtk_image_new_from_pixbuf(NULL);
-	gtk_misc_set_alignment(GTK_MISC(gtkblist->headline_image), 0.0, 0);
+	pidgin_widget_set_alignment(GTK_WIDGET(gtkblist->headline_image), 0.0, 0);
 	gtkblist->headline_label = gtk_label_new(NULL);
 	/* GTK3: avoid a hard min-width from size_request; wrap within the given width. */
 	gtk_label_set_line_wrap(GTK_LABEL(gtkblist->headline_label), TRUE);

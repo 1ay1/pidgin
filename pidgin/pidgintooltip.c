@@ -91,7 +91,11 @@ destroy_tooltip_data(PidginTooltipData *data)
 void pidgin_tooltip_destroy()
 {
 	if (pidgin_tooltip.timeout > 0) {
-		g_source_remove(pidgin_tooltip.timeout);
+		/* The source may have already fired (and thus been auto-removed)
+		 * before we get here; guard against "Source ID N was not found"
+		 * warnings by only removing it if it still exists. */
+		if (g_main_context_find_source_by_id(NULL, pidgin_tooltip.timeout) != NULL)
+			g_source_remove(pidgin_tooltip.timeout);
 		pidgin_tooltip.timeout = 0;
 	}
 	if (pidgin_tooltip.tipwindow) {
