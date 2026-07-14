@@ -26,6 +26,7 @@
 #include "network.h"
 #include "notify.h"
 #include "prpl.h"
+#include "protocols.h"
 #include "request.h"
 #include "util.h"
 
@@ -624,27 +625,10 @@ purple_prpl_got_media_caps(PurpleAccount *account, const char *name)
 PurplePlugin *
 purple_find_prpl(const char *id)
 {
-	GList *l;
-	PurplePlugin *plugin;
-
 	g_return_val_if_fail(id != NULL, NULL);
 
-	/* libpurple3 compatibility.
-	 * prpl-xmpp isn't used yet (it's prpl-jabber),
-	 * but may be used in the future.
-	 */
-	if (purple_strequal(id, "prpl-xmpp") ||
-		purple_strequal(id, "prpl-gtalk"))
-	{
-		id = "prpl-jabber";
-	}
-
-	for (l = purple_plugins_get_protocols(); l != NULL; l = l->next) {
-		plugin = (PurplePlugin *)l->data;
-
-		if (purple_strequal(plugin->info->id, id))
-			return plugin;
-	}
-
-	return NULL;
+	/* Modern O(1) hash-indexed lookup. The index applies the same
+	 * libpurple3-forward id aliasing (prpl-xmpp / prpl-gtalk -> prpl-jabber)
+	 * that this function used to do inline. */
+	return purple_protocols_find(id);
 }

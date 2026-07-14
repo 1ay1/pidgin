@@ -77,6 +77,7 @@
 #include <pounce.h>
 #include <prefs.h>
 #include <privacy.h>
+#include <protocols.h>
 #include <proxy.h>
 #include <prpl.h>
 #include <request.h>

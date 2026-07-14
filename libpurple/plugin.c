@@ -30,6 +30,7 @@
 #include "notify.h"
 #include "prefs.h"
 #include "prpl.h"
+#include "protocols.h"
 #include "request.h"
 #include "signals.h"
 #include "util.h"
@@ -737,8 +738,10 @@ purple_plugin_unload(PurplePlugin *plugin)
 	purple_plugin_ipc_unregister_all(plugin);
 
 	loaded_plugins = g_list_remove(loaded_plugins, plugin);
-	if ((plugin->info != NULL) && PURPLE_IS_PROTOCOL_PLUGIN(plugin))
+	if ((plugin->info != NULL) && PURPLE_IS_PROTOCOL_PLUGIN(plugin)) {
 		protocol_plugins = g_list_remove(protocol_plugins, plugin);
+		purple_protocols_remove(plugin);
+	}
 	plugins_to_disable = g_list_remove(plugins_to_disable, plugin);
 	plugin->loaded = FALSE;
 
@@ -1463,6 +1466,7 @@ purple_plugins_probe(const char *ext)
 
 			protocol_plugins = g_list_insert_sorted(protocol_plugins, plugin,
 													(GCompareFunc)compare_prpl);
+			purple_protocols_add(plugin);
 		}
 	}
 
@@ -1515,9 +1519,11 @@ purple_plugin_register(PurplePlugin *plugin)
 #else
 	if (plugin->info != NULL)
 	{
-		if (plugin->info->type == PURPLE_PLUGIN_PROTOCOL)
+		if (plugin->info->type == PURPLE_PLUGIN_PROTOCOL) {
 			protocol_plugins = g_list_insert_sorted(protocol_plugins, plugin,
 													(GCompareFunc)compare_prpl);
+			purple_protocols_add(plugin);
+		}
 		if (plugin->info->load != NULL)
 			if (!plugin->info->load(plugin))
 				return FALSE;

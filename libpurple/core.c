@@ -41,6 +41,7 @@
 #include "pounce.h"
 #include "prefs.h"
 #include "privacy.h"
+#include "protocols.h"
 #include "proxy.h"
 #include "savedstatuses.h"
 #include "signals.h"
@@ -142,6 +143,10 @@ purple_core_init(const char *ui)
 	 * subsystem right away too.
 	 */
 	purple_plugins_init();
+
+	/* The protocol registry must exist before any protocol plugin (static or
+	 * probed) registers, so it can index them as they arrive. */
+	purple_protocols_init();
 
 	/* Initialize all static protocols. */
 	static_proto_init();
@@ -256,6 +261,7 @@ purple_core_quit(void)
 	/* Everything after prefs_uninit must not try to read any prefs */
 	purple_prefs_uninit();
 	purple_plugins_uninit();
+	purple_protocols_uninit();
 #ifdef HAVE_DBUS
 	purple_dbus_uninit();
 #endif
