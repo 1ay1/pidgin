@@ -43,6 +43,7 @@
 #include "privacy.h"
 #include "protocols.h"
 #include "proxy.h"
+#include "reconnect.h"
 #include "savedstatuses.h"
 #include "signals.h"
 #include "smiley.h"
@@ -183,6 +184,10 @@ purple_core_init(const char *ui)
 	purple_xfers_init();
 	purple_idle_init();
 	purple_smileys_init();
+
+	/* Automatic reconnection observes account/connection/network signals, so
+	 * bring it up after those subsystems exist. */
+	purple_reconnect_init();
 	/*
 	 * Call this early on to try to auto-detect our IP address and
 	 * hopefully save some time later.
@@ -229,6 +234,7 @@ purple_core_quit(void)
 	purple_plugins_unload(PURPLE_PLUGIN_STANDARD);
 
 	/* Save .xml files, remove signals, etc. */
+	purple_reconnect_uninit();
 	purple_smileys_uninit();
 	purple_idle_uninit();
 	purple_pounces_uninit();
