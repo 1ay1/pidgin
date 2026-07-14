@@ -2959,7 +2959,9 @@ pidgin_blist_paint_tip(GtkWidget *widget, gpointer null)
 		return FALSE;
 
 	context = gtk_widget_get_style_context(gtkblist->tipwindow);
-	cr = gdk_cairo_create(gtk_widget_get_window(gtkblist->tipwindow));
+	cr = pidgin_tooltip_get_cairo();
+	if (cr == NULL)
+		return FALSE;
 
 	max_text_width = 0;
 	max_avatar_width = 0;
@@ -3048,7 +3050,6 @@ pidgin_blist_paint_tip(GtkWidget *widget, gpointer null)
 
 		current_height += MAX(td->name_height + td->height, td->avatar_height) + td->padding;
 	}
-	cairo_destroy(cr);
 	return FALSE;
 }
 

@@ -362,7 +362,9 @@ pidgin_roomlist_paint_tooltip(GtkWidget *widget, gpointer user_data)
 	GtkTextDirection dir = gtk_widget_get_direction(GTK_WIDGET(grl->tree));
 
 	context = gtk_widget_get_style_context(grl->tipwindow);
-	cr = gdk_cairo_create(gtk_widget_get_window(grl->tipwindow));
+	cr = pidgin_tooltip_get_cairo();
+	if (cr == NULL)
+		return FALSE;
 
 	max_text_width = MAX(grl->tip_width, grl->tip_name_width);
 	max_width = TOOLTIP_BORDER + SMALL_SPACE + max_text_width + TOOLTIP_BORDER;
@@ -386,7 +388,6 @@ pidgin_roomlist_paint_tooltip(GtkWidget *widget, gpointer user_data)
 				current_height + grl->tip_name_height,
 				grl->tip_layout);
 	}
-	cairo_destroy(cr);
 	return FALSE;
 }
 

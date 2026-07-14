@@ -567,9 +567,10 @@ pidgin_plugins_paint_tooltip(GtkWidget *tipwindow, gpointer data)
 {
 	PangoLayout *layout = g_object_get_data(G_OBJECT(tipwindow), "tooltip-plugin");
 	GtkStyleContext *context = gtk_widget_get_style_context(tipwindow);
-	cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(tipwindow));
+	cairo_t *cr = pidgin_tooltip_get_cairo();
+	if (cr == NULL)
+		return TRUE;
 	gtk_render_layout(context, cr, 6, 6, layout);
-	cairo_destroy(cr);
 	return TRUE;
 }
 

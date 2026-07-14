@@ -109,4 +109,16 @@ void pidgin_tooltip_destroy(void);
 void pidgin_tooltip_show(GtkWidget *widget, gpointer userdata,
 		PidginTooltipCreate create_cb, PidginTooltipPaint paint_cb);
 
+/**
+ * Get the cairo context to draw onto from within a #PidginTooltipPaint
+ * callback. This is the context supplied by the tooltip window's "draw"
+ * signal and is only valid for the duration of the paint callback. Paint
+ * callbacks should use this instead of the deprecated gdk_cairo_create().
+ *
+ * @return The current tooltip cairo context, or @c NULL if not painting.
+ *
+ * @since 2.15.0
+ */
+cairo_t *pidgin_tooltip_get_cairo(void);
+
 #endif

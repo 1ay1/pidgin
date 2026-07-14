@@ -40,6 +40,11 @@ struct
 	GdkRectangle tip_rect;
 	GtkWidget *tipwindow;
 	PidginTooltipPaint paint_tooltip;
+	/* The cairo context handed to us by the tipwindow "draw" signal, valid
+	 * only for the duration of the paint callback. Paint callbacks read it
+	 * via pidgin_tooltip_get_cairo() instead of the deprecated
+	 * gdk_cairo_create(). */
+	cairo_t *paint_cr;
 } pidgin_tooltip;
 
 typedef struct
@@ -113,7 +118,12 @@ pidgin_tooltip_paint_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 		gtk_widget_get_allocation(widget, &alloc);
 		gtk_render_background(context, cr, 0, 0, alloc.width, alloc.height);
 		gtk_render_frame(context, cr, 0, 0, alloc.width, alloc.height);
+		/* Expose the live cairo context so the paint callback can draw
+		 * onto it via pidgin_tooltip_get_cairo() rather than creating a
+		 * fresh (deprecated) one with gdk_cairo_create(). */
+		pidgin_tooltip.paint_cr = cr;
 		pidgin_tooltip.paint_tooltip(widget, data);
+		pidgin_tooltip.paint_cr = NULL;
 	}
 	return FALSE;
 }
@@ -391,5 +401,11 @@ gboolean pidgin_tooltip_setup_for_widget(GtkWidget *widget, gpointer userdata,
 	g_signal_connect(G_OBJECT(widget), "scroll-event", G_CALLBACK(widget_leave_cb), NULL);
 	g_signal_connect_swapped(G_OBJECT(widget), "destroy", G_CALLBACK(destroy_tooltip_data), wdata);
 	return TRUE;
+}
+
+cairo_t *
+pidgin_tooltip_get_cairo(void)
+{
+	return pidgin_tooltip.paint_cr;
 }
 
