@@ -1136,13 +1136,23 @@ gtk_imhtmltoolbar_finalize (GObject *object)
 	destroy_toolbar_bgcolor(NULL, NULL, toolbar);
 	destroy_toolbar_fgcolor(NULL, NULL, toolbar);
 	close_link_dialog(toolbar);
-	if (toolbar->imhtml) {
+	if (toolbar->imhtml && GTK_IS_IMHTML(toolbar->imhtml)) {
+		GtkTextBuffer *buffer;
+
 		g_signal_handlers_disconnect_matched(toolbar->imhtml,
 				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL,
 				toolbar);
-		g_signal_handlers_disconnect_matched(GTK_IMHTML(toolbar->imhtml)->text_buffer,
-				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL,
-				toolbar);
+
+		/* The imhtml widget may already have been destroyed (its text_buffer
+		 * finalized) if the conversation was torn down before the toolbar.
+		 * Disconnecting from a freed buffer trips "instance with invalid
+		 * (NULL) class pointer" / G_TYPE_CHECK_INSTANCE assertions, so verify
+		 * it is still a live GtkTextBuffer first. */
+		buffer = GTK_IMHTML(toolbar->imhtml)->text_buffer;
+		if (buffer && GTK_IS_TEXT_BUFFER(buffer))
+			g_signal_handlers_disconnect_matched(buffer,
+					G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL,
+					toolbar);
 	}
 
 	g_free(toolbar->sml);
