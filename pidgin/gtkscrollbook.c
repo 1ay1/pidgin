@@ -280,7 +280,10 @@ pidgin_scroll_book_init(PidginScrollBook *scroll_book,
 	/* Right arrow */
 	eb = gtk_event_box_new();
 	gtk_box_pack_end(GTK_BOX(scroll_book->hbox), eb, FALSE, FALSE, 0);
-	scroll_book->right_arrow = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
+	/* GTK3: GtkArrow (deprecated 3.14) draws nothing under most GTK3 themes;
+	 * use the themed directional icon so the nav arrow stays visible. */
+	scroll_book->right_arrow = gtk_image_new_from_icon_name("pan-end-symbolic",
+			GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(eb), scroll_book->right_arrow);
 	g_signal_connect_swapped(G_OBJECT(eb), "button-press-event", G_CALLBACK(scroll_right_cb), scroll_book);
 
@@ -291,7 +294,8 @@ pidgin_scroll_book_init(PidginScrollBook *scroll_book,
 	/* Left arrow */
 	eb = gtk_event_box_new();
 	gtk_box_pack_end(GTK_BOX(scroll_book->hbox), eb, FALSE, FALSE, 0);
-	scroll_book->left_arrow = gtk_arrow_new(GTK_ARROW_LEFT, GTK_SHADOW_NONE);
+	scroll_book->left_arrow = gtk_image_new_from_icon_name("pan-start-symbolic",
+			GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(eb), scroll_book->left_arrow);
 	g_signal_connect_swapped(G_OBJECT(eb), "button-press-event", G_CALLBACK(scroll_left_cb), scroll_book);
 
