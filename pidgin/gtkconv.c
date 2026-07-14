@@ -6974,7 +6974,9 @@ pidgin_conv_update_fields(PurpleConversation *conv, PidginConvFields fields)
 
 		gtk_widget_set_name(gtkconv->tab_label, style);
 		gtk_label_set_text(GTK_LABEL(gtkconv->tab_label), title);
-		gtk_widget_set_state(gtkconv->tab_label, GTK_STATE_ACTIVE);
+		/* GTK3: the CSS provider in pidgin_conversations_set_tab_colors()
+		 * colours the label by its #name unconditionally, so we no longer
+		 * need the deprecated gtk_widget_set_state(..., GTK_STATE_ACTIVE). */
 
 		if (gtkconv->unseen_state == PIDGIN_UNSEEN_TEXT ||
 				gtkconv->unseen_state == PIDGIN_UNSEEN_NICK ||
