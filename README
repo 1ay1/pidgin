@@ -17,12 +17,16 @@ BUILD
 
 Read the 'INSTALL' file for more detailed directions.
 
-These programs use the standard ./configure ; make. You need to use
-gmake, BSD make probably won't work. Remember, run ./configure --help
-to see what build options are available.
+These programs are built with Meson and Ninja:
+
+    meson setup build
+    ninja -C build
+
+Run 'meson configure build' to see what build options are available, and
+set them with e.g. 'meson setup build -Dgtk=enabled -Ddbus=disabled'.
 
 In order to compile Pidgin you need to have GTK+ 2.0 installed (as
-well as the development files!). The configure script will fail if you
+well as the development files!). Meson will fail to configure if you
 don't.  If you don't have GTK+ 2.0 installed, you should install it
 using your distribution's package management tools.
 
@@ -34,9 +38,9 @@ install the development packages.
 RUN
 ===
 
-You should run 'make install' as root to make sure plugins and other files
-get installed into locations they want to be in. Once you've done that,
-you only need to run 'pidgin' or 'finch'.
+You should run 'ninja -C build install' as root to make sure plugins and
+other files get installed into locations they want to be in. Once you've
+done that, you only need to run 'pidgin' or 'finch'.
 
 To get started, simply add a new account.
 
@@ -45,18 +49,17 @@ If you come across a bug, please report it at: https://issues.imfreedom.org/
 PLUGINS
 =======
 
-If you do not wish to enable the plugin support within Purple, run the
-./configure script with the --disable-plugins option and recompile your
-source code.  This will prevent the ability to load plugins.
+If you do not wish to enable the plugin support within Purple, configure
+the build with the -Dplugins=false option and recompile your source
+code.  This will prevent the ability to load plugins.
 
-'make install' puts the plugins in $PREFIX/lib/purple (PREFIX being what
-you specified when you ./configure'd - it defaults to /usr/local). Purple
+'ninja -C build install' puts the plugins in $PREFIX/lib/purple (PREFIX
+being what you set via 'meson setup build --prefix=... ' - it defaults to
+/usr/local). Purple
 looks for the plugins in that directory by default.  Plugins can be installed
 per-user in ~/.purple/plugins as well.  Pidgin and Finch also look in
 $PREFIX/lib/pidgin and $PREFIX/lib/finch for UI-specific, respectively.
 
-To build a plugin from a .c file, put it in the plugins/ directory in
-the source and run 'make filename.so', e.g. if you have the .c file
-'kickass.c', put it in the plugins/ directory, and from that directory,
-run 'make kickass.so'.
+To build a plugin from a .c file, add it to the appropriate plugins/
+directory's meson.build and rebuild with 'ninja -C build'.
 
