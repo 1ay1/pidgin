@@ -29,6 +29,8 @@
 #define _PURPLE_PROTOCOLS_H_
 
 #include "plugin.h"
+#include "connection.h"
+#include "prpl.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -144,6 +146,50 @@ const char *purple_protocol_capability_to_string(PurpleProtocolCapability cap);
  *            matches everything).
  */
 GList *purple_protocols_find_with_capability(PurpleProtocolCapability cap);
+
+/*@}*/
+
+/**************************************************************************/
+/** @name Capability-checked dispatch facade                              */
+/**************************************************************************/
+/*@{*/
+
+/**
+ * Resolve the PurplePluginProtocolInfo vtable for a connection in one call.
+ *
+ * Replaces the ubiquitous three-line dance
+ *     prpl = purple_connection_get_prpl(gc);
+ *     prpl_info = PURPLE_PLUGIN_PROTOCOL_INFO(prpl);
+ * with a single, NULL-safe accessor.
+ *
+ * @param gc A connection (may be @c NULL).
+ *
+ * @return The protocol vtable, or @c NULL if @a gc has no protocol.
+ */
+PurplePluginProtocolInfo *purple_connection_get_protocol_info(const PurpleConnection *gc);
+
+/**
+ * Ask whether the protocol backing a live connection provides a capability.
+ *
+ * @param gc  A connection.
+ * @param cap A PurpleProtocolCapability mask (all bits must be present).
+ *
+ * @return @c TRUE if @a gc is backed by a protocol offering @a cap.
+ */
+gboolean purple_connection_can(const PurpleConnection *gc,
+                               PurpleProtocolCapability cap);
+
+/**
+ * Ask whether the protocol behind an account provides a capability, even
+ * when the account is offline (no live connection needed).
+ *
+ * @param account An account.
+ * @param cap     A PurpleProtocolCapability mask.
+ *
+ * @return @c TRUE if @a account's protocol offers @a cap.
+ */
+gboolean purple_account_protocol_can(const PurpleAccount *account,
+                                     PurpleProtocolCapability cap);
 
 /*@}*/
 

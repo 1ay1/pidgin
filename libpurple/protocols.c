@@ -26,6 +26,8 @@
  */
 #include "internal.h"
 
+#include "account.h"
+#include "connection.h"
 #include "debug.h"
 #include "prpl.h"
 #include "protocols.h"
@@ -280,6 +282,56 @@ purple_protocols_find_with_capability(PurpleProtocolCapability cap)
 	g_hash_table_foreach(protocol_index, collect_with_capability, ctx);
 
 	return result;
+}
+
+/**************************************************************************
+ * Capability-checked dispatch facade
+ **************************************************************************/
+
+PurplePluginProtocolInfo *
+purple_connection_get_protocol_info(const PurpleConnection *gc)
+{
+	PurplePlugin *prpl;
+
+	if (gc == NULL)
+		return NULL;
+
+	prpl = purple_connection_get_prpl(gc);
+	if (prpl == NULL)
+		return NULL;
+
+	return PURPLE_PLUGIN_PROTOCOL_INFO(prpl);
+}
+
+gboolean
+purple_connection_can(const PurpleConnection *gc, PurpleProtocolCapability cap)
+{
+	PurplePlugin *prpl;
+
+	if (gc == NULL)
+		return FALSE;
+
+	prpl = purple_connection_get_prpl(gc);
+	if (prpl == NULL)
+		return FALSE;
+
+	return purple_protocol_has_capability(prpl, cap);
+}
+
+gboolean
+purple_account_protocol_can(const PurpleAccount *account,
+                            PurpleProtocolCapability cap)
+{
+	PurplePlugin *prpl;
+
+	if (account == NULL)
+		return FALSE;
+
+	prpl = purple_protocols_find(purple_account_get_protocol_id(account));
+	if (prpl == NULL)
+		return FALSE;
+
+	return purple_protocol_has_capability(prpl, cap);
 }
 
 /**************************************************************************
