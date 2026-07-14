@@ -8355,14 +8355,16 @@ pidgin_conversations_set_tab_colors(void)
 
 	for (iter = 0; styles[iter].labelname; iter++) {
 		GdkColor color;
-		gchar *color_str;
 		gdk_color_parse(styles[iter].color, &color);
 		pidgin_style_adjust_contrast(NULL, &color);
-		color_str = gdk_color_to_string(&color);
 
-		g_string_append_printf(str, "#%s { color: %s; }\n",
-				styles[iter].labelname, color_str);
-		g_free(color_str);
+		/* GTK3's CSS parser only understands #rgb / #rrggbb, not the
+		 * 16-bit-per-channel #rrrrggggbbbb that gdk_color_to_string()
+		 * produces (which triggered "Junk at end of value for color").
+		 * Emit an 8-bit hex triple. */
+		g_string_append_printf(str, "#%s { color: #%02x%02x%02x; }\n",
+				styles[iter].labelname,
+				color.red >> 8, color.green >> 8, color.blue >> 8);
 	}
 
 	gtk_css_provider_load_from_data(provider, str->str, -1, NULL);
