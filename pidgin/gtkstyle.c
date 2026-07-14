@@ -59,20 +59,12 @@ pidgin_style_seed_dark_from_theme(void)
 
 gboolean
 pidgin_style_is_dark(GtkStyle *style) {
-	GdkColor bg;
-
-	if (!style) {
-		if (!dark_mode_seeded)
-			pidgin_style_seed_dark_from_theme();
-		return dark_mode_cache;
-	}
-
-	bg = style->base[GTK_STATE_NORMAL];
-
-	if (bg.red != 0xFFFF || bg.green != 0xFFFF || bg.blue != 0xFFFF) {
-		dark_mode_cache =  ((int) bg.red + (int) bg.green + (int) bg.blue) < (65536 * 3 / 2);
-		dark_mode_seeded = TRUE;
-	}
+	/* GTK3: the legacy GtkStyle struct (and its ->base[] array) is no longer
+	 * filled from the active CSS theme, so reading style->base here returned
+	 * stale/zeroed data and mis-detected dark themes. Always derive darkness
+	 * from a live style context instead; the passed-in style is ignored. */
+	if (!dark_mode_seeded)
+		pidgin_style_seed_dark_from_theme();
 
 	return dark_mode_cache;
 }
