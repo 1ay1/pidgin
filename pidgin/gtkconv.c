@@ -897,13 +897,13 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		gtk_container_set_border_width(GTK_CONTAINER(vbox), PIDGIN_HIG_BOX_SPACE);
 
 		/* Setup the inner hbox and put the dialog's icon in it. */
-		hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 		gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 		gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
 
 		/* Setup the right vbox. */
-		vbox = gtk_vbox_new(FALSE, 0);
+		vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_container_add(GTK_CONTAINER(hbox), vbox);
 
 		/* Put our happy label in it. */
@@ -916,7 +916,7 @@ invite_cb(GtkWidget *widget, PidginConversation *gtkconv)
 		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 		/* hbox for the table, and to give it some spacing on the left. */
-		hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
 		/* Setup the table we're going to use to lay stuff out. */
@@ -1935,8 +1935,8 @@ conv_keypress_common(PidginConversation *gtkconv, GdkEventKey *event)
 	/* If CTRL was held down... */
 	if (event->state & GDK_CONTROL_MASK) {
 		switch (event->keyval) {
-			case GDK_Page_Down:
- 			case GDK_KP_Page_Down:
+			case GDK_KEY_Page_Down:
+ 			case GDK_KEY_KP_Page_Down:
 			case ']':
 				if (!pidgin_conv_window_get_gtkconv_at_index(win, curconv + 1))
 					gtk_notebook_set_current_page(GTK_NOTEBOOK(win->notebook), 0);
@@ -1945,8 +1945,8 @@ conv_keypress_common(PidginConversation *gtkconv, GdkEventKey *event)
 				return TRUE;
 				break;
 
-			case GDK_Page_Up:
- 			case GDK_KP_Page_Up:
+			case GDK_KEY_Page_Up:
+ 			case GDK_KEY_KP_Page_Up:
 			case '[':
 				if (!pidgin_conv_window_get_gtkconv_at_index(win, curconv - 1))
 					gtk_notebook_set_current_page(GTK_NOTEBOOK(win->notebook), -1);
@@ -1955,9 +1955,9 @@ conv_keypress_common(PidginConversation *gtkconv, GdkEventKey *event)
 				return TRUE;
 				break;
 
-			case GDK_Tab:
-			case GDK_KP_Tab:
-			case GDK_ISO_Left_Tab:
+			case GDK_KEY_Tab:
+			case GDK_KEY_KP_Tab:
+			case GDK_KEY_ISO_Left_Tab:
 				if (event->state & GDK_SHIFT_MASK) {
 					move_to_next_unread_tab(gtkconv, FALSE);
 				} else {
@@ -1967,14 +1967,14 @@ conv_keypress_common(PidginConversation *gtkconv, GdkEventKey *event)
 				return TRUE;
 				break;
 
-			case GDK_comma:
+			case GDK_KEY_comma:
 				gtk_notebook_reorder_child(GTK_NOTEBOOK(win->notebook),
 						gtk_notebook_get_nth_page(GTK_NOTEBOOK(win->notebook), curconv),
 						curconv - 1);
 				return TRUE;
 				break;
 
-			case GDK_period:
+			case GDK_KEY_period:
 				gtk_notebook_reorder_child(GTK_NOTEBOOK(win->notebook),
 						gtk_notebook_get_nth_page(GTK_NOTEBOOK(win->notebook), curconv),
 						(curconv + 1) % gtk_notebook_get_n_pages(GTK_NOTEBOOK(win->notebook)));
@@ -2034,7 +2034,7 @@ entry_key_press_cb(GtkWidget *entry, GdkEventKey *event, gpointer data)
 	/* If CTRL was held down... */
 	if (event->state & GDK_CONTROL_MASK) {
 		switch (event->keyval) {
-			case GDK_Up:
+			case GDK_KEY_Up:
 				if (!gtkconv->send_history)
 					break;
 
@@ -2085,7 +2085,7 @@ entry_key_press_cb(GtkWidget *entry, GdkEventKey *event, gpointer data)
 				return TRUE;
 				break;
 
-			case GDK_Down:
+			case GDK_KEY_Down:
 				if (!gtkconv->send_history)
 					break;
 
@@ -2138,9 +2138,9 @@ entry_key_press_cb(GtkWidget *entry, GdkEventKey *event, gpointer data)
 	/* If neither CTRL nor ALT were held down... */
 	else {
 		switch (event->keyval) {
-		case GDK_Tab:
-		case GDK_KP_Tab:
-		case GDK_ISO_Left_Tab:
+		case GDK_KEY_Tab:
+		case GDK_KEY_KP_Tab:
+		case GDK_KEY_ISO_Left_Tab:
 			if (gtkconv->entry != entry)
 				break;
 			{
@@ -2152,14 +2152,14 @@ entry_key_press_cb(GtkWidget *entry, GdkEventKey *event, gpointer data)
 			}
 			break;
 
-		case GDK_Page_Up:
- 		case GDK_KP_Page_Up:
+		case GDK_KEY_Page_Up:
+ 		case GDK_KEY_KP_Page_Up:
 			gtk_imhtml_page_up(GTK_IMHTML(gtkconv->imhtml));
 			return TRUE;
 			break;
 
-		case GDK_Page_Down:
- 		case GDK_KP_Page_Down:
+		case GDK_KEY_Page_Down:
+ 		case GDK_KEY_KP_Page_Down:
 			gtk_imhtml_page_down(GTK_IMHTML(gtkconv->imhtml));
 			return TRUE;
 			break;
@@ -2205,24 +2205,24 @@ refocus_entry_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	if ((event->state & GDK_CONTROL_MASK) ||
 		(event->keyval == GDK_F6) ||
 		(event->keyval == GDK_F10) ||
-		(event->keyval == GDK_Shift_L) ||
-		(event->keyval == GDK_Shift_R) ||
-		(event->keyval == GDK_Control_L) ||
-		(event->keyval == GDK_Control_R) ||
-		(event->keyval == GDK_Escape) ||
-		(event->keyval == GDK_Up) ||
-		(event->keyval == GDK_Down) ||
-		(event->keyval == GDK_Left) ||
-		(event->keyval == GDK_Right) ||
-		(event->keyval == GDK_Page_Up) ||
-		(event->keyval == GDK_KP_Page_Up) ||
-		(event->keyval == GDK_Page_Down) ||
-		(event->keyval == GDK_KP_Page_Down) ||
-		(event->keyval == GDK_Home) ||
-		(event->keyval == GDK_End) ||
-		(event->keyval == GDK_Tab) ||
-		(event->keyval == GDK_KP_Tab) ||
-		(event->keyval == GDK_ISO_Left_Tab))
+		(event->keyval == GDK_KEY_Shift_L) ||
+		(event->keyval == GDK_KEY_Shift_R) ||
+		(event->keyval == GDK_KEY_Control_L) ||
+		(event->keyval == GDK_KEY_Control_R) ||
+		(event->keyval == GDK_KEY_Escape) ||
+		(event->keyval == GDK_KEY_Up) ||
+		(event->keyval == GDK_KEY_Down) ||
+		(event->keyval == GDK_KEY_Left) ||
+		(event->keyval == GDK_KEY_Right) ||
+		(event->keyval == GDK_KEY_Page_Up) ||
+		(event->keyval == GDK_KEY_KP_Page_Up) ||
+		(event->keyval == GDK_KEY_Page_Down) ||
+		(event->keyval == GDK_KEY_KP_Page_Down) ||
+		(event->keyval == GDK_KEY_Home) ||
+		(event->keyval == GDK_KEY_End) ||
+		(event->keyval == GDK_KEY_Tab) ||
+		(event->keyval == GDK_KEY_KP_Tab) ||
+		(event->keyval == GDK_KEY_ISO_Left_Tab))
 	{
 		if (event->type == GDK_KEY_PRESS)
 			return conv_keypress_common(gtkconv, event);
@@ -3830,7 +3830,7 @@ create_sendto_item(GtkWidget *menu, GtkSizeGroup *sg, GSList **group, PurpleBudd
 	*group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(menuitem));
 
 	/* Do some evil, see some evil, speak some evil. */
-	box = gtk_hbox_new(FALSE, 0);
+	box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 
 	label = gtk_bin_get_child(GTK_BIN(menuitem));
 	g_object_ref(label);
@@ -4722,7 +4722,7 @@ setup_chat_topic(PidginConversation *gtkconv, GtkWidget *vbox)
 		GtkWidget *hbox, *label;
 		PidginChatPane *gtkchat = gtkconv->u.chat;
 
-		hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
 		label = gtk_label_new(_("Topic:"));
@@ -4787,7 +4787,7 @@ setup_chat_userlist(PidginConversation *gtkconv, GtkWidget *hpaned)
 	PurpleConversation *conv = gtkconv->active_conv;
 
 	/* Build the right pane. */
-	lbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	lbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_paned_pack2(GTK_PANED(hpaned), lbox, FALSE, TRUE);
 	gtk_widget_show(lbox);
 
@@ -4900,7 +4900,7 @@ pidgin_conv_end_quickfind(PidginConversation *gtkconv)
 	gtk_widget_modify_base(gtkconv->quickfind.entry, GTK_STATE_NORMAL, NULL);
 
 	gtk_imhtml_search_clear(GTK_IMHTML(gtkconv->imhtml));
-	gtk_widget_hide_all(gtkconv->quickfind.container);
+	gtk_widget_hide(gtkconv->quickfind.container);
 
 	gtk_widget_grab_focus(gtkconv->entry);
 	return TRUE;
@@ -4910,8 +4910,8 @@ static gboolean
 quickfind_process_input(GtkWidget *entry, GdkEventKey *event, PidginConversation *gtkconv)
 {
 	switch (event->keyval) {
-		case GDK_Return:
-		case GDK_KP_Enter:
+		case GDK_KEY_Return:
+		case GDK_KEY_KP_Enter:
 			if (gtk_imhtml_search_find(GTK_IMHTML(gtkconv->imhtml), gtk_entry_get_text(GTK_ENTRY(entry)))) {
 				gtk_widget_modify_base(gtkconv->quickfind.entry, GTK_STATE_NORMAL, NULL);
 			} else {
@@ -4922,7 +4922,7 @@ quickfind_process_input(GtkWidget *entry, GdkEventKey *event, PidginConversation
 				gtk_widget_modify_base(gtkconv->quickfind.entry, GTK_STATE_NORMAL, &col);
 			}
 			break;
-		case GDK_Escape:
+		case GDK_KEY_Escape:
 			pidgin_conv_end_quickfind(gtkconv);
 			break;
 		default:
@@ -4934,7 +4934,7 @@ quickfind_process_input(GtkWidget *entry, GdkEventKey *event, PidginConversation
 static void
 pidgin_conv_setup_quickfind(PidginConversation *gtkconv, GtkWidget *container)
 {
-	GtkWidget *widget = gtk_hbox_new(FALSE, 0);
+	GtkWidget *widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	GtkWidget *label, *entry, *close;
 
 	gtk_box_pack_start(GTK_BOX(container), widget, FALSE, FALSE, 0);
@@ -4974,14 +4974,14 @@ setup_common_pane(PidginConversation *gtkconv)
 	int buddyicon_size = 0;
 
 	/* Setup the top part of the pane */
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_widget_show(vbox);
 
 	/* Setup the info pane */
 	event_box = gtk_event_box_new();
 	gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), FALSE);
 	gtk_widget_show(event_box);
-	gtkconv->infopane_hbox = gtk_hbox_new(FALSE, 0);
+	gtkconv->infopane_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), event_box, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(event_box), gtkconv->infopane_hbox);
 	gtk_widget_show(gtkconv->infopane_hbox);
@@ -5011,13 +5011,13 @@ setup_common_pane(PidginConversation *gtkconv)
 		   for both the buddy list and the chat window, but PidginConversation
 		   is pretty much stuck until 3.0. */
 		GtkWidget *sizing_vbox;
-		sizing_vbox = gtk_vbox_new(FALSE, 0);
+		sizing_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_widget_set_size_request(sizing_vbox, -1, BUDDYICON_SIZE_MIN);
 		gtk_box_pack_start(GTK_BOX(gtkconv->infopane_hbox), sizing_vbox, FALSE, FALSE, 0);
 		gtk_widget_show(sizing_vbox);
 	}
 	else {
-		gtkconv->u.im->icon_container = gtk_vbox_new(FALSE, 0);
+		gtkconv->u.im->icon_container = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 		if ((buddy = purple_find_buddy(purple_conversation_get_account(conv),
 						purple_conversation_get_name(conv))) != NULL) {
@@ -5071,7 +5071,7 @@ setup_common_pane(PidginConversation *gtkconv)
 		setup_chat_topic(gtkconv, vbox);
 
 		/* Add the gtkimhtml frame */
-		hpaned = gtk_hpaned_new();
+		hpaned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
 		gtk_box_pack_start(GTK_BOX(vbox), hpaned, TRUE, TRUE, 0);
 		gtk_widget_show(hpaned);
 		gtk_paned_pack1(GTK_PANED(hpaned), frame, TRUE, TRUE);
@@ -5098,7 +5098,7 @@ setup_common_pane(PidginConversation *gtkconv)
 
 	pidgin_conv_setup_quickfind(gtkconv, vbox);
 
-	gtkconv->lower_hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	gtkconv->lower_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), gtkconv->lower_hbox, FALSE, FALSE, 0);
 	gtk_widget_show(gtkconv->lower_hbox);
 
@@ -5451,7 +5451,7 @@ private_gtkconv_new(PurpleConversation *conv, gboolean hidden)
 	g_signal_connect(gtkconv->imhtml, "style-set", G_CALLBACK(set_typing_font), gtkconv);
 
 	/* Setup the container for the tab. */
-	gtkconv->tab_cont = tab_cont = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	gtkconv->tab_cont = tab_cont = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	g_object_set_data(G_OBJECT(tab_cont), "PidginConversation", gtkconv);
 	gtk_container_set_border_width(GTK_CONTAINER(tab_cont), PIDGIN_HIG_BOX_SPACE);
 	gtk_container_add(GTK_CONTAINER(tab_cont), pane);
@@ -6878,7 +6878,7 @@ pidgin_conv_update_fields(PurpleConversation *conv, PidginConvFields fields)
 		if (title != markup)
 			g_free(markup);
 
-		if (!GTK_WIDGET_REALIZED(gtkconv->tab_label))
+		if (!gtk_widget_get_realized(gtkconv->tab_label))
 			gtk_widget_realize(gtkconv->tab_label);
 
 		accessibility_obj = gtk_widget_get_accessible(gtkconv->tab_cont);
@@ -7272,7 +7272,7 @@ pidgin_conv_get_tab_at_xy(PidginWindow *win, int x, int y, gboolean *to_right)
 		tab = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook), page);
 
 		/* Make sure the tab is not hidden beyond an arrow */
-		if (!GTK_WIDGET_DRAWABLE(tab) && gtk_notebook_get_show_tabs(notebook))
+		if (!gtk_widget_is_drawable(tab) && gtk_notebook_get_show_tabs(notebook))
 			continue;
 
 		if (horiz) {
@@ -8411,13 +8411,13 @@ build_warn_close_dialog(PidginWindow *gtkwin)
 	img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_WARNING,
 	                               gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_HUGE));
 	/* Setup the inner hbox and put the dialog's icon in it. */
-	hbox = gtk_hbox_new(FALSE, 12);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
 
 	/* Setup the right vbox. */
-	vbox = gtk_vbox_new(FALSE, 12);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
 	gtk_container_add(GTK_CONTAINER(hbox), vbox);
 
 	label = gtk_label_new(_("You have unread messages. Are you sure you want to close the window?"));
@@ -8704,7 +8704,7 @@ infopane_press_cb(GtkWidget *widget, GdkEventButton *e, PidginConversation *gtkc
 		gboolean populated = populate_menu_with_options(menu, gtkconv, TRUE);
 		sub = gtk_menu_item_get_submenu(GTK_MENU_ITEM(gtkconv->win->menu.send_to));
 
-		if (sub && GTK_WIDGET_IS_SENSITIVE(gtkconv->win->menu.send_to)) {
+		if (sub && gtk_widget_is_sensitive(gtkconv->win->menu.send_to)) {
 			GtkWidget *item = gtk_menu_item_new_with_mnemonic(_("S_end To"));
 			if (populated)
 				pidgin_separator(menu);
@@ -9092,7 +9092,7 @@ alias_focus_cb(GtkWidget *widget, GdkEventFocus *event, gpointer user_data)
 static gboolean
 alias_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-	if (event->keyval == GDK_Escape) {
+	if (event->keyval == GDK_KEY_Escape) {
 		remove_edit_entry(user_data, widget);
 		return TRUE;
 	}
@@ -9143,7 +9143,7 @@ infopane_entry_activate(PidginConversation *gtkconv)
 	g_object_set_data(G_OBJECT(gtkconv->entry), "resize-count",
 			  GINT_TO_POINTER(0));
 
-	if (!GTK_WIDGET_VISIBLE(gtkconv->infopane)) {
+	if (!gtk_widget_get_visible(gtkconv->infopane)) {
 		/* There's already an entry for alias. Let's not create another one. */
 		return FALSE;
 	}
@@ -9318,7 +9318,7 @@ static gboolean gtk_conv_configure_cb(GtkWidget *w, GdkEventConfigure *event, gp
 		}
 	}
 
-	if (GTK_WIDGET_VISIBLE(w))
+	if (gtk_widget_get_visible(w))
 		gtk_window_get_position(GTK_WINDOW(w), &x, &y);
 	else
 		return FALSE; /* carry on normally */
@@ -9356,7 +9356,7 @@ pidgin_conv_set_position_size(PidginWindow *win, int conv_x, int conv_y,
 	 /* if the window exists, is hidden, we're saving positions, and the
           * position is sane... */
 	if (win && win->window &&
-			!GTK_WIDGET_VISIBLE(win->window) && conv_width != 0) {
+			!gtk_widget_get_visible(win->window) && conv_width != 0) {
 
 #ifdef _WIN32  /* only override window manager placement on Windows */
 		/* ...check position is on screen... */
@@ -9471,7 +9471,7 @@ pidgin_conv_window_new()
 	g_signal_connect(G_OBJECT(win->notebook), "button_release_event",
 	                 G_CALLBACK(notebook_release_cb), win);
 
-	testidea = gtk_vbox_new(FALSE, 0);
+	testidea = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 	/* Setup the menubar. */
 	menubar = setup_menubar(win);
@@ -9629,7 +9629,7 @@ pidgin_conv_window_add_gtkconv(PidginWindow *win, PidginConversation *gtkconv)
 	gtkconv->tab_label = gtk_label_new(tmp_lab = purple_conversation_get_title(conv));
 	gtk_widget_set_name(gtkconv->tab_label, "tab-label");
 
-	gtkconv->menu_tabby = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	gtkconv->menu_tabby = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtkconv->menu_label = gtk_label_new(tmp_lab);
 	gtk_box_pack_start(GTK_BOX(gtkconv->menu_tabby), gtkconv->menu_icon, FALSE, FALSE, 0);
 
@@ -9724,9 +9724,9 @@ pidgin_conv_tab_pack(PidginWindow *win, PidginConversation *gtkconv)
 #endif
 
 	if (angle)
-		gtkconv->tabby = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		gtkconv->tabby = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	else
-		gtkconv->tabby = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		gtkconv->tabby = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_widget_set_name(gtkconv->tabby, "tab-container");
 
 	/* select the correct ordering for verticle tabs */
@@ -10012,7 +10012,7 @@ conv_placement_last_created_win_type_configured_cb(GtkWidget *w,
 	g_object_set_data(G_OBJECT(conv->entry), "resize-count",
 			  GINT_TO_POINTER(0));
 
-	if (GTK_WIDGET_VISIBLE(w))
+	if (gtk_widget_get_visible(w))
 		gtk_window_get_position(GTK_WINDOW(w), &x, &y);
 	else
 		return FALSE; /* carry on normally */

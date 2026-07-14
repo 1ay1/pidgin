@@ -277,7 +277,7 @@ multifield_ok_cb(GtkWidget *button, PidginRequestData *data)
 {
 	generic_response_start(data);
 
-	if (!GTK_WIDGET_HAS_FOCUS(button))
+	if (!gtk_widget_has_focus(button))
 		gtk_widget_grab_focus(button);
 
 	if (data->cbs[0] != NULL)
@@ -381,7 +381,7 @@ pidgin_request_input(const char *title, const char *primary,
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
 
 	/* Setup the main horizontal box */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
 	/* Dialog icon. */
@@ -391,7 +391,7 @@ pidgin_request_input(const char *title, const char *primary,
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 
 	/* Vertical box */
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 
 	gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
 
@@ -546,7 +546,7 @@ pidgin_request_choice(const char *title, const char *primary,
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
 
 	/* Setup the main horizontal box */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
 	/* Dialog icon. */
@@ -558,7 +558,7 @@ pidgin_request_choice(const char *title, const char *primary,
 	pidgin_widget_decorate_account(hbox, account);
 
 	/* Vertical box */
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
 	/* Descriptive label */
@@ -581,7 +581,7 @@ pidgin_request_choice(const char *title, const char *primary,
 
 	g_free(label_text);
 
-	vbox2 = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), vbox2, FALSE, FALSE, 0);
 	while ((radio_text = va_arg(args, char*))) {
 		       int resp = va_arg(args, int);
@@ -668,7 +668,7 @@ pidgin_request_action_with_icon(const char *title, const char *primary,
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
 
 	/* Setup the main horizontal box */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
 	/* Dialog icon. */
@@ -707,7 +707,7 @@ pidgin_request_action_with_icon(const char *title, const char *primary,
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 
 	/* Vertical box */
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
 	pidgin_widget_decorate_account(hbox, account);
@@ -735,8 +735,8 @@ pidgin_request_action_with_icon(const char *title, const char *primary,
 
 
 	if (default_action == PURPLE_DEFAULT_ACTION_NONE) {
-		GTK_WIDGET_SET_FLAGS(img, GTK_CAN_DEFAULT);
-		GTK_WIDGET_SET_FLAGS(img, GTK_CAN_FOCUS);
+		gtk_widget_set_can_default(img, TRUE);
+		gtk_widget_set_can_focus(img, TRUE);
 		gtk_widget_grab_focus(img);
 		gtk_widget_grab_default(img);
 	} else
@@ -996,9 +996,9 @@ create_choice_field(PurpleRequestField *field)
 		gint i;
 
 		if (num_labels == 2)
-			box = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+			box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		else
-			box = gtk_vbox_new(FALSE, 0);
+			box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 		widget = box;
 
@@ -1227,7 +1227,7 @@ pidgin_request_fields(const char *title, const char *primary,
 					 G_CALLBACK(destroy_multifield_cb), data);
 
 	/* Setup the main horizontal box */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(pidgin_dialog_get_vbox(GTK_DIALOG(win))), hbox);
 	gtk_widget_show(hbox);
 
@@ -1240,18 +1240,18 @@ pidgin_request_fields(const char *title, const char *primary,
 
 	/* Cancel button */
 	button = pidgin_dialog_add_button(GTK_DIALOG(win), text_to_stock(cancel_text), G_CALLBACK(multifield_cancel_cb), data);
-	GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(button, TRUE);
 
 	/* OK button */
 	button = pidgin_dialog_add_button(GTK_DIALOG(win), text_to_stock(ok_text), G_CALLBACK(multifield_ok_cb), data);
 	data->ok_button = button;
-	GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(button, TRUE);
 	gtk_window_set_default(GTK_WINDOW(win), button);
 
 	pidgin_widget_decorate_account(hbox, account);
 
 	/* Setup the vbox */
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
 	gtk_widget_show(vbox);
 
@@ -1279,18 +1279,18 @@ pidgin_request_fields(const char *title, const char *primary,
 	if(total_fields > 9) {
 		GtkWidget *hbox_for_spacing, *vbox_for_spacing;
 
-		hbox_for_spacing = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+		hbox_for_spacing = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 		gtk_box_pack_start(GTK_BOX(vbox),
 			pidgin_make_scrollable(hbox_for_spacing, GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC, GTK_SHADOW_NONE, -1, 200),
 			TRUE, TRUE, 0);
 		gtk_widget_show(hbox_for_spacing);
 
-		vbox_for_spacing = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+		vbox_for_spacing = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 		gtk_box_pack_start(GTK_BOX(hbox_for_spacing),
 				vbox_for_spacing, TRUE, TRUE, PIDGIN_HIG_BOX_SPACE);
 		gtk_widget_show(vbox_for_spacing);
 
-		vbox2 = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+		vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 		gtk_box_pack_start(GTK_BOX(vbox_for_spacing),
 				vbox2, TRUE, TRUE, PIDGIN_HIG_BOX_SPACE);
 		gtk_widget_show(vbox2);
@@ -2129,7 +2129,7 @@ screenshare_window_cb(GtkWidget *button, PidginRequestData *data)
 	GdkCursor *cursor;
 	GdkWindow *gdkwin = gtk_widget_get_window(GTK_WIDGET(data->dialog));
 
-	if (!GTK_WIDGET_HAS_FOCUS(button))
+	if (!gtk_widget_has_focus(button))
 		gtk_widget_grab_focus(button);
 
 	gtk_widget_add_events(GTK_WIDGET(data->dialog),
@@ -2211,7 +2211,7 @@ screenshare_monitor_cb(GtkWidget *button, PidginRequestData *data)
 
 	generic_response_start(data);
 
-	if (!GTK_WIDGET_HAS_FOCUS(button))
+	if (!gtk_widget_has_focus(button))
 		gtk_widget_grab_focus(button);
 
 	radio = g_object_get_data(G_OBJECT(data->dialog), "radio");
@@ -2254,7 +2254,7 @@ screenshare_videotest_cb(GtkWidget *button, PidginRequestData *data)
 
 	generic_response_start(data);
 
-	if (!GTK_WIDGET_HAS_FOCUS(button))
+	if (!gtk_widget_has_focus(button))
 		gtk_widget_grab_focus(button);
 
 	if (data->cbs[0] != NULL) {
@@ -2326,25 +2326,25 @@ static void *pidgin_request_screenshare_media(const char *title, const char *pri
 
 	button = pidgin_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL,
 					  G_CALLBACK(screenshare_cancel_cb), data);
-	GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(button, TRUE);
 
 	if (g_getenv("PIDGIN_SHARE_VIDEOTEST") != NULL) {
 		button = pidgin_dialog_add_button(GTK_DIALOG(dialog), _("Test image"),
 						  G_CALLBACK(screenshare_videotest_cb), data);
-		GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+		gtk_widget_set_can_default(button, TRUE);
 		gtk_window_set_default(GTK_WINDOW(dialog), button);
 	}
 
 #ifdef HAVE_X11
 	button = pidgin_dialog_add_button(GTK_DIALOG(dialog), _("Select window"),
 					  G_CALLBACK(screenshare_window_cb), data);
-	GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(button, TRUE);
 	gtk_window_set_default(GTK_WINDOW(dialog), button);
 #endif
 
 	button = pidgin_dialog_add_button(GTK_DIALOG(dialog), _("Use monitor"),
 					  G_CALLBACK(screenshare_monitor_cb), data);
-	GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(button, TRUE);
 	gtk_window_set_default(GTK_WINDOW(dialog), button);
 
 	g_signal_connect(G_OBJECT(dialog), "delete_event",
@@ -2358,12 +2358,12 @@ static void *pidgin_request_screenshare_media(const char *title, const char *pri
 	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
 
 	/* Setup the main horizontal box */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
 
 	/* Vertical box */
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
 	pidgin_widget_decorate_account(hbox, account);

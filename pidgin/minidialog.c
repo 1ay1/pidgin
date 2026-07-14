@@ -487,7 +487,7 @@ pidgin_mini_dialog_init(PidginMiniDialog *self,
 
 	gtk_container_set_border_width(GTK_CONTAINER(self), PIDGIN_HIG_BOX_SPACE);
 
-	priv->title_box = GTK_BOX(gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE));
+	priv->title_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE));
 
 	priv->icon = GTK_IMAGE(gtk_image_new());
 	gtk_misc_set_alignment(GTK_MISC(priv->icon), 0, 0);
@@ -514,9 +514,9 @@ pidgin_mini_dialog_init(PidginMiniDialog *self,
 	purple_prefs_connect_callback(self, BLIST_WIDTH_PREF,
 		blist_width_changed_cb, self);
 
-	self->contents = GTK_BOX(gtk_vbox_new(FALSE, 0));
+	self->contents = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
 
-	priv->buttons = GTK_BOX(gtk_hbox_new(FALSE, 0));
+	priv->buttons = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
 
 	gtk_box_pack_start(self_box, GTK_WIDGET(priv->title_box), FALSE, FALSE, 0);
 	gtk_box_pack_start(self_box, GTK_WIDGET(priv->desc), FALSE, FALSE, 0);

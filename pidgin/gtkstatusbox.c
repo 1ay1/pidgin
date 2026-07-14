@@ -284,7 +284,7 @@ update_to_reflect_account_status(PidginStatusBox *status_box, PurpleAccount *acc
 
 		if (!message || !*message)
 		{
-			gtk_widget_hide_all(status_box->vbox);
+			gtk_widget_hide(status_box->vbox);
 			status_box->imhtml_visible = FALSE;
 		}
 		else
@@ -887,7 +887,7 @@ status_menu_refresh_iter(PidginStatusBox *status_box, gboolean status_changed)
 		if (!purple_savedstatus_is_transient(saved_status) || !message || !*message)
 		{
 			status_box->imhtml_visible = FALSE;
-			gtk_widget_hide_all(status_box->vbox);
+			gtk_widget_hide(status_box->vbox);
 		}
 		else
 		{
@@ -1091,7 +1091,7 @@ static gboolean imhtml_scroll_event_cb(GtkWidget *w, GdkEventScroll *event, GtkI
 
 static gboolean imhtml_remove_focus(GtkWidget *w, GdkEventKey *event, PidginStatusBox *status_box)
 {
-	if (event->keyval == GDK_Tab || event->keyval == GDK_KP_Tab || event->keyval == GDK_ISO_Left_Tab)
+	if (event->keyval == GDK_KEY_Tab || event->keyval == GDK_KEY_KP_Tab || event->keyval == GDK_KEY_ISO_Left_Tab)
 	{
 		/* If last inserted character is a tab, then remove the focus from here */
 		GtkWidget *top = gtk_widget_get_toplevel(w);
@@ -1104,7 +1104,7 @@ static gboolean imhtml_remove_focus(GtkWidget *w, GdkEventKey *event, PidginStat
 		return FALSE;
 
 	/* Reset the status if Escape was pressed */
-	if (event->keyval == GDK_Escape)
+	if (event->keyval == GDK_KEY_Escape)
 	{
 		purple_timeout_remove(status_box->typing);
 		status_box->typing = 0;
@@ -1268,7 +1268,7 @@ pidgin_status_box_list_position (PidginStatusBox *status_box, int *x, int *y, in
 		"hscrollbar-policy", hpolicy,
 		"vscrollbar-policy", vpolicy,
 		NULL);
-  gtk_widget_size_request (status_box->popup_frame, &popup_req);
+  gtk_widget_get_preferred_size_compat(status_box->popup_frame, &popup_req);
 
   if (popup_req.width > *width)
     {
@@ -1277,7 +1277,7 @@ pidgin_status_box_list_position (PidginStatusBox *status_box, int *x, int *y, in
 				"hscrollbar-policy", hpolicy,
 				"vscrollbar-policy", vpolicy,
 				NULL);
-      gtk_widget_size_request (status_box->popup_frame, &popup_req);
+      gtk_widget_get_preferred_size_compat(status_box->popup_frame, &popup_req);
     }
 
   *height = popup_req.height;
@@ -1381,10 +1381,10 @@ static gboolean
 toggle_key_press_cb(GtkWidget *widget, GdkEventKey *event, PidginStatusBox *box)
 {
 	switch (event->keyval) {
-		case GDK_Return:
-		case GDK_KP_Enter:
-		case GDK_KP_Space:
-		case GDK_space:
+		case GDK_KEY_Return:
+		case GDK_KEY_KP_Enter:
+		case GDK_KEY_KP_Space:
+		case GDK_KEY_space:
 			if (!box->popup_in_progress) {
 				pidgin_status_box_popup (box);
 				box->popup_in_progress = TRUE;
@@ -1616,7 +1616,7 @@ treeview_key_press_event(GtkWidget *widget,
 			GdkEventKey *event, PidginStatusBox *box)
 {
 	if (box->popup_in_progress) {
-		if (event->keyval == GDK_Escape) {
+		if (event->keyval == GDK_KEY_Escape) {
 			pidgin_status_box_popdown(box);
 			return TRUE;
 		} else {
@@ -1627,9 +1627,9 @@ treeview_key_press_event(GtkWidget *widget,
 			if (gtk_tree_selection_get_selected(sel, NULL, &iter)) {
 				gboolean ret = TRUE;
 				path = gtk_tree_model_get_path(GTK_TREE_MODEL(box->dropdown_store), &iter);
-				if (event->keyval == GDK_Return) {
+				if (event->keyval == GDK_KEY_Return) {
 					treeview_activate_current_selection(box, path);
-				} else if (event->keyval == GDK_Delete) {
+				} else if (event->keyval == GDK_KEY_Delete) {
 					tree_view_delete_current_selection(box, path);
 				} else
 					ret = FALSE;
@@ -1712,9 +1712,9 @@ pidgin_status_box_init (PidginStatusBox *status_box,
 	status_box->connecting = FALSE;
 	status_box->typing = 0;
 	status_box->toggle_button = gtk_toggle_button_new();
-	status_box->hbox = gtk_hbox_new(FALSE, 6);
+	status_box->hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	status_box->cell_view = gtk_cell_view_new();
-	status_box->vsep = gtk_vseparator_new();
+	status_box->vsep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
 	status_box->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
 
 	status_box->store = gtk_list_store_new(NUM_COLUMNS, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_STRING,
@@ -1885,14 +1885,14 @@ pidgin_status_box_size_request(GtkWidget *widget,
 	GtkRequisition box_req;
 	gint border_width = GTK_CONTAINER (widget)->border_width;
 
-	gtk_widget_size_request(PIDGIN_STATUS_BOX(widget)->toggle_button, requisition);
+	gtk_widget_get_preferred_size_compat(PIDGIN_STATUS_BOX(widget)->toggle_button, requisition);
 
 	/* Make this icon the same size as other buddy icons in the list; unless it already wants to be bigger */
 	requisition->height = MAX(requisition->height, 34);
 	requisition->height += border_width * 2;
 
 	/* If the gtkimhtml is visible, then add some additional padding */
-	gtk_widget_size_request(PIDGIN_STATUS_BOX(widget)->vbox, &box_req);
+	gtk_widget_get_preferred_size_compat(PIDGIN_STATUS_BOX(widget)->vbox, &box_req);
 	if (box_req.height > 1)
 		requisition->height += box_req.height + border_width * 2;
 
@@ -1948,7 +1948,7 @@ pidgin_status_box_size_allocate(GtkWidget *widget,
 	GtkAllocation parent_alc, box_alc, icon_alc;
 	gint border_width = GTK_CONTAINER (widget)->border_width;
 
-	gtk_widget_size_request(status_box->toggle_button, &req);
+	gtk_widget_get_preferred_size_compat(status_box->toggle_button, &req);
 	/* Make this icon the same size as other buddy icons in the list; unless it already wants to be bigger */
 
 	req.height = MAX(req.height, 34);
@@ -2307,7 +2307,7 @@ activate_currently_selected_status(PidginStatusBox *status_box)
 	message = pidgin_status_box_get_message(status_box);
 	if (!message || !*message)
 	{
-		gtk_widget_hide_all(status_box->vbox);
+		gtk_widget_hide(status_box->vbox);
 		status_box->imhtml_visible = FALSE;
 		if (message != NULL)
 		{
@@ -2579,7 +2579,7 @@ static void pidgin_status_box_changed(PidginStatusBox *status_box)
 		purple_timeout_remove(status_box->typing);
 	status_box->typing = 0;
 
-	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(status_box)))
+	if (gtk_widget_is_sensitive(GTK_WIDGET(status_box)))
 	{
 		if (type == PIDGIN_STATUS_BOX_TYPE_POPULAR || type == PIDGIN_STATUS_BOX_TYPE_SAVED_POPULAR)
 		{
@@ -2641,7 +2641,7 @@ static void pidgin_status_box_changed(PidginStatusBox *status_box)
 	}
 	g_list_free(accounts);
 
-	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(status_box)))
+	if (gtk_widget_is_sensitive(GTK_WIDGET(status_box)))
 	{
 		if (status_box->imhtml_visible)
 		{
@@ -2661,7 +2661,7 @@ static void pidgin_status_box_changed(PidginStatusBox *status_box)
 		}
 		else
 		{
-			gtk_widget_hide_all(status_box->vbox);
+			gtk_widget_hide(status_box->vbox);
 			activate_currently_selected_status(status_box); /* This is where we actually set the status */
 		}
 	}
@@ -2701,7 +2701,7 @@ get_statusbox_index(PidginStatusBox *box, PurpleSavedStatus *saved_status)
 static void imhtml_changed_cb(GtkTextBuffer *buffer, void *data)
 {
 	PidginStatusBox *status_box = (PidginStatusBox*)data;
-	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(status_box)))
+	if (gtk_widget_is_sensitive(GTK_WIDGET(status_box)))
 	{
 		if (status_box->typing != 0) {
 			pidgin_status_box_pulse_typing(status_box);

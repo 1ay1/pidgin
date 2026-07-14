@@ -128,7 +128,7 @@ debug_window_destroy(GtkWidget *w, GdkEvent *event, void *unused)
 static gboolean
 configure_cb(GtkWidget *w, GdkEventConfigure *event, DebugWindow *win)
 {
-	if (GTK_WIDGET_VISIBLE(w)) {
+	if (gtk_widget_get_visible(w)) {
 		purple_prefs_set_int(PIDGIN_PREFS_ROOT "/debug/width",  event->width);
 		purple_prefs_set_int(PIDGIN_PREFS_ROOT "/debug/height", event->height);
 	}
@@ -191,7 +191,7 @@ find_cb(GtkWidget *w, DebugWindow *win)
 	gtk_container_set_border_width(
 		GTK_CONTAINER(GTK_DIALOG(win->find)->vbox), PIDGIN_HIG_BOX_SPACE);
 
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(win->find)->vbox),
 					  hbox);
 	img = gtk_image_new_from_stock(PIDGIN_STOCK_DIALOG_QUESTION,
@@ -622,8 +622,8 @@ regex_changed_cb(GtkWidget *w, DebugWindow *win) {
 
 static void
 regex_key_release_cb(GtkWidget *w, GdkEventKey *e, DebugWindow *win) {
-	if(e->keyval == GDK_Return &&
-	   GTK_WIDGET_IS_SENSITIVE(win->filter) &&
+	if(e->keyval == GDK_KEY_Return &&
+	   gtk_widget_is_sensitive(win->filter) &&
 	   !gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(win->filter)))
 	{
 		gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(win->filter), TRUE);
@@ -780,7 +780,7 @@ debug_window_new(void)
 #endif /* USE_REGEX */
 
 	/* Setup the vbox */
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(win->window), vbox);
 
 	if (purple_prefs_get_bool(PIDGIN_PREFS_ROOT "/debug/toolbar")) {

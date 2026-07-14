@@ -482,7 +482,7 @@ static void gtk_imhtml_size_allocate(GtkWidget *widget, GtkAllocation *alloc)
 
 	/* Don't scroll here if we're in the middle of a smooth scroll */
 	if (scroll && imhtml->scroll_time == NULL &&
-	    GTK_WIDGET_REALIZED(imhtml))
+	    gtk_widget_get_realized(imhtml))
 		gtk_imhtml_scroll_to_end(imhtml, FALSE);
 }
 
@@ -606,7 +606,7 @@ gtk_imhtml_tip (gpointer data)
 
 	g_return_val_if_fail(GTK_IS_IMHTML(imhtml), FALSE);
 
-	if (!imhtml->tip || !GTK_WIDGET_DRAWABLE (GTK_WIDGET(imhtml))) {
+	if (!imhtml->tip || !gtk_widget_is_drawable(GTK_WIDGET(imhtml))) {
 		imhtml->tip_timer = 0;
 		return FALSE;
 	}
@@ -859,7 +859,7 @@ gtk_imhtml_expose_event (GtkWidget      *widget,
 			gdk_color_parse(GTK_IMHTML(widget)->edit.background, &gcolor);
 			gdk_cairo_set_source_color(cr, &gcolor);
 		} else {
-			gdk_cairo_set_source_color(cr, &(widget->style->base[GTK_WIDGET_STATE(widget)]));
+			gdk_cairo_set_source_color(cr, &(widget->style->base[gtk_widget_get_state(widget)]));
 		}
 
 		cairo_rectangle(cr,
@@ -1725,20 +1725,20 @@ static void gtk_imhtml_class_init (GtkIMHtmlClass *klass)
 	                                        TRUE, G_PARAM_READABLE));
 
 	binding_set = gtk_binding_set_by_class (parent_class);
-	gtk_binding_entry_add_signal (binding_set, GDK_b, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_BOLD);
-	gtk_binding_entry_add_signal (binding_set, GDK_i, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_ITALIC);
-	gtk_binding_entry_add_signal (binding_set, GDK_u, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_UNDERLINE);
-	gtk_binding_entry_add_signal (binding_set, GDK_plus, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_GROW);
-	gtk_binding_entry_add_signal (binding_set, GDK_equal, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_GROW);
-	gtk_binding_entry_add_signal (binding_set, GDK_minus, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_SHRINK);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_b, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_BOLD);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_i, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_ITALIC);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_u, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_UNDERLINE);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_plus, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_GROW);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_equal, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_GROW);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_minus, GDK_CONTROL_MASK, "format_function_toggle", 1, G_TYPE_INT, GTK_IMHTML_SHRINK);
 	binding_set = gtk_binding_set_by_class(klass);
-	gtk_binding_entry_add_signal (binding_set, GDK_r, GDK_CONTROL_MASK, "format_function_clear", 0);
-	gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0, "message_send", 0);
-	gtk_binding_entry_add_signal (binding_set, GDK_Return, 0, "message_send", 0);
-	gtk_binding_entry_add_signal (binding_set, GDK_z, GDK_CONTROL_MASK, "undo", 0);
-	gtk_binding_entry_add_signal (binding_set, GDK_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "redo", 0);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_r, GDK_CONTROL_MASK, "format_function_clear", 0);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, "message_send", 0);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0, "message_send", 0);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_z, GDK_CONTROL_MASK, "undo", 0);
+	gtk_binding_entry_add_signal (binding_set, GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "redo", 0);
 	gtk_binding_entry_add_signal (binding_set, GDK_F14, 0, "undo", 0);
-	gtk_binding_entry_add_signal(binding_set, GDK_v, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "paste", 1, G_TYPE_STRING, "text");
+	gtk_binding_entry_add_signal(binding_set, GDK_KEY_v, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "paste", 1, G_TYPE_STRING, "text");
 }
 
 static void gtk_imhtml_init (GtkIMHtml *imhtml)
@@ -4099,7 +4099,7 @@ GtkIMHtmlScalable *gtk_imhtml_hr_new()
 	GTK_IMHTML_SCALABLE(hr)->add_to = gtk_imhtml_hr_add_to;
 	GTK_IMHTML_SCALABLE(hr)->free = gtk_imhtml_hr_free;
 
-	hr->sep = gtk_hseparator_new();
+	hr->sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_widget_set_size_request(hr->sep, 5000, 2);
 	gtk_widget_show(hr->sep);
 

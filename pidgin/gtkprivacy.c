@@ -240,7 +240,7 @@ type_changed_cb(GtkComboBox *combo, PidginPrivacyDialog *dialog)
 
 	gtk_widget_hide(dialog->allow_widget);
 	gtk_widget_hide(dialog->block_widget);
-	gtk_widget_hide_all(dialog->button_box);
+	gtk_widget_hide(dialog->button_box);
 
 	if (new_type == PURPLE_PRIVACY_ALLOW_USERS) {
 		gtk_widget_show(dialog->allow_widget);

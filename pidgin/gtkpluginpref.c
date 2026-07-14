@@ -119,7 +119,7 @@ make_string_pref(GtkWidget *parent, PurplePluginPref *pref, GtkSizeGroup *sg) {
 				GtkWidget *toolbar;
 				GtkWidget *frame;
 
-				box = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+				box = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 
 				gtk_widget_show(box);
 				gtk_box_pack_start(GTK_BOX(parent), box, FALSE, FALSE, 0);
@@ -132,7 +132,7 @@ make_string_pref(GtkWidget *parent, PurplePluginPref *pref, GtkSizeGroup *sg) {
 				if(sg)
 					gtk_size_group_add_widget(sg, gtk_label);
 
-				hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+				hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 				gtk_box_pack_start(GTK_BOX(box), hbox, FALSE, FALSE, 0);
 				gtk_widget_show(hbox);
 
@@ -210,7 +210,7 @@ pidgin_plugin_pref_create_frame(PurplePluginPrefFrame *frame) {
 
 	sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 
-	parent = ret = gtk_vbox_new(FALSE, 16);
+	parent = ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, 16);
 	gtk_container_set_border_width(GTK_CONTAINER(ret), PIDGIN_HIG_BORDER);
 	gtk_widget_show(ret);
 

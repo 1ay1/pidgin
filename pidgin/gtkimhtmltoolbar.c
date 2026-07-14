@@ -125,7 +125,7 @@ realize_toolbar_font(GtkWidget *widget, GtkIMHtmlToolbar *toolbar)
 	GtkFontSelection *sel;
 
 	sel = GTK_FONT_SELECTION(GTK_FONT_SELECTION_DIALOG(toolbar->font_dialog)->fontsel);
-	gtk_widget_hide_all(gtk_widget_get_parent(sel->size_entry));
+	gtk_widget_hide(gtk_widget_get_parent(sel->size_entry));
 	gtk_widget_show_all(sel->family_list);
 	gtk_widget_show(gtk_widget_get_parent(sel->family_list));
 	gtk_widget_show(gtk_widget_get_parent(gtk_widget_get_parent(sel->family_list)));
@@ -620,7 +620,7 @@ sort_smileys(struct smiley_button_list *ls, GtkIMHtmlToolbar *toolbar,
 	it_last = ls; /* list iterators*/
 	image = gtk_image_new_from_file(filename);
 
-	gtk_widget_size_request(image, &size);
+	gtk_widget_get_preferred_size_compat(image, &size);
 
 	if (size.width > 24 &&
 			smiley->flags & GTK_IMHTML_SMILEY_CUSTOM) { /* This is a custom smiley, let's scale it */
@@ -645,7 +645,7 @@ sort_smileys(struct smiley_button_list *ls, GtkIMHtmlToolbar *toolbar,
 					GDK_INTERP_HYPER);
 
 			gtk_image_set_from_pixbuf(GTK_IMAGE(image), resized); /* This unrefs pixbuf */
-			gtk_widget_size_request(image, &size);
+			gtk_widget_get_preferred_size_compat(image, &size);
 			g_object_unref(G_OBJECT(resized));
 		}
 	}
@@ -714,7 +714,7 @@ smiley_is_unique(GSList *list, GtkIMHtmlSmiley *smiley)
 static gboolean
 smiley_dialog_input_cb(GtkWidget *dialog, GdkEvent *event, GtkIMHtmlToolbar *toolbar)
 {
-	if ((event->type == GDK_KEY_PRESS && event->key.keyval == GDK_Escape) ||
+	if ((event->type == GDK_KEY_PRESS && event->key.keyval == GDK_KEY_Escape) ||
 	    (event->type == GDK_BUTTON_PRESS && event->button.button == 1))
 	{
 		close_smiley_dialog(toolbar);
@@ -734,7 +734,7 @@ add_smiley_list(GtkWidget *container, struct smiley_button_list *list,
 	if (!list)
 		return;
 
-	line = gtk_hbox_new(FALSE, 0);
+	line = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(container), line, FALSE, FALSE, 0);
 	for (; list; list = list->next) {
 		if (custom != !!(list->smiley->flags & GTK_IMHTML_SMILEY_CUSTOM))
@@ -744,7 +744,7 @@ add_smiley_list(GtkWidget *container, struct smiley_button_list *list,
 		line_width += list->width;
 		if (line_width >= max_width) {
 			if (list->next) {
-				line = gtk_hbox_new(FALSE, 0);
+				line = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 				gtk_box_pack_start(GTK_BOX(container), line, FALSE, FALSE, 0);
 			}
 			line_width = 0;
@@ -813,7 +813,7 @@ insert_smiley_cb(GtkWidget *smiley, GtkIMHtmlToolbar *toolbar)
 		ls = NULL;
 		max_line_width = 0;
 		num_lines = floor(sqrt(g_slist_length(unique_smileys)));
-		smiley_table = gtk_vbox_new(FALSE, 0);
+		smiley_table = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 		if (supports_custom) {
 			GtkWidget *manage = gtk_button_new_with_mnemonic(_("_Manage custom smileys"));
@@ -823,7 +823,7 @@ insert_smiley_cb(GtkWidget *smiley, GtkIMHtmlToolbar *toolbar)
 			g_signal_connect_swapped(G_OBJECT(manage), "clicked",
 					G_CALLBACK(gtk_widget_destroy), dialog);
 			gtk_box_pack_end(GTK_BOX(vbox), manage, FALSE, TRUE, 0);
-			gtk_widget_size_request(manage, &req);
+			gtk_widget_get_preferred_size_compat(manage, &req);
 			button_width = req.width;
 		}
 
@@ -841,7 +841,7 @@ insert_smiley_cb(GtkWidget *smiley, GtkIMHtmlToolbar *toolbar)
 		/* pack buttons of the list */
 		add_smiley_list(smiley_table, ls, max_line_width, FALSE);
 		if (supports_custom) {
-			gtk_box_pack_start(GTK_BOX(smiley_table), gtk_hseparator_new(), TRUE, FALSE, 0);
+			gtk_box_pack_start(GTK_BOX(smiley_table), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), TRUE, FALSE, 0);
 			add_smiley_list(smiley_table, ls, max_line_width, TRUE);
 		}
 		while (ls) {
@@ -876,7 +876,7 @@ insert_smiley_cb(GtkWidget *smiley, GtkIMHtmlToolbar *toolbar)
 	/* show everything */
 	gtk_widget_show_all(dialog);
 
-	gtk_widget_size_request(viewport, &req);
+	gtk_widget_get_preferred_size_compat(viewport, &req);
 	gtk_widget_set_size_request(scrolled, MIN(300, req.width), MIN(290, req.height));
 
 	/* The window has to be made resizable, and the scrollbars in the scrolled window
@@ -1087,7 +1087,7 @@ menu_position_func (GtkMenu           *menu,
 	gint ythickness = widget->style->ythickness;
 	int savy;
 
-	gtk_widget_size_request(GTK_WIDGET (menu), &menu_req);
+	gtk_widget_get_preferred_size_compat(GTK_WIDGET (menu), &menu_req);
 	gdk_window_get_origin(widget->window, x, y);
 	*x += widget->allocation.x;
 	*y += widget->allocation.y + widget->allocation.height;
@@ -1186,7 +1186,7 @@ gtk_imhtmltoolbar_popup_menu(GtkWidget *widget, GdkEventButton *event, GtkIMHtml
 	if (event->button != 3)
 		return FALSE;
 
-	wide = GTK_WIDGET_VISIBLE(toolbar->bold);
+	wide = gtk_widget_get_visible(toolbar->bold);
 
 	menu = gtk_menu_new();
 	item = gtk_menu_item_new_with_mnemonic(wide ? _("Group Items") : _("Ungroup Items"));
@@ -1243,7 +1243,7 @@ static void gtk_imhtmltoolbar_create_old_buttons(GtkIMHtmlToolbar *toolbar)
 	};
 	int iter;
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 
 	for (iter = 0; buttons[iter].stock; iter++) {
 		if (buttons[iter].stock[0]) {
@@ -1254,7 +1254,7 @@ static void gtk_imhtmltoolbar_create_old_buttons(GtkIMHtmlToolbar *toolbar)
 			*(buttons[iter].button) = button;
 			gtk_tooltips_set_tip(toolbar->tooltips, button, buttons[iter].tooltip, NULL);
 		} else
-			button = gtk_vseparator_new();
+			button = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
 		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 	}
 	/* create the attention button (this is a bit hacky to not break ABI) */
@@ -1273,7 +1273,7 @@ static void gtk_imhtmltoolbar_create_old_buttons(GtkIMHtmlToolbar *toolbar)
 static void
 button_visibility_changed(GtkWidget *button, gpointer dontcare, GtkWidget *item)
 {
-	if (GTK_WIDGET_VISIBLE(button))
+	if (gtk_widget_get_visible(button))
 		gtk_widget_hide(item);
 	else
 		gtk_widget_show(item);
@@ -1282,7 +1282,7 @@ button_visibility_changed(GtkWidget *button, gpointer dontcare, GtkWidget *item)
 static void
 button_sensitiveness_changed(GtkWidget *button, gpointer dontcare, GtkWidget *item)
 {
-	gtk_widget_set_sensitive(item, GTK_WIDGET_IS_SENSITIVE(button));
+	gtk_widget_set_sensitive(item, gtk_widget_is_sensitive(button));
 }
 
 static void
@@ -1305,10 +1305,10 @@ imhtmltoolbar_view_pref_changed(const char *name, PurplePrefType type,
 		gconstpointer value, gpointer toolbar)
 {
 	if (value) {
-		gtk_widget_hide_all(g_object_get_data(G_OBJECT(toolbar), "lean-view"));
+		gtk_widget_hide(g_object_get_data(G_OBJECT(toolbar), "lean-view"));
 		gtk_widget_show_all(g_object_get_data(G_OBJECT(toolbar), "wide-view"));
 	} else {
-		gtk_widget_hide_all(g_object_get_data(G_OBJECT(toolbar), "wide-view"));
+		gtk_widget_hide(g_object_get_data(G_OBJECT(toolbar), "wide-view"));
 		gtk_widget_show_all(g_object_get_data(G_OBJECT(toolbar), "lean-view"));
 	}
 }
@@ -1316,7 +1316,7 @@ imhtmltoolbar_view_pref_changed(const char *name, PurplePrefType type,
 static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 {
 	GtkWidget *hbox = GTK_WIDGET(toolbar), *event = gtk_event_box_new();
-	GtkWidget *bbox, *box = gtk_hbox_new(FALSE, 0);
+	GtkWidget *bbox, *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	GtkWidget *image;
 	GtkWidget *label;
 	GtkWidget *insert_button;
@@ -1370,7 +1370,7 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	/* Fonts */
 	font_button = gtk_toggle_button_new();
 	gtk_button_set_relief(GTK_BUTTON(font_button), GTK_RELIEF_NONE);
-	bbox = gtk_hbox_new(FALSE, 3);
+	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_add(GTK_CONTAINER(font_button), bbox);
 	image = gtk_image_new_from_stock(GTK_STOCK_BOLD, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 0);
@@ -1408,14 +1408,14 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	g_signal_connect(G_OBJECT(font_menu), "deactivate", G_CALLBACK(pidgin_menu_deactivate), font_button);
 
 	/* Sep */
-	sep = gtk_vseparator_new();
+	sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
 	gtk_box_pack_start(GTK_BOX(box), sep, FALSE, FALSE, 0);
 	gtk_widget_show_all(sep);
 
 	/* Insert */
 	insert_button = gtk_toggle_button_new();
 	gtk_button_set_relief(GTK_BUTTON(insert_button), GTK_RELIEF_NONE);
-	bbox = gtk_hbox_new(FALSE, 3);
+	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_add(GTK_CONTAINER(insert_button), bbox);
 	image = gtk_image_new_from_stock(PIDGIN_STOCK_TOOLBAR_INSERT, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 0);
@@ -1454,14 +1454,14 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	toolbar->sml = NULL;
 
 	/* Sep */
-	sep = gtk_vseparator_new();
+	sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
 	gtk_box_pack_start(GTK_BOX(box), sep, FALSE, FALSE, 0);
 	gtk_widget_show_all(sep);
 
 	/* Smiley */
 	smiley_button = gtk_button_new();
 	gtk_button_set_relief(GTK_BUTTON(smiley_button), GTK_RELIEF_NONE);
-	bbox = gtk_hbox_new(FALSE, 3);
+	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_add(GTK_CONTAINER(smiley_button), bbox);
 	image = gtk_image_new_from_stock(PIDGIN_STOCK_TOOLBAR_SMILEY, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 0);
@@ -1473,7 +1473,7 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 	gtk_widget_show_all(smiley_button);
 
 	/* Sep */
-	sep = gtk_vseparator_new();
+	sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
 	gtk_box_pack_start(GTK_BOX(box), sep, FALSE, FALSE, 0);
 	gtk_widget_show_all(sep);
 
@@ -1482,7 +1482,7 @@ static void gtk_imhtmltoolbar_init (GtkIMHtmlToolbar *toolbar)
 
 	attention_button = gtk_button_new();
 	gtk_button_set_relief(GTK_BUTTON(attention_button), GTK_RELIEF_NONE);
-	bbox = gtk_hbox_new(FALSE, 3);
+	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_add(GTK_CONTAINER(attention_button), bbox);
 	image = gtk_image_new_from_stock(PIDGIN_STOCK_TOOLBAR_SEND_ATTENTION,
 		gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));

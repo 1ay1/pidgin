@@ -589,7 +589,7 @@ static PidginLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList *
 
 	/* Icon *************/
 	if (icon != NULL) {
-		title_box = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		title_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		gtk_container_set_border_width(GTK_CONTAINER(title_box), PIDGIN_HIG_BOX_SPACE);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(lv->window)->vbox), title_box, FALSE, FALSE, 0);
 
@@ -608,7 +608,7 @@ static PidginLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList *
 	g_free(text);
 
 	/* Pane *************/
-	pane = gtk_hpaned_new();
+	pane = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_container_set_border_width(GTK_CONTAINER(pane), PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(lv->window)->vbox), pane, TRUE, TRUE, 0);
 
@@ -651,7 +651,7 @@ static PidginLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList *
 	}
 
 	/* A fancy little box ************/
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_paned_add2(GTK_PANED(pane), vbox);
 
 	/* Viewer ************/
@@ -662,7 +662,7 @@ static PidginLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList *
 	gtk_widget_show(frame);
 
 	/* Search box **********/
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 	lv->entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox), lv->entry, TRUE, TRUE, 0);

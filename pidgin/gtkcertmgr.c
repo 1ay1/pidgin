@@ -405,7 +405,7 @@ tls_peers_mgmt_build(void)
 	tpm_dat = g_new0(tls_peers_mgmt_data, 1);
 
 	tpm_dat->mgmt_widget = mgmt_widget =
-		gtk_hbox_new(FALSE, /* Non-homogeneous */
+		gtk_box_new(GTK_ORIENTATION_HORIZONTAL, /* Non-homogeneous */
 			     PIDGIN_HIG_BOX_SPACE);
 	gtk_container_set_border_width(GTK_CONTAINER(mgmt_widget),
 		PIDGIN_HIG_BOX_SPACE);
@@ -462,7 +462,7 @@ tls_peers_mgmt_build(void)
 	tls_peers_mgmt_repopulate_list();
 
 	/* Right-hand side controls box */
-	bbox = gtk_vbutton_box_new();
+	bbox = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);
 	gtk_box_pack_end(GTK_BOX(mgmt_widget), bbox,
 			 FALSE, FALSE, /* Do not take up space */
 			 0);

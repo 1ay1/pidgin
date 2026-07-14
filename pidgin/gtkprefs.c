@@ -1084,7 +1084,7 @@ add_theme_prefs_combo(GtkWidget *vbox,
 {
 	GtkWidget *label;
 	GtkWidget *combo_box = NULL;
-	GtkWidget *themesel_hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	GtkWidget *themesel_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 
 	label = gtk_label_new(label_str);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -1112,7 +1112,7 @@ theme_page(void)
 	GtkSizeGroup *label_sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	GtkSizeGroup *combo_sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width (GTK_CONTAINER (ret), PIDGIN_HIG_BORDER);
 
 	vbox = pidgin_make_frame(ret, _("Theme Selections"));
@@ -1367,7 +1367,7 @@ interface_page(void)
 	GtkSizeGroup *sg;
 	GList *names = NULL;
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width(GTK_CONTAINER(ret), PIDGIN_HIG_BORDER);
 
 	sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
@@ -1407,7 +1407,7 @@ interface_page(void)
 	 * Connect a signal to the above preference.  When conversations are not
 	 * shown in a tabbed window then all tabbing options should be disabled.
 	 */
-	vbox2 = gtk_vbox_new(FALSE, 9);
+	vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 9);
 	gtk_box_pack_start(GTK_BOX(vbox), vbox2, FALSE, FALSE, 0);
 	purple_prefs_connect_callback(prefs, PIDGIN_PREFS_ROOT "/conversations/tabs",
 	                            conversation_usetabs_cb, vbox2);
@@ -1485,7 +1485,7 @@ conv_page(void)
 	GtkWidget *checkbox;
 	GtkWidget *spin_button;
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width(GTK_CONTAINER(ret), PIDGIN_HIG_BORDER);
 
 	vbox = pidgin_make_frame(ret, _("Conversations"));
@@ -1516,7 +1516,7 @@ conv_page(void)
 #ifdef _WIN32
 	pidgin_prefs_checkbox(_("F_lash window when IMs are received"), PIDGIN_PREFS_ROOT "/win32/blink_im", vbox);
 #endif
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 
 	checkbox = pidgin_prefs_checkbox(_("Resize incoming custom smileys"),
 			PIDGIN_PREFS_ROOT "/conversations/resize_custom_smileys", hbox);
@@ -1750,7 +1750,7 @@ network_page(void)
 	GtkWidget *label, *auto_ip_checkbox, *ports_checkbox, *spin_button;
 	GtkSizeGroup *sg;
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width (GTK_CONTAINER (ret), PIDGIN_HIG_BORDER);
 
 	vbox = pidgin_make_frame (ret, _("IP Address"));
@@ -1766,7 +1766,7 @@ network_page(void)
 	pidgin_add_widget_to_vbox(GTK_BOX(vbox), _("ST_UN server:"),
 			sg, entry, TRUE, NULL);
 
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
 	label = gtk_label_new(NULL);
@@ -1808,7 +1808,7 @@ network_page(void)
 	pidgin_prefs_checkbox(_("_Enable automatic router port forwarding"),
 			"/purple/network/map_ports", vbox);
 
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 
 	ports_checkbox = pidgin_prefs_checkbox(_("_Manually specify range of ports to listen on:"),
 			"/purple/network/ports_range_use", hbox);
@@ -1969,7 +1969,7 @@ browser_page(void)
 	GtkSizeGroup *sg;
 	GList *browsers = NULL;
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width (GTK_CONTAINER (ret), PIDGIN_HIG_BORDER);
 
 	vbox = pidgin_make_frame (ret, _("Browser Selection"));
@@ -1977,12 +1977,12 @@ browser_page(void)
 	if (purple_running_gnome()) {
 		gchar *path;
 
-		hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		label = gtk_label_new(_("Browser preferences are configured in GNOME preferences"));
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-		hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
 		path = g_find_program_in_path("gnome-control-center");
@@ -2020,7 +2020,7 @@ browser_page(void)
 			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 			gtk_size_group_add_widget(sg, label);
 
-			hbox = gtk_hbox_new(FALSE, 0);
+			hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 			label = pidgin_prefs_dropdown(hbox, _("_Open link in:"), PURPLE_PREF_INT,
 				PIDGIN_PREFS_ROOT "/browsers/place",
 				_("Browser default"), PIDGIN_BROWSER_DEFAULT,
@@ -2065,20 +2065,20 @@ proxy_page(void)
 	GtkWidget *prefs_proxy_frame = NULL;
 	PurpleProxyInfo *proxy_info;
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width(GTK_CONTAINER(ret), PIDGIN_HIG_BORDER);
 	vbox = pidgin_make_frame(ret, _("Proxy Server"));
-	prefs_proxy_frame = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	prefs_proxy_frame = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 
 	if(purple_running_gnome()) {
 		gchar *path = NULL;
 
-		hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		label = gtk_label_new(_("Proxy preferences are configured in GNOME preferences"));
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-		hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
 		path = g_find_program_in_path("gnome-network-properties");
@@ -2110,7 +2110,7 @@ proxy_page(void)
 		         which is never */
 		gtk_widget_show_all(ret);
 	} else {
-		GtkWidget *prefs_proxy_subframe = gtk_vbox_new(FALSE, 0);
+		GtkWidget *prefs_proxy_subframe = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 		/* This is a global option that affects SOCKS4 usage even with
 		 * account-specific proxy settings */
@@ -2155,7 +2155,7 @@ proxy_page(void)
 			gtk_entry_set_text(GTK_ENTRY(entry),
 					   purple_proxy_info_get_host(proxy_info));
 
-		hbox = gtk_hbox_new(TRUE, 5);
+		hbox = pidgin_box_new_homogeneous(GTK_ORIENTATION_HORIZONTAL, 5);
 		gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 		pidgin_set_accessible_label (entry, label);
 
@@ -2189,7 +2189,7 @@ proxy_page(void)
 			gtk_entry_set_text(GTK_ENTRY(entry),
 						   purple_proxy_info_get_username(proxy_info));
 
-		hbox = gtk_hbox_new(TRUE, 5);
+		hbox = pidgin_box_new_homogeneous(GTK_ORIENTATION_HORIZONTAL, 5);
 		gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 		pidgin_set_accessible_label (entry, label);
 
@@ -2229,7 +2229,7 @@ logging_page(void)
 	GtkWidget *vbox;
 	GList *names;
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width (GTK_CONTAINER (ret), PIDGIN_HIG_BORDER);
 
 
@@ -2505,14 +2505,14 @@ sound_page(void)
 	const char *cmd;
 #endif
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width (GTK_CONTAINER (ret), PIDGIN_HIG_BORDER);
 
 	sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 
 	vbox2 = pidgin_make_frame(ret, _("Sound Options"));
 
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox2), vbox, FALSE, FALSE, 0);
 
 #ifndef _WIN32
@@ -2559,7 +2559,7 @@ sound_page(void)
 				NULL);
 
 #ifdef USE_GSTREAMER
-	sw = gtk_hscale_new_with_range(0.0, 100.0, 5.0);
+	sw = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0.0, 100.0, 5.0);
 	gtk_range_set_increments(GTK_RANGE(sw), 5.0, 25.0);
 	gtk_range_set_value(GTK_RANGE(sw), purple_prefs_get_int(PIDGIN_PREFS_ROOT "/sound/volume"));
 	g_signal_connect (G_OBJECT (sw), "format-value",
@@ -2646,7 +2646,7 @@ sound_page(void)
 		pidgin_make_scrollable(event_view, GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC, GTK_SHADOW_IN, -1, 100),
 		TRUE, TRUE, 0);
 
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 	sound_entry = gtk_entry_new();
 	pref = g_strdup_printf(PIDGIN_PREFS_ROOT "/sound/file/%s",
@@ -2700,7 +2700,7 @@ away_page(void)
 	GtkWidget *menu;
 	GtkSizeGroup *sg;
 
-	ret = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width (GTK_CONTAINER (ret), PIDGIN_HIG_BORDER);
 
 	sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
@@ -2723,7 +2723,7 @@ away_page(void)
 			_("_Minutes before becoming idle:"), "/purple/away/mins_before_away",
 			1, 24 * 60, sg);
 
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
 	button = pidgin_prefs_checkbox(_("Change to this status when _idle:"),
@@ -3001,7 +3001,7 @@ make_voice_test(GtkWidget *vbox)
 	label = gtk_label_new(NULL);
 	gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 	label = gtk_label_new(_("Volume:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -3018,7 +3018,7 @@ make_voice_test(GtkWidget *vbox)
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	g_free(tmp);
-	threshold = gtk_hscale_new_with_range(0, 100, 1);
+	threshold = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
 	gtk_box_pack_start(GTK_BOX(vbox), threshold, FALSE, FALSE, 0);
 	gtk_range_set_value(GTK_RANGE(threshold),
 			purple_prefs_get_int("/purple/media/audio/silence_threshold"));
@@ -3319,7 +3319,7 @@ vv_page(void)
 	GtkSizeGroup *sg;
 	PurpleMediaManager *manager;
 
-	ret = gtk_hbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	ret = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_set_border_width(GTK_CONTAINER(ret), PIDGIN_HIG_BORDER);
 
 	sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);

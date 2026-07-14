@@ -543,14 +543,14 @@ pidgin_pounce_editor_show(PurpleAccount *account, const char *name,
 	vbox1 = GTK_DIALOG(window)->vbox;
 
 	/* Create the vbox that will contain all the prefs stuff. */
-	vbox2 = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox1), vbox2, TRUE, TRUE, 0);
 
 	/* Create the "Pounce on Whom" frame. */
 	frame = pidgin_make_frame(vbox2, _("Pounce on Whom"));
 
 	/* Account: */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(frame), hbox, FALSE, FALSE, 0);
 	gtk_widget_show(hbox);
 
@@ -570,7 +570,7 @@ pidgin_pounce_editor_show(PurpleAccount *account, const char *name,
 	pidgin_set_accessible_label (dialog->account_menu, label);
 
 	/* Buddy: */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(frame), hbox, FALSE, FALSE, 0);
 	gtk_widget_show(hbox);
 
@@ -1018,7 +1018,7 @@ pidgin_pounce_editor_show(PurpleAccount *account, const char *name,
 static gboolean
 pounces_manager_configure_cb(GtkWidget *widget, GdkEventConfigure *event, PouncesManager *dialog)
 {
-	if (GTK_WIDGET_VISIBLE(widget)) {
+	if (gtk_widget_get_visible(widget)) {
 		purple_prefs_set_int(PIDGIN_PREFS_ROOT "/pounces/dialog/width",  event->width);
 		purple_prefs_set_int(PIDGIN_PREFS_ROOT "/pounces/dialog/height", event->height);
 	}

@@ -523,7 +523,7 @@ create_saved_status_list(StatusWindow *dialog)
 static gboolean
 configure_cb(GtkWidget *widget, GdkEventConfigure *event, StatusWindow *dialog)
 {
-	if (GTK_WIDGET_VISIBLE(widget))
+	if (gtk_widget_get_visible(widget))
 	{
 		purple_prefs_set_int(PIDGIN_PREFS_ROOT "/status/dialog/width",  event->width);
 		purple_prefs_set_int(PIDGIN_PREFS_ROOT "/status/dialog/height", event->height);
@@ -1165,7 +1165,7 @@ pidgin_status_editor_show(gboolean edit, PurpleSavedStatus *saved_status)
 	gtk_box_pack_start(GTK_BOX(vbox), expander, FALSE, FALSE, 0);
 
 	/* Setup the box that the expander will cover */
-	dbox = gtk_vbox_new(FALSE, PIDGIN_HIG_CAT_SPACE);
+	dbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_CAT_SPACE);
 	gtk_container_add(GTK_CONTAINER(expander), dbox);
 
 	/* Create the list model */
@@ -1424,7 +1424,7 @@ edit_substatus(StatusEditor *status_editor, PurpleAccount *account)
 	sg = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 
 	/* Status type */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
 	label = gtk_label_new_with_mnemonic(_("_Status:"));
@@ -1458,7 +1458,7 @@ edit_substatus(StatusEditor *status_editor, PurpleAccount *account)
 	gtk_box_pack_start(GTK_BOX(hbox), combo, FALSE, FALSE, 0);
 
 	/* Status mesage */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
 	label = gtk_label_new_with_mnemonic(_("_Message:"));

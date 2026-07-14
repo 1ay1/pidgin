@@ -104,7 +104,7 @@ refresh_scroll_box(PidginScrollBook *scroll_book, int index, int count)
 
 	gtk_widget_show_all(GTK_WIDGET(scroll_book));
 	if (count < 1)
-		gtk_widget_hide_all(scroll_book->hbox);
+		gtk_widget_hide(scroll_book->hbox);
 	else {
 		gtk_widget_show_all(scroll_book->hbox);
 		if (count == 1) {
@@ -264,7 +264,7 @@ pidgin_scroll_book_init(PidginScrollBook *scroll_book,
 	GtkWidget *eb;
 	GtkWidget *close_button;
 
-	scroll_book->hbox = gtk_hbox_new(FALSE, 0);
+	scroll_book->hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 
 	/* Close */
 	eb = gtk_event_box_new();

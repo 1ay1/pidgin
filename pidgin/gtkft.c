@@ -722,12 +722,12 @@ pidgin_xfer_dialog_new(void)
 					 G_CALLBACK(delete_win_cb), dialog);
 
 	/* Create the parent vbox for everything. */
-	vbox1 = gtk_vbox_new(FALSE, 0);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_widget_show(vbox1);
 	gtk_container_add(GTK_CONTAINER(window), vbox1);
 
 	/* Create the main vbox for top half of the window. */
-	vbox2 = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox1), vbox2, TRUE, TRUE, 0);
 	gtk_widget_show(vbox2);
 
@@ -775,7 +775,7 @@ pidgin_xfer_dialog_new(void)
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 	gtk_widget_show(table);
 
-	bbox = gtk_hbutton_box_new();
+	bbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_END);
 	gtk_box_set_spacing(GTK_BOX(bbox), PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_end(GTK_BOX(vbox1), bbox, FALSE, TRUE, 0);

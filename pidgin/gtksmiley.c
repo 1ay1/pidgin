@@ -414,12 +414,12 @@ pidgin_smiley_edit(GtkWidget *widget, PurpleSmiley *smiley)
 	g_signal_connect(window, "response", G_CALLBACK(do_add_select_cb), s);
 
 	/* The vbox */
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(window)->vbox), vbox);
 	gtk_widget_show(vbox);
 
 	/* The hbox */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_VBOX(vbox)), hbox);
 
 	label = gtk_label_new_with_mnemonic(_("_Image:"));
@@ -449,7 +449,7 @@ pidgin_smiley_edit(GtkWidget *widget, PurpleSmiley *smiley)
 	gtk_widget_show_all(hbox);
 
 	/* info */
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_VBOX(vbox)),hbox);
 
 	/* Shortcut text */
@@ -882,7 +882,7 @@ void pidgin_smiley_manager_show(void)
 			dialog);
 
 	/* The vbox */
-	vbox = gtk_vbox_new(FALSE, PIDGIN_HIG_BORDER);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(win)->vbox), vbox);
 	gtk_widget_show(vbox);
 

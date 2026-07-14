@@ -247,7 +247,7 @@ static gboolean gtk_blist_configure_cb(GtkWidget *w, GdkEventConfigure *event, g
 
 	/* check for visibility because when we aren't visible, this will   *
 	 * give us bogus (0,0) coordinates.                      - xOr      */
-	if (GTK_WIDGET_VISIBLE(w))
+	if (gtk_widget_get_visible(w))
 		gtk_window_get_position(GTK_WINDOW(w), &x, &y);
 	else
 		return FALSE; /* carry on normally */
@@ -1015,12 +1015,12 @@ make_blist_request_dialog(PidginBlistRequestData *data, PurpleAccount *account,
 	gtk_container_set_border_width(GTK_CONTAINER(GTK_DIALOG(data->window)->vbox), PIDGIN_HIG_BOX_SPACE);
 	gtk_window_set_role(GTK_WINDOW(data->window), window_role);
 
-	hbox = gtk_hbox_new(FALSE, PIDGIN_HIG_BORDER);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(data->window)->vbox), hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
 	gtk_misc_set_alignment(GTK_MISC(img), 0, 0);
 
-	vbox = gtk_vbox_new(FALSE, 5);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 	gtk_container_add(GTK_CONTAINER(hbox), vbox);
 
 	label = gtk_label_new(label_text);
@@ -1036,7 +1036,7 @@ make_blist_request_dialog(PidginBlistRequestData *data, PurpleAccount *account,
 			callback_func, filter_func, data);
 	pidgin_add_widget_to_vbox(GTK_BOX(vbox), _("A_ccount"), data->sg, data->account_menu, TRUE, NULL);
 
-	data->vbox = GTK_BOX(gtk_vbox_new(FALSE, 5));
+	data->vbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 5));
 	gtk_container_set_border_width(GTK_CONTAINER(data->vbox), 0);
 	gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(data->vbox), FALSE, FALSE, 0);
 
@@ -1634,7 +1634,7 @@ gtk_blist_key_press_cb(GtkWidget *tv, GdkEventKey *event, gpointer data)
 				gtk_blist_menu_alias_cb(tv, node);
 				break;
 
-			case GDK_Left:
+			case GDK_KEY_Left:
 				path = gtk_tree_model_get_path(GTK_TREE_MODEL(gtkblist->treemodel), &iter);
 				if (gtk_tree_view_row_expanded(GTK_TREE_VIEW(tv), path)) {
 					/* Collapse the Group */
@@ -1656,7 +1656,7 @@ gtk_blist_key_press_cb(GtkWidget *tv, GdkEventKey *event, gpointer data)
 				gtk_tree_path_free(path);
 				break;
 
-			case GDK_Right:
+			case GDK_KEY_Right:
 				path = gtk_tree_model_get_path(GTK_TREE_MODEL(gtkblist->treemodel), &iter);
 				if (!gtk_tree_view_row_expanded(GTK_TREE_VIEW(tv), path)) {
 					/* Expand the Group */
@@ -4410,7 +4410,7 @@ static void pidgin_blist_restore_position(void)
 	/* if the window exists, is hidden, we're saving positions, and the
 	 * position is sane... */
 	if (gtkblist && gtkblist->window &&
-		!GTK_WIDGET_VISIBLE(gtkblist->window) && blist_width != 0) {
+		!gtk_widget_get_visible(gtkblist->window) && blist_width != 0) {
 
 		blist_x      = purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/x");
 		blist_y      = purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/y");
@@ -4440,7 +4440,7 @@ static gboolean pidgin_blist_refresh_timer(PurpleBuddyList *list)
 	PurpleBlistNode *gnode, *cnode;
 
 	if (gtk_blist_visibility == GDK_VISIBILITY_FULLY_OBSCURED
-			|| !GTK_WIDGET_VISIBLE(gtkblist->window))
+			|| !gtk_widget_get_visible(gtkblist->window))
 		return TRUE;
 
 	for(gnode = list->root; gnode; gnode = gnode->next) {
@@ -5304,7 +5304,7 @@ create_account_label(PurpleAccount *account)
 	const char *username = purple_account_get_username(account);
 	char *markup;
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	g_object_set_data(G_OBJECT(hbox), OBJECT_DATA_KEY_ACCOUNT, account);
 
 	pack_prpl_icon_start(hbox, account);
@@ -5553,7 +5553,7 @@ blist_focus_cb(GtkWidget *widget, GdkEventFocus *event, PidginBuddyList *gtkblis
 static GtkWidget *
 kiosk_page()
 {
-	GtkWidget *ret = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	GtkWidget *ret = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 	GtkWidget *label;
 	GtkWidget *entry;
 	GtkWidget *bbox;
@@ -5580,7 +5580,7 @@ kiosk_page()
 	label = gtk_label_new(" ");
 	gtk_box_pack_start(GTK_BOX(ret), label, FALSE, FALSE, 0);
 
-	bbox = gtk_hbutton_box_new();
+	bbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
 	button = gtk_button_new_with_mnemonic(_("_Login"));
 	gtk_box_pack_start(GTK_BOX(ret), bbox, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(bbox), button);
@@ -5894,7 +5894,7 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 			 G_CALLBACK(blist_focus_cb), gtkblist);
 	GTK_WINDOW(gtkblist->window)->allow_shrink = TRUE;
 
-	gtkblist->main_vbox = gtk_vbox_new(FALSE, 0);
+	gtkblist->main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_widget_show(gtkblist->main_vbox);
 	gtk_container_add(GTK_CONTAINER(gtkblist->window), gtkblist->main_vbox);
 
@@ -5954,14 +5954,14 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	gtk_label_set_markup(GTK_LABEL(label), pretty);
 	g_free(pretty);
 	gtk_notebook_append_page(GTK_NOTEBOOK(gtkblist->notebook),label, NULL);
-	gtkblist->vbox = gtk_vbox_new(FALSE, 0);
+	gtkblist->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_notebook_append_page(GTK_NOTEBOOK(gtkblist->notebook), gtkblist->vbox, NULL);
 	gtk_widget_show_all(gtkblist->notebook);
 	pidgin_blist_select_notebook_page(gtkblist);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(gtkblist->vbox), ebox, FALSE, FALSE, 0);
-	gtkblist->headline_hbox = gtk_hbox_new(FALSE, 3);
+	gtkblist->headline_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 	gtk_container_set_border_width(GTK_CONTAINER(gtkblist->headline_hbox), 6);
 	gtk_container_add(GTK_CONTAINER(ebox), gtkblist->headline_hbox);
 	gtkblist->headline_image = gtk_image_new_from_pixbuf(NULL);
@@ -6090,7 +6090,7 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 		pidgin_make_scrollable(gtkblist->treeview, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC, GTK_SHADOW_NONE, -1, -1),
 		TRUE, TRUE, 0);
 
-	sep = gtk_hseparator_new();
+	sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_box_pack_start(GTK_BOX(gtkblist->vbox), sep, FALSE, FALSE, 0);
 
 	gtkblist->scrollbook = pidgin_scroll_book_new();
@@ -6100,7 +6100,7 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	 * display connection errors.  The vbox needs to still exist for
 	 * backwards compatibility.
 	 */
-	gtkblist->error_buttons = gtk_vbox_new(FALSE, 0);
+	gtkblist->error_buttons = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start(GTK_BOX(gtkblist->vbox), gtkblist->error_buttons, FALSE, FALSE, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(gtkblist->error_buttons), 0);
 
@@ -7052,7 +7052,7 @@ static void pidgin_blist_set_visible(PurpleBuddyList *list, gboolean show)
 		return;
 
 	if (show) {
-		if(!PIDGIN_WINDOW_ICONIFIED(gtkblist->window) && !GTK_WIDGET_VISIBLE(gtkblist->window))
+		if(!PIDGIN_WINDOW_ICONIFIED(gtkblist->window) && !gtk_widget_get_visible(gtkblist->window))
 			purple_signal_emit(pidgin_blist_get_handle(), "gtkblist-unhiding", gtkblist);
 		pidgin_blist_restore_position();
 		gtk_window_present(GTK_WINDOW(gtkblist->window));
@@ -7061,7 +7061,7 @@ static void pidgin_blist_set_visible(PurpleBuddyList *list, gboolean show)
 			purple_signal_emit(pidgin_blist_get_handle(), "gtkblist-hiding", gtkblist);
 			gtk_widget_hide(gtkblist->window);
 		} else {
-			if (!GTK_WIDGET_VISIBLE(gtkblist->window))
+			if (!gtk_widget_get_visible(gtkblist->window))
 				gtk_widget_show(gtkblist->window);
 			gtk_window_iconify(GTK_WINDOW(gtkblist->window));
 		}
@@ -7466,7 +7466,7 @@ void
 pidgin_blist_toggle_visibility()
 {
 	if (gtkblist && gtkblist->window) {
-		if (GTK_WIDGET_VISIBLE(gtkblist->window)) {
+		if (gtk_widget_get_visible(gtkblist->window)) {
 			/* make the buddy list visible if it is iconified or if it is
 			 * obscured and not currently focused (the focus part ensures
 			 * that we do something reasonable if the buddy list is obscured
@@ -7531,7 +7531,7 @@ pidgin_blist_set_headline(const char *text, GdkPixbuf *pixbuf, GCallback callbac
 static void
 set_urgent(void)
 {
-	if (gtkblist->window && !GTK_WIDGET_HAS_FOCUS(gtkblist->window))
+	if (gtkblist->window && !gtk_widget_has_focus(gtkblist->window))
 		pidgin_set_urgent(GTK_WINDOW(gtkblist->window), TRUE);
 }
 

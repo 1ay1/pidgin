@@ -332,7 +332,7 @@ pidgin_media_init (PidginMedia *media)
 	XSetErrorHandler(pidgin_x_error_handler);
 #endif
 
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(media), vbox);
 
 	media->priv->statusbar = gtk_statusbar_new();
@@ -346,7 +346,7 @@ pidgin_media_init (PidginMedia *media)
 	gtk_box_pack_start(GTK_BOX(vbox), media->priv->menubar,
 			FALSE, TRUE, 0);
 
-	media->priv->display = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+	media->priv->display = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 	gtk_container_set_border_width(GTK_CONTAINER(media->priv->display),
 			PIDGIN_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(vbox), media->priv->display,
@@ -442,7 +442,7 @@ pidgin_media_remove_widget(PidginMedia *gtkmedia,
 
 		gtk_widget_destroy(widget);
 
-		gtk_widget_size_request(GTK_WIDGET(gtkmedia), &req);
+		gtk_widget_get_preferred_size_compat(GTK_WIDGET(gtkmedia), &req);
 		gtk_window_resize(GTK_WINDOW(gtkmedia), req.width, req.height);
 	}
 }
@@ -731,8 +731,8 @@ pidgin_media_add_audio_widget(PidginMedia *gtkmedia,
 
 #if GTK_CHECK_VERSION(2,12,0)
 	/* Setup widget structure */
-	volume_widget = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
-	progress_parent = gtk_vbox_new(FALSE, 0);
+	volume_widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
+	progress_parent = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start(GTK_BOX(volume_widget),
 			progress_parent, TRUE, TRUE, 0);
 
@@ -743,11 +743,11 @@ pidgin_media_add_audio_widget(PidginMedia *gtkmedia,
 			volume, FALSE, FALSE, 0);
 #else
 	/* Setup widget structure */
-	volume_widget = gtk_vbox_new(FALSE, 0);
+	volume_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	progress_parent = volume_widget;
 
 	/* Volume slider */
-	volume = gtk_hscale_new_with_range(0.0, 100.0, 5.0);
+	volume = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0.0, 100.0, 5.0);
 	gtk_range_set_increments(GTK_RANGE(volume), 5.0, 25.0);
 	gtk_range_set_value(GTK_RANGE(volume), value);
 	gtk_scale_set_draw_value(GTK_SCALE(volume), FALSE);
@@ -809,7 +809,7 @@ phone_create_button(const gchar *text_hi, const gchar *text_lo)
 	else
 		text_hi_local = "";
 
-	grid = gtk_vbox_new(TRUE, 0);
+	grid = pidgin_box_new_homogeneous(GTK_ORIENTATION_VERTICAL, 0);
 
 	button = gtk_button_new();
 	label_hi = gtk_label_new(text_hi_local);
@@ -924,7 +924,7 @@ pidgin_media_ready_cb(PurpleMedia *media, PidginMedia *gtkmedia, const gchar *si
 	if (gtkmedia->priv->recv_widget == NULL
 			&& type & (PURPLE_MEDIA_RECV_VIDEO |
 			PURPLE_MEDIA_RECV_AUDIO)) {
-		recv_widget = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		recv_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 		gtk_box_pack_start(GTK_BOX(gtkmedia->priv->display),
 				recv_widget, TRUE, TRUE, 0);
 		gtk_widget_show(recv_widget);
@@ -934,10 +934,10 @@ pidgin_media_ready_cb(PurpleMedia *media, PidginMedia *gtkmedia, const gchar *si
 	if (gtkmedia->priv->send_widget == NULL
 			&& type & (PURPLE_MEDIA_SEND_VIDEO |
 			PURPLE_MEDIA_SEND_AUDIO)) {
-		send_widget = gtk_vbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		send_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
 		gtk_box_pack_start(GTK_BOX(gtkmedia->priv->display),
 				send_widget, FALSE, TRUE, 0);
-		button_widget = gtk_hbox_new(FALSE, PIDGIN_HIG_BOX_SPACE);
+		button_widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BOX_SPACE);
 		gtk_box_pack_end(GTK_BOX(recv_widget), button_widget,
 				FALSE, TRUE, 0);
 		gtk_widget_show(send_widget);
