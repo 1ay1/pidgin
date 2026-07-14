@@ -6051,6 +6051,13 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 
 	/* everything else column */
 	gtkblist->text_column = gtk_tree_view_column_new ();
+	/* GTK3: the default GROW_ONLY sizing makes the column request its full
+	 * content width and never shrink, which pins the window's minimum width to
+	 * the widest row and prevents horizontal resizing. Use FIXED sizing with
+	 * expand so the column fills available space and the ellipsizing text
+	 * renderer can truncate, letting the window shrink freely. */
+	gtk_tree_view_column_set_sizing(gtkblist->text_column, GTK_TREE_VIEW_COLUMN_FIXED);
+	gtk_tree_view_column_set_expand(gtkblist->text_column, TRUE);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(gtkblist->treeview), gtkblist->text_column);
 	pidgin_blist_build_layout(list);
 
