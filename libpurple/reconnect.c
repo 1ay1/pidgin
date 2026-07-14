@@ -86,29 +86,52 @@ clear_pending(PurpleReconnectData *rd)
 }
 
 /*
- * Compute the delay before the Nth (1-based) attempt:
- *   min(initial * 2^(N-1), max) plus up to ~25% random jitter.
- * Jitter de-synchronises many accounts that dropped together (e.g. a laptop
- * waking up), avoiding a reconnect thundering herd.
+ * Deterministic base delay before the Nth (1-based) attempt:
+ *   min(initial * 2^(N-1), max).
+ * Kept jitter-free and side-effect-free so it can be unit tested; the live
+ * scheduler layers random jitter on top (see compute_delay).
+ *
+ * Not part of the public API -- exposed with a leading underscore for the
+ * test suite only.
  */
-static guint
-compute_delay(guint attempt)
+guint
+_purple_reconnect_backoff_base(guint attempt, guint initial, guint max)
 {
-	guint64 delay = cfg_initial_delay;
+	guint64 delay;
 	guint shift = attempt > 0 ? attempt - 1 : 0;
-	guint jitter;
+
+	if (initial < 1)
+		initial = 1;
+	if (max < initial)
+		max = initial;
 
 	/* Cap the shift so the doubling can't overflow before the clamp. */
 	if (shift > 20)
 		shift = 20;
-	delay = (guint64)cfg_initial_delay << shift;
+	delay = (guint64)initial << shift;
 
-	if (delay > cfg_max_delay)
-		delay = cfg_max_delay;
+	if (delay > max)
+		delay = max;
+
+	return (guint)delay;
+}
+
+/*
+ * Compute the delay before the Nth (1-based) attempt: the deterministic base
+ * plus up to ~25% random jitter. Jitter de-synchronises many accounts that
+ * dropped together (e.g. a laptop waking up), avoiding a reconnect
+ * thundering herd.
+ */
+static guint
+compute_delay(guint attempt)
+{
+	guint delay = _purple_reconnect_backoff_base(attempt,
+			cfg_initial_delay, cfg_max_delay);
+	guint jitter;
 
 	jitter = (delay / 4) > 0 ? g_random_int_range(0, (gint32)(delay / 4) + 1) : 0;
 
-	return (guint)delay + jitter;
+	return delay + jitter;
 }
 
 static gboolean

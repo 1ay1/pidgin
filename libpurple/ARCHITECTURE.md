@@ -22,9 +22,31 @@ plug in through `*UiOps` vtables; protocols plug in as plugins exposing a
 | Conversations | `conversation.c`                                 | IM and chat sessions (tagged union) |
 | Connections   | `connection.c`, `server.c`                       | Live sessions + `serv_*` dispatch helpers |
 | Protocols     | `prpl.c`, `protocols.c`, `plugin.c`              | Protocol plugin vtable, registry, dispatch |
+| Reconnection  | `reconnect.c`                                    | Core auto-reconnect with exponential backoff |
 | Signals       | `signals.c`, `value.c`                           | Hand-rolled string-keyed signal bus |
 | Async I/O     | `eventloop.c`, `proxy.c`, `dnsquery.c`, `dnssrv.c` | fd-watch callbacks over a pluggable event loop |
 | Media         | `media*.c`, `media/`                             | GStreamer voice/video (GObject-based) |
+
+## Automatic reconnection (new)
+
+Reconnection used to live in a separate "autorecon" UI plugin, so every
+embedder shipped its own recovery logic with no shared backoff policy.
+`reconnect.{c,h}` builds it into the core, entirely signal-driven:
+
+- On a **non-fatal** `connection-error` it schedules a reconnect with capped
+  exponential backoff: `delay = min(initial * 2^(n-1), max)` plus ~25% jitter
+  (to avoid a thundering herd when many accounts drop together). **Fatal**
+  errors (bad password, banned, name-in-use) are never retried, gated on
+  `purple_connection_error_is_fatal()`.
+- Reconnection is **suspended while the network is down** and resumes on the
+  next `network-configuration-changed`; a successful `signed-on` resets the
+  backoff; `account-removed`/`account-disabled` cancel and clear state.
+- Policy/query API: `purple_reconnect_set_enabled` / `set_backoff` /
+  `get_delay` / `get_attempts` / `cancel_account`. Defaults: 8s..8m,
+  unlimited attempts, enabled.
+
+The pure backoff calculation (`_purple_reconnect_backoff_base`) is factored
+out jitter-free and covered by `tests/test_reconnect.c`.
 
 ## The protocol subsystem (modernized)
 
