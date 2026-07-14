@@ -178,12 +178,40 @@ make_gtkrc_string(void)
 			if (pref && *pref) {
 				/* font_prefs paths carry a widget name in the basename
 				 * (e.g. "pidgin_conv_entry"). In GTK3 CSS a named widget is
-				 * selected with "#name" and the font set via the shorthand
-				 * "font" property. */
+				 * selected with "#name". The stored value is a Pango font
+				 * string ("Sans Bold 12"); GTK3 CSS rejects the Pango "font:"
+				 * shorthand, so decompose it into font-family/size/weight/style. */
+				PangoFontDescription *desc = pango_font_description_from_string(pref);
+				PangoFontMask mask = pango_font_description_get_set_fields(desc);
+
 				prefbase = g_path_get_basename(font_prefs[i]);
-				g_string_append_printf(style_string,
-				                       "#%s {\n\tfont: %s;\n}\n",
-			                       prefbase, pref);
+				g_string_append_printf(style_string, "#%s {\n", prefbase);
+
+				if (mask & PANGO_FONT_MASK_FAMILY) {
+					g_string_append_printf(style_string,
+						"\tfont-family: \"%s\";\n",
+						pango_font_description_get_family(desc));
+				}
+				if (mask & PANGO_FONT_MASK_SIZE) {
+					gint sz = pango_font_description_get_size(desc);
+					if (pango_font_description_get_size_is_absolute(desc))
+						g_string_append_printf(style_string,
+							"\tfont-size: %dpx;\n", sz / PANGO_SCALE);
+					else
+						g_string_append_printf(style_string,
+							"\tfont-size: %dpt;\n", sz / PANGO_SCALE);
+				}
+				if ((mask & PANGO_FONT_MASK_WEIGHT) &&
+						pango_font_description_get_weight(desc) >= PANGO_WEIGHT_BOLD) {
+					g_string_append(style_string, "\tfont-weight: bold;\n");
+				}
+				if ((mask & PANGO_FONT_MASK_STYLE) &&
+						pango_font_description_get_style(desc) != PANGO_STYLE_NORMAL) {
+					g_string_append(style_string, "\tfont-style: italic;\n");
+				}
+
+				g_string_append(style_string, "}\n");
+				pango_font_description_free(desc);
 				g_free(prefbase);
 			}
 		}
