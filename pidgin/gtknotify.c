@@ -534,11 +534,11 @@ pidgin_notify_message(PurpleNotifyMsgType type, const char *title,
 	gtk_container_set_border_width(GTK_CONTAINER(dialog), PIDGIN_HIG_BORDER);
 	gtk_window_set_resizable(GTK_WINDOW(dialog), FALSE);
 	/* set_has_separator removed */;
-	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
-	gtk_container_set_border_width(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BOX_SPACE);
+	gtk_box_set_spacing(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), PIDGIN_HIG_BORDER);
+	gtk_container_set_border_width(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), PIDGIN_HIG_BOX_SPACE);
 
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), hbox);
 
 	if (img != NULL)
 		gtk_box_pack_start(GTK_BOX(hbox), img, FALSE, FALSE, 0);
@@ -849,7 +849,7 @@ pidgin_notify_formatted(const char *title, const char *primary,
 					 G_CALLBACK(formatted_close_cb), NULL);
 
 	/* Setup the main vbox */
-	vbox = GTK_DIALOG(window)->vbox;
+	vbox = gtk_dialog_get_content_area(GTK_DIALOG(window));
 
 	/* Setup the descriptive label */
 	primary_esc = g_markup_escape_text(primary, -1);
@@ -1001,7 +1001,7 @@ pidgin_notify_searchresults(PurpleConnection *gc, const char *title,
 							 G_CALLBACK(searchresults_close_cb), data);
 
 	/* Setup the main vbox */
-	vbox = GTK_DIALOG(window)->vbox;
+	vbox = gtk_dialog_get_content_area(GTK_DIALOG(window));
 
 	/* Setup the descriptive label */
 	primary_esc = (primary != NULL) ? g_markup_escape_text(primary, -1) : NULL;
@@ -1584,12 +1584,12 @@ pidgin_create_notification_dialog(PidginNotifyType type)
 
 	/* Setup the dialog */
 	gtk_container_set_border_width(GTK_CONTAINER(dialog), PIDGIN_HIG_BOX_SPACE);
-	gtk_container_set_border_width(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BOX_SPACE);
+	gtk_container_set_border_width(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), PIDGIN_HIG_BOX_SPACE);
 	/* set_has_separator removed */;
-	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), PIDGIN_HIG_BORDER);
+	gtk_box_set_spacing(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), PIDGIN_HIG_BORDER);
 
 	/* Vertical box */
-	vbox = GTK_DIALOG(dialog)->vbox;
+	vbox = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
 	/* Golden ratio it up! */
 	gtk_widget_set_size_request(dialog, 550, 400);

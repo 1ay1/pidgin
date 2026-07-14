@@ -213,25 +213,32 @@ pidgin_prefs_labeled_password(GtkWidget *page, const gchar *title,
 static void
 dropdown_set(GObject *w, const char *key)
 {
-	const char *str_value;
-	int int_value;
+	GtkComboBox *combo_box = GTK_COMBO_BOX(w);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 	PurplePrefType type;
 
+	if (!gtk_combo_box_get_active_iter(combo_box, &iter))
+		return;
+
+	model = gtk_combo_box_get_model(combo_box);
 	type = GPOINTER_TO_INT(g_object_get_data(w, "type"));
 
 	if (type == PURPLE_PREF_INT) {
-		int_value = GPOINTER_TO_INT(g_object_get_data(w, "value"));
-
+		int int_value = 0;
+		gtk_tree_model_get(model, &iter, 1, &int_value, -1);
 		purple_prefs_set_int(key, int_value);
 	}
 	else if (type == PURPLE_PREF_STRING) {
-		str_value = (const char *)g_object_get_data(w, "value");
-
+		char *str_value = NULL;
+		gtk_tree_model_get(model, &iter, 2, &str_value, -1);
 		purple_prefs_set_string(key, str_value);
+		g_free(str_value);
 	}
 	else if (type == PURPLE_PREF_BOOLEAN) {
-		purple_prefs_set_bool(key,
-				GPOINTER_TO_INT(g_object_get_data(w, "value")));
+		int int_value = 0;
+		gtk_tree_model_get(model, &iter, 1, &int_value, -1);
+		purple_prefs_set_bool(key, int_value);
 	}
 }
 
@@ -239,9 +246,12 @@ GtkWidget *
 pidgin_prefs_dropdown_from_list(GtkWidget *box, const gchar *title,
 		PurplePrefType type, const char *key, GList *menuitems)
 {
-	GtkWidget  *dropdown, *opt, *menu;
+	GtkWidget  *dropdown;
 	GtkWidget  *label = NULL;
 	gchar      *text;
+	GtkListStore *store;
+	GtkTreeIter iter;
+	GtkCellRenderer *renderer;
 	const char *stored_str = NULL;
 	int         stored_int = 0;
 	int         int_value  = 0;
@@ -250,8 +260,17 @@ pidgin_prefs_dropdown_from_list(GtkWidget *box, const gchar *title,
 
 	g_return_val_if_fail(menuitems != NULL, NULL);
 
-	dropdown = gtk_option_menu_new();
-	menu = gtk_menu_new();
+	/* Model columns: 0 = label, 1 = int value, 2 = string value */
+	store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING);
+	dropdown = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+	g_object_unref(store);
+
+	renderer = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(dropdown), renderer, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(dropdown), renderer,
+	                               "text", 0, NULL);
+
+	g_object_set_data(G_OBJECT(dropdown), "type", GINT_TO_POINTER(type));
 
 	if (type == PURPLE_PREF_INT)
 		stored_int = purple_prefs_get_int(key);
@@ -262,30 +281,21 @@ pidgin_prefs_dropdown_from_list(GtkWidget *box, const gchar *title,
 		menuitems = g_list_next(menuitems);
 		g_return_val_if_fail(menuitems != NULL, NULL);
 
-		opt = gtk_menu_item_new_with_label(_(text));
-
-		g_object_set_data(G_OBJECT(opt), "type", GINT_TO_POINTER(type));
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, 0, _(text), -1);
 
 		if (type == PURPLE_PREF_INT) {
 			int_value = GPOINTER_TO_INT(menuitems->data);
-			g_object_set_data(G_OBJECT(opt), "value",
-							  GINT_TO_POINTER(int_value));
+			gtk_list_store_set(store, &iter, 1, int_value, -1);
 		}
 		else if (type == PURPLE_PREF_STRING) {
 			str_value = (const char *)menuitems->data;
-
-			g_object_set_data(G_OBJECT(opt), "value", (char *)str_value);
+			gtk_list_store_set(store, &iter, 2, str_value, -1);
 		}
 		else if (type == PURPLE_PREF_BOOLEAN) {
-			g_object_set_data(G_OBJECT(opt), "value",
-					menuitems->data);
+			gtk_list_store_set(store, &iter, 1,
+				GPOINTER_TO_INT(menuitems->data), -1);
 		}
-
-		g_signal_connect(G_OBJECT(opt), "activate",
-						 G_CALLBACK(dropdown_set), (char *)key);
-
-		gtk_widget_show(opt);
-		gtk_menu_shell_append(GTK_MENU_SHELL(menu), opt);
 
 		if ((type == PURPLE_PREF_INT && stored_int == int_value) ||
 			(type == PURPLE_PREF_STRING && stored_str != NULL &&
@@ -293,7 +303,7 @@ pidgin_prefs_dropdown_from_list(GtkWidget *box, const gchar *title,
 			(type == PURPLE_PREF_BOOLEAN &&
 			 (purple_prefs_get_bool(key) == GPOINTER_TO_INT(menuitems->data)))) {
 
-			gtk_menu_set_active(GTK_MENU(menu), o);
+			gtk_combo_box_set_active(GTK_COMBO_BOX(dropdown), o);
 		}
 
 		menuitems = g_list_next(menuitems);
@@ -301,7 +311,8 @@ pidgin_prefs_dropdown_from_list(GtkWidget *box, const gchar *title,
 		o++;
 	}
 
-	gtk_option_menu_set_menu(GTK_OPTION_MENU(dropdown), menu);
+	g_signal_connect(G_OBJECT(dropdown), "changed",
+	                 G_CALLBACK(dropdown_set), (char *)key);
 
 	pidgin_add_widget_to_vbox(GTK_BOX(box), title, NULL, dropdown, FALSE, &label);
 
@@ -860,9 +871,9 @@ static void
 theme_dnd_recv(GtkWidget *widget, GdkDragContext *dc, guint x, guint y,
 		GtkSelectionData *sd, guint info, guint t, gpointer user_data)
 {
-	gchar *name = g_strchomp((gchar *)sd->data);
+	gchar *name = g_strchomp((gchar *)gtk_selection_data_get_data(sd));
 
-	if ((sd->length >= 0) && (sd->format == 8)) {
+	if ((gtk_selection_data_get_length(sd) >= 0) && (gtk_selection_data_get_format(sd) == 8)) {
 		/* Well, it looks like the drag event was cool.
 		 * Let's do something with it */
 		gchar *temp;
@@ -2586,12 +2597,17 @@ sound_page(void)
 
 	/* The following is an ugly hack to make the frame expand so the
 	 * sound events list is big enough to be usable */
-	gtk_box_set_child_packing(GTK_BOX(vbox->parent), vbox, TRUE, TRUE, 0,
-			GTK_PACK_START);
-	gtk_box_set_child_packing(GTK_BOX(vbox->parent->parent), vbox->parent, TRUE,
-			TRUE, 0, GTK_PACK_START);
-	gtk_box_set_child_packing(GTK_BOX(vbox->parent->parent->parent),
-			vbox->parent->parent, TRUE, TRUE, 0, GTK_PACK_START);
+	{
+		GtkWidget *vbox_parent = gtk_widget_get_parent(vbox);
+		GtkWidget *vbox_parent2 = gtk_widget_get_parent(vbox_parent);
+		GtkWidget *vbox_parent3 = gtk_widget_get_parent(vbox_parent2);
+		gtk_box_set_child_packing(GTK_BOX(vbox_parent), vbox, TRUE, TRUE, 0,
+				GTK_PACK_START);
+		gtk_box_set_child_packing(GTK_BOX(vbox_parent2), vbox_parent, TRUE,
+				TRUE, 0, GTK_PACK_START);
+		gtk_box_set_child_packing(GTK_BOX(vbox_parent3),
+				vbox_parent2, TRUE, TRUE, 0, GTK_PACK_START);
+	}
 
 	/* SOUND SELECTION */
 	event_store = gtk_list_store_new (4, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_UINT);

@@ -400,7 +400,7 @@ pidgin_smiley_edit(GtkWidget *widget, PurpleSmiley *smiley)
 
 	window = gtk_dialog_new_with_buttons(smiley ? _("Edit Smiley") : _("Add Smiley"),
 			widget ? GTK_WINDOW(widget) : NULL,
-			GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
+			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			smiley ? GTK_STOCK_SAVE : GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT,
 			NULL);
@@ -415,12 +415,12 @@ pidgin_smiley_edit(GtkWidget *widget, PurpleSmiley *smiley)
 
 	/* The vbox */
 	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(window)->vbox), vbox);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(window))), vbox);
 	gtk_widget_show(vbox);
 
 	/* The hbox */
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
-	gtk_container_add(GTK_CONTAINER(GTK_VBOX(vbox)), hbox);
+	gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
 	label = gtk_label_new_with_mnemonic(_("_Image:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -450,7 +450,7 @@ pidgin_smiley_edit(GtkWidget *widget, PurpleSmiley *smiley)
 
 	/* info */
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PIDGIN_HIG_BORDER);
-	gtk_container_add(GTK_CONTAINER(GTK_VBOX(vbox)),hbox);
+	gtk_container_add(GTK_CONTAINER(vbox),hbox);
 
 	/* Shortcut text */
 	label = gtk_label_new_with_mnemonic(_("S_hortcut text:"));
@@ -725,9 +725,9 @@ smiley_dnd_recv(GtkWidget *widget, GdkDragContext *dc, guint x, guint y,
 		GtkSelectionData *sd, guint info, guint t, gpointer user_data)
 {
 	SmileyManager *dialog = user_data;
-	gchar *name = g_strchomp((gchar *)sd->data);
+	gchar *name = g_strchomp((gchar *)gtk_selection_data_get_data(sd));
 
-	if ((sd->length >= 0) && (sd->format == 8)) {
+	if ((gtk_selection_data_get_length(sd) >= 0) && (gtk_selection_data_get_format(sd) == 8)) {
 		/* Well, it looks like the drag event was cool.
 		 * Let's do something with it */
 
@@ -883,7 +883,7 @@ void pidgin_smiley_manager_show(void)
 
 	/* The vbox */
 	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BORDER);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(win)->vbox), vbox);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(win))), vbox);
 	gtk_widget_show(vbox);
 
 	/* get the scrolled window with all stuff */
