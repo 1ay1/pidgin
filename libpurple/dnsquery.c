@@ -41,7 +41,23 @@
 
 #define MAX_ADDR_RESPONSE_LEN 1048576
 
-#if (defined(__APPLE__) || defined (__unix__)) && !defined(__osf__)
+/*
+ * DNS resolution strategy selection.
+ *
+ * Historically Unix/Apple defaulted to PURPLE_DNSQUERY_USE_FORK, which
+ * fork()s a dedicated resolver child per lookup and shuttles the request /
+ * result over a pipe() pair -- heavyweight and fiddly (SIGCHLD reaping,
+ * process pools, EINTR loops).
+ *
+ * When getaddrinfo() is available (effectively everywhere modern), we instead
+ * run the blocking lookup on a short-lived GLib worker thread -- the same,
+ * simpler, portable mechanism the Windows build has always used. This is the
+ * PURPLE_DNSQUERY_USE_THREAD strategy. fork() remains only as a fallback for
+ * the rare platform that has neither threads-with-getaddrinfo nor Win32.
+ */
+#if defined(HAVE_GETADDRINFO) && !defined(_WIN32) && !defined(PURPLE_DNSQUERY_FORCE_FORK)
+#define PURPLE_DNSQUERY_USE_THREAD
+#elif (defined(__APPLE__) || defined (__unix__)) && !defined(__osf__)
 #define PURPLE_DNSQUERY_USE_FORK
 #endif
 /**************************************************************************
@@ -62,7 +78,7 @@ struct _PurpleDnsQueryData {
 
 #if defined(PURPLE_DNSQUERY_USE_FORK)
 	PurpleDnsQueryResolverProcess *resolver;
-#elif defined _WIN32 /* end PURPLE_DNSQUERY_USE_FORK  */
+#elif defined(_WIN32) || defined(PURPLE_DNSQUERY_USE_THREAD)
 	GThread *resolver;
 	GSList *hosts;
 	gchar *error_message;
@@ -701,10 +717,13 @@ resolve_host(PurpleDnsQueryData *query_data)
 	handle_next_queued_request();
 }
 
-#elif defined _WIN32 /* end PURPLE_DNSQUERY_USE_FORK  */
+#elif defined(_WIN32) || defined(PURPLE_DNSQUERY_USE_THREAD) /* end PURPLE_DNSQUERY_USE_FORK  */
 
 /*
- * Windows!
+ * Thread-based resolver: run getaddrinfo() on a short-lived GLib worker
+ * thread and hand the result back to the main thread. Used on Windows and,
+ * since it is simpler and lighter than fork()+pipe(), as the default on any
+ * platform with getaddrinfo().
  */
 
 static gboolean
@@ -713,7 +732,10 @@ dns_main_thread_cb(gpointer data)
 	PurpleDnsQueryData *query_data = data;
 
 	/* We're done, so purple_dnsquery_destroy() shouldn't think it is canceling an in-progress lookup */
-	query_data->resolver = NULL;
+	if (query_data->resolver != NULL) {
+		g_thread_unref(query_data->resolver);
+		query_data->resolver = NULL;
+	}
 
 	if (query_data->error_message != NULL)
 		purple_dnsquery_failed(query_data, query_data->error_message);
@@ -820,8 +842,8 @@ resolve_host(PurpleDnsQueryData *query_data)
 	 * Spin off a separate thread to perform the DNS lookup so
 	 * that we don't block the UI.
 	 */
-	query_data->resolver = g_thread_create(dns_thread,
-			query_data, FALSE, &err);
+	query_data->resolver = g_thread_try_new("purple-dnsquery",
+			dns_thread, query_data, &err);
 	if (query_data->resolver == NULL)
 	{
 		char message[1024];
@@ -832,7 +854,7 @@ resolve_host(PurpleDnsQueryData *query_data)
 	}
 }
 
-#else /* not PURPLE_DNSQUERY_USE_FORK or _WIN32 */
+#else /* not PURPLE_DNSQUERY_USE_FORK or _WIN32 or _THREAD */
 
 /*
  * We weren't able to do anything fancier above, so use the
@@ -881,7 +903,7 @@ resolve_host(PurpleDnsQueryData *query_data)
 	purple_dnsquery_resolved(query_data, hosts);
 }
 
-#endif /* not PURPLE_DNSQUERY_USE_FORK or _WIN32 */
+#endif /* not PURPLE_DNSQUERY_USE_FORK or _WIN32 or _THREAD */
 
 static gboolean
 initiate_resolving(gpointer data)
@@ -973,13 +995,13 @@ purple_dnsquery_destroy(PurpleDnsQueryData *query_data)
 		 * have more stuff to resolve.
 		 */
 		purple_dnsquery_resolver_destroy(query_data->resolver);
-#elif defined _WIN32 /* end PURPLE_DNSQUERY_USE_FORK */
+#elif defined(_WIN32) || defined(PURPLE_DNSQUERY_USE_THREAD) /* end PURPLE_DNSQUERY_USE_FORK */
 	if (query_data->resolver != NULL)
 	{
 		/*
 		 * It's not really possible to kill a thread.  So instead we
 		 * just set the callback to NULL and let the DNS lookup
-		 * finish.
+		 * finish.  dns_main_thread_cb() will unref the GThread.
 		 */
 		query_data->callback = NULL;
 		return;
