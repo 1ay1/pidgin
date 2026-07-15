@@ -4969,7 +4969,27 @@ gtk_blist_window_key_press_cb(GtkWidget *w, GdkEventKey *event, PidginBuddyList 
 	/* clear any tooltips */
 	pidgin_blist_tooltip_destroy();
 
+	/* Single-window (docked) mode: the conversation content is hosted inside
+	 * this buddy list toplevel, so conversation tab shortcuts (Ctrl+Tab,
+	 * Ctrl+PgUp/PgDn, Ctrl+[ / ], Alt+1..9, F6, ...) arrive here first. Hand
+	 * them to the docked conversation's shortcut handler BEFORE GTK's default
+	 * focus navigation runs -- otherwise Ctrl+Tab just walks focus through the
+	 * buddy list widgets instead of switching the conversation tab. If it
+	 * consumes the event we stop here so the two windows' key handling is
+	 * unified: one press == one tab switch, wherever focus happens to be.
+	 *
+	 * Guard: don't hijack a plain Tab (no Ctrl/Alt) while the user is typing
+	 * in an entry / imhtml -- that must still do normal text-field navigation
+	 * and autocomplete (handled by the widget-local handlers below). Only the
+	 * Ctrl/Alt-modified shortcuts are forwarded unconditionally. */
 	widget = gtk_window_get_focus(GTK_WINDOW(gtkblist->window));
+	{
+		gboolean typing_field = (GTK_IS_IMHTML(widget) || GTK_IS_ENTRY(widget));
+		gboolean modified = (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) != 0;
+		if ((modified || !typing_field) &&
+		    pidgin_conv_docked_dispatch_key(event))
+			return TRUE;
+	}
 
 	if (GTK_IS_IMHTML(widget) || GTK_IS_ENTRY(widget)) {
 		if (gtk_bindings_activate(G_OBJECT(widget), event->keyval, event->state))

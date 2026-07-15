@@ -314,6 +314,19 @@ void pidgin_conversations_uninit(void);
 gboolean pidgin_conv_single_window_enabled(void);
 
 /**
+ * Single-window (docked) mode: forward a key event to the active docked
+ * conversation's tab-switch/shortcut handler. Called by the buddy list
+ * toplevel key handler so conversation tab shortcuts (Ctrl+Tab, Ctrl+PgUp/Dn,
+ * Alt+1..9, etc.) work identically whether focus is in the buddy list or the
+ * docked conversation, instead of GTK's default focus navigation eating them.
+ *
+ * @param event The key event received by the buddy list toplevel.
+ * @return TRUE if the event was consumed (a tab shortcut fired); FALSE if it
+ *         should be handled normally.
+ */
+gboolean pidgin_conv_docked_dispatch_key(GdkEventKey *event);
+
+/**
  * Returns the conversation content box if it is currently docked inside
  * @dock, else NULL. Used during buddy list teardown in single-window mode to
  * detach the shared conversation content before the blist window is destroyed.

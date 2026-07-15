@@ -10241,6 +10241,43 @@ pidgin_conv_single_window_enabled(void)
 }
 
 /*
+ * Single-window (docked) mode key unification.
+ *
+ * In docked mode the conversation content lives inside the buddy list
+ * toplevel, so the conversation window's own key handler (connected to
+ * win->window / win->notebook) is only reached AFTER GTK's default keyboard
+ * focus-navigation on the blist toplevel has already had a crack at the event.
+ * That is why Ctrl+Tab appeared to "walk the buddy list first": GTK was using
+ * it to move focus rather than switching conversation tabs.
+ *
+ * The buddy list toplevel key handler calls this early. We forward the event
+ * to conv_keypress_common() on the active docked conversation, which owns all
+ * the tab-switch / tab-reorder / unread-cycle shortcuts (Ctrl+Tab,
+ * Ctrl+Shift+Tab, Ctrl+PgUp/PgDn, Ctrl+[ / ], Ctrl+, / ., Alt+1..9, F6).
+ * Returning TRUE stops the blist toplevel (and GTK's focus-nav) from also
+ * acting on the same keystroke, so the two windows' events are unified: one
+ * press == one tab switch, regardless of where focus currently sits.
+ */
+gboolean
+pidgin_conv_docked_dispatch_key(GdkEventKey *event)
+{
+	PidginConversation *gtkconv;
+
+	if (event == NULL)
+		return FALSE;
+	if (!pidgin_conv_single_window_enabled())
+		return FALSE;
+	if (docked_convwin == NULL)
+		return FALSE;
+
+	gtkconv = pidgin_conv_window_get_active_gtkconv(docked_convwin);
+	if (gtkconv == NULL)
+		return FALSE;
+
+	return conv_keypress_common(gtkconv, event);
+}
+
+/*
  * Return the conversation content box if it is currently docked inside the
  * given dock container, else NULL. Used by the buddy list teardown to detach
  * it before the blist window is destroyed.
