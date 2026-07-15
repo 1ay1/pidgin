@@ -358,6 +358,9 @@ acp_on_new_session(AcpData *d, JsonObject *result, JsonObject *error)
 	g_free(d->session_id);
 	d->session_id = g_strdup(json_object_get_string_member(result, "sessionId"));
 
+	/* Label our own outgoing lines "You" rather than the account name. */
+	purple_connection_set_display_name(d->gc, _("You"));
+
 	purple_connection_set_state(d->gc, PURPLE_CONNECTED);
 	acp_bring_online(d);
 }
@@ -1002,7 +1005,7 @@ acp_actions(PurplePlugin *plugin, gpointer context)
 
 static PurplePluginProtocolInfo prpl_info =
 {
-	OPT_PROTO_NO_PASSWORD | OPT_PROTO_IM_IMAGE,  /* options */
+	OPT_PROTO_NO_PASSWORD,                /* options */
 	NULL,                                /* user_splits */
 	NULL,                                /* protocol_options (set in init) */
 	NO_BUDDY_ICONS,                      /* icon_spec */
