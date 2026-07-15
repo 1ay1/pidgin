@@ -9594,6 +9594,24 @@ pidgin_conv_window_new()
 	/* Create the notebook. */
 	win->notebook = gtk_notebook_new();
 
+	/* GTK3: GtkNotebook installs class keybindings for <Control>Tab and
+	 * <Control><Shift>Tab ("move focus to the next/prev tab group"). Those
+	 * fire during key delivery to the focused child and swallow the event
+	 * before it can bubble up to our window/entry key handlers, so Pidgin's
+	 * own Ctrl+Tab "switch conversation tab" never runs. Remove those entries
+	 * from the GtkNotebook class binding set once so the events propagate. */
+	{
+		static gboolean unbound = FALSE;
+		if (!unbound) {
+			GtkBindingSet *bs = gtk_binding_set_by_class(
+				GTK_NOTEBOOK_GET_CLASS(win->notebook));
+			gtk_binding_entry_remove(bs, GDK_KEY_Tab, GDK_CONTROL_MASK);
+			gtk_binding_entry_remove(bs, GDK_KEY_ISO_Left_Tab,
+				GDK_CONTROL_MASK | GDK_SHIFT_MASK);
+			unbound = TRUE;
+		}
+	}
+
 	pos = purple_prefs_get_int(PIDGIN_PREFS_ROOT "/conversations/tab_side");
 
 #if 0
