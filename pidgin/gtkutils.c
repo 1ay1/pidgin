@@ -797,70 +797,55 @@ pidgin_pixbuf_button_from_stock(const char *text, const char *icon,
 
 
 /*
- * GTK3-idiomatic replacement for the deprecated GtkImageMenuItem.
+ * Menu item with a leading icon column, the GTK2 GtkImageMenuItem way.
  *
- * GtkImageMenuItem was deprecated in GTK+ 3.10 because the GNOME HIG moved
- * away from icons in menus, but Pidgin's menus (tray, right-click context
- * menus, buddy-list actions) still want them.  Build a plain GtkMenuItem
- * whose child is an hbox holding the image in a fixed-width gutter plus a
- * mnemonic GtkAccelLabel -- exactly the internal layout GtkImageMenuItem
- * used, minus the deprecated widget.
+ * GtkImageMenuItem was deprecated in GTK+ 3.10 (the GNOME HIG moved away from
+ * icons in menus), but Pidgin's menus -- and, crucially, the system-tray menu
+ * exported to an AppIndicator / StatusNotifierItem host over dbusmenu -- still
+ * want them. We deliberately keep using GtkImageMenuItem here (guarded with
+ * deprecation-ignore pragmas) rather than a hand-built GtkMenuItem + GtkBox,
+ * because:
+ *
+ *  - It reserves the same automatic toggle-size icon gutter GTK reserves for
+ *    check/radio items, so image items and check items line up in one column
+ *    exactly like GTK2 -- no manual gutter box needed.
+ *
+ *  - dbusmenu-gtk3 (the AppIndicator/SNI menu serializer) only exports a menu
+ *    icon when it can find a GtkImage AND should_show_image() approves it.
+ *    should_show_image() returns TRUE only for a GtkImageMenuItem whose
+ *    "always-show-image" is set; a plain GtkMenuItem with a packed GtkImage
+ *    child is silently dropped, so the tray menu's whole icon column vanishes.
+ *    Setting always-show-image on a real GtkImageMenuItem is what makes the
+ *    tray icons appear.
  *
  * @param label     Label text (mnemonic if @a mnemonic is TRUE).
  * @param image      A GtkImage to show in the gutter (may be NULL).
  * @param mnemonic   Whether underscores in @a label mark a mnemonic.
- * @return           A realized (but not shown) GtkMenuItem.
+ * @return           A realized (but not shown) menu item.
  */
 GtkWidget *
 pidgin_image_menu_item_new(const char *label, GtkWidget *image, gboolean mnemonic)
 {
 	GtkWidget *menuitem;
-	GtkWidget *box;
-	GtkWidget *gutter;
-	GtkWidget *accel_label;
 
-	/* Fixed pixel width of the leading icon column. Matches the extra-small
-	 * (16px) icon size Pidgin uses for menu icons; every item reserves this
-	 * gutter -- even icon-less ones -- so labels line up in one shared column
-	 * and the icons that ARE present sit in a consistent left column, the way
-	 * the old GtkImageMenuItem toggle-size gutter used to guarantee. */
-#define PIDGIN_MENU_ICON_GUTTER 16
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+	if (mnemonic)
+		menuitem = gtk_image_menu_item_new_with_mnemonic(label ? label : "");
+	else
+		menuitem = gtk_image_menu_item_new_with_label(label ? label : "");
 
-	menuitem = gtk_menu_item_new();
-
-	box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-
-	/* Reserve a consistent gutter for the icon so that menus mixing image
-	 * items with check/radio items (e.g. the tray menu: "New Message" vs.
-	 * "Show Buddy List") keep their labels in one shared column, matching
-	 * the toggle gutter GTK reserves for the check items. The gutter is a
-	 * fixed-width slot; the icon (if any) is centered inside it, so all
-	 * icons in a menu align in the same column regardless of their natural
-	 * width and icon-less items still indent their label to match. */
-	gutter = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-	gtk_widget_set_size_request(gutter, PIDGIN_MENU_ICON_GUTTER, -1);
 	if (image != NULL) {
-		gtk_widget_set_halign(image, GTK_ALIGN_CENTER);
-		gtk_widget_set_valign(image, GTK_ALIGN_CENTER);
-		gtk_box_pack_start(GTK_BOX(gutter), image, TRUE, TRUE, 0);
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
 		gtk_widget_show(image);
 	}
-	gtk_box_pack_start(GTK_BOX(box), gutter, FALSE, FALSE, 0);
-	gtk_widget_show(gutter);
 
-	accel_label = gtk_accel_label_new(label ? label : "");
-	gtk_label_set_use_underline(GTK_LABEL(accel_label), mnemonic);
-	gtk_label_set_xalign(GTK_LABEL(accel_label), 0.0);
-	gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(accel_label), menuitem);
-	if (mnemonic)
-		gtk_label_set_mnemonic_widget(GTK_LABEL(accel_label), menuitem);
-	gtk_box_pack_start(GTK_BOX(box), accel_label, TRUE, TRUE, 0);
-	gtk_widget_show(accel_label);
+	/* Force the icon to show even when the desktop's "gtk-menu-images" setting
+	 * is off. This both restores GTK2 behaviour in-process and is the flag
+	 * dbusmenu's should_show_image() checks before exporting the icon to an
+	 * AppIndicator/SNI tray host. */
+	gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menuitem), TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
-	gtk_container_add(GTK_CONTAINER(menuitem), box);
-	gtk_widget_show(box);
-
-#undef PIDGIN_MENU_ICON_GUTTER
 	return menuitem;
 }
 
