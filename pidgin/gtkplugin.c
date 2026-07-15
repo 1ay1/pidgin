@@ -36,6 +36,7 @@
 #include <string.h>
 
 #define PIDGIN_RESPONSE_CONFIGURE 98121
+#define PIDGIN_RESPONSE_REFRESH   98122
 
 static void plugin_toggled_stage_two(PurplePlugin *plug, GtkTreeModel *model,
                                   GtkTreeIter *iter, gboolean unload);
@@ -537,6 +538,15 @@ static void plugin_dialog_response_cb(GtkWidget *d, int response, GtkTreeSelecti
 		gtk_widget_show_all(dialog);
 		g_value_unset(&val);
 		break;
+	case PIDGIN_RESPONSE_REFRESH:
+	{
+		GtkListStore *ls = g_object_get_data(G_OBJECT(d), "pidgin-plugin-store");
+		if (ls != NULL) {
+			update_plugin_list(ls);
+			gtk_widget_set_sensitive(pref_button, FALSE);
+		}
+		break;
+	}
 	}
 }
 
@@ -728,7 +738,9 @@ void pidgin_plugin_dialog_show()
 						    0,
 						    NULL);
 	pref_button = gtk_dialog_add_button(GTK_DIALOG(plugin_dialog),
-						_("Configure Pl_ugin"), PIDGIN_RESPONSE_CONFIGURE);
+					_("Configure Pl_ugin"), PIDGIN_RESPONSE_CONFIGURE);
+	gtk_dialog_add_button(GTK_DIALOG(plugin_dialog),
+					_("_Refresh"), PIDGIN_RESPONSE_REFRESH);
 	gtk_dialog_add_button(GTK_DIALOG(plugin_dialog),
 						pidgin_stock_label(GTK_STOCK_CLOSE), GTK_RESPONSE_CLOSE);
 	gtk_widget_set_sensitive(pref_button, FALSE);
@@ -737,6 +749,8 @@ void pidgin_plugin_dialog_show()
 	ls = gtk_list_store_new(5, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(ls),
 					     1, GTK_SORT_ASCENDING);
+
+	g_object_set_data(G_OBJECT(plugin_dialog), "pidgin-plugin-store", ls);
 
 	update_plugin_list(ls);
 
