@@ -27,6 +27,6 @@ option('doc',            type : 'boolean', value : false, description : 'Build D
 option('install-ssl-certs', type : 'boolean', value : true, description : 'Install the bundled CA certificate bundle')
 
 option('protocols',      type : 'array',
-  choices : ['irc', 'jabber', 'simple', 'bonjour', 'null'],
-  value   : ['irc', 'jabber', 'simple', 'bonjour'],
+  choices : ['irc', 'jabber', 'simple', 'bonjour', 'null', 'acp'],
+  value   : ['irc', 'jabber', 'simple', 'bonjour', 'acp'],
   description : 'Protocol plugins to build')

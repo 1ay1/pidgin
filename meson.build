@@ -206,6 +206,10 @@ have_unity = unity_dep.found() and messaging_dep.found()
 evo_dep = dependency('libebook-1.2', required : get_option('evolution'))
 have_evolution = evo_dep.found()
 
+# json-glib (ACP agent plugin: JSON-RPC framing over the agent's stdio)
+json_glib_dep = dependency('json-glib-1.0', required : false)
+have_json_glib = json_glib_dep.found() and have_gtk
+
 # gettext / i18n
 have_nls = get_option('nls')
 if have_nls
