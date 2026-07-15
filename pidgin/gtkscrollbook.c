@@ -194,30 +194,24 @@ pidgin_scroll_book_forall(GtkContainer *container,
 			   GtkCallback callback,
 			   gpointer callback_data)
 {
-#if 0
-	GList *children;
-#endif
 	PidginScrollBook *scroll_book;
 
 	g_return_if_fail(GTK_IS_CONTAINER(container));
 
 	scroll_book = PIDGIN_SCROLL_BOOK(container);
 
-	if (include_internals) {
-		(*callback)(scroll_book->hbox, callback_data);
-		(*callback)(scroll_book->notebook, callback_data);
-	}
-
-#if 0
-	children = scroll_book->children;
-
-	while (children) {
-		GtkWidget *child;
-		child = children->data;
-		children = children->next;
-		(*callback)(child, callback_data);
-	}
-#endif
+	/*
+	 * hbox and notebook are packed into this GtkBox with
+	 * gtk_box_pack_start(), so they are genuine box children -- not
+	 * "internal" widgets. GTK3's default GtkBox size negotiation walks
+	 * forall() to find the children it measures and allocates, so they
+	 * MUST be reported unconditionally. Reporting them only under
+	 * include_internals (as this did under GTK2) made the container
+	 * request ~zero height in GTK3, letting sibling widgets (the status
+	 * box) draw over the collapsed notification area.
+	 */
+	(*callback)(scroll_book->hbox, callback_data);
+	(*callback)(scroll_book->notebook, callback_data);
 }
 
 static void
