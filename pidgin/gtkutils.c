@@ -873,7 +873,20 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
 			}
 		} else {
-			image = gtk_image_new_from_icon_name(resolved, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+			/* Prefer the "-symbolic" variant when the icon theme has one.
+			 * Symbolic menu icons are the freedesktop tray convention (nm-
+			 * applet, blueman, ...), and some SNI tray hosts (waybar's
+			 * dbusmenu-gtk3 menu) render symbolic menu-item icons where they
+			 * drop full-colour ones -- so this is what makes the tray menu's
+			 * icon column actually paint.  In-process menus render either
+			 * flavour identically. */
+			GtkIconSize isz = gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL);
+			char *symbolic = g_strconcat(resolved, "-symbolic", NULL);
+			if (gtk_icon_theme_has_icon(gtk_icon_theme_get_default(), symbolic))
+				image = gtk_image_new_from_icon_name(symbolic, isz);
+			else
+				image = gtk_image_new_from_icon_name(resolved, isz);
+			g_free(symbolic);
 		}
 	}
 
