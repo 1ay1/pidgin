@@ -10032,15 +10032,27 @@ pidgin_conv_window_remove_gtkconv(PidginWindow *win, PidginConversation *gtkconv
 		}
 	}
 
-	if (!win->gtkconvs && win != hidden_convwin)
-		pidgin_conv_window_destroy(win);
-
 	/* Single-window mode: when the shared docked window loses its last
-	 * conversation, bring the pretty "no conversation open" placeholder back. */
+	 * conversation, bring the pretty "no conversation open" placeholder back.
+	 * Do this BEFORE the empty-window teardown below, because that path frees
+	 * `win` (and clears the docked_convwin static), after which `win` is a
+	 * dangling pointer. */
 	if (win == docked_convwin && win->gtkconvs == NULL) {
 		PidginBuddyList *gtkblist = pidgin_blist_get_default_gtk_blist();
 		if (gtkblist != NULL && gtkblist->conv_placeholder != NULL)
 			gtk_widget_show(gtkblist->conv_placeholder);
+	}
+
+	if (!win->gtkconvs && win != hidden_convwin) {
+		/* Tearing down the shared docked window: clear the static pointer
+		 * FIRST so nothing (e.g. a later pidgin_conv_get_docked_window()
+		 * during a single-window mode switch) can dereference the freed
+		 * PidginWindow. Without this, toggling single-window mode off crashed
+		 * with a GTK_IS_BOX assertion when the reparent loop asked the stale
+		 * docked window for its content box. */
+		if (win == docked_convwin)
+			docked_convwin = NULL;
+		pidgin_conv_window_destroy(win);
 	}
 }
 

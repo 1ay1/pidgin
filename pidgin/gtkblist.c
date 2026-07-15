@@ -7882,11 +7882,15 @@ pidgin_blist_single_window_pref_cb(const char *name, PurplePrefType type,
 	was_visible = gtkblist && gtkblist->window &&
 	              gtk_widget_get_visible(gtkblist->window);
 
-	/* Rebuild the buddy list window in the new layout. destroy() sets the
-	 * global gtkblist to NULL and reparents any docked conv content back to
-	 * its own hidden toplevel; show() then builds the paned (or plain) layout
-	 * fresh according to the new pref value. */
+	/* Rebuild the buddy list window in the new layout. destroy() frees the
+	 * PidginBuddyList struct and nulls the global gtkblist, but leaves
+	 * list->ui_data dangling; pidgin_blist_new_list() must run before show()
+	 * to allocate a fresh struct and repoint list->ui_data at it. Without the
+	 * new_list() call, pidgin_blist_show() reads the freed ui_data and crashes
+	 * (SIGSEGV in gtk_item_factory_get_item on a garbage ->ift). This mirrors
+	 * the normal startup order: new_list -> show. */
 	pidgin_blist_destroy(list);
+	pidgin_blist_new_list(list);
 	pidgin_blist_show(list);
 
 	/* Now move existing conversations into or out of the docked window to
