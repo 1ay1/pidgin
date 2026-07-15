@@ -64,18 +64,12 @@ struct _AcpData {
 
 	gchar      *buddy;         /* the agent buddy's name */
 
-	/* ---- streaming render state (see acp_render.c) ------------------- *
-	 * The agent's message text arrives as many small chunks. We buffer the
-	 * raw markdown of the *current, still-incomplete block* and flush whole
-	 * blocks to the conversation as they finalise, so the transcript streams
-	 * yet renders Markdown correctly. */
-	GString    *md_block;      /* raw markdown of the pending line           */
-	gboolean    in_code_fence; /* inside a ``` fenced block                  */
-	gchar      *fence_lang;    /* language tag of the open fence             */
-	GString    *code_buf;      /* accumulates fenced code lines              */
-	gboolean    code_buf_reset;/* clear code_buf on next append              */
-	gboolean    turn_opened;   /* have we written the "agent:" header yet     */
-	gboolean    header_pending;/* need to emit the header before next write   */
+	/* ---- streaming render state ------------------------------------- *
+	 * The agent's message text arrives as many small chunks. The live,
+	 * in-place incremental Markdown renderer (acp_stream.c) owns all of
+	 * that; its private state hangs off this opaque pointer. */
+	void       *stream;        /* AcpStream* (acp_stream.c)                   */
+	gboolean    turn_opened;   /* legacy flag (unused by stream renderer)     */
 
 	GHashTable *tools;         /* toolCallId -> AcpToolCall*                  */
 };
@@ -91,19 +85,25 @@ void  acp_handle_line (AcpData *d, const char *line);
 /* ---- acp_render.c ------------------------------------------------------- */
 /* Write raw HTML into the agent conversation (creating it if needed). */
 void  acp_conv_write_html(AcpData *d, const char *html, PurpleMessageFlags extra);
-/* Feed a chunk of streamed agent message text (markdown). */
-void  acp_stream_message(AcpData *d, const char *text);
-/* Feed streamed "thought" text (rendered dimmed, if enabled). */
-void  acp_stream_thought(AcpData *d, const char *text);
-/* Flush any buffered partial block; call at end of turn. */
-void  acp_stream_flush(AcpData *d);
-/* Reset streaming state at the start of a new turn. */
-void  acp_stream_reset(AcpData *d);
 /* Convert inline markdown (bold/italic/code/links) in one line (caller frees). */
 char *acp_md_inline(const char *text);
 /* Render / update a tool-call card. */
 void  acp_render_tool_call  (AcpData *d, JsonObject *update, gboolean is_update);
 /* Render a plan as a checklist. */
 void  acp_render_plan(AcpData *d, JsonArray *entries);
+
+/* ---- acp_stream.c  (live incremental Markdown renderer) ----------------- */
+/* Feed a chunk of streamed agent message text (markdown). */
+void  acp_stream_message(AcpData *d, const char *text);
+/* Feed streamed "thought" text (rendered dimmed, if enabled). */
+void  acp_stream_thought(AcpData *d, const char *text);
+/* Flush any buffered partial block; call at end of turn / before a card. */
+void  acp_stream_flush(AcpData *d);
+/* Reset streaming state at the start of a new turn. */
+void  acp_stream_reset(AcpData *d);
+/* Commit pending text, then append a pre-rendered HTML card (tool/plan). */
+void  acp_stream_write_card(AcpData *d, const char *html);
+/* Free all streaming state (on connection close). */
+void  acp_stream_free(AcpData *d);
 
 #endif /* PIDGIN_ACP_H */

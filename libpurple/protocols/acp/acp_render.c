@@ -1,17 +1,13 @@
 /*
- * ACP protocol plugin -- Markdown rendering + streaming into the conversation.
+ * ACP protocol plugin -- inline Markdown + tool-call / plan cards.
  *
- * The agent streams Markdown text in small chunks and emits structured
- * tool-call / plan updates. This module turns all of that into a rich, live
- * transcript in the Pidgin conversation window, using the HTML subset that
- * GtkIMHtml understands.
- *
- * Streaming strategy: we buffer the raw markdown of the *current, incomplete
- * block* (a paragraph, list, fenced code block, heading, ...). As soon as a
- * block is finalised (a blank line, or a fence close), we convert that block
- * to HTML and write it to the conversation -- so text appears promptly while
- * still rendering Markdown correctly. The trailing partial block is flushed at
- * end of turn.
+ * The live, in-place streaming Markdown renderer lives in acp_stream.c (it
+ * drives the GtkIMHtml widget directly so text can be revised as it streams).
+ * This file keeps the pieces that do not need in-place revision:
+ *   - acp_md_inline(): inline markdown (bold/italic/code/links/strike),
+ *     shared by the stream renderer and the cards below;
+ *   - tool-call cards and the plan checklist, rendered as cohesive HTML and
+ *     handed to acp_stream_write_card() so they interleave with streamed text.
  *
  * Copyright (C) 2024 Ayush Bhat <tfeayush@gmail.com>
  *
@@ -36,7 +32,7 @@
 #define COL_DEL    "#cc0000"
 
 /* ------------------------------------------------------------------------- *
- *  Conversation plumbing
+ *  Conversation plumbing (message-API fallback, used by headless frontends)
  * ------------------------------------------------------------------------- */
 
 static PurpleConversation *
@@ -52,28 +48,15 @@ acp_get_conv(AcpData *d)
 	return conv;
 }
 
-/* Write an HTML fragment to the agent conversation as an incoming line. We
- * only stamp the "agent:" sender on the first write of a turn; subsequent
- * fragments are written with PURPLE_MESSAGE_RAW so the transcript reads as one
- * continuous streamed reply instead of many "agent:" headers. */
 void
 acp_conv_write_html(AcpData *d, const char *html, PurpleMessageFlags extra)
 {
 	PurpleConversation *conv = acp_get_conv(d);
 	PurpleConvIm *im = purple_conversation_get_im_data(conv);
 
-	if (!d->turn_opened) {
-		/* First fragment of the turn: a normal incoming message so Pidgin
-		 * draws the "agent:" nick + timestamp. */
-		purple_conv_im_write(im, d->buddy, html,
-		                     PURPLE_MESSAGE_RECV | extra, time(NULL));
-		d->turn_opened = TRUE;
-	} else {
-		/* Continuation: raw append, no repeated nick header. */
-		purple_conv_im_write(im, d->buddy, html,
-		                     PURPLE_MESSAGE_RECV | PURPLE_MESSAGE_RAW | extra,
-		                     time(NULL));
-	}
+	purple_conv_im_write(im, d->buddy, html,
+	                     PURPLE_MESSAGE_RECV | PURPLE_MESSAGE_RAW | extra,
+	                     time(NULL));
 }
 
 /* ------------------------------------------------------------------------- *
@@ -181,257 +164,6 @@ acp_md_inline(const char *text)
 }
 
 /* ------------------------------------------------------------------------- *
- *  Block markdown: headings, lists, quotes, fenced code, rules, paragraphs
- * ------------------------------------------------------------------------- */
-
-/* Count leading heading hashes (returns 0 if not a heading). */
-static int
-heading_level(const char *line)
-{
-	int n = 0;
-	while (line[n] == '#') n++;
-	if (n >= 1 && n <= 6 && (line[n] == ' ' || line[n] == '\0'))
-		return n;
-	return 0;
-}
-
-static gboolean
-is_hr(const char *line)
-{
-	const char *p = line;
-	int dashes = 0;
-	while (*p == ' ') p++;
-	while (*p == '-' || *p == '*' || *p == '_') { dashes++; p++; }
-	while (*p == ' ') p++;
-	return (dashes >= 3 && *p == '\0');
-}
-
-/* Render a fenced code block body verbatim in a monospace, coloured box. */
-static char *
-render_code_block(const char *code, const char *lang)
-{
-	GString *out = g_string_new(NULL);
-	char *esc = g_markup_escape_text(code, -1);
-	GString *withbr = g_string_new(NULL);
-	const char *p;
-
-	for (p = esc; *p; p++) {
-		if (*p == '\n')
-			g_string_append(withbr, "<br>");
-		else if (*p == ' ')
-			g_string_append(withbr, "&#160;");
-		else
-			g_string_append_c(withbr, *p);
-	}
-	if (lang && *lang) {
-		g_string_append_printf(out,
-		    "<font color=\"" COL_DIM "\" size=\"2\">%s</font><br>", lang);
-	}
-	g_string_append_printf(out,
-	    "<font face=\"monospace\" color=\"" COL_CODE "\" size=\"2\">%s</font><br>",
-	    withbr->str);
-
-	g_string_free(withbr, TRUE);
-	g_free(esc);
-	return g_string_free(out, FALSE);
-}
-
-/* ------------------------------------------------------------------------- *
- *  Streaming: render each line the instant it completes
- * ------------------------------------------------------------------------- */
-
-/* Render one finished markdown line (no trailing newline) to HTML and write it
- * to the conversation. Handles headings, list items, quotes, rules; falls back
- * to an inline-formatted paragraph line. */
-static void
-emit_line(AcpData *d, const char *line)
-{
-	const char *t = line;
-	int hl;
-	char *inner, *html;
-
-	while (*t == ' ') t++;
-
-	/* blank line -> a small vertical gap */
-	if (*t == '\0') {
-		acp_conv_write_html(d, "<br>", 0);
-		return;
-	}
-	/* horizontal rule */
-	if (is_hr(t)) {
-		acp_conv_write_html(d, "<hr>", 0);
-		return;
-	}
-	/* heading */
-	hl = heading_level(t);
-	if (hl) {
-		int size = (6 - hl) + 2;
-		inner = acp_md_inline(t + hl + 1);
-		html = g_strdup_printf("<font size=\"%d\"><b>%s</b></font>",
-		                       size < 3 ? 3 : size, inner);
-		acp_conv_write_html(d, html, 0);
-		g_free(html); g_free(inner);
-		return;
-	}
-	/* blockquote */
-	if (t[0] == '>') {
-		inner = acp_md_inline(t[1] == ' ' ? t + 2 : t + 1);
-		html = g_strdup_printf(
-		    "<font color=\"" COL_DIM "\">&#8214; %s</font>", inner);
-		acp_conv_write_html(d, html, 0);
-		g_free(html); g_free(inner);
-		return;
-	}
-	/* unordered list item */
-	if ((t[0] == '-' || t[0] == '*' || t[0] == '+') && t[1] == ' ') {
-		int indent = (t - line);   /* nesting by leading spaces */
-		inner = acp_md_inline(t + 2);
-		html = g_strdup_printf("%s&#8226; %s",
-		                       indent >= 2 ? "&#160;&#160;&#160;" : "&#160;&#160;",
-		                       inner);
-		acp_conv_write_html(d, html, 0);
-		g_free(html); g_free(inner);
-		return;
-	}
-	/* ordered list item "N. " */
-	if (isdigit((unsigned char)t[0])) {
-		const char *q = t;
-		while (isdigit((unsigned char)*q)) q++;
-		if (q[0] == '.' && q[1] == ' ') {
-			int num = atoi(t);
-			inner = acp_md_inline(q + 2);
-			html = g_strdup_printf("&#160;&#160;%d. %s", num, inner);
-			acp_conv_write_html(d, html, 0);
-			g_free(html); g_free(inner);
-			return;
-		}
-	}
-	/* plain paragraph line */
-	inner = acp_md_inline(line);
-	acp_conv_write_html(d, inner, 0);
-	g_free(inner);
-}
-
-/* Feed streamed message text. We render each line as soon as its newline
- * arrives, so the transcript advances line-by-line as the agent types. Fenced
- * code blocks accumulate until the closing ``` and then render as one box.
- * Any text before the first newline is held in md_block until the line ends. */
-void
-acp_stream_message(AcpData *d, const char *text)
-{
-	const char *p;
-
-	if (!text || !*text)
-		return;
-
-	for (p = text; *p; p++) {
-		if (*p != '\n') {
-			g_string_append_c(d->md_block, *p);
-			continue;
-		}
-
-		/* a full line is now in md_block */
-		{
-			const char *line = d->md_block->str;
-
-			if (strncmp(line, "```", 3) == 0) {
-				if (!d->in_code_fence) {
-					char *lang = g_strdup(line + 3);
-					g_strchomp(lang);
-					g_free(d->fence_lang);
-					d->fence_lang = lang;
-					d->in_code_fence = TRUE;
-					d->code_buf_reset = TRUE;
-				} else {
-					char *html = render_code_block(
-					    d->code_buf ? d->code_buf->str : "", d->fence_lang);
-					acp_conv_write_html(d, html, 0);
-					g_free(html);
-					if (d->code_buf) g_string_truncate(d->code_buf, 0);
-					d->in_code_fence = FALSE;
-					g_free(d->fence_lang);
-					d->fence_lang = NULL;
-				}
-				g_string_truncate(d->md_block, 0);
-				continue;
-			}
-
-			if (d->in_code_fence) {
-				if (!d->code_buf)
-					d->code_buf = g_string_new(NULL);
-				if (d->code_buf_reset) {
-					g_string_truncate(d->code_buf, 0);
-					d->code_buf_reset = FALSE;
-				}
-				if (d->code_buf->len)
-					g_string_append_c(d->code_buf, '\n');
-				g_string_append(d->code_buf, line);
-				g_string_truncate(d->md_block, 0);
-				continue;
-			}
-
-			emit_line(d, line);
-			g_string_truncate(d->md_block, 0);
-		}
-	}
-}
-
-void
-acp_stream_thought(AcpData *d, const char *text)
-{
-	char *esc, *html;
-	GString *s;
-	const char *p;
-
-	if (!text || !*text)
-		return;
-	/* thoughts are shown dimmed+italic, verbatim (not markdown-parsed) */
-	esc = g_markup_escape_text(text, -1);
-	s = g_string_new(NULL);
-	for (p = esc; *p; p++) {
-		if (*p == '\n') g_string_append(s, "<br>");
-		else            g_string_append_c(s, *p);
-	}
-	html = g_strdup_printf("<font color=\"" COL_DIM "\"><i>%s</i></font>", s->str);
-	acp_conv_write_html(d, html, 0);
-	g_free(html);
-	g_string_free(s, TRUE);
-	g_free(esc);
-}
-
-void
-acp_stream_flush(AcpData *d)
-{
-	if (d->in_code_fence) {
-		/* unterminated fence: render what we have */
-		char *html = render_code_block(
-		    d->code_buf ? d->code_buf->str : "", d->fence_lang);
-		acp_conv_write_html(d, html, 0);
-		g_free(html);
-		if (d->code_buf) g_string_truncate(d->code_buf, 0);
-		d->in_code_fence = FALSE;
-		g_free(d->fence_lang);
-		d->fence_lang = NULL;
-	}
-	/* emit any trailing line that never got a newline (the final line of the
-	 * reply usually arrives without one). */
-	if (d->md_block->len > 0) {
-		emit_line(d, d->md_block->str);
-		g_string_truncate(d->md_block, 0);
-	}
-}
-
-void
-acp_stream_reset(AcpData *d)
-{
-	g_string_truncate(d->md_block, 0);
-	d->in_code_fence = FALSE;
-	g_free(d->fence_lang);
-	d->fence_lang = NULL;
-	d->turn_opened = FALSE;
-}
-
-/* ------------------------------------------------------------------------- *
  *  Tool-call cards
  * ------------------------------------------------------------------------- */
 
@@ -460,9 +192,9 @@ status_color(const char *status)
 	return COL_TOOL;
 }
 
-/* Render tool content items: text, diffs, terminal output. */
+/* Append rendered tool content items (text, diffs) to an HTML buffer. */
 static void
-render_tool_content(AcpData *d, JsonArray *content)
+append_tool_content(GString *html, JsonArray *content)
 {
 	guint i, n = content ? json_array_get_length(content) : 0;
 
@@ -479,13 +211,11 @@ render_tool_content(AcpData *d, JsonArray *content)
 			  ? json_object_get_string_member(item, "oldText") : NULL;
 			const char *newt = json_object_has_member(item, "newText")
 			                 ? json_object_get_string_member(item, "newText") : "";
-			GString *html = g_string_new(NULL);
 			char *pe = g_markup_escape_text(path, -1);
 			g_string_append_printf(html,
 			    "<font color=\"" COL_DIM "\" size=\"2\">&#160;&#160;%s</font><br>", pe);
 			g_free(pe);
 
-			/* show removed then added lines, colour-coded */
 			if (oldt && *oldt) {
 				gchar **ol = g_strsplit(oldt, "\n", -1);
 				int k;
@@ -510,33 +240,23 @@ render_tool_content(AcpData *d, JsonArray *content)
 				}
 				g_strfreev(nl);
 			}
-			acp_conv_write_html(d, html->str, 0);
-			g_string_free(html, TRUE);
 
 		} else if (purple_strequal(type, "content")) {
-			/* nested content block: usually {type:text,text:...} */
 			JsonObject *c = json_object_has_member(item, "content")
 			              ? json_object_get_object_member(item, "content") : NULL;
 			const char *t = c && json_object_has_member(c, "text")
 			              ? json_object_get_string_member(c, "text") : NULL;
 			if (t && *t) {
 				char *e = g_markup_escape_text(t, -1);
-				GString *s = g_string_new(NULL);
 				const char *p;
+				g_string_append(html,
+				    "<font face=\"monospace\" size=\"2\" color=\"" COL_DIM "\">");
 				for (p = e; *p; p++) {
-					if (*p == '\n')
-						g_string_append(s, "<br>");
-					else
-						g_string_append_c(s, *p);
+					if (*p == '\n')      g_string_append(html, "<br>");
+					else if (*p == ' ')  g_string_append(html, "&#160;");
+					else                 g_string_append_c(html, *p);
 				}
-				{
-					char *html = g_strdup_printf(
-					    "<font face=\"monospace\" size=\"2\" color=\"" COL_DIM
-					    "\">%s</font><br>", s->str);
-					acp_conv_write_html(d, html, 0);
-					g_free(html);
-				}
-				g_string_free(s, TRUE);
+				g_string_append(html, "</font><br>");
 				g_free(e);
 			}
 		}
@@ -558,9 +278,6 @@ acp_render_tool_call(AcpData *d, JsonObject *update, gboolean is_update)
 	                   ? json_object_get_array_member(update, "content") : NULL;
 	AcpToolCall *tc = NULL;
 	GString *html;
-
-	/* Any tool output ends the current text block cleanly. */
-	acp_stream_flush(d);
 
 	if (id)
 		tc = g_hash_table_lookup(d->tools, id);
@@ -587,13 +304,13 @@ acp_render_tool_call(AcpData *d, JsonObject *update, gboolean is_update)
 			    "<font color=\"%s\">%s %s &#8212; %s</font><br>",
 			    status_color(status),
 			    kind_glyph(tc ? tc->kind : NULL), te, status);
-			acp_conv_write_html(d, m, 0);
+			acp_stream_write_card(d, m);
 			g_free(m); g_free(te);
 		}
 		return;
 	}
 
-	/* Header line for the tool call. */
+	/* Header line + content for the tool call, as one cohesive card. */
 	html = g_string_new(NULL);
 	{
 		const char *t = title ? title : (tc && tc->title ? tc->title : "tool");
@@ -608,11 +325,11 @@ acp_render_tool_call(AcpData *d, JsonObject *update, gboolean is_update)
 		    (s && *s) ? ")</font>" : "");
 		g_free(te);
 	}
-	acp_conv_write_html(d, html->str, 0);
-	g_string_free(html, TRUE);
-
 	if (content)
-		render_tool_content(d, content);
+		append_tool_content(html, content);
+
+	acp_stream_write_card(d, html->str);
+	g_string_free(html, TRUE);
 }
 
 /* ------------------------------------------------------------------------- *
@@ -628,7 +345,6 @@ acp_render_plan(AcpData *d, JsonArray *entries)
 	if (n == 0)
 		return;
 
-	acp_stream_flush(d);
 	html = g_string_new(NULL);
 	g_string_append(html,
 	    "<font color=\"" COL_PLAN "\"><b>Plan</b></font><br>");
@@ -656,6 +372,6 @@ acp_render_plan(AcpData *d, JsonArray *entries)
 		    box, inner);
 		g_free(inner);
 	}
-	acp_conv_write_html(d, html->str, 0);
+	acp_stream_write_card(d, html->str);
 	g_string_free(html, TRUE);
 }

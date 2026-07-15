@@ -341,7 +341,6 @@ acp_login(PurpleAccount *acct)
 	d->next_id = 1;
 	d->pending = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, g_free);
 	d->inbuf = g_string_new(NULL);
-	d->md_block = g_string_new(NULL);
 	d->tools = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, free_tool_call);
 	d->buddy = g_strdup(acct_str(acct, OPT_BUDDY, "agent"));
 	gc->proto_data = d;
@@ -411,9 +410,7 @@ acp_close(PurpleConnection *gc)
 	if (d->pending) g_hash_table_destroy(d->pending);
 	if (d->tools)   g_hash_table_destroy(d->tools);
 	if (d->inbuf)    g_string_free(d->inbuf, TRUE);
-	if (d->md_block) g_string_free(d->md_block, TRUE);
-	if (d->code_buf) g_string_free(d->code_buf, TRUE);
-	g_free(d->fence_lang);
+	acp_stream_free(d);
 	g_free(d->session_id);
 	g_free(d->buddy);
 	g_free(d);
