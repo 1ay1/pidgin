@@ -32,6 +32,7 @@
 #define COL_BOLD   "#eeeeec"   /* bright_white (bold)  */
 #define COL_ADD    "#8ae234"   /* bright_green         */
 #define COL_DEL    "#ef2929"   /* bright_red           */
+#define ACP_FG_C   "#d4d4d4"   /* body text (card header) */
 
 /* ------------------------------------------------------------------------- *
  *  Conversation plumbing (message-API fallback, used by headless frontends)
@@ -443,39 +444,170 @@ acp_render_table(char **lines, int nlines)
 }
 
 /* ------------------------------------------------------------------------- *
- *  Tool-call cards
+ *  Tool-call cards -- maya-style framed shell
+ *
+ *  Every card is drawn as a rounded (or, on failure, dashed) box, matching
+ *  maya's tool_call widget (docs/agent_panel/07_tool_cards.md):
+ *
+ *    ╭─ <icon> <tool name> ──────────╮
+ *    │ <header: title / path / cmd>  status │
+ *    ├┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┤      (only when there is a body)
+ *    │ <body: diff / content>              │
+ *    ╰─────────────────────────╯
+ *
+ *  Status drives the icon + colour: pending ○ dim, running ● amber,
+ *  completed ✓ green, failed ✗ red (dashed border).
  * ------------------------------------------------------------------------- */
 
-/* A little glyph per tool kind. */
+#define CARD_BORDER "#3a3a3a"   /* rounded border, dim              */
+#define CARD_FAIL   "#78383f"   /* failed border, darkened red      */
+#define CARD_W      54          /* interior width in glyph columns  */
+
+/* Status -> icon glyph (maya table). */
 static const char *
-kind_glyph(const char *kind)
+status_icon(const char *status)
 {
-	if (!kind)                              return "\xE2\x9A\x99";       /* gear */
-	if (strstr(kind, "read"))               return "\xF0\x9F\x93\x96";  /* book */
-	if (strstr(kind, "edit"))               return "\xE2\x9C\x8F";      /* pencil */
-	if (strstr(kind, "delete"))             return "\xF0\x9F\x97\x91";  /* trash */
-	if (strstr(kind, "move"))               return "\xF0\x9F\x93\xA6";  /* box */
-	if (strstr(kind, "search"))             return "\xF0\x9F\x94\x8D";  /* magnifier */
-	if (strstr(kind, "execute"))            return "\xE2\x96\xB6";      /* play */
-	if (strstr(kind, "fetch"))              return "\xF0\x9F\x8C\x90";  /* globe */
-	if (strstr(kind, "think"))              return "\xF0\x9F\x92\xAD";  /* thought */
-	return "\xE2\x9A\x99";
+	if (!status)                                  return "\xE2\x97\x8F"; /* ● running */
+	if (purple_strequal(status, "completed"))     return "\xE2\x9C\x93"; /* ✓ */
+	if (purple_strequal(status, "failed"))        return "\xE2\x9C\x97"; /* ✗ */
+	if (purple_strequal(status, "pending"))       return "\xE2\x97\x8B"; /* ○ */
+	if (purple_strequal(status, "in_progress"))   return "\xE2\x97\x8F"; /* ● */
+	return "\xE2\x97\x8F";
 }
 
 static const char *
-status_color(const char *status)
+status_icon_color(const char *status)
 {
-	if (!status)                                return COL_TOOL;
-	if (purple_strequal(status, "completed"))   return COL_ADD;
-	if (purple_strequal(status, "failed"))      return COL_DEL;
-	return COL_TOOL;
+	if (!status)                                  return COL_TOOL;
+	if (purple_strequal(status, "completed"))     return COL_ADD;
+	if (purple_strequal(status, "failed"))        return COL_DEL;
+	if (purple_strequal(status, "pending"))       return COL_DIM;
+	return COL_TOOL;   /* running/in_progress -> amber */
 }
 
-/* Append rendered tool content items (text, diffs) to an HTML buffer. */
+static gboolean
+status_failed(const char *status)
+{
+	return status && purple_strequal(status, "failed");
+}
+
+/* Emit the card's top rule with the tool name in the border label:
+ *   ╭─ <icon> <name> ──────────╮   (dashed ╭┄ ┄┄┄ ╮ on failure). */
 static void
-append_tool_content(GString *html, JsonArray *content)
+card_top(GString *o, const char *icon, const char *icol, const char *name,
+         gboolean fail)
+{
+	const char *bcol = fail ? CARD_FAIL : CARD_BORDER;
+	const char *dash = fail ? "\xE2\x94\x84" : "\xE2\x94\x80"; /* ┄ / ─ */
+	char *ne = g_markup_escape_text(name && *name ? name : "tool", -1);
+	/* rendered leader columns before the trailing dashes:
+	 *   ╭(1) ─(1) space(1) icon(1) space(1) name(N) space(1) = 6 + N
+	 * and the closing ╮ is 1. total line = CARD_W, so:              */
+	int name_cols = (int)g_utf8_strlen(name && *name ? name : "tool", -1);
+	int dashes = CARD_W - 1 /*╭*/ - 5 /*─ sp icon sp + trailing sp*/
+	             - name_cols - 1 /*╮*/, k;
+	if (dashes < 1) dashes = 1;
+	g_string_append_printf(o,
+	    "<font face=\"monospace\" color=\"%s\">\xE2\x95\xAD%s </font>",
+	    bcol, dash);   /* ╭─ space */
+	g_string_append_printf(o, "<font face=\"monospace\" color=\"%s\">%s</font>",
+	    icol, icon);
+	g_string_append_printf(o,
+	    " <font face=\"monospace\" color=\"%s\"><b>%s</b></font> ", bcol, ne);
+	g_string_append_printf(o, "<font face=\"monospace\" color=\"%s\">", bcol);
+	for (k = 0; k < dashes; k++) g_string_append(o, dash);
+	g_string_append(o, "\xE2\x95\xAE</font><br>");   /* ╮ */
+	g_free(ne);
+}
+
+/* Emit a full-width bottom rule ╰───╯ (dashed ╰┄┄┄╯ on failure). */
+static void
+card_bottom(GString *o, gboolean fail)
+{
+	const char *bcol = fail ? CARD_FAIL : CARD_BORDER;
+	const char *dash = fail ? "\xE2\x94\x84" : "\xE2\x94\x80";
+	int k;
+	g_string_append_printf(o, "<font face=\"monospace\" color=\"%s\">\xE2\x95\xB0",
+	    bcol);
+	for (k = 0; k < CARD_W - 2; k++) g_string_append(o, dash);
+	g_string_append(o, "\xE2\x95\xAF</font><br>");   /* ╯ */
+}
+
+/* Emit a mid separator ├┈┈┈┤ (dim dashed, always). */
+static void
+card_sep(GString *o, gboolean fail)
+{
+	const char *bcol = fail ? CARD_FAIL : CARD_BORDER;
+	int k;
+	g_string_append_printf(o, "<font face=\"monospace\" color=\"%s\">\xE2\x94\x9C",
+	    bcol);
+	for (k = 0; k < CARD_W - 2; k++) g_string_append(o, "\xE2\x94\x88"); /* ┈ */
+	g_string_append(o, "\xE2\x94\xA4</font><br>");   /* ┤ */
+}
+
+/* Emit one framed body row: │ <html content, display width `cols`> <pad> │.
+ * `content_html` is already-escaped HTML; `cols` is its visible glyph width. */
+static void
+card_row(GString *o, const char *content_html, int cols, gboolean fail)
+{
+	const char *bcol = fail ? CARD_FAIL : CARD_BORDER;
+	const char *bar  = fail ? "\xE2\x94\x86" : "\xE2\x94\x82"; /* ┆ / │ */
+	int inner = CARD_W - 2;         /* space between the two bars      */
+	int pad = inner - 1 - cols, k;  /* -1 for the single leading space */
+	if (pad < 0) pad = 0;
+	g_string_append_printf(o, "<font face=\"monospace\" color=\"%s\">%s</font>",
+	    bcol, bar);
+	g_string_append(o, "<font face=\"monospace\">&#160;</font>");
+	g_string_append(o, content_html);
+	g_string_append(o, "<font face=\"monospace\">");
+	for (k = 0; k < pad; k++) g_string_append(o, "&#160;");
+	g_string_append(o, "</font>");
+	g_string_append_printf(o, "<font face=\"monospace\" color=\"%s\">%s</font><br>",
+	    bcol, bar);
+}
+
+/* Convenience: a plain (single-colour, monospace) framed text row. `text` is
+ * raw (unescaped); it is escaped + truncated to the interior width here. */
+static void
+card_text_row(GString *o, const char *text, const char *color, gboolean fail)
+{
+	int budget = CARD_W - 3;   /* interior minus leading space         */
+	glong len = g_utf8_strlen(text ? text : "", -1);
+	char *clip;
+	char *esc;
+	GString *frag = g_string_new(NULL);
+	int cols;
+
+	if (len > budget) {
+		/* truncate with an ellipsis */
+		const char *cut = g_utf8_offset_to_pointer(text, budget - 1);
+		clip = g_strndup(text, cut - text);
+		esc = g_markup_escape_text(clip, -1);
+		g_free(clip);
+		cols = budget;
+		g_string_append_printf(frag,
+		    "<font face=\"monospace\" color=\"%s\">%s\xE2\x80\xA6</font>",
+		    color, esc);
+	} else {
+		esc = g_markup_escape_text(text ? text : "", -1);
+		cols = (int)len;
+		g_string_append_printf(frag,
+		    "<font face=\"monospace\" color=\"%s\">%s</font>", color, esc);
+	}
+	g_free(esc);
+	card_row(o, frag->str, cols, fail);
+	g_string_free(frag, TRUE);
+}
+
+/* Append rendered tool content items (text, diffs) as framed card rows. Each
+ * physical line becomes one card_text_row so the box stays square. Returns
+ * TRUE if it emitted anything (so the caller knows to draw the separator). */
+static gboolean
+append_tool_content(GString *html, JsonArray *content, gboolean fail)
 {
 	guint i, n = content ? json_array_get_length(content) : 0;
+	gboolean any = FALSE;
+	int budget = CARD_W - 3;
 
 	for (i = 0; i < n; i++) {
 		JsonObject *item = json_array_get_object_element(content, i);
@@ -490,20 +622,17 @@ append_tool_content(GString *html, JsonArray *content)
 			  ? json_object_get_string_member(item, "oldText") : NULL;
 			const char *newt = json_object_has_member(item, "newText")
 			                 ? json_object_get_string_member(item, "newText") : "";
-			char *pe = g_markup_escape_text(path, -1);
-			g_string_append_printf(html,
-			    "<font color=\"" COL_DIM "\" size=\"2\">&#160;&#160;%s</font><br>", pe);
-			g_free(pe);
-
+			if (path && *path) {
+				card_text_row(html, path, COL_DIM, fail);
+				any = TRUE;
+			}
 			if (oldt && *oldt) {
 				gchar **ol = g_strsplit(oldt, "\n", -1);
 				int k;
 				for (k = 0; ol[k]; k++) {
-					char *e = g_markup_escape_text(ol[k], -1);
-					g_string_append_printf(html,
-					    "<font color=\"" COL_DEL "\" face=\"monospace\" size=\"2\">"
-					    "&#160;- %s</font><br>", e);
-					g_free(e);
+					char *ln = g_strdup_printf("- %s", ol[k]);
+					card_text_row(html, ln, COL_DEL, fail);
+					g_free(ln); any = TRUE;
 				}
 				g_strfreev(ol);
 			}
@@ -511,11 +640,9 @@ append_tool_content(GString *html, JsonArray *content)
 				gchar **nl = g_strsplit(newt, "\n", -1);
 				int k;
 				for (k = 0; nl[k]; k++) {
-					char *e = g_markup_escape_text(nl[k], -1);
-					g_string_append_printf(html,
-					    "<font color=\"" COL_ADD "\" face=\"monospace\" size=\"2\">"
-					    "&#160;+ %s</font><br>", e);
-					g_free(e);
+					char *ln = g_strdup_printf("+ %s", nl[k]);
+					card_text_row(html, ln, COL_ADD, fail);
+					g_free(ln); any = TRUE;
 				}
 				g_strfreev(nl);
 			}
@@ -526,20 +653,26 @@ append_tool_content(GString *html, JsonArray *content)
 			const char *t = c && json_object_has_member(c, "text")
 			              ? json_object_get_string_member(c, "text") : NULL;
 			if (t && *t) {
-				char *e = g_markup_escape_text(t, -1);
-				const char *p;
-				g_string_append(html,
-				    "<font face=\"monospace\" size=\"2\" color=\"" COL_DIM "\">");
-				for (p = e; *p; p++) {
-					if (*p == '\n')      g_string_append(html, "<br>");
-					else if (*p == ' ')  g_string_append(html, "&#160;");
-					else                 g_string_append_c(html, *p);
+				gchar **ls = g_strsplit(t, "\n", -1);
+				int k, shown = 0;
+				for (k = 0; ls[k] && shown < 12; k++) {
+					/* skip a trailing empty final split element */
+					if (ls[k + 1] == NULL && ls[k][0] == '\0') break;
+					card_text_row(html, ls[k], COL_DIM, fail);
+					shown++; any = TRUE;
 				}
-				g_string_append(html, "</font><br>");
-				g_free(e);
+				if (ls[k] && shown >= 12) {
+					int more = 0; while (ls[k + more]) more++;
+					char *m = g_strdup_printf("\xE2\x80\xA6 %d more lines", more);
+					card_text_row(html, m, COL_DIM, fail);
+					g_free(m);
+				}
+				g_strfreev(ls);
+				(void)budget;
 			}
 		}
 	}
+	return any;
 }
 
 void
@@ -572,40 +705,55 @@ acp_render_tool_call(AcpData *d, JsonObject *update, gboolean is_update)
 		if (status) { g_free(tc->status); tc->status = g_strdup(status); }
 	}
 
-	/* On a bare tool_call_update that only changes status (no title/content),
-	 * only emit a compact status line for terminal states. */
-	if (is_update && !title && !content) {
-		if (status && (purple_strequal(status, "completed") ||
-		               purple_strequal(status, "failed"))) {
-			const char *t = tc && tc->title ? tc->title : "tool";
-			char *te = g_markup_escape_text(t, -1);
-			char *m = g_strdup_printf(
-			    "<font color=\"%s\">%s %s &#8212; %s</font><br>",
-			    status_color(status),
-			    kind_glyph(tc ? tc->kind : NULL), te, status);
-			acp_stream_write_card(d, m);
-			g_free(m); g_free(te);
-		}
-		return;
+	/* The conversation view is append-only -- we cannot revise an already-drawn
+	 * card in place. So instead of emitting a fresh card on every status update
+	 * (which spammed pending -> pending -> completed duplicates), draw the card
+	 * EXACTLY ONCE, when the tool reaches a terminal state (completed/failed).
+	 * Intermediate pending/in_progress updates are folded into `tc` silently;
+	 * the live "agent is thinking" indicator already shows work is happening. */
+	{
+		const char *s = status ? status : (tc ? tc->status : NULL);
+		gboolean terminal = s && (purple_strequal(s, "completed") ||
+		                          purple_strequal(s, "failed"));
+		if (!terminal)
+			return;
+		if (tc && tc->rendered)
+			return;              /* already drew this one */
+		if (tc)
+			tc->rendered = TRUE;
 	}
 
-	/* Header line + content for the tool call, as one cohesive card. */
+	/* Full framed card: top rule (status icon + tool name), header row
+	 * (title · status), an optional diff/content body behind a dashed
+	 * separator, bottom rule. */
 	html = g_string_new(NULL);
 	{
-		const char *t = title ? title : (tc && tc->title ? tc->title : "tool");
+		const char *t = title ? title : (tc && tc->title ? tc->title : NULL);
 		const char *k = kind ? kind : (tc ? tc->kind : NULL);
 		const char *s = status ? status : (tc ? tc->status : NULL);
-		char *te = g_markup_escape_text(t, -1);
-		g_string_append_printf(html,
-		    "<font color=\"%s\"><b>%s %s</b>%s%s%s</font><br>",
-		    status_color(s), kind_glyph(k), te,
-		    (s && *s) ? " <font color=\"" COL_DIM "\" size=\"2\">(" : "",
-		    (s && *s) ? s : "",
-		    (s && *s) ? ")</font>" : "");
-		g_free(te);
+		gboolean fail = status_failed(s);
+		/* border label = just the tool kind (the status icon carries state; no
+		 * redundant kind emoji). Capitalised for a title-case look. */
+		char *label = g_strdup(k && *k ? k : "tool");
+		gboolean has_body;
+		GString *body = g_string_new(NULL);
+
+		if (label[0]) label[0] = g_ascii_toupper(label[0]);
+
+		/* pre-render the body so we know whether to draw the separator */
+		has_body = content ? append_tool_content(body, content, fail) : FALSE;
+
+		card_top(html, status_icon(s), status_icon_color(s), label, fail);
+		/* header line: the title (falls back to the kind if no title) */
+		card_text_row(html, t && *t ? t : label, ACP_FG_C, fail);
+		if (has_body) {
+			card_sep(html, fail);
+			g_string_append(html, body->str);
+		}
+		card_bottom(html, fail);
+		g_string_free(body, TRUE);
+		g_free(label);
 	}
-	if (content)
-		append_tool_content(html, content);
 
 	acp_stream_write_card(d, html->str);
 	g_string_free(html, TRUE);
@@ -625,8 +773,7 @@ acp_render_plan(AcpData *d, JsonArray *entries)
 		return;
 
 	html = g_string_new(NULL);
-	g_string_append(html,
-	    "<font color=\"" COL_PLAN "\"><b>Plan</b></font><br>");
+	card_top(html, "\xE2\x98\xB0", COL_PLAN, "Plan", FALSE);   /* ☰ icon */
 
 	for (i = 0; i < n; i++) {
 		JsonObject *e = json_array_get_object_element(entries, i);
@@ -634,23 +781,45 @@ acp_render_plan(AcpData *d, JsonArray *entries)
 		                    ? json_object_get_string_member(e, "content") : "";
 		const char *status = e && json_object_has_member(e, "status")
 		                   ? json_object_get_string_member(e, "status") : "";
-		const char *box;
-		char *inner;
+		const char *box, *bcol;
 
 		if (purple_strequal(status, "completed"))
-			box = "\xE2\x9C\x94";       /* check */
+			{ box = "\xE2\x9C\x94"; bcol = COL_ADD; }       /* check */
 		else if (purple_strequal(status, "in_progress"))
-			box = "\xE2\x96\xB6";       /* play */
+			{ box = "\xE2\x96\xB6"; bcol = COL_TOOL; }      /* play */
 		else
-			box = "\xE2\x97\xAB";       /* white square */
+			{ box = "\xE2\x97\xAB"; bcol = COL_DIM; }       /* white square */
 
-		inner = acp_md_inline(content);
-		g_string_append_printf(html,
-		    "&#160;&#160;<font color=\"%s\">%s</font> %s<br>",
-		    purple_strequal(status, "completed") ? COL_ADD : COL_DIM,
-		    box, inner);
-		g_free(inner);
+		/* "<glyph> <content>" -- glyph coloured, content truncated to fit */
+		{
+			int budget = CARD_W - 3 - 2;   /* minus glyph + space */
+			glong len = g_utf8_strlen(content, -1);
+			char *ce;
+			GString *frag = g_string_new(NULL);
+			int cols;
+			if (len > budget) {
+				const char *cut = g_utf8_offset_to_pointer(content, budget - 1);
+				char *clip = g_strndup(content, cut - content);
+				ce = g_markup_escape_text(clip, -1); g_free(clip);
+				cols = 2 + budget;
+				g_string_append_printf(frag,
+				    "<font face=\"monospace\" color=\"%s\">%s</font>"
+				    "<font face=\"monospace\"> %s\xE2\x80\xA6</font>",
+				    bcol, box, ce);
+			} else {
+				ce = g_markup_escape_text(content, -1);
+				cols = 2 + (int)len;
+				g_string_append_printf(frag,
+				    "<font face=\"monospace\" color=\"%s\">%s</font>"
+				    "<font face=\"monospace\"> %s</font>",
+				    bcol, box, ce);
+			}
+			card_row(html, frag->str, cols, FALSE);
+			g_string_free(frag, TRUE);
+			g_free(ce);
+		}
 	}
+	card_bottom(html, FALSE);
 	acp_stream_write_card(d, html->str);
 	g_string_free(html, TRUE);
 }

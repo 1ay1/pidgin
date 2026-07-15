@@ -145,7 +145,13 @@ acp_apply_dark_theme(GtkIMHtml *imhtml)
 
 	prov = gtk_css_provider_new();
 	gtk_css_provider_load_from_data(prov,
-	    "textview, textview text {"
+	    "textview {"
+	    "  background-color: " ACP_BG ";"
+	    "  color: " ACP_FG ";"
+	    "  padding: 10px 16px 10px 16px;"   /* top right bottom left breathing room */
+	    "  font-size: 10.5pt;"
+	    "}"
+	    "textview text {"
 	    "  background-color: " ACP_BG ";"
 	    "  color: " ACP_FG ";"
 	    "}", -1, NULL);
@@ -936,7 +942,10 @@ acp_stream_write_card(AcpData *d, const char *html)
 	s = stream_get(d);
 	if (s->imhtml) {
 		ensure_open(d, s);
+		/* blank line before the card so it doesn't crowd the preceding text */
+		imhtml_append(s, "<br>");
 		imhtml_append(s, html);
+		imhtml_append(s, "<br>");   /* and one after */
 		imhtml_anchor_tail(s);
 		gtk_imhtml_scroll_to_end(s->imhtml, FALSE);
 	} else {

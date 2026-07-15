@@ -42,6 +42,7 @@ typedef struct {
 	gchar *title;
 	gchar *kind;      /* read/edit/execute/... */
 	gchar *status;    /* pending/in_progress/completed/failed */
+	gboolean rendered; /* card already drawn (append-only view: draw once) */
 } AcpToolCall;
 
 struct _AcpData {
