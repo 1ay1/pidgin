@@ -181,6 +181,7 @@ void irc_msg_account(struct irc_conn *irc, const char *name, const char *from, c
 void irc_msg_awaynotify(struct irc_conn *irc, const char *name, const char *from, char **args);
 void irc_msg_chghost(struct irc_conn *irc, const char *name, const char *from, char **args);
 void irc_msg_setname(struct irc_conn *irc, const char *name, const char *from, char **args);
+void irc_msg_batch(struct irc_conn *irc, const char *name, const char *from, char **args);
 
 void irc_register_commands(void);
 void irc_msg_table_build(struct irc_conn *irc);

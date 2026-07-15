@@ -1019,6 +1019,28 @@ void irc_msg_join(struct irc_conn *irc, const char *name, const char *from, char
 		irc_send(irc, buf);
 		g_free(buf);
 
+		/*
+		 * IRCv3 draft/chathistory: pull the most recent backlog for this
+		 * channel so we rejoin mid-conversation instead of to an empty
+		 * window.  "LATEST <target> * <limit>" asks for up to <limit> of
+		 * the newest messages; the server replays them inside a BATCH,
+		 * each line carrying its own server-time tag so it renders with
+		 * the original timestamp.  Requires the "batch" cap too (we ask
+		 * for both), which is why this is gated on chathistory being live.
+		 */
+		if (irc_cap_have(irc, "draft/chathistory")) {
+			int limit = purple_account_get_int(irc->account,
+			                                   "chathistory-limit", 50);
+			if (limit > 0) {
+				char *lim = g_strdup_printf("%d", limit);
+				buf = irc_format(irc, "vvvvv", "CHATHISTORY",
+				                 "LATEST", channel, "*", lim);
+				irc_send(irc, buf);
+				g_free(buf);
+				g_free(lim);
+			}
+		}
+
 		/* Until purple_conversation_present does something that
 		 * one would expect in Pidgin, this call produces buggy
 		 * behavior both for the /join and auto-join cases. */
@@ -1982,6 +2004,24 @@ irc_msg_setname(struct irc_conn *irc, const char *name, const char *from, char *
 }
 
 /*
+ * BATCH: ":server BATCH +ref type [params]" opens a batch, "-ref" closes it.
+ * We negotiated the "batch" cap so we can receive chathistory playback (and
+ * other grouped messages) without the individual lines being rejected.  Each
+ * message inside the batch is delivered normally and carries its own
+ * server-time tag, so our existing handlers already render it with the right
+ * timestamp and ordering.  There is nothing extra to do here beyond accepting
+ * the framing line silently instead of logging it as junk.
+ */
+void
+irc_msg_batch(struct irc_conn *irc, const char *name, const char *from, char **args)
+{
+	(void)irc;
+	(void)name;
+	(void)from;
+	(void)args;
+}
+
+/*
  * ============================================================================
  *  IRCv3 capability negotiation
  * ============================================================================
@@ -2011,6 +2051,8 @@ static const char * const irc_wanted_caps[] = {
 	"userhost-in-names", /* full nick!user@host in NAMES                    */
 	"invite-notify",     /* see invites sent by others in a channel        */
 	"setname",           /* realname changes without reconnect             */
+	"batch",             /* grouped messages (chathistory playback, etc.)  */
+	"draft/chathistory", /* fetch missed backlog on join / on demand        */
 	NULL
 };
 

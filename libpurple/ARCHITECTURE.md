@@ -328,12 +328,26 @@ the generic core, and the SASL completion paths route through
 | `extended-join` | services account announced on JOIN without a manual WHOIS    |
 | `account-notify`| live "logged in as X" / "logged out" in channels             |
 | `away-notify`   | buddy away/back reflected instantly, no ISON/WHO polling     |
+| `batch` + `draft/chathistory` | on join, up to N recent lines are replayed into the channel with their original timestamps (see below) |
 | `multi-prefix`, `userhost-in-names`, `chghost`, `setname`, `invite-notify`, `message-tags` | negotiated and accepted (no longer logged as junk); ready for host/realname-aware features |
 
 The design deliberately keeps every consumer guarded on `irc_cap_have()` and
 every tag read guarded on presence, so a bare RFC1459 server behaves exactly as
 before. Pure tag logic is covered by
 `libpurple/protocols/irc/tests/test_irc_tags.c`.
+
+### Backlog on join (chathistory)
+
+When the server offers both `batch` and `draft/chathistory`, joining a channel
+no longer drops you into an empty window. Immediately after `serv_got_joined_chat`
+(and the existing `WHO`), `irc_msg_join` sends
+`CHATHISTORY LATEST <channel> * <limit>`. The server replays the newest
+messages inside a `BATCH` frame; each replayed line carries its own
+`server-time` tag, so the existing PRIVMSG path renders it with the *original*
+timestamp and ordering — no special-casing of the replay is needed. The `BATCH`
+open/close framing lines are accepted silently by `irc_msg_batch` so they are
+not logged as junk. The limit is the per-account **"Backlog messages to fetch
+on join"** option (`chathistory-limit`, default 50, `0` disables the fetch).
 
 ## The protocol subsystem (modernized)
 
