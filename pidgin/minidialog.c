@@ -90,7 +90,7 @@ typedef struct _PidginMiniDialogPrivate
 	GtkBox *title_box;
 	GtkLabel *title;
 	GtkLabel *desc;
-	GtkBox *buttons;
+	GtkFlowBox *buttons;
 	gboolean enable_description_markup;
 
 	guint idle_destroy_cb_id;
@@ -260,8 +260,14 @@ mini_dialog_add_button(PidginMiniDialog *self,
 	pidgin_widget_set_alignment(GTK_WIDGET(label), 0.5, 0.5);
 	gtk_container_add(GTK_CONTAINER(button), label);
 
-	gtk_box_pack_end(GTK_BOX(priv->buttons), button, FALSE, FALSE,
-		0);
+	/*
+	 * A GtkFlowBox wraps its children to the next line when the row is too
+	 * narrow (the buddy-list column is only ~200px), so two action buttons
+	 * that don't fit side by side stack instead of forcing the whole panel
+	 * -- and the buddy list -- wider than the column. Insert at 0 so buttons
+	 * keep the previous pack_end ordering (last added appears first).
+	 */
+	gtk_flow_box_insert(priv->buttons, button, 0);
 	gtk_widget_show_all(GTK_WIDGET(button));
 }
 
@@ -476,17 +482,19 @@ pidgin_mini_dialog_init(PidginMiniDialog *self,
 
 	priv->title = GTK_LABEL(gtk_label_new(NULL));
 	gtk_label_set_line_wrap(priv->title, TRUE);
+	gtk_label_set_line_wrap_mode(priv->title, PANGO_WRAP_WORD_CHAR);
 	gtk_label_set_selectable(priv->title, TRUE);
 	/*
-	 * Pin the wrap width to a fixed character count (width == max) so the
-	 * label's height-for-width is deterministic from the very first size
-	 * request. Leaving a range let GtkNotebook measure at one width and
-	 * allocate at another, so wrapping labels needed more rows than the
-	 * committed height -> buttons/close overlapped siblings until a later
-	 * resize corrected it.
+	 * The buddy-list column is narrow (~200px). Do NOT pin a large
+	 * width_chars: that sets the label's MINIMUM width, which would make
+	 * the whole mini-dialog demand more width than the column and push the
+	 * buddy list into horizontal overflow (clipping its left edge). Allow
+	 * the label to shrink to the column and wrap; cap the natural width so
+	 * it doesn't try to grow the panel wide either.
 	 */
-	gtk_label_set_width_chars(priv->title, 28);
-	gtk_label_set_max_width_chars(priv->title, 28);
+	gtk_label_set_width_chars(priv->title, -1);
+	gtk_label_set_max_width_chars(priv->title, 24);
+	gtk_widget_set_hexpand(GTK_WIDGET(priv->title), TRUE);
 	pidgin_widget_set_alignment(GTK_WIDGET(priv->title), 0, 0);
 
 	gtk_box_pack_start(priv->title_box, GTK_WIDGET(priv->icon), FALSE, FALSE, 0);
@@ -494,8 +502,10 @@ pidgin_mini_dialog_init(PidginMiniDialog *self,
 
 	priv->desc = GTK_LABEL(gtk_label_new(NULL));
 	gtk_label_set_line_wrap(priv->desc, TRUE);
-	gtk_label_set_width_chars(priv->desc, 28);
-	gtk_label_set_max_width_chars(priv->desc, 28);
+	gtk_label_set_line_wrap_mode(priv->desc, PANGO_WRAP_WORD_CHAR);
+	gtk_label_set_width_chars(priv->desc, -1);
+	gtk_label_set_max_width_chars(priv->desc, 24);
+	gtk_widget_set_hexpand(GTK_WIDGET(priv->desc), TRUE);
 	pidgin_widget_set_alignment(GTK_WIDGET(priv->desc), 0, 0);
 	gtk_label_set_selectable(priv->desc, TRUE);
 	/* make calling show_all() on the minidialog not affect desc even though
@@ -513,12 +523,24 @@ pidgin_mini_dialog_init(PidginMiniDialog *self,
 
 	self->contents = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
 
-	priv->buttons = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+	/*
+	 * Action buttons live in a GtkFlowBox so they wrap to a second line
+	 * when the narrow buddy-list column can't fit them side by side
+	 * (instead of overflowing and clipping the buddy list). Spacing gives
+	 * the buttons breathing room from each other and the panel edges.
+	 */
+	priv->buttons = GTK_FLOW_BOX(gtk_flow_box_new());
+	gtk_flow_box_set_selection_mode(priv->buttons, GTK_SELECTION_NONE);
+	gtk_flow_box_set_column_spacing(priv->buttons, PIDGIN_HIG_BOX_SPACE);
+	gtk_flow_box_set_row_spacing(priv->buttons, PIDGIN_HIG_BOX_SPACE);
+	gtk_flow_box_set_homogeneous(priv->buttons, FALSE);
+	gtk_widget_set_halign(GTK_WIDGET(priv->buttons), GTK_ALIGN_START);
+	gtk_container_set_border_width(GTK_CONTAINER(priv->buttons), PIDGIN_HIG_BOX_SPACE);
 
 	gtk_box_pack_start(self_box, GTK_WIDGET(priv->title_box), FALSE, FALSE, 0);
 	gtk_box_pack_start(self_box, GTK_WIDGET(priv->desc), FALSE, FALSE, 0);
 	gtk_box_pack_start(self_box, GTK_WIDGET(self->contents), TRUE, TRUE, 0);
-	gtk_box_pack_start(self_box, GTK_WIDGET(priv->buttons), FALSE, FALSE, 0);
+	gtk_box_pack_start(self_box, GTK_WIDGET(priv->buttons), FALSE, FALSE, PIDGIN_HIG_BOX_SPACE);
 
 	gtk_widget_show_all(GTK_WIDGET(self));
 }
