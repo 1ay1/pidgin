@@ -442,6 +442,18 @@ ensure_open(AcpData *d, AcpStream *s)
 	if (s->opened)
 		return;
 
+	/* Pop / raise the conversation window so the user actually sees the reply
+	 * even if they never opened the chat (the agent buddy is always online and
+	 * may reply to a session action). Routed through the GTK conv UI op. */
+	{
+		PurpleAccount *acct = purple_connection_get_account(d->gc);
+		PurpleConversation *conv =
+		    purple_find_conversation_with_account(PURPLE_CONV_TYPE_IM,
+		                                          d->buddy, acct);
+		if (conv)
+			purple_conversation_present(conv);
+	}
+
 	/* Draw our own incoming header row directly into the widget: a dim
 	 * timestamp + the buddy nick in a colour, matching Pidgin's own
 	 * "(HH:MM:SS) nick:" style but fully under our control so the streamed
