@@ -857,9 +857,21 @@ GtkWidget *pidgin_new_item_from_stock(GtkWidget *menu, const char *str, const ch
 	if (icon != NULL) {
 		const char *resolved = pidgin_stock_icon_name(icon);
 		if (g_str_has_prefix(resolved, "pidgin-")) {
+			/* Pidgin's own "pidgin-*" ids live only in the deprecated
+			 * GtkIconFactory, not the icon theme.  A GTK_IMAGE_STOCK image
+			 * has no icon-name/gicon/pixbuf for dbusmenu-gtk3 to serialize,
+			 * so over an AppIndicator/SNI tray the whole icon column comes
+			 * up blank.  Render the icon set to a real pixbuf and hand
+			 * dbusmenu a GTK_IMAGE_PIXBUF image, which it does export. */
+			GdkPixbuf *pixbuf = pidgin_pixbuf_from_stock(resolved, 16);
+			if (pixbuf != NULL) {
+				image = gtk_image_new_from_pixbuf(pixbuf);
+				g_object_unref(pixbuf);
+			} else {
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-			image = gtk_image_new_from_stock(resolved, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
+				image = gtk_image_new_from_stock(resolved, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 G_GNUC_END_IGNORE_DEPRECATIONS
+			}
 		} else {
 			image = gtk_image_new_from_icon_name(resolved, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 		}
