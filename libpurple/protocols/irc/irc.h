@@ -98,6 +98,30 @@ struct irc_conn {
 
 	gboolean quitting;
 
+	/*
+	 * IRCv3 capability negotiation state.  caps is the set of
+	 * capabilities the server offered (CAP LS); caps_enabled is what we
+	 * successfully negotiated (CAP ACK).  cap_reqs counts REQ replies we
+	 * are still waiting on so CAP END is sent exactly once, after both
+	 * the cap round-trips and any SASL exchange complete.  in_cap tracks
+	 * whether we are mid-negotiation (registration held open).
+	 */
+	GHashTable *caps;
+	GHashTable *caps_enabled;
+	int cap_reqs;
+	gboolean in_cap;
+	gboolean cap_ls_done;
+	gboolean sasl_wanted;
+
+	/*
+	 * Per-message IRCv3 tag context.  irc_parse_msg populates this from
+	 * the '@'-prefixed tag string (if any) for the duration of a single
+	 * dispatched message, then clears it.  Handlers read it via the
+	 * irc_msg_tag* accessors -- e.g. server-time for accurate timestamps
+	 * on bouncer/backlog replay, account for logged-in identity.
+	 */
+	GHashTable *tags;
+
 	time_t recv_time;
 
 	GQueue *send_queue;
@@ -142,6 +166,21 @@ char *irc_mirc2txt(const char *string);
 const char *irc_nick_skip_mode(struct irc_conn *irc, const char *string);
 
 gboolean irc_ischannel(const char *string);
+
+/* IRCv3 message-tag accessors (valid only within a message-handler call). */
+const char *irc_msg_tag(struct irc_conn *irc, const char *key);
+time_t irc_msg_tag_time(struct irc_conn *irc);
+
+/* IRCv3 capability negotiation. */
+gboolean irc_cap_have(struct irc_conn *irc, const char *cap);
+void irc_cap_ls_begin(struct irc_conn *irc);
+void irc_msg_cap_v3(struct irc_conn *irc, const char *name, const char *from, char **args);
+
+/* IRCv3 presence/identity notifications. */
+void irc_msg_account(struct irc_conn *irc, const char *name, const char *from, char **args);
+void irc_msg_awaynotify(struct irc_conn *irc, const char *name, const char *from, char **args);
+void irc_msg_chghost(struct irc_conn *irc, const char *name, const char *from, char **args);
+void irc_msg_setname(struct irc_conn *irc, const char *name, const char *from, char **args);
 
 void irc_register_commands(void);
 void irc_msg_table_build(struct irc_conn *irc);

@@ -114,9 +114,13 @@ static struct _irc_msg {
 	{ "905", "*", 0, irc_msg_authfail },		/* SASL auth failed		*/
 	{ "906", "*", 0, irc_msg_authfail },		/* SASL auth failed		*/
 	{ "907", "*", 0, irc_msg_authfail },		/* SASL auth failed		*/
-	{ "cap", "vv:", 3, irc_msg_cap },		/* SASL capable			*/
 	{ "authenticate", ":", 1, irc_msg_authenticate }, /* SASL authenticate		*/
 #endif
+	{ "cap", "vv:", 2, irc_msg_cap_v3 },		/* IRCv3 capability negotiation	*/
+	{ "account", "v:", 1, irc_msg_account },	/* IRCv3 account-notify		*/
+	{ "away", ":", 0, irc_msg_awaynotify },	/* IRCv3 away-notify		*/
+	{ "chghost", "vv", 2, irc_msg_chghost },	/* IRCv3 chghost		*/
+	{ "setname", ":", 1, irc_msg_setname },	/* IRCv3 setname		*/
 	{ "invite", "n:", 2, irc_msg_invite },		/* Invited			*/
 	{ "join", ":", 1, irc_msg_join },		/* Joined a channel		*/
 	{ "kick", "cn:", 3, irc_msg_kick },		/* KICK				*/
@@ -664,6 +668,100 @@ char *irc_format(struct irc_conn *irc, const char *format, ...)
 	return (g_string_free(string, FALSE));
 }
 
+/*
+ * IRCv3 message tags (https://ircv3.net/specs/extensions/message-tags).
+ *
+ * A line may begin with '@' followed by a semicolon-separated list of
+ * key[=value] pairs, then a space, then the ordinary RFC1459 message.  Values
+ * use a small escape alphabet (\: -> ';', \s -> ' ', \\ -> '\', \r, \n).
+ * We stash the decoded pairs on irc->tags for the lifetime of one dispatched
+ * message so handlers can consult server-time, account, etc.
+ */
+static char *irc_tag_unescape(const char *value)
+{
+	GString *out = g_string_new(NULL);
+	const char *p;
+
+	for (p = value; *p; p++) {
+		if (*p != '\\') {
+			g_string_append_c(out, *p);
+			continue;
+		}
+		p++;
+		switch (*p) {
+		case ':': g_string_append_c(out, ';'); break;
+		case 's': g_string_append_c(out, ' '); break;
+		case 'r': g_string_append_c(out, '\r'); break;
+		case 'n': g_string_append_c(out, '\n'); break;
+		case '\\': g_string_append_c(out, '\\'); break;
+		case '\0': /* trailing lone backslash: drop it */ return g_string_free(out, FALSE);
+		default: g_string_append_c(out, *p); break;
+		}
+	}
+	return g_string_free(out, FALSE);
+}
+
+/* Parse a '@'-tag blob (without the leading '@') into irc->tags. */
+static void irc_tags_parse(struct irc_conn *irc, const char *blob)
+{
+	gchar **pairs, **it;
+
+	if (irc->tags == NULL)
+		irc->tags = g_hash_table_new_full(g_str_hash, g_str_equal,
+		                                  g_free, g_free);
+	else
+		g_hash_table_remove_all(irc->tags);
+
+	pairs = g_strsplit(blob, ";", -1);
+	for (it = pairs; it && *it; it++) {
+		char *eq;
+		if (**it == '\0')
+			continue;
+		eq = strchr(*it, '=');
+		if (eq == NULL) {
+			g_hash_table_insert(irc->tags, g_strdup(*it),
+			                    g_strdup(""));
+		} else {
+			*eq = '\0';
+			g_hash_table_insert(irc->tags, g_strdup(*it),
+			                    irc_tag_unescape(eq + 1));
+		}
+	}
+	g_strfreev(pairs);
+}
+
+const char *irc_msg_tag(struct irc_conn *irc, const char *key)
+{
+	if (irc->tags == NULL)
+		return NULL;
+	return g_hash_table_lookup(irc->tags, key);
+}
+
+/*
+ * Resolve the effective timestamp for the message being dispatched.  If the
+ * server sent an IRCv3 server-time tag (ISO 8601 UTC, e.g.
+ * 2021-01-02T15:04:05.123Z) we honour it -- this is what makes bouncer and
+ * chat-history replay show the ORIGINAL time instead of "now".  Falls back to
+ * the local receive time when no usable tag is present.
+ */
+time_t irc_msg_tag_time(struct irc_conn *irc)
+{
+	const char *st = irc_msg_tag(irc, "time");
+	GDateTime *dt;
+	time_t result;
+
+	if (st == NULL || *st == '\0')
+		return time(NULL);
+
+	dt = g_date_time_new_from_iso8601(st, NULL);
+	if (dt == NULL)
+		return time(NULL);
+
+	result = (time_t)g_date_time_to_unix(dt);
+	g_date_time_unref(dt);
+	return result;
+}
+
 void irc_parse_msg(struct irc_conn *irc, char *input)
 {
 	struct _irc_msg *msgent;
@@ -687,6 +785,31 @@ void irc_parse_msg(struct irc_conn *irc, char *input)
 		clean = g_strstrip(clean);
 		purple_debug_misc("irc", ">> %s\n", clean);
 		g_free(clean);
+	}
+
+	/*
+	 * IRCv3 message tags: a leading '@blob ' prefix carrying metadata
+	 * (server-time, account, msgid, ...).  Decode it into irc->tags and
+	 * advance past it so the remainder parses as an ordinary line.  Tags
+	 * stay live for this whole dispatch and are cleared when we return.
+	 */
+	if (input[0] == '@') {
+		char *sp = strchr(input, ' ');
+		if (sp == NULL) {
+			/* Tags with no message -- nothing to dispatch. */
+			if (irc->tags)
+				g_hash_table_remove_all(irc->tags);
+			return;
+		}
+		*sp = '\0';
+		irc_tags_parse(irc, input + 1);
+		*sp = ' ';
+		/* Skip the tag blob and any run of spaces before the message. */
+		input = sp;
+		while (*input == ' ')
+			input++;
+	} else if (irc->tags) {
+		g_hash_table_remove_all(irc->tags);
 	}
 
 	if (!strncmp(input, "PING ", 5)) {

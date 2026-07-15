@@ -52,6 +52,11 @@ static void irc_msg_handle_privmsg(struct irc_conn *irc, const char *name,
                                    const char *from, const char *to,
                                    const char *rawmsg, gboolean notice);
 
+static void irc_cap_maybe_end(struct irc_conn *irc);
+#ifdef HAVE_CYRUS_SASL
+static void irc_cap_start_sasl(struct irc_conn *irc);
+#endif
+
 #ifdef HAVE_CYRUS_SASL
 static void irc_sasl_finish(struct irc_conn *irc);
 #endif
@@ -960,30 +965,57 @@ void irc_msg_join(struct irc_conn *irc, const char *name, const char *from, char
 	PurpleConvChatBuddy *cb;
 
 	char *nick, *userhost, *buf;
+	char *channel;
+	char *ejoin_channel = NULL;
+	const char *ejoin_account = NULL;
 	struct irc_buddy *ib;
 	static int id = 1;
 
 	g_return_if_fail(gc);
 
+	/*
+	 * IRCv3 extended-join changes the JOIN line to
+	 *   :nick!user@host JOIN #channel accountname :Real Name
+	 * instead of the bare ":nick JOIN #channel".  Our format captures the
+	 * lot in args[0]; split off the channel (and note the account, which
+	 * is "*" when the user isn't logged in to services).
+	 */
+	channel = args[0];
+	if (irc_cap_have(irc, "extended-join")) {
+		char *sp = strchr(args[0], ' ');
+		if (sp != NULL) {
+			char *acct_start, *acct_end;
+			ejoin_channel = g_strndup(args[0], sp - args[0]);
+			channel = ejoin_channel;
+			acct_start = sp + 1;
+			acct_end = strchr(acct_start, ' ');
+			if (acct_end != NULL)
+				*acct_end = '\0';
+			if (*acct_start && !purple_strequal(acct_start, "*"))
+				ejoin_account = acct_start;
+		}
+	}
+
 	nick = irc_mask_nick(from);
 
 	if (!purple_utf8_strcasecmp(nick, purple_connection_get_display_name(gc))) {
 		/* We are joining a channel for the first time */
-		serv_got_joined_chat(gc, id++, args[0]);
+		serv_got_joined_chat(gc, id++, channel);
 		g_free(nick);
 		convo = purple_find_conversation_with_account(PURPLE_CONV_TYPE_CHAT,
-							    args[0],
-							    irc->account);
+						    channel,
+						    irc->account);
 
 		if (convo == NULL) {
-			purple_debug_error("irc", "tried to join %s but couldn't\n", args[0]);
+			purple_debug_error("irc", "tried to join %s but couldn't\n", channel);
+			g_free(ejoin_channel);
 			return;
 		}
 		purple_conversation_set_data(convo, IRC_NAMES_FLAG,
 					   GINT_TO_POINTER(FALSE));
 
 		// Get the real name and user host for all participants.
-		buf = irc_format(irc, "vc", "WHO", args[0]);
+		buf = irc_format(irc, "vc", "WHO", channel);
 		irc_send(irc, buf);
 		g_free(buf);
 
@@ -991,13 +1023,15 @@ void irc_msg_join(struct irc_conn *irc, const char *name, const char *from, char
 		 * one would expect in Pidgin, this call produces buggy
 		 * behavior both for the /join and auto-join cases. */
 		/* purple_conversation_present(convo); */
+		g_free(ejoin_channel);
 		return;
 	}
 
-	convo = purple_find_conversation_with_account(PURPLE_CONV_TYPE_CHAT, args[0], irc->account);
+	convo = purple_find_conversation_with_account(PURPLE_CONV_TYPE_CHAT, channel, irc->account);
 	if (convo == NULL) {
-		purple_debug(PURPLE_DEBUG_ERROR, "irc", "JOIN for %s failed\n", args[0]);
+		purple_debug(PURPLE_DEBUG_ERROR, "irc", "JOIN for %s failed\n", channel);
 		g_free(nick);
+		g_free(ejoin_channel);
 		return;
 	}
 
@@ -1012,6 +1046,20 @@ void irc_msg_join(struct irc_conn *irc, const char *name, const char *from, char
 		purple_conv_chat_cb_set_attribute(chat, cb, "userhost", userhost);
 	}
 
+	/*
+	 * extended-join told us this joiner's services account for free --
+	 * announce it so channel regulars can see who is authenticated
+	 * without a manual WHOIS.
+	 */
+	if (ejoin_account != NULL) {
+		char *amsg = g_strdup_printf(_("%s joined, logged in as %s"),
+		                             nick, ejoin_account);
+		purple_conv_chat_write(chat, "", amsg,
+			PURPLE_MESSAGE_SYSTEM | PURPLE_MESSAGE_NO_LOG,
+			irc_msg_tag_time(irc));
+		g_free(amsg);
+	}
+
 	if ((ib = g_hash_table_lookup(irc->buddies, nick)) != NULL) {
 		ib->new_online_status = TRUE;
 		irc_buddy_status(nick, ib, irc);
@@ -1019,6 +1067,7 @@ void irc_msg_join(struct irc_conn *irc, const char *name, const char *from, char
 
 	g_free(userhost);
 	g_free(nick);
+	g_free(ejoin_channel);
 }
 
 void irc_msg_kick(struct irc_conn *irc, const char *name, const char *from, char **args)
@@ -1317,6 +1366,9 @@ static void irc_msg_handle_privmsg(struct irc_conn *irc, const char *name, const
 	char *tmp;
 	char *msg;
 	char *nick;
+	time_t mtime;
+	const char *ournick;
+	gboolean self_echo;
 
 	if (!gc)
 		return;
@@ -1340,12 +1392,38 @@ static void irc_msg_handle_privmsg(struct irc_conn *irc, const char *name, const
 		msg = tmp;
 	}
 
-	if (!purple_utf8_strcasecmp(to, purple_connection_get_display_name(gc))) {
-		serv_got_im(gc, nick, msg, 0, time(NULL));
+	/*
+	 * IRCv3 server-time: if the server tagged this line with a time (as
+	 * bouncers and chat-history playback do), honour it so replayed
+	 * backlog shows the ORIGINAL timestamp instead of the moment we
+	 * happened to receive it.
+	 */
+	mtime = irc_msg_tag_time(irc);
+
+	/*
+	 * IRCv3 echo-message: when enabled the server echoes our own
+	 * PRIVMSGs back to us.  For a channel that is exactly what we want
+	 * (the message shows once, stamped and ordered by the server).  For
+	 * a one-to-one IM libpurple already rendered our outgoing line
+	 * locally, so echoing it back as an inbound IM would duplicate it --
+	 * suppress that case.
+	 */
+	ournick = purple_connection_get_display_name(gc);
+	self_echo = irc_cap_have(irc, "echo-message") &&
+	            ournick != NULL && !purple_utf8_strcasecmp(nick, ournick);
+
+	if (!purple_utf8_strcasecmp(to, ournick)) {
+		if (self_echo) {
+			/* Our own IM bounced back; already shown locally. */
+			g_free(msg);
+			g_free(nick);
+			return;
+		}
+		serv_got_im(gc, nick, msg, 0, mtime);
 	} else {
 		convo = purple_find_conversation_with_account(PURPLE_CONV_TYPE_CHAT, irc_nick_skip_mode(irc, to), irc->account);
 		if (convo)
-			serv_got_chat_in(gc, purple_conv_chat_get_id(PURPLE_CONV_CHAT(convo)), nick, 0, msg, time(NULL));
+			serv_got_chat_in(gc, purple_conv_chat_get_id(PURPLE_CONV_CHAT(convo)), nick, 0, msg, mtime);
 		else
 			purple_debug_error("irc", "Got a %s on %s, which does not exist\n",
 			                   notice ? "NOTICE" : "PRIVMSG", to);
@@ -1586,9 +1664,13 @@ irc_auth_start_cyrus(struct irc_conn *irc)
 	g_free(buf);
 }
 
-/* SASL authentication */
-void
-irc_msg_cap(struct irc_conn *irc, const char *name, const char *from, char **args)
+/*
+ * IRCv3 SASL setup, invoked once the server ACKs the "sasl" capability.
+ * (Extracted from the former irc_msg_cap so the capability dispatcher below
+ * can drive it as one step of the wider negotiation.)
+ */
+static void
+irc_cap_start_sasl(struct irc_conn *irc)
 {
 	int ret = 0;
 	int id = 0;
@@ -1596,17 +1678,6 @@ irc_msg_cap(struct irc_conn *irc, const char *name, const char *from, char **arg
 	const char *mech_list = NULL;
 	char *pos;
 	size_t index;
-
-	if (strncmp(g_strstrip(args[2]), "sasl", 5))
-		return;
-	if (strncmp(args[1], "ACK", 4)) {
-		const char *tmp = _("SASL authentication failed: Server does not support SASL authentication.");
-		purple_connection_error_reason (gc,
-			PURPLE_CONNECTION_ERROR_AUTHENTICATION_IMPOSSIBLE, tmp);
-
-		irc_sasl_finish(irc);
-		return;
-	}
 
 	if (sasl_client_init(NULL) != SASL_OK) {
 		const char *tmp = _("SASL authentication failed: Initializing SASL failed.");
@@ -1728,16 +1799,13 @@ irc_msg_authenticate(struct irc_conn *irc, const char *name, const char *from, c
 void
 irc_msg_authok(struct irc_conn *irc, const char *name, const char *from, char **args)
 {
-	char *buf;
-
 	sasl_dispose(&irc->sasl_conn);
 	irc->sasl_conn = NULL;
 	purple_debug_info("irc", "Successfully authenticated using SASL.\n");
 
-	/* Finish auth session */
-	buf = irc_format(irc, "vv", "CAP", "END");
-	irc_priority_send(irc, buf);
-	g_free(buf);
+	/* SASL done; close negotiation if nothing else is pending. */
+	irc->sasl_wanted = FALSE;
+	irc_cap_maybe_end(irc);
 }
 
 void
@@ -1805,20 +1873,369 @@ irc_msg_authfail(struct irc_conn *irc, const char *name, const char *from, char 
 static void
 irc_sasl_finish(struct irc_conn *irc)
 {
-	char *buf;
-
 	sasl_dispose(&irc->sasl_conn);
 	irc->sasl_conn = NULL;
 
 	g_free(irc->sasl_cb);
 	irc->sasl_cb = NULL;
 
-	/* Auth failed, abort */
+	/* Auth aborted/failed; unblock negotiation and close it if we can. */
+	irc->sasl_wanted = FALSE;
+	irc_cap_maybe_end(irc);
+}
+#endif
+
+/*
+ * ============================================================================
+ *  IRCv3 presence & identity notifications
+ * ============================================================================
+ *
+ * These messages only arrive because we negotiated the matching capability
+ * (account-notify, away-notify, chghost, setname).  They let the client keep
+ * an accurate live picture of who is around and who they are without the old
+ * polling hacks (periodic ISON/WHO).
+ */
+
+/* account-notify: ":nick!user@host ACCOUNT accountname" ("*" == logged out). */
+void
+irc_msg_account(struct irc_conn *irc, const char *name, const char *from, char **args)
+{
+	PurpleConnection *gc = purple_account_get_connection(irc->account);
+	char *nick;
+	const char *account = args[0];
+	char *msg;
+	GSList *buddies;
+
+	if (!gc)
+		return;
+
+	nick = irc_mask_nick(from);
+
+	if (account == NULL || *account == '\0' || purple_strequal(account, "*")) {
+		msg = g_strdup_printf(_("%s logged out of their account"), nick);
+	} else {
+		msg = g_strdup_printf(_("%s is now logged in as %s"), nick, account);
+	}
+
+	/* Report into every channel where we can see this nick. */
+	for (buddies = gc->buddy_chats; buddies; buddies = buddies->next) {
+		PurpleConversation *convo = buddies->data;
+		if (purple_conv_chat_find_user(PURPLE_CONV_CHAT(convo), nick))
+			purple_conv_chat_write(PURPLE_CONV_CHAT(convo), "", msg,
+				PURPLE_MESSAGE_SYSTEM | PURPLE_MESSAGE_NO_LOG,
+				irc_msg_tag_time(irc));
+	}
+
+	g_free(msg);
+	g_free(nick);
+}
+
+/* away-notify: ":nick!user@host AWAY [:reason]".  No arg means back. */
+void
+irc_msg_awaynotify(struct irc_conn *irc, const char *name, const char *from, char **args)
+{
+	PurpleConnection *gc = purple_account_get_connection(irc->account);
+	char *nick;
+	const char *reason = args[0];
+	gboolean away = (reason != NULL && *reason != '\0');
+
+	if (!gc)
+		return;
+
+	nick = irc_mask_nick(from);
+
+	/* If this user is on our buddy list, reflect their away state. */
+	if (g_hash_table_lookup(irc->buddies, nick) != NULL) {
+		purple_prpl_got_user_status(irc->account, nick,
+			away ? "away" : "available", NULL);
+	}
+
+	g_free(nick);
+}
+
+/* chghost: ":nick!user@host CHGHOST newuser newhost" -- host changed in place. */
+void
+irc_msg_chghost(struct irc_conn *irc, const char *name, const char *from, char **args)
+{
+	/*
+	 * We don't currently surface user@host in the UI, so there is nothing
+	 * to redraw; the value of honouring CHGHOST is purely that we do NOT
+	 * treat it as an unknown message (which older code would have logged
+	 * as junk) and that any future host-aware feature sees the update.
+	 */
+	(void)irc;
+	(void)name;
+	(void)from;
+	(void)args;
+}
+
+/* setname: ":nick!user@host SETNAME :new real name". */
+void
+irc_msg_setname(struct irc_conn *irc, const char *name, const char *from, char **args)
+{
+	/* Realname isn't shown live in a conversation; accept silently so the
+	 * line isn't logged as an unrecognized message. */
+	(void)irc;
+	(void)name;
+	(void)from;
+	(void)args;
+}
+
+/*
+ * ============================================================================
+ *  IRCv3 capability negotiation
+ * ============================================================================
+ *
+ * On connect we send CAP LS 302 and hold registration open (in_cap) while we
+ * decide which of the server's offered capabilities to request.  We REQ the
+ * intersection of what the server offers and the set below, count outstanding
+ * REQ round-trips, and only send CAP END once every REQ has been answered and
+ * any SASL exchange has finished.  This is what upgrades the prpl from a bare
+ * RFC1459 client to a modern IRCv3 one -- server-time, account tracking,
+ * away-notify, chghost, extended-join, echo-message, etc. all ride on this.
+ */
+
+/* Capabilities we know how to make use of.  "sasl" is only requested when the
+ * user has enabled SASL and libpurple was built with Cyrus. */
+static const char * const irc_wanted_caps[] = {
+	"server-time",       /* accurate timestamps on replayed/bounced msgs   */
+	"account-notify",    /* learn when a user logs in/out of services      */
+	"account-tag",       /* per-message account identity                   */
+	"away-notify",       /* real-time away/back without polling            */
+	"chghost",           /* user host changes without a fake quit/join     */
+	"extended-join",     /* account + realname delivered with JOIN         */
+	"multi-prefix",      /* full @+%& prefix set in NAMES/WHO              */
+	"echo-message",      /* server echoes our own PRIVMSGs back reliably   */
+	"message-tags",      /* generic client-only tag transport              */
+	"cap-notify",        /* CAP NEW / CAP DEL live capability updates       */
+	"userhost-in-names", /* full nick!user@host in NAMES                    */
+	"invite-notify",     /* see invites sent by others in a channel        */
+	"setname",           /* realname changes without reconnect             */
+	NULL
+};
+
+gboolean irc_cap_have(struct irc_conn *irc, const char *cap)
+{
+	return irc->caps_enabled != NULL &&
+	       g_hash_table_contains(irc->caps_enabled, cap);
+}
+
+/* True if we want this capability (and can actually use it right now). */
+static gboolean irc_cap_wanted(struct irc_conn *irc, const char *cap)
+{
+	int i;
+
+	if (purple_strequal(cap, "sasl"))
+		return irc->sasl_wanted;
+
+	for (i = 0; irc_wanted_caps[i] != NULL; i++) {
+		if (purple_strequal(cap, irc_wanted_caps[i]))
+			return TRUE;
+	}
+	return FALSE;
+}
+
+/*
+ * Send CAP END exactly once, and only when the whole negotiation has settled:
+ * CAP LS parsed, no REQ replies outstanding, and no SASL exchange in flight.
+ */
+static void
+irc_cap_maybe_end(struct irc_conn *irc)
+{
+	char *buf;
+
+	if (!irc->in_cap)
+		return;
+	if (!irc->cap_ls_done || irc->cap_reqs > 0 || irc->sasl_wanted)
+		return;
+
+	irc->in_cap = FALSE;
 	buf = irc_format(irc, "vv", "CAP", "END");
 	irc_priority_send(irc, buf);
 	g_free(buf);
 }
+
+/* Kick off negotiation.  Called from the login path before USER/NICK. */
+void
+irc_cap_ls_begin(struct irc_conn *irc)
+{
+	char *buf;
+
+#ifdef HAVE_CYRUS_SASL
+	irc->sasl_wanted = purple_account_get_bool(irc->account, "sasl", FALSE);
+#else
+	irc->sasl_wanted = FALSE;
 #endif
+
+	if (irc->caps == NULL)
+		irc->caps = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+	if (irc->caps_enabled == NULL)
+		irc->caps_enabled = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+
+	irc->in_cap = TRUE;
+	irc->cap_ls_done = FALSE;
+	irc->cap_reqs = 0;
+
+	/* "302" requests IRCv3.2 CAP LS semantics (values, multiline). */
+	buf = irc_format(irc, "vvv", "CAP", "LS", "302");
+	irc_priority_send(irc, buf);
+	g_free(buf);
+}
+
+/* Record the offered caps and REQ the subset we want. */
+static void
+irc_cap_handle_ls(struct irc_conn *irc, const char *caplist, gboolean more)
+{
+	gchar **caps, **it;
+	GString *req = g_string_new(NULL);
+
+	caps = g_strsplit(g_strstrip((char *)caplist), " ", -1);
+	for (it = caps; it && *it; it++) {
+		char *eq;
+		char *name;
+		if (**it == '\0')
+			continue;
+		/* CAP LS 302 may carry name=value; we only key on the name. */
+		eq = strchr(*it, '=');
+		name = eq ? g_strndup(*it, eq - *it) : g_strdup(*it);
+		g_hash_table_add(irc->caps, g_strdup(name));
+		if (irc_cap_wanted(irc, name)) {
+			if (req->len)
+				g_string_append_c(req, ' ');
+			g_string_append(req, name);
+		}
+		g_free(name);
+	}
+	g_strfreev(caps);
+
+	/* An asterisk parameter before the list means more LS lines follow. */
+	if (more) {
+		g_string_free(req, TRUE);
+		return;
+	}
+
+	irc->cap_ls_done = TRUE;
+
+	if (req->len) {
+		char *buf = irc_format(irc, "vv:", "CAP", "REQ", req->str);
+		irc->cap_reqs++;
+		irc_priority_send(irc, buf);
+		g_free(buf);
+	}
+	g_string_free(req, TRUE);
+
+	/* If we requested nothing (and don't want SASL), close immediately. */
+	irc_cap_maybe_end(irc);
+}
+
+/* Mark ACKed caps enabled; trigger SASL if it was among them. */
+static void
+irc_cap_handle_ack(struct irc_conn *irc, const char *caplist)
+{
+	gchar **caps, **it;
+	gboolean start_sasl = FALSE;
+
+	caps = g_strsplit(g_strstrip((char *)caplist), " ", -1);
+	for (it = caps; it && *it; it++) {
+		const char *name = *it;
+		if (*name == '\0')
+			continue;
+		/* A leading '-' means the cap was disabled. */
+		if (*name == '-') {
+			g_hash_table_remove(irc->caps_enabled, name + 1);
+			continue;
+		}
+		g_hash_table_add(irc->caps_enabled, g_strdup(name));
+		purple_debug_info("irc", "IRCv3 capability enabled: %s\n", name);
+		if (purple_strequal(name, "sasl"))
+			start_sasl = TRUE;
+	}
+	g_strfreev(caps);
+
+	if (irc->cap_reqs > 0)
+		irc->cap_reqs--;
+
+#ifdef HAVE_CYRUS_SASL
+	if (start_sasl && irc->sasl_wanted) {
+		/* SASL keeps negotiation open until AUTHENTICATE completes. */
+		irc_cap_start_sasl(irc);
+		return;
+	}
+#else
+	(void)start_sasl;
+#endif
+
+	irc_cap_maybe_end(irc);
+}
+
+/*
+ * IRCv3 CAP dispatcher.  args[0] is our nick or '*', args[1] is the
+ * subcommand (LS/ACK/NAK/NEW/DEL/LIST), and the remaining tokens are the
+ * capability list (possibly preceded by '*' to signal continuation).
+ */
+void
+irc_msg_cap_v3(struct irc_conn *irc, const char *name, const char *from, char **args)
+{
+	const char *sub = args[1];
+	const char *list = args[2] ? args[2] : "";
+	gboolean more = FALSE;
+
+	if (sub == NULL)
+		return;
+
+	/* CAP LS/LIST may send "* :caps" to indicate more lines follow. */
+	if (list[0] == '*' && (list[1] == ' ' || list[1] == '\0')) {
+		more = TRUE;
+		list = (list[1] == ' ') ? list + 2 : list + 1;
+	}
+
+	if (!g_ascii_strcasecmp(sub, "LS")) {
+		irc_cap_handle_ls(irc, list, more);
+	} else if (!g_ascii_strcasecmp(sub, "ACK")) {
+		irc_cap_handle_ack(irc, list);
+	} else if (!g_ascii_strcasecmp(sub, "NAK")) {
+		purple_debug_info("irc", "IRCv3 CAP REQ rejected: %s\n", list);
+		if (irc->cap_reqs > 0)
+			irc->cap_reqs--;
+#ifdef HAVE_CYRUS_SASL
+		/* If SASL was refused, don't keep the connection blocked on it. */
+		if (irc->sasl_wanted && strstr(list, "sasl"))
+			irc->sasl_wanted = FALSE;
+#endif
+		irc_cap_maybe_end(irc);
+	} else if (!g_ascii_strcasecmp(sub, "NEW")) {
+		/* cap-notify: server advertises a newly-available capability. */
+		gchar **caps, **it;
+		GString *req = g_string_new(NULL);
+		caps = g_strsplit(g_strstrip((char *)list), " ", -1);
+		for (it = caps; it && *it; it++) {
+			char *eq = strchr(*it, '=');
+			char *cn = eq ? g_strndup(*it, eq - *it) : g_strdup(*it);
+			if (**it && irc_cap_wanted(irc, cn) && !irc_cap_have(irc, cn)) {
+				if (req->len) g_string_append_c(req, ' ');
+				g_string_append(req, cn);
+			}
+			g_free(cn);
+		}
+		g_strfreev(caps);
+		if (req->len) {
+			char *buf = irc_format(irc, "vv:", "CAP", "REQ", req->str);
+			irc_send(irc, buf);
+			g_free(buf);
+		}
+		g_string_free(req, TRUE);
+	} else if (!g_ascii_strcasecmp(sub, "DEL")) {
+		/* cap-notify: server withdrew a capability. */
+		gchar **caps, **it;
+		caps = g_strsplit(g_strstrip((char *)list), " ", -1);
+		for (it = caps; it && *it; it++) {
+			if (**it)
+				g_hash_table_remove(irc->caps_enabled, *it);
+		}
+		g_strfreev(caps);
+	}
+	/* LIST is informational; nothing to do. */
+}
 
 void irc_msg_ignore(struct irc_conn *irc, const char *name, const char *from, char **args)
 {

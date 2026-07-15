@@ -450,17 +450,18 @@ static gboolean do_login(PurpleConnection *gc) {
 	struct irc_conn *irc = gc->proto_data;
 	const char *pass = purple_connection_get_password(gc);
 	gint interval, burst;
-#ifdef HAVE_CYRUS_SASL
-	const gboolean use_sasl = purple_account_get_bool(irc->account, "sasl", FALSE);
-#endif
 
-	if (pass && *pass) {
-#ifdef HAVE_CYRUS_SASL
-		if (use_sasl)
-			buf = irc_format(irc, "vv:", "CAP", "REQ", "sasl");
-		else /* intended to fall through */
-#endif
-			buf = irc_format(irc, "v:", "PASS", pass);
+	/*
+	 * Begin IRCv3 capability negotiation (CAP LS 302) before registering.
+	 * This holds the connection open until CAP END and is what enables
+	 * server-time, account-notify, away-notify, SASL, echo-message, etc.
+	 * SASL, when enabled, is now requested as one negotiated capability
+	 * rather than via a bespoke CAP REQ here.
+	 */
+	irc_cap_ls_begin(irc);
+
+	if (pass && *pass && !irc->sasl_wanted) {
+		buf = irc_format(irc, "v:", "PASS", pass);
 		if (irc_priority_send(irc, buf) < 0) {
 			g_free(buf);
 			return FALSE;
@@ -601,6 +602,13 @@ static void irc_close(PurpleConnection *gc)
 
 	g_free(irc->mode_chars);
 	g_free(irc->reqnick);
+
+	if (irc->caps)
+		g_hash_table_destroy(irc->caps);
+	if (irc->caps_enabled)
+		g_hash_table_destroy(irc->caps_enabled);
+	if (irc->tags)
+		g_hash_table_destroy(irc->tags);
 
 #ifdef HAVE_CYRUS_SASL
 	if (irc->sasl_conn) {
@@ -884,7 +892,14 @@ static int irc_chat_send(PurpleConnection *gc, int id, const char *what, PurpleM
 
 	irc_cmd_privmsg(irc, "msg", NULL, args);
 
-	serv_got_chat_in(gc, id, purple_connection_get_display_name(gc), flags, what, time(NULL));
+	/*
+	 * With IRCv3 echo-message the server sends our own line back to us
+	 * (server-ordered and server-timestamped), and irc_msg_handle_privmsg
+	 * displays it.  Only echo locally when the server won't, to avoid a
+	 * duplicate.
+	 */
+	if (!irc_cap_have(irc, "echo-message"))
+		serv_got_chat_in(gc, id, purple_connection_get_display_name(gc), flags, what, time(NULL));
 	g_free(tmp);
 	return 0;
 }

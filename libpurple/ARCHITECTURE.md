@@ -281,6 +281,60 @@ The fix clamps the measured vbox height in the requisition to the height
 is set. The entry now stays exactly as tall as the text it holds; if no
 request is pinned yet the old natural-size behaviour is used unchanged.
 
+## The IRC protocol plugin, dragged into the IRCv3 era
+
+The `irc` prpl (`libpurple/protocols/irc`) was a faithful but frozen RFC1459
+client: it understood only the classic `:prefix COMMAND args` line grammar and
+its sole nod to modern IRC was a bespoke `CAP REQ sasl` hack bolted onto the
+login path. Everything downstream paid for that -- every message was stamped
+with the local `time(NULL)`, presence was learned by polling `ISON`/`WHO`, and
+any line the server tagged (a `@`-prefixed blob) was dropped as unparseable.
+
+The modernization is additive and centred on a real **capability-negotiation
+core** plus a **message-tag layer**, both living in `parse.c`/`msgs.c` behind a
+small API in `irc.h` (`irc_cap_have`, `irc_msg_tag`, `irc_msg_tag_time`).
+
+### Message tags (the foundation)
+
+`irc_parse_msg()` now strips a leading `@key=value;...` blob before the rest of
+the line is parsed, decoding the IRCv3 escape alphabet (`\:`->`;`, `\s`->space,
+`\\`, `\r`, `\n`) into a per-connection `irc->tags` hash that stays live for
+exactly one dispatched message. Handlers read it through `irc_msg_tag()`;
+`irc_msg_tag_time()` turns an IRCv3 `server-time` tag (ISO 8601) into a
+`time_t`, falling back to receive-time when absent. This is what makes bouncer
+backlog and `chathistory` replay render with the **original** timestamps
+instead of "now".
+
+### Capability negotiation
+
+`irc_cap_ls_begin()` (called from the login path before `USER`/`NICK`) sends
+`CAP LS 302` and holds registration open (`in_cap`) while we intersect the
+server's offer with `irc_wanted_caps[]` and `CAP REQ` the subset we can use.
+The dispatcher `irc_msg_cap_v3()` handles `LS/ACK/NAK/NEW/DEL/LIST`, tracking
+outstanding REQ round-trips in `cap_reqs`; `irc_cap_maybe_end()` emits `CAP END`
+**exactly once**, only after the LS is parsed, every REQ is answered, and any
+SASL exchange has finished. SASL is now just one negotiated capability -- the
+old `irc_msg_cap` was split into `irc_cap_start_sasl()` (driven by the ACK) and
+the generic core, and the SASL completion paths route through
+`irc_cap_maybe_end()` instead of sending their own `CAP END`. `cap-notify`
+(`CAP NEW`/`CAP DEL`) lets the server add/remove capabilities mid-session.
+
+### Capabilities consumed
+
+| Capability      | Effect in the prpl                                          |
+|-----------------|-------------------------------------------------------------|
+| `server-time`   | real timestamps on replayed/bounced messages                |
+| `echo-message`  | own messages shown from the server's echo (correctly ordered/stamped); the local optimistic echo is suppressed to avoid duplicates |
+| `extended-join` | services account announced on JOIN without a manual WHOIS    |
+| `account-notify`| live "logged in as X" / "logged out" in channels             |
+| `away-notify`   | buddy away/back reflected instantly, no ISON/WHO polling     |
+| `multi-prefix`, `userhost-in-names`, `chghost`, `setname`, `invite-notify`, `message-tags` | negotiated and accepted (no longer logged as junk); ready for host/realname-aware features |
+
+The design deliberately keeps every consumer guarded on `irc_cap_have()` and
+every tag read guarded on presence, so a bare RFC1459 server behaves exactly as
+before. Pure tag logic is covered by
+`libpurple/protocols/irc/tests/test_irc_tags.c`.
+
 ## The protocol subsystem (modernized)
 
 Historically a protocol was located with an O(n) linear scan
