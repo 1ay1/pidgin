@@ -248,6 +248,40 @@ mini_dialog_add_button(PidginMiniDialog *self,
 	gtk_label_set_markup_with_mnemonic(GTK_LABEL(label), button_text);
 	g_free(button_text);
 
+	/* Keep the buttons compact: trim the label's internal padding and the
+	 * button's focus/inner spacing so they don't hog the narrow column. */
+	gtk_widget_set_margin_start(label, 2);
+	gtk_widget_set_margin_end(label, 2);
+	gtk_widget_set_margin_top(label, 0);
+	gtk_widget_set_margin_bottom(label, 0);
+	gtk_button_set_focus_on_click(GTK_BUTTON(button), FALSE);
+
+	/*
+	 * The GTK3 theme's default button padding makes these action buttons
+	 * bulky in the narrow buddy-list column. Install a one-shot CSS provider
+	 * that gives buttons carrying the "pidgin-minidialog-button" class tight
+	 * padding, and tag this button with it.
+	 */
+	{
+		static GtkCssProvider *provider = NULL;
+		if (provider == NULL) {
+			provider = gtk_css_provider_new();
+			gtk_css_provider_load_from_data(provider,
+				".pidgin-minidialog-button {"
+				"  padding: 1px 6px;"
+				"  min-height: 0;"
+				"  min-width: 0;"
+				"}", -1, NULL);
+		}
+		gtk_style_context_add_provider(
+			gtk_widget_get_style_context(button),
+			GTK_STYLE_PROVIDER(provider),
+			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+		gtk_style_context_add_class(
+			gtk_widget_get_style_context(button),
+			"pidgin-minidialog-button");
+	}
+
 	callback_data->mini_dialog = self;
 	callback_data->callback = clicked_cb;
 	callback_data->user_data = user_data;
