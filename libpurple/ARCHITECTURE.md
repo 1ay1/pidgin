@@ -4,6 +4,11 @@ This document describes the internal architecture of libpurple 2.x and the
 modernization work carried on the `better-libpurple` branch. It is a working
 map for contributors, not end-user documentation.
 
+> For the **build / install / run / debug workflow** (and the common
+> "plugin shadowing" footgun where the system Pidgin loads a stale
+> `libirc.so` instead of your build), see
+> [`../docs/DEVELOPING.md`](../docs/DEVELOPING.md).
+
 ## Overview
 
 libpurple is the ~93k-line C core beneath Pidgin and Finch. It provides the
