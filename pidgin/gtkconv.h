@@ -327,4 +327,12 @@ GtkWidget *pidgin_conv_get_docked_child(GtkWidget *dock);
  */
 void pidgin_conv_redock_widget(GtkWidget *box);
 
+/**
+ * Re-place every open conversation according to the CURRENT value of the
+ * single-window pref. Call this after the buddy list window has been rebuilt
+ * in the new mode so existing conversations move into (or out of) the shared
+ * docked window as appropriate.
+ */
+void pidgin_conv_reparent_all_for_mode_switch(void);
+
 #endif /* _PIDGIN_CONVERSATION_H_ */

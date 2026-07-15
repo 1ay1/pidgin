@@ -10676,6 +10676,45 @@ pidgin_conv_is_hidden(PidginConversation *gtkconv)
 	return (gtkconv->win == hidden_convwin);
 }
 
+void
+pidgin_conv_reparent_all_for_mode_switch(void)
+{
+	GList *convs, *l;
+	GList *gtkconvs = NULL;
+
+	/* Snapshot every real (non-hidden) conversation's PidginConversation.
+	 * We take the snapshot first because we're about to move gtkconvs between
+	 * windows, which mutates the very window/gtkconv lists we'd be walking. */
+	convs = purple_get_conversations();
+	for (l = convs; l != NULL; l = l->next) {
+		PurpleConversation *conv = l->data;
+		PidginConversation *gtkconv = PIDGIN_CONVERSATION(conv);
+
+		if (gtkconv == NULL)
+			continue;
+		if (gtkconv->win == hidden_convwin)
+			continue;
+		/* A gtkconv can back several PurpleConversations (contact merging);
+		 * only handle each PidginConversation once. */
+		if (g_list_find(gtkconvs, gtkconv) != NULL)
+			continue;
+		gtkconvs = g_list_prepend(gtkconvs, gtkconv);
+	}
+
+	/* Detach each from its current window and re-place it according to the
+	 * new mode. pidgin_conv_placement_place() routes to conv_placement_blist
+	 * (docked) when single_window is on, or the user's normal placement when
+	 * it's off. */
+	for (l = gtkconvs; l != NULL; l = l->next) {
+		PidginConversation *gtkconv = l->data;
+
+		pidgin_conv_window_remove_gtkconv(gtkconv->win, gtkconv);
+		pidgin_conv_placement_place(gtkconv);
+	}
+
+	g_list_free(gtkconvs);
+}
+
 
 /* Algorithm from http://www.w3.org/TR/AERT#color-contrast */
 static gboolean

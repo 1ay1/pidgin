@@ -7840,6 +7840,45 @@ pidgin_blist_get_theme()
 	return priv->current_theme;
 }
 
+/*
+ * Runtime toggle of the "buddy list and conversations in one window" pref.
+ * The whole layout (paned vs. plain notebook) is only built in
+ * pidgin_blist_show(), so flipping the pref while running has to rebuild the
+ * buddy list window and then re-place every open conversation according to the
+ * new mode. pidgin_blist_destroy() already hands the docked conversation
+ * content box back to its own hidden toplevel, so tearing the window down is
+ * safe; pidgin_blist_show() then constructs the correct layout, and
+ * pidgin_conv_reparent_all_for_mode_switch() moves the convs into (or out of)
+ * the shared docked window.
+ */
+static void
+pidgin_blist_single_window_pref_cb(const char *name, PurplePrefType type,
+                                   gconstpointer val, gpointer data)
+{
+	PurpleBuddyList *list = purple_get_blist();
+	gboolean was_visible;
+
+	if (list == NULL || list->ui_data == NULL)
+		return;
+
+	was_visible = gtkblist && gtkblist->window &&
+	              gtk_widget_get_visible(gtkblist->window);
+
+	/* Rebuild the buddy list window in the new layout. destroy() sets the
+	 * global gtkblist to NULL and reparents any docked conv content back to
+	 * its own hidden toplevel; show() then builds the paned (or plain) layout
+	 * fresh according to the new pref value. */
+	pidgin_blist_destroy(list);
+	pidgin_blist_show(list);
+
+	/* Now move existing conversations into or out of the docked window to
+	 * match the new mode. */
+	pidgin_conv_reparent_all_for_mode_switch();
+
+	if (was_visible)
+		purple_blist_set_visible(TRUE);
+}
+
 void pidgin_blist_init(void)
 {
 	void *gtk_blist_handle = pidgin_blist_get_handle();
@@ -7907,6 +7946,18 @@ void pidgin_blist_init(void)
 	purple_signal_connect_priority(purple_connections_get_handle(), "autojoin",
 	                               gtk_blist_handle, PURPLE_CALLBACK(autojoin_cb),
 	                               NULL, PURPLE_SIGNAL_PRIORITY_HIGHEST);
+
+	/* React to the single-window pref being toggled at runtime. Registered on
+	 * a dedicated static handle (NOT pidgin_blist_get_handle) because
+	 * pidgin_blist_destroy() -- which our own handler calls -- disconnects all
+	 * prefs callbacks on the blist handle, which would tear this very callback
+	 * out mid-flight. */
+	{
+		static int single_window_pref_handle;
+		purple_prefs_connect_callback(&single_window_pref_handle,
+			PIDGIN_PREFS_ROOT "/conversations/single_window",
+			pidgin_blist_single_window_pref_cb, NULL);
+	}
 }
 
 void
