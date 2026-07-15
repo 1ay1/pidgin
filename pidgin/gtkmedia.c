@@ -87,7 +87,6 @@ struct _PidginMediaPrivate
 	gchar *screenname;
 	gulong level_handler_id;
 
-	GtkUIManager *ui;
 	GtkWidget *menubar;
 	GtkWidget *statusbar;
 
@@ -263,63 +262,44 @@ pidgin_x_error_handler(Display *display, XErrorEvent *event)
 #endif
 
 static void
-menu_hangup(GtkAction *action, gpointer data)
+menu_hangup(GtkMenuItem *menuitem, gpointer data)
 {
 	PidginMedia *gtkmedia = PIDGIN_MEDIA(data);
 	purple_media_stream_info(gtkmedia->priv->media,
 			PURPLE_MEDIA_INFO_HANGUP, NULL, NULL, TRUE);
 }
 
-static const GtkActionEntry menu_entries[] = {
-	{ "MediaMenu", NULL, N_("_Media"), NULL, NULL, NULL },
-	{ "Hangup", NULL, N_("_Hangup"), NULL, NULL, G_CALLBACK(menu_hangup) },
-};
-
-static const char *media_menu =
-"<ui>"
-	"<menubar name='Media'>"
-		"<menu action='MediaMenu'>"
-			"<menuitem action='Hangup'/>"
-		"</menu>"
-	"</menubar>"
-"</ui>";
-
 static GtkWidget *
 setup_menubar(PidginMedia *window)
 {
-	GtkActionGroup *action_group;
-	GError *error;
+	GtkWidget *menubar;
+	GtkWidget *media_item;
+	GtkWidget *media_menu;
+	GtkWidget *hangup_item;
 	GtkAccelGroup *accel_group;
-	GtkWidget *menu;
 
-	action_group = gtk_action_group_new("MediaActions");
-#ifdef ENABLE_NLS
-	gtk_action_group_set_translation_domain(action_group,
-	                                        PACKAGE);
-#endif
-	gtk_action_group_add_actions(action_group,
-	                             menu_entries,
-	                             G_N_ELEMENTS(menu_entries),
-	                             GTK_WINDOW(window));
-
-	window->priv->ui = gtk_ui_manager_new();
-	gtk_ui_manager_insert_action_group(window->priv->ui, action_group, 0);
-
-	accel_group = gtk_ui_manager_get_accel_group(window->priv->ui);
+	/* GTK3: GtkUIManager/GtkAction/GtkActionGroup are all deprecated (3.10).
+	 * This menubar is trivial (one menu, one item), so build it directly
+	 * with GtkMenuBar/GtkMenuItem instead. */
+	accel_group = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
 
-	error = NULL;
-	if (!gtk_ui_manager_add_ui_from_string(window->priv->ui, media_menu, -1, &error))
-	{
-		g_message("building menus failed: %s", error->message);
-		g_error_free(error);
-		exit(EXIT_FAILURE);
-	}
+	menubar = gtk_menu_bar_new();
 
-	menu = gtk_ui_manager_get_widget(window->priv->ui, "/Media");
+	media_item = gtk_menu_item_new_with_mnemonic(_("_Media"));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar), media_item);
 
-	gtk_widget_show(menu);
-	return menu;
+	media_menu = gtk_menu_new();
+	gtk_menu_set_accel_group(GTK_MENU(media_menu), accel_group);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(media_item), media_menu);
+
+	hangup_item = gtk_menu_item_new_with_mnemonic(_("_Hangup"));
+	g_signal_connect(G_OBJECT(hangup_item), "activate",
+			G_CALLBACK(menu_hangup), window);
+	gtk_menu_shell_append(GTK_MENU_SHELL(media_menu), hangup_item);
+
+	gtk_widget_show_all(menubar);
+	return menubar;
 }
 
 static void
@@ -493,11 +473,6 @@ pidgin_media_dispose(GObject *media)
 			G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, gtkmedia);
 		g_object_unref(gtkmedia->priv->media);
 		gtkmedia->priv->media = NULL;
-	}
-
-	if (gtkmedia->priv->ui) {
-		g_object_unref(gtkmedia->priv->ui);
-		gtkmedia->priv->ui = NULL;
 	}
 
 	if (gtkmedia->priv->timeout_id != 0)
