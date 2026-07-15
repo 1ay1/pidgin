@@ -329,7 +329,15 @@ docklet_toggle_blink(GtkWidget *toggle, void *data)
 static void
 docklet_toggle_blist(GtkWidget *toggle, void *data)
 {
-	purple_blist_set_visible(gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(toggle)));
+	/* Toggle the buddy list's ACTUAL visibility rather than trusting the check
+	 * item's active state. Over dbusmenu (the AppIndicator / StatusNotifierItem
+	 * tray backend) the checkbox state that round-trips from the host can be
+	 * stale or inverted relative to the real window, so reading
+	 * gtk_check_menu_item_get_active() here would frequently produce a no-op
+	 * (e.g. "set visible" when it already thinks it's visible). Mirroring the
+	 * left-click path (pidgin_blist_toggle_visibility) makes the item work
+	 * identically on both the legacy GtkStatusIcon and the SNI tray. */
+	pidgin_blist_toggle_visibility();
 }
 
 #ifdef _WIN32
@@ -683,7 +691,18 @@ docklet_build_menu(void)
 	menu = gtk_menu_new();
 
 	menuitem = gtk_check_menu_item_new_with_mnemonic(_("Show Buddy _List"));
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem), purple_prefs_get_bool(PIDGIN_PREFS_ROOT "/blist/list_visible"));
+	{
+		/* Reflect the buddy list's REAL current visibility, not just the
+		 * /blist/list_visible pref (which can drift from the actual window
+		 * state, especially under the SNI tray). Set it with the toggle handler
+		 * connected AFTER, so this programmatic set doesn't itself fire
+		 * docklet_toggle_blist and flip visibility on menu rebuild. */
+		PidginBuddyList *gtkblist = pidgin_blist_get_default_gtk_blist();
+		gboolean visible = gtkblist && gtkblist->window &&
+		                   gtk_widget_get_visible(gtkblist->window) &&
+		                   !PIDGIN_WINDOW_ICONIFIED(gtkblist->window);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem), visible);
+	}
 	g_signal_connect(G_OBJECT(menuitem), "toggled", G_CALLBACK(docklet_toggle_blist), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
