@@ -288,6 +288,10 @@ request is pinned yet the old natural-size behaviour is used unchanged.
 
 ## The IRC protocol plugin, dragged into the IRCv3 era
 
+> User-facing reference for the features below (capabilities, account
+> options, and slash-commands like `/cap` and `/chathistory`) lives in
+> [`../docs/IRC.md`](../docs/IRC.md). This section covers the *internals*.
+
 The `irc` prpl (`libpurple/protocols/irc`) was a faithful but frozen RFC1459
 client: it understood only the classic `:prefix COMMAND args` line grammar and
 its sole nod to modern IRC was a bespoke `CAP REQ sasl` hack bolted onto the
