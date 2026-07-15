@@ -10348,6 +10348,11 @@ pidgin_conv_dock_into_blist(void)
 	g_object_unref(box);
 	gtk_widget_show(box);
 
+	/* The conversation content now lives inside the buddy list. The docked
+	 * conversation's own toplevel is an empty orphan that must never show;
+	 * hide it so it doesn't linger on screen as a stray blank window. */
+	gtk_widget_hide(win->window);
+
 	/* A conversation is now docked: hide the "no conversation open" panel. */
 	if (gtkblist->conv_placeholder != NULL)
 		gtk_widget_hide(gtkblist->conv_placeholder);
@@ -10368,6 +10373,12 @@ pidgin_conv_redock_widget(GtkWidget *box)
 
 	if (gtk_widget_get_parent(box) == NULL)
 		gtk_container_add(GTK_CONTAINER(docked_convwin->window), box);
+
+	/* The docked conversation toplevel is an orphan that must never appear on
+	 * screen. Handing the content box back to it can leave it mapped (a stray
+	 * blank conversation window) if it was ever presented while docked, so
+	 * force it hidden here. */
+	gtk_widget_hide(docked_convwin->window);
 }
 
 /* Placement: every conversation goes into the shared docked window. */
@@ -10377,6 +10388,11 @@ conv_placement_blist(PidginConversation *conv)
 	PidginWindow *win = pidgin_conv_get_docked_window();
 
 	pidgin_conv_window_add_gtkconv(win, conv);
+
+	/* The docked window's own toplevel must never map; only its content box,
+	 * re-parented into the buddy list below, is shown. Keep it hidden in case
+	 * add_gtkconv (or a focus grab within it) tried to surface it. */
+	gtk_widget_hide(win->window);
 
 	/* Make sure the buddy list (which hosts us) is visible, then move the
 	 * conversation content box into the buddy list's dock placeholder. Doing
@@ -10817,7 +10833,28 @@ pidgin_conv_reparent_all_for_mode_switch(void)
 		pidgin_conv_placement_place(gtkconv);
 	}
 
+	/* After every conversation has been re-placed, make sure the shared docked
+	 * window's own toplevel is not left mapped. In docked mode its content box
+	 * lives inside the buddy list, so the toplevel must stay hidden; a focus
+	 * grab during add_gtkconv can otherwise surface it as a stray blank window
+	 * on reattach. */
+	if (pidgin_conv_single_window_enabled() && docked_convwin != NULL)
+		gtk_widget_hide(docked_convwin->window);
+
 	g_list_free(gtkconvs);
+
+	/* Switching OUT of single-window mode: the shared docked window is no
+	 * longer used. If the reparent above didn't already empty it (e.g. there
+	 * were no open conversations to move), it still holds its orphaned content
+	 * box off-screen -- tear it down now so no stray blank conversation window
+	 * lingers. When it did empty, remove_gtkconv already destroyed it and
+	 * nulled the static, so this is a no-op. */
+	if (!pidgin_conv_single_window_enabled() && docked_convwin != NULL &&
+	    docked_convwin->gtkconvs == NULL) {
+		PidginWindow *dead = docked_convwin;
+		docked_convwin = NULL;
+		pidgin_conv_window_destroy(dead);
+	}
 }
 
 
