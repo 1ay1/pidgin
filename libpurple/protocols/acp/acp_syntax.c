@@ -494,7 +494,7 @@ acp_highlight_code(const char *code, const char *lang_tag)
 			g_string_append_printf(out,
 			    "&#160;<font color=\"" SC_GUTTER "\">%s</font>&#160;", le);
 		}
-		dashes = panel_w - 2 - lang_cols;
+		dashes = panel_w - 2 - lang_cols + 2;   /* +2 for the right border cell */
 		if (dashes < 1) dashes = 1;
 		for (k = 0; k < dashes; k++) g_string_append(out, "\xE2\x94\x80"); /* ─ */
 		g_string_append(out, "\xE2\x95\xAE</font><br>");   /* ╮ */
@@ -521,6 +521,10 @@ acp_highlight_code(const char *code, const char *lang_tag)
 			for (k = 0; k < pad; k++) g_string_append(out, "&#160;");
 			g_string_append(out, "</font>");
 		}
+		/* right border */
+		g_string_append(out,
+		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
+		    "\">&#160;\xE2\x94\x82</font>");   /* │ right border */
 		g_string_append(out, "<br>");
 		g_string_free(rows[i], TRUE);
 	}
@@ -531,7 +535,7 @@ acp_highlight_code(const char *code, const char *lang_tag)
 		g_string_append(out,
 		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
 		    "\">\xE2\x95\xB0");   /* ╰ */
-		for (k = 0; k < panel_w - 1; k++) g_string_append(out, "\xE2\x94\x80");
+		for (k = 0; k < panel_w - 1 + 2; k++) g_string_append(out, "\xE2\x94\x80");
 		g_string_append(out, "\xE2\x95\xAF</font>");   /* ╯ */
 	}
 

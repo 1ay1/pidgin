@@ -92,12 +92,34 @@ typedef struct {
 	/* the kind of block currently accumulating in `open`, so we can detect
 	 * an interrupter (e.g. a list item ending a paragraph) and commit early. */
 	int           open_kind;   /* AcpBlk* below                               */
+
+	/* live "agent is typing" placeholder drawn in the transcript while a turn
+	 * is in flight but before any content has landed. Removed the instant the
+	 * first chunk/card arrives or the turn ends. */
+	gboolean      typing;      /* placeholder currently shown                 */
+	GtkTextMark  *type_start;  /* start of the placeholder region             */
 } AcpStream;
 
-enum { BLK_NONE = 0, BLK_PARA, BLK_LIST, BLK_QUOTE, BLK_HEAD };
+enum { BLK_NONE = 0, BLK_PARA, BLK_LIST, BLK_QUOTE, BLK_HEAD, BLK_TABLE };
 
 /* Forward decls from acp_render.c (shared inline renderer). */
 char *acp_md_inline(const char *text);
+
+/* forward decl: defined below, used by ensure_open to clear the placeholder */
+void acp_stream_typing_off(AcpData *d);
+static AcpStream *stream_get(AcpData *d);
+
+/* A line that could be a table row: contains a '|' and, after trimming, is not
+ * a fence / heading / list. (The real promotion to BLK_TABLE still requires a
+ * following separator row -- see feed_line.) */
+static gboolean
+looks_table_row(const char *l)
+{
+	while (*l == ' ') l++;
+	if (*l == '\0' || *l == '#' || *l == '>')
+		return FALSE;
+	return strchr(l, '|') != NULL;
+}
 
 /* ------------------------------------------------------------------------- *
  *  Widget lookup
@@ -310,12 +332,26 @@ render_line(GString *out, const char *line)
 		return;
 	}
 	if (t[0] == '>') {
-		/* maya: │ bright_yellow bar + muted italic text */
-		inner = acp_md_inline(t[1] == ' ' ? t + 2 : t + 1);
-		g_string_append_printf(out,
-		    "<font color=\"" COL_QUOTE "\">\xE2\x94\x82 </font>"
-		    "<font color=\"" COL_QTEXT "\"><i>%s</i></font>", inner);
-		g_free(inner);
+		/* maya: │ bright_yellow bar + muted italic text. Nested quotes (> >)
+		 * render one bar per level; the content is whatever remains after the
+		 * markers. A bare "> " (blank quote line) still draws its bar so the
+		 * gutter stays continuous down the whole quote. */
+		int level = 0;
+		const char *q = t;
+		while (*q == '>') {
+			level++;
+			q++;
+			if (*q == ' ') q++;
+		}
+		for (; level > 0; level--)
+			g_string_append(out,
+			    "<font color=\"" COL_QUOTE "\">\xE2\x94\x82 </font>");
+		if (*q) {
+			inner = acp_md_inline(q);
+			g_string_append_printf(out,
+			    "<font color=\"" COL_QTEXT "\"><i>%s</i></font>", inner);
+			g_free(inner);
+		}
 		return;
 	}
 	/* GFM task list: - [ ] / - [x] */
@@ -376,6 +412,32 @@ render_open_block(AcpStream *s)
 		return g_string_free(out, FALSE);
 	}
 
+	if (s->open_kind == BLK_TABLE) {
+		/* Table: split the accumulated raw lines and hand them to the
+		 * alignment-aware box-drawn renderer. While still streaming the
+		 * header alone (no separator yet) it is shown as plain text below. */
+		gchar **lines = g_strsplit(s->open->str, "\n", -1);
+		int n = 0;
+		while (lines[n]) n++;
+		if (n >= 2 && acp_table_is_separator(lines[1])) {
+			char *tbl = acp_render_table(lines, n);
+			g_string_append(out, tbl ? tbl : "");
+			g_free(tbl);
+		} else {
+			/* not yet a full table -- echo raw lines so the header shows */
+			int i;
+			for (i = 0; i < n; i++) {
+				char *e = g_markup_escape_text(lines[i], -1);
+				if (i) g_string_append(out, "<br>");
+				g_string_append_printf(out,
+				    "<font face=\"monospace\">%s</font>", e);
+				g_free(e);
+			}
+		}
+		g_strfreev(lines);
+		return g_string_free(out, FALSE);
+	}
+
 	{
 		gchar **lines = g_strsplit(s->open->str, "\n", -1);
 		int i;
@@ -409,6 +471,9 @@ ensure_open(AcpData *d, AcpStream *s)
 
 	if (s->opened)
 		return;
+
+	/* tear down the "thinking" placeholder before drawing the header */
+	acp_stream_typing_off(d);
 
 	/* Pop / raise the conversation window so the user actually sees the reply
 	 * even if they never opened the chat (the agent buddy is always online and
@@ -457,6 +522,14 @@ commit_open(AcpData *d, AcpStream *s)
 	if (s->open->len == 0 && !s->in_fence)
 		return;
 
+	/* trim trailing bare-bar rows we inserted for blank lines inside a quote,
+	 * so a quote that ends on a blank line has no dangling empty │ */
+	if (s->open_kind == BLK_QUOTE) {
+		while (s->open->len >= 2 &&
+		       g_str_has_suffix(s->open->str, "\n>"))
+			g_string_truncate(s->open, s->open->len - 2);
+	}
+
 	{
 		char *html = render_open_block(s);
 		/* replace the live tail with the final render, then anchor past it */
@@ -485,6 +558,70 @@ paint_tail(AcpStream *s)
 	char *html = render_open_block(s);
 	imhtml_set_tail(s, html);
 	g_free(html);
+}
+
+/* ------------------------------------------------------------------------- *
+ *  "agent is typing" placeholder (in-transcript, matches agentty's spinner)
+ * ------------------------------------------------------------------------- */
+
+/* Show a dim thinking line at the end of the transcript. Idempotent. It sits
+ * after the committed prefix and is torn down (typing_off) the instant real
+ * content or a card arrives, so it never mixes into the streamed reply. */
+void
+acp_stream_typing_on(AcpData *d)
+{
+	AcpStream *s = stream_get(d);
+	GtkTextIter end;
+
+	if (!s->imhtml || s->typing)
+		return;
+	/* only show the placeholder before any reply text has been drawn */
+	if (s->opened)
+		return;
+
+	/* present the conversation so the user sees the agent start working */
+	{
+		PurpleAccount *acct = purple_connection_get_account(d->gc);
+		PurpleConversation *conv =
+		    purple_find_conversation_with_account(PURPLE_CONV_TYPE_IM,
+		                                          d->buddy, acct);
+		if (conv)
+			purple_conversation_present(conv);
+	}
+
+	if (gtk_text_buffer_get_char_count(s->imhtml->text_buffer) > 0)
+		imhtml_append(s, "<br>");
+	gtk_text_buffer_get_end_iter(s->imhtml->text_buffer, &end);
+	s->type_start = gtk_text_buffer_create_mark(s->imhtml->text_buffer,
+	                                            NULL, &end, TRUE);
+	imhtml_append(s,
+	    "<font color=\"" COL_DIM "\"><i>\xE2\x97\x8F agent is thinking\xE2\x80\xA6"
+	    "</i></font>");
+	gtk_imhtml_scroll_to_end(s->imhtml, FALSE);
+	s->typing = TRUE;
+}
+
+/* Remove the thinking placeholder if present. */
+void
+acp_stream_typing_off(AcpData *d)
+{
+	AcpStream *s = d->stream;
+	GtkTextIter a, b;
+
+	if (!s || !s->typing || !s->imhtml || !GTK_IS_IMHTML(s->imhtml)) {
+		if (s) s->typing = FALSE;
+		return;
+	}
+	if (s->type_start) {
+		gtk_text_buffer_get_iter_at_mark(s->imhtml->text_buffer, &a,
+		                                 s->type_start);
+		gtk_text_buffer_get_end_iter(s->imhtml->text_buffer, &b);
+		if (!gtk_text_iter_equal(&a, &b))
+			gtk_imhtml_delete(s->imhtml, &a, &b);
+		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->type_start);
+		s->type_start = NULL;
+	}
+	s->typing = FALSE;
 }
 
 /* ------------------------------------------------------------------------- *
@@ -546,6 +683,15 @@ feed_line(AcpData *d, AcpStream *s, const char *line)
 		const char *t = line;
 		while (*t == ' ') t++;
 		if (*t == '\0') {
+			/* Inside a blockquote a blank line does NOT end the quote (a
+			 * quote can span paragraphs); draw a bare bar row so the │ gutter
+			 * stays continuous, matching maya. It closes on the first
+			 * non-quote, non-blank line (handled below as an interrupter). */
+			if (s->open->len && s->open_kind == BLK_QUOTE) {
+				g_string_append(s->open, "\n>");
+				paint_tail(s);
+				return;
+			}
 			if (s->open->len)
 				commit_open(d, s);
 			return;
@@ -559,8 +705,39 @@ feed_line(AcpData *d, AcpStream *s, const char *line)
 		int kind;
 		while (*t == ' ') t++;
 		kind = classify(t);
+
+		/* ---- GFM table handling -------------------------------------- *
+		 * We cannot know line 1 ("| a | b |") is a table header until the
+		 * separator ("|---|---|") arrives on line 2. So: buffer the header
+		 * as an ordinary block, and when a separator lands on top of a
+		 * single pipe-row block, PROMOTE the block to BLK_TABLE. Once in a
+		 * table, further pipe rows keep appending; a non-pipe line ends it. */
+		if (s->open_kind != BLK_TABLE && acp_table_is_separator(line) &&
+		    s->open->len && strchr(s->open->str, '\n') == NULL &&
+		    looks_table_row(s->open->str)) {
+			s->open_kind = BLK_TABLE;
+			g_string_append_c(s->open, '\n');
+			g_string_append(s->open, line);
+			paint_tail(s);
+			return;
+		}
+		if (s->open_kind == BLK_TABLE) {
+			if (looks_table_row(line)) {
+				g_string_append_c(s->open, '\n');
+				g_string_append(s->open, line);
+				paint_tail(s);
+				return;
+			}
+			/* non-table line ends the table; fall through to normal path */
+			commit_open(d, s);
+		}
+
 		if (s->open->len && s->open_kind == BLK_PARA &&
 		    (kind == BLK_HEAD || kind == BLK_LIST || kind == BLK_QUOTE)) {
+			commit_open(d, s);
+		}
+		/* a blockquote ends when a non-quote line arrives */
+		if (s->open->len && s->open_kind == BLK_QUOTE && kind != BLK_QUOTE) {
 			commit_open(d, s);
 		}
 		if (s->open->len)
@@ -741,6 +918,11 @@ acp_stream_reset(AcpData *d)
 		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->tail);
 	}
 	s->tail = NULL;
+	/* clear any lingering thinking placeholder mark */
+	if (s->type_start && s->imhtml && GTK_IS_IMHTML(s->imhtml))
+		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->type_start);
+	s->type_start = NULL;
+	s->typing = FALSE;
 }
 
 /* Append a pre-rendered HTML card (tool call / plan) after committing text.
@@ -780,6 +962,8 @@ acp_stream_free(AcpData *d)
 		return;
 	if (s->tail && s->imhtml && GTK_IS_IMHTML(s->imhtml))
 		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->tail);
+	if (s->type_start && s->imhtml && GTK_IS_IMHTML(s->imhtml))
+		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->type_start);
 	if (s->open)       g_string_free(s->open, TRUE);
 	if (s->open_line)  g_string_free(s->open_line, TRUE);
 	if (s->fence_body) g_string_free(s->fence_body, TRUE);

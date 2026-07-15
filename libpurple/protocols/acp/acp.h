@@ -87,6 +87,10 @@ void  acp_handle_line (AcpData *d, const char *line);
 void  acp_conv_write_html(AcpData *d, const char *html, PurpleMessageFlags extra);
 /* Convert inline markdown (bold/italic/code/links) in one line (caller frees). */
 char *acp_md_inline(const char *text);
+/* GFM tables: detect the |---|:--:| separator row; render a framed table from
+ * raw lines (header, separator, data rows). acp_render_table caller frees. */
+gboolean acp_table_is_separator(const char *line);
+char    *acp_render_table(char **lines, int nlines);
 /* Render / update a tool-call card. */
 void  acp_render_tool_call  (AcpData *d, JsonObject *update, gboolean is_update);
 /* Render a plan as a checklist. */
@@ -101,6 +105,9 @@ void  acp_stream_thought(AcpData *d, const char *text);
 void  acp_stream_flush(AcpData *d);
 /* Reset streaming state at the start of a new turn. */
 void  acp_stream_reset(AcpData *d);
+/* Show/remove an in-transcript "agent is thinking…" placeholder for the turn. */
+void  acp_stream_typing_on(AcpData *d);
+void  acp_stream_typing_off(AcpData *d);
 /* Commit pending text, then append a pre-rendered HTML card (tool/plan). */
 void  acp_stream_write_card(AcpData *d, const char *html);
 /* Free all streaming state (on connection close). */

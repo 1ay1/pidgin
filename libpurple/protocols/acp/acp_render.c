@@ -169,6 +169,211 @@ acp_md_inline(const char *text)
 }
 
 /* ------------------------------------------------------------------------- *
+ *  GFM tables (maya-style box-drawn, alignment-aware)
+ * ------------------------------------------------------------------------- */
+
+#define TB_BORDER  "#3a3a3a"   /* table frame (matches code panel)   */
+#define TB_HEAD    "#34e2e2"   /* header text (bright_cyan)          */
+#define TB_BG      "#181818"   /* table background fill              */
+
+enum { TB_LEFT = 0, TB_CENTER, TB_RIGHT };
+
+/* Split a "| a | b | c |" row into trimmed cell strings. Leading/trailing
+ * pipes are optional (GFM); an escaped \| becomes a literal pipe. Returns a
+ * NULL-terminated array (g_strfreev) and writes the count to *ncols. */
+static char **
+table_split_row(const char *line, int *ncols)
+{
+	GPtrArray *cells = g_ptr_array_new();
+	GString *cur = g_string_new(NULL);
+	const char *p = line;
+
+	while (*p == ' ') p++;
+	if (*p == '|') p++;                 /* optional leading pipe */
+
+	for (; *p; p++) {
+		if (*p == '\\' && p[1] == '|') { g_string_append_c(cur, '|'); p++; continue; }
+		if (*p == '|') {
+			g_ptr_array_add(cells, g_strstrip(g_strdup(cur->str)));
+			g_string_truncate(cur, 0);
+			continue;
+		}
+		g_string_append_c(cur, *p);
+	}
+	/* trailing cell only if non-empty (a trailing pipe yields an empty tail) */
+	{
+		char *t = g_strstrip(g_strdup(cur->str));
+		if (*t) g_ptr_array_add(cells, t);
+		else    g_free(t);
+	}
+	g_string_free(cur, TRUE);
+	g_ptr_array_add(cells, NULL);
+	if (ncols) *ncols = (int)cells->len - 1;
+	return (char **)g_ptr_array_free(cells, FALSE);
+}
+
+/* Is `line` a GFM alignment separator?  |---|:--:|---:| -- every cell of the
+ * form (:?)(-+)(:?) with at least one dash. */
+gboolean
+acp_table_is_separator(const char *line)
+{
+	int n = 0, i;
+	char **cells = table_split_row(line, &n);
+	gboolean ok = (n > 0);
+	for (i = 0; i < n && ok; i++) {
+		const char *c = cells[i];
+		int dashes = 0;
+		while (*c == ' ') c++;
+		if (*c == ':') c++;
+		while (*c == '-') { dashes++; c++; }
+		if (*c == ':') c++;
+		while (*c == ' ') c++;
+		if (dashes == 0 || *c != '\0') ok = FALSE;
+	}
+	g_strfreev(cells);
+	return ok;
+}
+
+/* Parse the separator row into per-column alignment codes. */
+static int *
+table_parse_align(const char *sep, int ncols)
+{
+	int *al = g_new0(int, ncols > 0 ? ncols : 1);
+	int n = 0, i;
+	char **cells = table_split_row(sep, &n);
+	for (i = 0; i < ncols; i++) {
+		gboolean l = FALSE, r = FALSE;
+		if (i < n) {
+			const char *c = cells[i];
+			while (*c == ' ') c++;
+			if (*c == ':') l = TRUE;
+			if (*c) { const char *e = c + strlen(c); while (e > c && e[-1] == ' ') e--;
+			          if (e > c && e[-1] == ':') r = TRUE; }
+		}
+		al[i] = (l && r) ? TB_CENTER : r ? TB_RIGHT : TB_LEFT;
+	}
+	g_strfreev(cells);
+	return al;
+}
+
+/* Emit a horizontal rule line. kind: 0=top ┌┬┐, 1=mid ├┼┤, 2=bottom └┴┘. */
+static void
+table_border(GString *out, const int *w, int ncols, int kind)
+{
+	static const char *L[] = { "\xE2\x94\x8C", "\xE2\x94\x9C", "\xE2\x94\x94" };
+	static const char *M[] = { "\xE2\x94\xAC", "\xE2\x94\xBC", "\xE2\x94\xB4" };
+	static const char *R[] = { "\xE2\x94\x90", "\xE2\x94\xA4", "\xE2\x94\x98" };
+	int c, k;
+	g_string_append(out,
+	    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_BORDER "\">");
+	g_string_append(out, L[kind]);
+	for (c = 0; c < ncols; c++) {
+		if (c > 0) g_string_append(out, M[kind]);
+		for (k = 0; k < w[c] + 2; k++) g_string_append(out, "\xE2\x94\x80");
+	}
+	g_string_append(out, R[kind]);
+	g_string_append(out, "</font><br>");
+}
+
+/* Emit one data/header row. `is_head` bolds + colours the cell text. */
+static void
+table_row(GString *out, char **cells, int ncols, const int *w, const int *al,
+          gboolean is_head)
+{
+	int c;
+	g_string_append(out,
+	    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_BORDER
+	    "\">\xE2\x94\x82</font>");   /* leading | */
+	for (c = 0; c < ncols; c++) {
+		const char *raw = (c < ncols && cells[c]) ? cells[c] : "";
+		int cw = (int)g_utf8_strlen(raw, -1);
+		int slack = w[c] - cw; if (slack < 0) slack = 0;
+		int lp = 0, rp = slack, k;
+		char *inner;
+		if (al[c] == TB_RIGHT)  { lp = slack; rp = 0; }
+		else if (al[c] == TB_CENTER) { lp = slack / 2; rp = slack - lp; }
+		/* fixed 1-space pad + left slack, over the table bg */
+		g_string_append(out, "<font face=\"monospace\" back=\"" TB_BG "\">");
+		for (k = 0; k < lp + 1; k++) g_string_append(out, "&#160;");
+		g_string_append(out, "</font>");
+		/* content */
+		inner = acp_md_inline(raw);
+		if (is_head)
+			g_string_append_printf(out,
+			    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_HEAD
+			    "\"><b>%s</b></font>", inner);
+		else
+			g_string_append_printf(out,
+			    "<font face=\"monospace\" back=\"" TB_BG "\">%s</font>", inner);
+		g_free(inner);
+		/* right slack + fixed pad, then trailing border */
+		g_string_append(out, "<font face=\"monospace\" back=\"" TB_BG "\">");
+		for (k = 0; k < rp + 1; k++) g_string_append(out, "&#160;");
+		g_string_append(out, "</font>");
+		g_string_append(out,
+		    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_BORDER
+		    "\">\xE2\x94\x82</font>");   /* | */
+	}
+	g_string_append(out, "<br>");
+}
+
+/* Render a whole GFM table (raw lines: header, separator, then data rows) as a
+ * framed, alignment-aware HTML fragment. Caller frees. `lines` is a NULL-
+ * terminated array; `nlines` >= 2 (header + separator). Matches maya. */
+char *
+acp_render_table(char **lines, int nlines)
+{
+	GString *out = g_string_new(NULL);
+	int ncols = 0, i, c;
+	char **head;
+	int *w, *al;
+	GPtrArray *body = g_ptr_array_new_with_free_func((GDestroyNotify)g_strfreev);
+
+	if (nlines < 2) { return g_string_free(out, FALSE); }
+
+	head = table_split_row(lines[0], &ncols);
+	if (ncols == 0) { g_strfreev(head); g_ptr_array_free(body, TRUE);
+	                  return g_string_free(out, FALSE); }
+	al = table_parse_align(lines[1], ncols);
+	w  = g_new0(int, ncols);
+
+	/* header widths */
+	for (c = 0; c < ncols; c++)
+		if (head[c]) { int hw = (int)g_utf8_strlen(head[c], -1);
+		               if (hw > w[c]) w[c] = hw; }
+
+	/* body rows (from line 2 on) + widen columns */
+	for (i = 2; i < nlines && lines[i]; i++) {
+		int rn = 0;
+		char **row = table_split_row(lines[i], &rn);
+		for (c = 0; c < ncols; c++) {
+			const char *v = (c < rn && row[c]) ? row[c] : "";
+			int vw = (int)g_utf8_strlen(v, -1);
+			if (vw > w[c]) w[c] = vw;
+		}
+		g_ptr_array_add(body, row);
+	}
+	for (c = 0; c < ncols; c++) if (w[c] < 1) w[c] = 1;
+
+	/* compose: top rule, header, mid rule, body rows (dashed separators). */
+	table_border(out, w, ncols, 0);
+	table_row(out, head, ncols, w, al, TRUE);
+	table_border(out, w, ncols, 1);
+	for (i = 0; i < (int)body->len; i++) {
+		char **row = g_ptr_array_index(body, i);
+		int rn = 0; while (row[rn]) rn++;
+		/* pad short rows so table_row always has ncols entries */
+		table_row(out, row, ncols, w, al, FALSE);
+	}
+	table_border(out, w, ncols, 2);
+
+	g_free(w); g_free(al);
+	g_strfreev(head);
+	g_ptr_array_free(body, TRUE);
+	return g_string_free(out, FALSE);
+}
+
+/* ------------------------------------------------------------------------- *
  *  Tool-call cards
  * ------------------------------------------------------------------------- */
 
