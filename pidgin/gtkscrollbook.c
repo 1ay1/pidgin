@@ -98,15 +98,26 @@ refresh_scroll_box(PidginScrollBook *scroll_book, int index, int count)
 {
 	char *label;
 
-	gtk_widget_show_all(GTK_WIDGET(scroll_book));
+	/*
+	 * Only ensure the pages/notebook are shown here. Do NOT show_all the
+	 * whole scrollbook: that would reveal the nav header (hbox) even when
+	 * there are no pages, leaving an empty "prev/next/x" bar floating above
+	 * the status box. The hbox's children are shown once at init; here we
+	 * just toggle the hbox itself by page count.
+	 */
+	gtk_widget_show(scroll_book->notebook);
 	if (count < 1)
 		gtk_widget_hide(scroll_book->hbox);
 	else {
-		gtk_widget_show_all(scroll_book->hbox);
+		gtk_widget_show(scroll_book->hbox);
 		if (count == 1) {
 			gtk_widget_hide(scroll_book->label);
 			gtk_widget_hide(scroll_book->left_arrow);
 			gtk_widget_hide(scroll_book->right_arrow);
+		} else {
+			gtk_widget_show(scroll_book->label);
+			gtk_widget_show(scroll_book->left_arrow);
+			gtk_widget_show(scroll_book->right_arrow);
 		}
 	}
 
@@ -299,6 +310,18 @@ pidgin_scroll_book_init(PidginScrollBook *scroll_book,
 	g_signal_connect_swapped(G_OBJECT(scroll_book->notebook), "remove", G_CALLBACK(page_count_change_cb), scroll_book);
 	g_signal_connect(G_OBJECT(scroll_book->notebook), "switch-page", G_CALLBACK(switch_page_cb), scroll_book);
 	gtk_widget_show_all(scroll_book->notebook);
+
+	/*
+	 * Show the nav header's children once so that when refresh_scroll_box()
+	 * later shows the hbox (pages present) they are already visible. Then
+	 * hide the hbox and mark it no-show-all so an empty nav bar is never
+	 * revealed -- not at startup, and not by any parent gtk_widget_show_all()
+	 * on the buddy list. Its visibility is driven solely by
+	 * refresh_scroll_box() based on the page count.
+	 */
+	gtk_widget_show_all(scroll_book->hbox);
+	gtk_widget_hide(scroll_book->hbox);
+	gtk_widget_set_no_show_all(scroll_book->hbox, TRUE);
 }
 
 GtkWidget *
