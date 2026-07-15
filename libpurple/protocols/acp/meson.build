@@ -1,4 +1,4 @@
-acp_sources = files('acp.c', 'acp_rpc.c', 'acp_render.c', 'acp_stream.c')
+acp_sources = files('acp.c', 'acp_rpc.c', 'acp_render.c', 'acp_stream.c', 'acp_syntax.c')
 
 # acp_stream.c drives the GtkIMHtml widget directly for live in-place Markdown
 # streaming, so the plugin links GTK + Pidgin UI headers. Pidgin exports the

@@ -106,4 +106,9 @@ void  acp_stream_write_card(AcpData *d, const char *html);
 /* Free all streaming state (on connection close). */
 void  acp_stream_free(AcpData *d);
 
+/* ---- acp_syntax.c  (fenced-code syntax highlighter) --------------------- */
+/* Render a code block body to HTML with a line-number gutter + syntax
+ * highlighting (maya-style). lang_tag may be NULL/empty. Caller frees. */
+char *acp_highlight_code(const char *code, const char *lang_tag);
+
 #endif /* PIDGIN_ACP_H */

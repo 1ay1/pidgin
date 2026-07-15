@@ -365,14 +365,13 @@ render_open_block(AcpStream *s)
 	GString *out = g_string_new(NULL);
 
 	if (s->in_fence) {
-		/* Code block, maya-style: a │ gutter down the left edge (in the dim
-		 * border colour) with the language tag as a header chip, and the body
-		 * in cyan monospace. The per-line gutter reads as one cohesive box
-		 * (unlike a per-run background, which leaves ragged rectangles in
-		 * IMHtml). Each source line gets its own "│ <code>" row. */
+		/* Code block, maya-style: a language header chip (╭─ lang) above a
+		 * syntax-highlighted body that carries its own right-aligned
+		 * line-number gutter (acp_highlight_code). The whole body is one
+		 * cohesive listing -- keywords magenta, strings green, numbers
+		 * yellow, comments dim-italic, functions blue, etc. */
 		const char *src = s->fence_body ? s->fence_body->str : "";
-		gchar **lines = g_strsplit(src, "\n", -1);
-		int i;
+		char *body;
 
 		if (s->fence_lang && *s->fence_lang) {
 			char *le = g_markup_escape_text(s->fence_lang, -1);
@@ -381,30 +380,9 @@ render_open_block(AcpStream *s)
 			    "\xE2\x95\xAD\xE2\x94\x80 %s</font><br>", le);   /* ╭─ lang */
 			g_free(le);
 		}
-		for (i = 0; lines[i]; i++) {
-			char *e;
-			GString *cl;
-			const char *p;
-			/* drop the trailing empty element from a final '\n' */
-			if (lines[i + 1] == NULL && lines[i][0] == '\0')
-				break;
-			e = g_markup_escape_text(lines[i], -1);
-			cl = g_string_new(NULL);
-			for (p = e; *p; p++) {
-				if (*p == ' ')       g_string_append(cl, "&#160;");
-				else if (*p == '\t') g_string_append(cl, "&#160;&#160;&#160;&#160;");
-				else                 g_string_append_c(cl, *p);
-			}
-			if (i)
-				g_string_append(out, "<br>");
-			g_string_append_printf(out,
-			    "<font color=\"" COL_LANG "\">\xE2\x94\x82 </font>"
-			    "<font face=\"monospace\" color=\"" COL_CODE "\">%s</font>",
-			    cl->len ? cl->str : "&#160;");
-			g_string_free(cl, TRUE);
-			g_free(e);
-		}
-		g_strfreev(lines);
+		body = acp_highlight_code(src, s->fence_lang);
+		g_string_append(out, body ? body : "");
+		g_free(body);
 		return g_string_free(out, FALSE);
 	}
 
