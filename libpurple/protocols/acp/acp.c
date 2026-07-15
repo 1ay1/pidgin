@@ -1,44 +1,32 @@
 /*
  * ACP - an Agent Client Protocol (ACP) protocol plugin for libpurple.
  *
- * Registers an "ACP Agent" account type. When you sign in, the plugin spawns
- * the configured ACP agent binary as a subprocess, runs the ACP handshake
- * (initialize -> session/new), and -- if that succeeds -- brings you online
- * with a single always-available buddy: the agent itself. Open an IM with it
- * and you are chatting with the agent, exactly like any other contact. What
- * you type becomes an ACP `session/prompt`; the agent's streamed reply,
- * thoughts, plan and tool calls come back as an incoming message.
+ * Registers an "ACP Agent" account type. Signing in spawns the configured ACP
+ * agent binary as a subprocess, runs the ACP handshake (initialize ->
+ * session/new) and -- on success -- brings you online with a single always-
+ * available buddy: the agent. Open an IM with it and you are chatting with the
+ * agent, with its replies, thoughts, plans and tool calls streamed live and
+ * rendered as rich Markdown -- like a real coding-agent UI, inside Pidgin.
  *
- * The transport is JSON-RPC 2.0, one JSON value per line, on the agent's
- * stdin/stdout, exactly as the Agent Client Protocol specifies
- * (https://agentclientprotocol.com/). We are the *client* (editor) side.
+ * This file is the prpl glue (login/close/send_im/account options + process
+ * management). The wire protocol lives in acp_rpc.c and all conversation
+ * rendering lives in acp_render.c.
  *
- * Everything runs on the GLib main loop -- the agent's stdout is watched with
- * a GIOChannel, so there are no worker threads.
+ * Transport is JSON-RPC 2.0, one JSON value per line, over the agent's
+ * stdin/stdout, exactly as ACP specifies (https://agentclientprotocol.com/).
+ * We are the *client* (editor) side. Everything runs on the GLib main loop --
+ * the agent's stdout is watched with a GIOChannel, so there are no threads.
  *
  * Copyright (C) 2024 Ayush Bhat <tfeayush@gmail.com>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02111-1301, USA.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 (or, at your
+ * option, any later version).
  */
-#include "internal.h"
+#include "acp.h"
 
 #include "accountopt.h"
 #include "blist.h"
-#include "conversation.h"
-#include "connection.h"
 #include "debug.h"
 #include "notify.h"
 #include "prpl.h"
@@ -46,64 +34,12 @@
 #include "status.h"
 #include "version.h"
 
-#include <json-glib/json-glib.h>
-
 #include <errno.h>
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
 
-#define ACP_PRPL_ID          "prpl-acp"
-#define ACP_PROTOCOL_VERSION 1
-
-/* Account option pref names. */
-#define OPT_COMMAND    "command"
-#define OPT_ARGS       "args"
-#define OPT_CWD        "cwd"
-#define OPT_APPROVE    "auto_approve"
-#define OPT_BUDDY      "buddy_name"
-#define OPT_SHOW_THOUGHTS "show_thoughts"
-
-/* ------------------------------------------------------------------------- *
- *  Per-connection state (hangs off gc->proto_data)
- * ------------------------------------------------------------------------- */
-
-typedef struct _AcpData AcpData;
-
-struct _AcpData {
-	PurpleConnection *gc;
-
-	GPid   pid;
-	int    write_fd;        /* -> agent stdin  */
-	GIOChannel *out_chan;   /* <- agent stdout */
-	guint  out_watch;
-	guint  child_watch;
-	GString *inbuf;         /* partial stdout line accumulator */
-
-	gint   next_id;
-	GHashTable *pending;    /* request id (int) -> PendingReq* */
-	gchar *session_id;
-	gboolean initialized;
-	gboolean prompting;
-
-	gchar *buddy;           /* the agent buddy's name (from account opts) */
-
-	/* One agent turn == one incoming IM. We accumulate streamed chunks in
-	 * `turn` and flush them when the turn ends (stopReason). */
-	GString *turn;
-};
-
-typedef void (*AcpReplyCb)(AcpData *d, JsonObject *result, JsonObject *error);
-
-typedef struct {
-	AcpReplyCb cb;
-} PendingReq;
-
 static PurplePlugin *_acp_protocol = NULL;
-
-/* ------------------------------------------------------------------------- *
- *  small helpers
- * ------------------------------------------------------------------------- */
 
 static const char *
 acct_str(PurpleAccount *a, const char *opt, const char *dflt)
@@ -112,182 +48,12 @@ acct_str(PurpleAccount *a, const char *opt, const char *dflt)
 	return (v && *v) ? v : dflt;
 }
 
-/* Append to the current agent turn, converting newlines to <br> for the
- * conversation window (Pidgin renders IM text as HTML). */
+/* Post a standalone system line into the agent conversation. */
 static void
-turn_append_text(AcpData *d, const char *text)
+acp_system_im(AcpData *d, const char *text)
 {
-	const char *p;
-	char *esc;
-	if (!text || !*text)
-		return;
-	esc = g_markup_escape_text(text, -1);
-	for (p = esc; *p; p++) {
-		if (*p == '\n')
-			g_string_append(d->turn, "<br>");
-		else
-			g_string_append_c(d->turn, *p);
-	}
-	g_free(esc);
-}
-
-static void
-turn_append_markup(AcpData *d, const char *markup)
-{
-	if (markup)
-		g_string_append(d->turn, markup);
-}
-
-/* Deliver whatever has accumulated for this turn as one incoming IM. */
-static void
-turn_flush(AcpData *d)
-{
-	if (!d->turn || d->turn->len == 0)
-		return;
-	serv_got_im(d->gc, d->buddy, d->turn->str, PURPLE_MESSAGE_RECV, time(NULL));
-	g_string_truncate(d->turn, 0);
-}
-
-/* Post a standalone system-ish line immediately (e.g. errors, tool notices). */
-static void
-acp_system_im(AcpData *d, const char *markup)
-{
-	serv_got_im(d->gc, d->buddy, markup, PURPLE_MESSAGE_RECV | PURPLE_MESSAGE_SYSTEM,
-	            time(NULL));
-}
-
-/* ------------------------------------------------------------------------- *
- *  Wire I/O
- * ------------------------------------------------------------------------- */
-
-static void
-acp_send_node(AcpData *d, JsonNode *root)
-{
-	JsonGenerator *gen;
-	char *line, *withnl;
-	gsize total;
-	gssize off = 0;
-
-	if (d->write_fd < 0) {
-		json_node_free(root);
-		return;
-	}
-	gen = json_generator_new();
-	json_generator_set_root(gen, root);
-	line = json_generator_to_data(gen, NULL);
-	g_object_unref(gen);
-	json_node_free(root);
-
-	withnl = g_strdup_printf("%s\n", line);
-	total = strlen(withnl);
-	purple_debug_misc("acp", "-> %s\n", line);
-	while ((gsize)off < total) {
-		ssize_t n = write(d->write_fd, withnl + off, total - off);
-		if (n < 0) {
-			if (errno == EINTR)
-				continue;
-			purple_debug_error("acp", "write to agent failed: %s\n",
-			                   g_strerror(errno));
-			break;
-		}
-		off += n;
-	}
-	g_free(withnl);
-	g_free(line);
-}
-
-static gint
-acp_request(AcpData *d, const char *method, JsonNode *params, AcpReplyCb cb)
-{
-	JsonBuilder *b = json_builder_new();
-	JsonNode *root;
-	gint id = d->next_id++;
-
-	json_builder_begin_object(b);
-	json_builder_set_member_name(b, "jsonrpc");
-	json_builder_add_string_value(b, "2.0");
-	json_builder_set_member_name(b, "id");
-	json_builder_add_int_value(b, id);
-	json_builder_set_member_name(b, "method");
-	json_builder_add_string_value(b, method);
-	json_builder_set_member_name(b, "params");
-	if (params) json_builder_add_value(b, params);
-	else        json_builder_add_null_value(b);
-	json_builder_end_object(b);
-	root = json_builder_get_root(b);
-	g_object_unref(b);
-
-	if (cb) {
-		PendingReq *pr = g_new0(PendingReq, 1);
-		pr->cb = cb;
-		g_hash_table_insert(d->pending, GINT_TO_POINTER(id), pr);
-	}
-	acp_send_node(d, root);
-	return id;
-}
-
-static void
-acp_notify(AcpData *d, const char *method, JsonNode *params)
-{
-	JsonBuilder *b = json_builder_new();
-	JsonNode *root;
-
-	json_builder_begin_object(b);
-	json_builder_set_member_name(b, "jsonrpc");
-	json_builder_add_string_value(b, "2.0");
-	json_builder_set_member_name(b, "method");
-	json_builder_add_string_value(b, method);
-	json_builder_set_member_name(b, "params");
-	if (params) json_builder_add_value(b, params);
-	else        json_builder_add_null_value(b);
-	json_builder_end_object(b);
-	root = json_builder_get_root(b);
-	g_object_unref(b);
-	acp_send_node(d, root);
-}
-
-static void
-acp_reply_result(AcpData *d, JsonNode *id_node, JsonNode *result)
-{
-	JsonBuilder *b = json_builder_new();
-	JsonNode *root;
-
-	json_builder_begin_object(b);
-	json_builder_set_member_name(b, "jsonrpc");
-	json_builder_add_string_value(b, "2.0");
-	json_builder_set_member_name(b, "id");
-	json_builder_add_value(b, json_node_copy(id_node));
-	json_builder_set_member_name(b, "result");
-	if (result) json_builder_add_value(b, result);
-	else { json_builder_begin_object(b); json_builder_end_object(b); }
-	json_builder_end_object(b);
-	root = json_builder_get_root(b);
-	g_object_unref(b);
-	acp_send_node(d, root);
-}
-
-static void
-acp_reply_error(AcpData *d, JsonNode *id_node, gint code, const char *msg)
-{
-	JsonBuilder *b = json_builder_new();
-	JsonNode *root;
-
-	json_builder_begin_object(b);
-	json_builder_set_member_name(b, "jsonrpc");
-	json_builder_add_string_value(b, "2.0");
-	json_builder_set_member_name(b, "id");
-	json_builder_add_value(b, json_node_copy(id_node));
-	json_builder_set_member_name(b, "error");
-	json_builder_begin_object(b);
-	json_builder_set_member_name(b, "code");
-	json_builder_add_int_value(b, code);
-	json_builder_set_member_name(b, "message");
-	json_builder_add_string_value(b, msg ? msg : "error");
-	json_builder_end_object(b);
-	json_builder_end_object(b);
-	root = json_builder_get_root(b);
-	g_object_unref(b);
-	acp_send_node(d, root);
+	serv_got_im(d->gc, d->buddy, text,
+	            PURPLE_MESSAGE_RECV | PURPLE_MESSAGE_SYSTEM, time(NULL));
 }
 
 /* ------------------------------------------------------------------------- *
@@ -303,7 +69,6 @@ acp_bring_online(AcpData *d)
 	PurpleGroup *group;
 	PurpleBuddy *b;
 
-	/* Ensure the agent buddy exists and show it online. */
 	b = purple_find_buddy(acct, d->buddy);
 	if (!b) {
 		group = purple_find_group("ACP Agents");
@@ -326,8 +91,7 @@ acp_on_initialize(AcpData *d, JsonObject *result, JsonObject *error)
 
 	if (error) {
 		purple_connection_error_reason(d->gc,
-			PURPLE_CONNECTION_ERROR_OTHER_ERROR,
-			_("ACP initialize failed"));
+			PURPLE_CONNECTION_ERROR_OTHER_ERROR, _("ACP initialize failed"));
 		return;
 	}
 	d->initialized = TRUE;
@@ -406,22 +170,23 @@ static void
 acp_on_prompt_done(AcpData *d, JsonObject *result, JsonObject *error)
 {
 	const char *reason = "end_turn";
+
+	acp_stream_flush(d);
 	d->prompting = FALSE;
 	serv_got_typing_stopped(d->gc, d->buddy);
 
 	if (error) {
-		turn_append_markup(d, "<font color='#cc0000'>[prompt failed]</font>");
+		acp_conv_write_html(d,
+		    "<font color=\"#cc0000\">[prompt failed]</font>", 0);
 	} else if (result && json_object_has_member(result, "stopReason")) {
 		reason = json_object_get_string_member(result, "stopReason");
 	}
-	if (reason && strcmp(reason, "end_turn") != 0 &&
-	    strcmp(reason, "cancelled") != 0) {
-		char *m = g_strdup_printf("<br><font color='#888888'><i>[%s]</i></font>",
-		                          reason);
-		turn_append_markup(d, m);
+	if (reason && strcmp(reason, "end_turn") != 0) {
+		char *m = g_strdup_printf(
+		    "<font color=\"#888888\" size=\"2\"><i>[%s]</i></font>", reason);
+		acp_conv_write_html(d, m, 0);
 		g_free(m);
 	}
-	turn_flush(d);
 }
 
 static int
@@ -438,7 +203,6 @@ acp_send_prompt(AcpData *d, const char *text)
 		return 0;
 	}
 
-	/* Conversations hand us HTML; strip it back to text for the prompt. */
 	plain = purple_markup_strip_html(text);
 
 	b = json_builder_new();
@@ -460,256 +224,14 @@ acp_send_prompt(AcpData *d, const char *text)
 	g_free(plain);
 
 	d->prompting = TRUE;
-	g_string_truncate(d->turn, 0);
+	acp_stream_reset(d);
 	serv_got_typing(d->gc, d->buddy, 0, PURPLE_TYPING);
 	acp_request(d, "session/prompt", params, acp_on_prompt_done);
 	return 1;
 }
 
 /* ------------------------------------------------------------------------- *
- *  session/update streaming
- * ------------------------------------------------------------------------- */
-
-static const char *
-content_text(JsonObject *content)
-{
-	if (content && json_object_has_member(content, "text"))
-		return json_object_get_string_member(content, "text");
-	return NULL;
-}
-
-static void
-acp_handle_session_update(AcpData *d, JsonObject *params)
-{
-	PurpleAccount *acct = purple_connection_get_account(d->gc);
-	JsonObject *update;
-	const char *kind;
-
-	if (!params || !json_object_has_member(params, "update"))
-		return;
-	update = json_object_get_object_member(params, "update");
-	if (!update || !json_object_has_member(update, "sessionUpdate"))
-		return;
-	kind = json_object_get_string_member(update, "sessionUpdate");
-
-	if (purple_strequal(kind, "agent_message_chunk")) {
-		JsonObject *c = json_object_has_member(update, "content")
-		              ? json_object_get_object_member(update, "content") : NULL;
-		turn_append_text(d, content_text(c));
-		/* keep the typing indicator alive during long turns */
-		serv_got_typing(d->gc, d->buddy, 6, PURPLE_TYPING);
-
-	} else if (purple_strequal(kind, "agent_thought_chunk")) {
-		if (purple_account_get_bool(acct, OPT_SHOW_THOUGHTS, FALSE)) {
-			JsonObject *c = json_object_has_member(update, "content")
-			              ? json_object_get_object_member(update, "content") : NULL;
-			const char *t = content_text(c);
-			if (t && *t) {
-				char *esc = g_markup_escape_text(t, -1);
-				char *m = g_strdup_printf("<font color='#888888'><i>%s</i></font><br>", esc);
-				turn_append_markup(d, m);
-				g_free(m);
-				g_free(esc);
-			}
-		}
-
-	} else if (purple_strequal(kind, "tool_call")) {
-		const char *title = json_object_has_member(update, "title")
-		                  ? json_object_get_string_member(update, "title") : "tool";
-		const char *stat = json_object_has_member(update, "status")
-		                 ? json_object_get_string_member(update, "status") : "";
-		char *esc = g_markup_escape_text(title, -1);
-		char *m = g_strdup_printf(
-		    "<font color='#a05a00'>\xE2\x9A\x99 %s%s%s</font><br>",
-		    esc, (stat && *stat) ? " " : "", stat ? stat : "");
-		turn_append_markup(d, m);
-		g_free(m);
-		g_free(esc);
-
-	} else if (purple_strequal(kind, "tool_call_update")) {
-		const char *stat = json_object_has_member(update, "status")
-		                 ? json_object_get_string_member(update, "status") : NULL;
-		if (stat && (purple_strequal(stat, "completed") ||
-		             purple_strequal(stat, "failed"))) {
-			char *m = g_strdup_printf(
-			    "<font color='#a05a00'>\xE2\x9A\x99 [%s]</font><br>", stat);
-			turn_append_markup(d, m);
-			g_free(m);
-		}
-
-	} else if (purple_strequal(kind, "plan")) {
-		JsonArray *entries = json_object_has_member(update, "entries")
-		                   ? json_object_get_array_member(update, "entries") : NULL;
-		guint i, n = entries ? json_array_get_length(entries) : 0;
-		if (n)
-			turn_append_markup(d, "<font color='#5c3566'><b>plan:</b></font><br>");
-		for (i = 0; i < n; i++) {
-			JsonObject *e = json_array_get_object_element(entries, i);
-			const char *ec = e && json_object_has_member(e, "content")
-			               ? json_object_get_string_member(e, "content") : "";
-			const char *es = e && json_object_has_member(e, "status")
-			               ? json_object_get_string_member(e, "status") : "";
-			char *esc = g_markup_escape_text(ec, -1);
-			char *m = g_strdup_printf(
-			    "&#160;&#160;&#8226; %s <font color='#888888'>(%s)</font><br>",
-			    esc, es);
-			turn_append_markup(d, m);
-			g_free(m);
-			g_free(esc);
-		}
-	}
-}
-
-/* ------------------------------------------------------------------------- *
- *  agent -> client requests
- * ------------------------------------------------------------------------- */
-
-static void
-acp_handle_request(AcpData *d, const char *method, JsonNode *id_node,
-                   JsonObject *params)
-{
-	PurpleAccount *acct = purple_connection_get_account(d->gc);
-
-	if (purple_strequal(method, "fs/read_text_file")) {
-		const char *path = params && json_object_has_member(params, "path")
-		                 ? json_object_get_string_member(params, "path") : NULL;
-		gchar *contents = NULL;
-		if (path && g_file_get_contents(path, &contents, NULL, NULL)) {
-			JsonBuilder *b = json_builder_new();
-			JsonNode *res;
-			json_builder_begin_object(b);
-			json_builder_set_member_name(b, "content");
-			json_builder_add_string_value(b, contents);
-			json_builder_end_object(b);
-			res = json_builder_get_root(b);
-			g_object_unref(b);
-			acp_reply_result(d, id_node, res);
-			g_free(contents);
-		} else {
-			acp_reply_error(d, id_node, -32000, "cannot read file");
-		}
-
-	} else if (purple_strequal(method, "fs/write_text_file")) {
-		const char *path = params && json_object_has_member(params, "path")
-		                 ? json_object_get_string_member(params, "path") : NULL;
-		const char *data = params && json_object_has_member(params, "content")
-		                 ? json_object_get_string_member(params, "content") : "";
-		if (path && g_file_set_contents(path, data, -1, NULL)) {
-			acp_reply_result(d, id_node, NULL);
-		} else {
-			acp_reply_error(d, id_node, -32000, "cannot write file");
-		}
-
-	} else if (purple_strequal(method, "session/request_permission")) {
-		JsonArray *opts = params && json_object_has_member(params, "options")
-		                ? json_object_get_array_member(params, "options") : NULL;
-		const char *chosen = NULL;
-		gboolean auto_ok = purple_account_get_bool(acct, OPT_APPROVE, TRUE);
-		guint i, n = opts ? json_array_get_length(opts) : 0;
-		JsonBuilder *b;
-		JsonNode *res;
-
-		for (i = 0; i < n; i++) {
-			JsonObject *o = json_array_get_object_element(opts, i);
-			const char *okind = o && json_object_has_member(o, "kind")
-			                  ? json_object_get_string_member(o, "kind") : "";
-			const char *oid = o && json_object_has_member(o, "optionId")
-			                ? json_object_get_string_member(o, "optionId") : NULL;
-			if (!oid)
-				continue;
-			if (auto_ok && strstr(okind, "allow")) { chosen = oid; break; }
-			if (!auto_ok && strstr(okind, "reject")) { chosen = oid; break; }
-			if (!chosen) chosen = oid;  /* fallback */
-		}
-
-		b = json_builder_new();
-		json_builder_begin_object(b);
-		json_builder_set_member_name(b, "outcome");
-		json_builder_begin_object(b);
-		json_builder_set_member_name(b, "outcome");
-		json_builder_add_string_value(b, "selected");
-		json_builder_set_member_name(b, "optionId");
-		json_builder_add_string_value(b, chosen ? chosen : "allow");
-		json_builder_end_object(b);
-		json_builder_end_object(b);
-		res = json_builder_get_root(b);
-		g_object_unref(b);
-		acp_reply_result(d, id_node, res);
-
-	} else {
-		acp_reply_error(d, id_node, -32601, "method not found");
-	}
-}
-
-/* ------------------------------------------------------------------------- *
- *  dispatch
- * ------------------------------------------------------------------------- */
-
-static void
-acp_dispatch(AcpData *d, JsonObject *msg)
-{
-	gboolean has_method = json_object_has_member(msg, "method");
-	gboolean has_id     = json_object_has_member(msg, "id");
-
-	if (has_method && has_id) {
-		const char *method = json_object_get_string_member(msg, "method");
-		JsonNode *id = json_object_get_member(msg, "id");
-		JsonObject *params = json_object_has_member(msg, "params") &&
-		    JSON_NODE_HOLDS_OBJECT(json_object_get_member(msg, "params"))
-		  ? json_object_get_object_member(msg, "params") : NULL;
-		acp_handle_request(d, method, id, params);
-
-	} else if (has_method) {
-		const char *method = json_object_get_string_member(msg, "method");
-		JsonObject *params = json_object_has_member(msg, "params") &&
-		    JSON_NODE_HOLDS_OBJECT(json_object_get_member(msg, "params"))
-		  ? json_object_get_object_member(msg, "params") : NULL;
-		if (purple_strequal(method, "session/update"))
-			acp_handle_session_update(d, params);
-
-	} else if (has_id) {
-		JsonNode *idn = json_object_get_member(msg, "id");
-		gint id = JSON_NODE_HOLDS_VALUE(idn) ? (gint)json_node_get_int(idn) : -1;
-		PendingReq *pr = g_hash_table_lookup(d->pending, GINT_TO_POINTER(id));
-		if (pr) {
-			JsonObject *result = json_object_has_member(msg, "result") &&
-			    JSON_NODE_HOLDS_OBJECT(json_object_get_member(msg, "result"))
-			  ? json_object_get_object_member(msg, "result") : NULL;
-			JsonObject *error = json_object_has_member(msg, "error")
-			  ? json_object_get_object_member(msg, "error") : NULL;
-			if (pr->cb)
-				pr->cb(d, result, error);
-			g_hash_table_remove(d->pending, GINT_TO_POINTER(id));
-		}
-	}
-}
-
-static void
-acp_handle_line(AcpData *d, const char *line)
-{
-	JsonParser *parser;
-	GError *err = NULL;
-	JsonNode *root;
-
-	if (!*line)
-		return;
-	purple_debug_misc("acp", "<- %s\n", line);
-	parser = json_parser_new();
-	if (!json_parser_load_from_data(parser, line, -1, &err)) {
-		purple_debug_warning("acp", "bad JSON from agent: %s\n",
-		                     err ? err->message : "?");
-		g_clear_error(&err);
-		g_object_unref(parser);
-		return;
-	}
-	root = json_parser_get_root(parser);
-	if (root && JSON_NODE_HOLDS_OBJECT(root))
-		acp_dispatch(d, json_node_get_object(root));
-	g_object_unref(parser);
-}
-
-/* ------------------------------------------------------------------------- *
- *  agent stdout watch
+ *  agent stdout watch + process lifecycle
  * ------------------------------------------------------------------------- */
 
 static gboolean
@@ -757,6 +279,18 @@ acp_child_exited(GPid pid, gint status, gpointer data)
 	d->child_watch = 0;
 }
 
+static void
+free_tool_call(gpointer p)
+{
+	AcpToolCall *tc = p;
+	if (!tc) return;
+	g_free(tc->id);
+	g_free(tc->title);
+	g_free(tc->kind);
+	g_free(tc->status);
+	g_free(tc);
+}
+
 /* ------------------------------------------------------------------------- *
  *  prpl ops
  * ------------------------------------------------------------------------- */
@@ -773,8 +307,7 @@ acp_status_types(PurpleAccount *acct)
 	GList *types = NULL;
 	PurpleStatusType *t;
 
-	t = purple_status_type_new(PURPLE_STATUS_AVAILABLE, "available",
-	                           NULL, TRUE);
+	t = purple_status_type_new(PURPLE_STATUS_AVAILABLE, "available", NULL, TRUE);
 	types = g_list_append(types, t);
 	t = purple_status_type_new(PURPLE_STATUS_OFFLINE, "offline", NULL, TRUE);
 	types = g_list_append(types, t);
@@ -808,14 +341,14 @@ acp_login(PurpleAccount *acct)
 	d->next_id = 1;
 	d->pending = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, g_free);
 	d->inbuf = g_string_new(NULL);
-	d->turn = g_string_new(NULL);
+	d->md_block = g_string_new(NULL);
+	d->tools = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, free_tool_call);
 	d->buddy = g_strdup(acct_str(acct, OPT_BUDDY, "agent"));
 	gc->proto_data = d;
 
 	purple_connection_update_progress(gc, _("Launching agent"), 0, 2);
 
-	/* Assemble the command line: command + extra args, verbatim. Whatever
-	 * flags the chosen agent needs go in the account's "Arguments" field. */
+	/* command + extra args, verbatim; agent-specific flags go in "Arguments". */
 	fullcmd = g_strdup_printf("%s%s%s", cmd,
 	                          (extra && *extra) ? " " : "",
 	                          (extra && *extra) ? extra : "");
@@ -876,8 +409,11 @@ acp_close(PurpleConnection *gc)
 		d->pid = 0;
 	}
 	if (d->pending) g_hash_table_destroy(d->pending);
-	if (d->inbuf)   g_string_free(d->inbuf, TRUE);
-	if (d->turn)    g_string_free(d->turn, TRUE);
+	if (d->tools)   g_hash_table_destroy(d->tools);
+	if (d->inbuf)    g_string_free(d->inbuf, TRUE);
+	if (d->md_block) g_string_free(d->md_block, TRUE);
+	if (d->code_buf) g_string_free(d->code_buf, TRUE);
+	g_free(d->fence_lang);
 	g_free(d->session_id);
 	g_free(d->buddy);
 	g_free(d);
@@ -893,16 +429,12 @@ acp_send_im(PurpleConnection *gc, const char *who, const char *message,
 
 	if (!d)
 		return -EINVAL;
-	if (!purple_strequal(who, d->buddy)) {
-		/* Only the agent buddy is a valid recipient. */
+	if (!purple_strequal(who, d->buddy))
 		return -ENOTSUP;
-	}
 	r = acp_send_prompt(d, message);
-	if (r == -EAGAIN) {
+	if (r == -EAGAIN)
 		acp_system_im(d, _("The agent session is not ready yet."));
-		return 1;
-	}
-	return 1; /* the conversation echoes the outgoing message itself */
+	return 1;
 }
 
 static void
@@ -915,8 +447,6 @@ acp_get_info(PurpleConnection *gc, const char *who)
 	purple_notify_user_info_destroy(info);
 }
 
-/* Adding/removing the agent buddy is a no-op on the wire; libpurple keeps it
- * in the local blist. We just make sure it shows online. */
 static void
 acp_add_buddy(PurpleConnection *gc, PurpleBuddy *buddy, PurpleGroup *group)
 {
@@ -927,27 +457,12 @@ acp_add_buddy(PurpleConnection *gc, PurpleBuddy *buddy, PurpleGroup *group)
 }
 
 static void acp_remove_buddy(PurpleConnection *gc, PurpleBuddy *b, PurpleGroup *g) {}
-
-static void
-acp_set_status(PurpleAccount *acct, PurpleStatus *status)
-{
-	/* We are always available while the agent runs; nothing to push. */
-}
-
-static void
-acp_keepalive(PurpleConnection *gc)
-{
-	/* nothing: the pipe watch tells us if the agent dies */
-}
-
-static gboolean
-acp_offline_message(const PurpleBuddy *buddy)
-{
-	return FALSE;
-}
+static void acp_set_status(PurpleAccount *acct, PurpleStatus *status) {}
+static void acp_keepalive(PurpleConnection *gc) {}
+static gboolean acp_offline_message(const PurpleBuddy *buddy) { return FALSE; }
 
 /* ------------------------------------------------------------------------- *
- *  Restart-session account action
+ *  account actions
  * ------------------------------------------------------------------------- */
 
 static void
@@ -960,11 +475,11 @@ acp_action_restart(PurplePluginAction *action)
 	g_free(d->session_id);
 	d->session_id = NULL;
 	d->prompting = FALSE;
+	acp_stream_reset(d);
 	acp_do_initialize(d);
 	acp_system_im(d, _("Started a fresh agent session."));
 }
 
-/* Interrupt the in-flight prompt turn (ACP session/cancel notification). */
 static void
 acp_action_cancel(PurplePluginAction *action)
 {
@@ -1132,12 +647,12 @@ static PurplePluginInfo info =
 	ACP_PRPL_ID,                                   /**< id             */
 	N_("ACP Agent"),                               /**< name           */
 	DISPLAY_VERSION,                               /**< version        */
-	                                               /**  summary        */
 	N_("Agent Client Protocol (ACP) agents as buddies."),
-	                                               /**  description    */
 	N_("Sign in to run an ACP agent binary as a subprocess and chat with it "
-	   "as an always-online buddy. Configure the agent command, arguments, "
-	   "working directory and permissions in the account settings."),
+	   "as an always-online buddy. Its replies, thoughts, plans and tool "
+	   "calls stream live and render as Markdown. Configure the agent "
+	   "command, arguments, working directory and permissions in the "
+	   "account settings."),
 	"Ayush Bhat <tfeayush@gmail.com>",             /**< author         */
 	PURPLE_WEBSITE,                                /**< homepage       */
 
