@@ -9360,6 +9360,9 @@ window_keypress_cb(GtkWidget *widget, GdkEventKey *event, PidginWindow *win)
 {
 	PidginConversation *gtkconv = pidgin_conv_window_get_active_gtkconv(win);
 
+	if (gtkconv == NULL)
+		return FALSE;
+
 	return conv_keypress_common(gtkconv, event);
 }
 
@@ -9617,6 +9620,15 @@ pidgin_conv_window_new()
 			unbound = TRUE;
 		}
 	}
+
+	/* Handle Ctrl+Tab (and the other tab-switch keys) on the notebook
+	 * itself, not just on win->window. In single-window (docked) mode the
+	 * whole content box -- notebook included -- is re-parented into the
+	 * buddy list toplevel, so win->window never sees key events. The
+	 * notebook always travels with the conversation panes, so a handler
+	 * here fires in both standalone and docked windows. */
+	g_signal_connect(G_OBJECT(win->notebook), "key_press_event",
+	                 G_CALLBACK(window_keypress_cb), win);
 
 	pos = purple_prefs_get_int(PIDGIN_PREFS_ROOT "/conversations/tab_side");
 
