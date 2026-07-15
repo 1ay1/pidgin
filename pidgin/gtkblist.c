@@ -1879,12 +1879,10 @@ create_buddy_menu(PurpleBlistNode *node, PurpleBuddy *b)
 				if(!show_offline && !PURPLE_BUDDY_IS_ONLINE(buddy))
 					continue;
 
-				menuitem = gtk_image_menu_item_new_with_label(buddy->name);
 				buf = pidgin_create_prpl_icon(buddy->account,PIDGIN_PRPL_ICON_SMALL);
 				image = gtk_image_new_from_pixbuf(buf);
 				g_object_unref(G_OBJECT(buf));
-				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
-											  image);
+				menuitem = pidgin_image_menu_item_new(buddy->name, image, FALSE);
 				gtk_widget_show(image);
 				gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 				gtk_widget_show(menuitem);
@@ -8400,9 +8398,8 @@ pidgin_blist_update_accounts_menu(void)
 
 			buf = g_strconcat(purple_account_get_username(account), " (",
 				purple_account_get_protocol_name(account), ")", NULL);
-			menuitem = gtk_image_menu_item_new_with_label(buf);
-			g_free(buf);
 			pixbuf = pidgin_create_prpl_icon(account, PIDGIN_PRPL_ICON_SMALL);
+			image = NULL;
 			if (pixbuf != NULL)
 			{
 				if (!purple_account_is_connected(account))
@@ -8410,8 +8407,9 @@ pidgin_blist_update_accounts_menu(void)
 				image = gtk_image_new_from_pixbuf(pixbuf);
 				g_object_unref(G_OBJECT(pixbuf));
 				gtk_widget_show(image);
-				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
 			}
+			menuitem = pidgin_image_menu_item_new(buf, image, FALSE);
+			g_free(buf);
 			g_signal_connect(G_OBJECT(menuitem), "activate",
 				G_CALLBACK(enable_account_cb), account);
 			gtk_menu_shell_append(GTK_MENU_SHELL(submenu), menuitem);
@@ -8445,10 +8443,9 @@ pidgin_blist_update_accounts_menu(void)
 
 		buf = g_strconcat(purple_account_get_username(account), " (",
 				purple_account_get_protocol_name(account), ")", NULL);
-		menuitem = gtk_image_menu_item_new_with_label(buf);
 		accel_path_buf = g_strconcat(N_("<PurpleMain>/Accounts/"), buf, NULL);
-		g_free(buf);
 		pixbuf = pidgin_create_prpl_icon(account, PIDGIN_PRPL_ICON_SMALL);
+		image = NULL;
 		if (pixbuf != NULL) {
 			if (!purple_account_is_connected(account))
 				gdk_pixbuf_saturate_and_pixelate(pixbuf, pixbuf,
@@ -8456,8 +8453,9 @@ pidgin_blist_update_accounts_menu(void)
 			image = gtk_image_new_from_pixbuf(pixbuf);
 			g_object_unref(G_OBJECT(pixbuf));
 			gtk_widget_show(image);
-			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
 		}
+		menuitem = pidgin_image_menu_item_new(buf, image, FALSE);
+		g_free(buf);
 		gtk_menu_shell_append(GTK_MENU_SHELL(accountmenu), menuitem);
 
 		submenu = gtk_menu_new();
@@ -8544,7 +8542,7 @@ pidgin_blist_update_plugin_actions(void)
 		if (!PURPLE_PLUGIN_HAS_ACTIONS(plugin))
 			continue;
 
-		menuitem = gtk_image_menu_item_new_with_label(_(plugin->info->name));
+		menuitem = gtk_menu_item_new_with_label(_(plugin->info->name));
 		gtk_menu_shell_append(GTK_MENU_SHELL(pluginmenu), menuitem);
 
 		plugin_submenus = g_list_append(plugin_submenus, menuitem);

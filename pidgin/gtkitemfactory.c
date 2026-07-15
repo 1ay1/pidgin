@@ -248,27 +248,25 @@ pidgin_if_create_one(GtkItemFactory *ift, GtkItemFactoryEntry *e,
 		item = gtk_check_menu_item_new_with_mnemonic(label);
 	} else if (g_strcmp0(type, "<StockItem>") == 0 ||
 	           g_strcmp0(type, "<ImageItem>") == 0) {
-		/* GTK3 has no image menu items in the classic sense, but the
-		 * deprecated GtkImageMenuItem is still available (removed only in
-		 * GTK4) and is what gives menus their GTK2-style leading icons.
-		 * e->extra_data carries the stock/icon id (e.g. PIDGIN_STOCK_CHAT
-		 * or GTK_STOCK_FIND); resolve it and attach an image. */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-		item = gtk_image_menu_item_new_with_mnemonic(label);
+		/* e->extra_data carries the stock/icon id (e.g. PIDGIN_STOCK_CHAT
+		 * or GTK_STOCK_FIND); resolve it to an image and build a GTK3
+		 * image menu item (plain GtkMenuItem + image, no deprecated
+		 * GtkImageMenuItem). */
+		GtkWidget *image = NULL;
 		if (e->extra_data != NULL) {
 			const gchar *resolved = pidgin_stock_icon_name(e->extra_data);
-			GtkWidget *image;
 			GtkIconSize isz = gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL);
 			if (isz == GTK_ICON_SIZE_INVALID)
 				isz = GTK_ICON_SIZE_MENU;
-			if (resolved != NULL && g_str_has_prefix(resolved, "pidgin-"))
+			if (resolved != NULL && g_str_has_prefix(resolved, "pidgin-")) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 				image = gtk_image_new_from_stock(e->extra_data, isz);
-			else
-				image = gtk_image_new_from_icon_name(resolved, isz);
-			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-			gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(item), TRUE);
-		}
 G_GNUC_END_IGNORE_DEPRECATIONS
+			} else {
+				image = gtk_image_new_from_icon_name(resolved, isz);
+			}
+		}
+		item = pidgin_image_menu_item_new(label, image, TRUE);
 	} else { /* "<Item>" and anything else */
 		item = gtk_menu_item_new_with_mnemonic(label);
 	}

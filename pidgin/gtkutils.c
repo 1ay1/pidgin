@@ -796,25 +796,63 @@ pidgin_pixbuf_button_from_stock(const char *text, const char *icon,
 }
 
 
+/*
+ * GTK3-idiomatic replacement for the deprecated GtkImageMenuItem.
+ *
+ * GtkImageMenuItem was deprecated in GTK+ 3.10 because the GNOME HIG moved
+ * away from icons in menus, but Pidgin's menus (tray, right-click context
+ * menus, buddy-list actions) still want them.  Build a plain GtkMenuItem
+ * whose child is an hbox holding the image in a fixed-width gutter plus a
+ * mnemonic GtkAccelLabel -- exactly the internal layout GtkImageMenuItem
+ * used, minus the deprecated widget.
+ *
+ * @param label     Label text (mnemonic if @a mnemonic is TRUE).
+ * @param image      A GtkImage to show in the gutter (may be NULL).
+ * @param mnemonic   Whether underscores in @a label mark a mnemonic.
+ * @return           A realized (but not shown) GtkMenuItem.
+ */
+GtkWidget *
+pidgin_image_menu_item_new(const char *label, GtkWidget *image, gboolean mnemonic)
+{
+	GtkWidget *menuitem;
+	GtkWidget *box;
+	GtkWidget *accel_label;
+
+	if (image == NULL) {
+		return mnemonic
+			? gtk_menu_item_new_with_mnemonic(label ? label : "")
+			: gtk_menu_item_new_with_label(label ? label : "");
+	}
+
+	menuitem = gtk_menu_item_new();
+
+	box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+
+	/* Reserve a consistent gutter for the icon so that menus mixing image
+	 * items with check/radio items (e.g. the tray menu: "New Message" vs.
+	 * "Show Buddy List") keep their labels in one shared column, matching
+	 * the toggle gutter GTK reserves for the check items. */
+	gtk_widget_set_halign(image, GTK_ALIGN_CENTER);
+	gtk_widget_set_valign(image, GTK_ALIGN_CENTER);
+	gtk_box_pack_start(GTK_BOX(box), image, FALSE, FALSE, 0);
+
+	accel_label = gtk_accel_label_new(label ? label : "");
+	gtk_label_set_use_underline(GTK_LABEL(accel_label), mnemonic);
+	gtk_label_set_xalign(GTK_LABEL(accel_label), 0.0);
+	gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(accel_label), menuitem);
+	if (mnemonic)
+		gtk_label_set_mnemonic_widget(GTK_LABEL(accel_label), menuitem);
+	gtk_box_pack_start(GTK_BOX(box), accel_label, TRUE, TRUE, 0);
+
+	gtk_container_add(GTK_CONTAINER(menuitem), box);
+
+	return menuitem;
+}
+
 GtkWidget *pidgin_new_item_from_stock(GtkWidget *menu, const char *str, const char *icon, GCallback cb, gpointer data, guint accel_key, guint accel_mods, char *mod)
 {
 	GtkWidget *menuitem;
-	/*
-	GtkWidget *hbox;
-	GtkWidget *label;
-	*/
-	GtkWidget *image;
-
-	if (icon == NULL)
-		menuitem = gtk_menu_item_new_with_mnemonic(str);
-	else
-		menuitem = gtk_image_menu_item_new_with_mnemonic(str);
-
-	if (menu)
-		gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-	if (cb)
-		g_signal_connect(G_OBJECT(menuitem), "activate", cb, data);
+	GtkWidget *image = NULL;
 
 	if (icon != NULL) {
 		const char *resolved = pidgin_stock_icon_name(icon);
@@ -825,17 +863,16 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		} else {
 			image = gtk_image_new_from_icon_name(resolved, gtk_icon_size_from_name(PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL));
 		}
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
-		/* GTK3 lays out the image gutter independently from the check/radio
-		 * toggle gutter, so a menu that mixes image items with check items
-		 * (e.g. the tray menu: New Message vs. Show Buddy List) ended up with
-		 * the two kinds of labels in different columns. Forcing the image to
-		 * always show makes GtkImageMenuItem reserve the toggle-size gutter,
-		 * which GTK then aligns with the check items -- one shared column. */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-		gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menuitem), TRUE);
-G_GNUC_END_IGNORE_DEPRECATIONS
 	}
+
+	menuitem = pidgin_image_menu_item_new(str, image, TRUE);
+
+	if (menu)
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+	if (cb)
+		g_signal_connect(G_OBJECT(menuitem), "activate", cb, data);
+
 /* FIXME: this isn't right
 	if (mod) {
 		label = gtk_label_new(mod);
@@ -3608,15 +3645,13 @@ link_context_menu(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 
 	/* Open Link */
 	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_JUMP_TO), GTK_ICON_SIZE_MENU);
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Open Link"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
+	item = pidgin_image_menu_item_new(_("_Open Link"), img, TRUE);
 	g_signal_connect_swapped(G_OBJECT(item), "activate", G_CALLBACK(gtk_imhtml_link_activate), link);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Copy Link Location */
 	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_COPY), GTK_ICON_SIZE_MENU);
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Copy Link Location"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
+	item = pidgin_image_menu_item_new(_("_Copy Link Location"), img, TRUE);
 	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(url_copy), (gpointer)url);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
@@ -3637,8 +3672,7 @@ copy_email_address(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 
 	/* Copy Email Address */
 	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_COPY), GTK_ICON_SIZE_MENU);
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Copy Email Address"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
+	item = pidgin_image_menu_item_new(_("_Copy Email Address"), img, TRUE);
 	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(url_copy), address);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
@@ -3757,15 +3791,13 @@ file_context_menu(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 
 	/* Open File */
 	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_JUMP_TO), GTK_ICON_SIZE_MENU);
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Open File"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
+	item = pidgin_image_menu_item_new(_("_Open File"), img, TRUE);
 	g_signal_connect_swapped(G_OBJECT(item), "activate", G_CALLBACK(gtk_imhtml_link_activate), link);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Open Containing Directory */
 	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_DIRECTORY), GTK_ICON_SIZE_MENU);
-	item = gtk_image_menu_item_new_with_mnemonic(_("Open _Containing Directory"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
+	item = pidgin_image_menu_item_new(_("Open _Containing Directory"), img, TRUE);
 
 	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(open_containing_cb), (gpointer)url);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -3833,16 +3865,14 @@ audio_context_menu(GtkIMHtml *imhtml, GtkIMHtmlLink *link, GtkWidget *menu)
 
 	/* Play Sound */
 	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_MEDIA_PLAY), GTK_ICON_SIZE_MENU);
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Play Sound"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
+	item = pidgin_image_menu_item_new(_("_Play Sound"), img, TRUE);
 
 	g_signal_connect_swapped(G_OBJECT(item), "activate", G_CALLBACK(gtk_imhtml_link_activate), link);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Save File */
 	img = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_SAVE), GTK_ICON_SIZE_MENU);
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Save File"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), img);
+	item = pidgin_image_menu_item_new(_("_Save File"), img, TRUE);
 	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(save_file_cb), (gpointer)(url+AUDIOLINKSIZE));
 	g_object_set_data(G_OBJECT(item), "gtkconv", conv);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);

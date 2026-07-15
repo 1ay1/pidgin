@@ -490,21 +490,17 @@ new_menu_item_with_status_icon(GtkWidget *menu, const char *str, PurpleStatusPri
 	GdkPixbuf *pixbuf;
 	GtkWidget *image;
 
-	menuitem = gtk_image_menu_item_new_with_label(str);
+	pixbuf = pidgin_create_status_icon(primitive, menu, PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL);
+	image = gtk_image_new_from_pixbuf(pixbuf);
+	g_object_unref(pixbuf);
+
+	menuitem = pidgin_image_menu_item_new(str, image, FALSE);
 
 	if (menu)
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
 	if (cb)
 		g_signal_connect(G_OBJECT(menuitem), "activate", cb, data);
-
-	pixbuf = pidgin_create_status_icon(primitive, menu, PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL);
-	image = gtk_image_new_from_pixbuf(pixbuf);
-	g_object_unref(pixbuf);
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-	gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menuitem), TRUE);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 	gtk_widget_show_all(menuitem);
 
@@ -660,7 +656,7 @@ docklet_plugin_actions(GtkWidget *menu)
 		if (!PURPLE_PLUGIN_HAS_ACTIONS(plugin))
 			continue;
 
-		menuitem = gtk_image_menu_item_new_with_label(_(plugin->info->name));
+		menuitem = gtk_menu_item_new_with_label(_(plugin->info->name));
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
 		submenu = gtk_menu_new();

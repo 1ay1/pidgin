@@ -341,9 +341,24 @@ GtkWidget *pidgin_new_check_item(GtkWidget *menu, const char *str,
  * @return The newly created menu item.
  */
 GtkWidget *pidgin_new_item_from_stock(GtkWidget *menu, const char *str,
-									const char *icon, GCallback cb,
-									gpointer data, guint accel_key,
-									guint accel_mods, char *mod);
+					const char *icon, GCallback cb,
+					gpointer data, guint accel_key,
+					guint accel_mods, char *mod);
+
+/**
+ * Creates a menu item that shows an icon to the left of a mnemonic label,
+ * the GTK3 way (a plain GtkMenuItem wrapping an image + GtkAccelLabel),
+ * without the deprecated GtkImageMenuItem.
+ *
+ * @param label The label text (mnemonic if @a mnemonic is TRUE).
+ * @param image A GtkImage to show in the icon gutter, or @c NULL for a
+ *              plain (icon-less) item.
+ * @param mnemonic Whether underscores in @a label mark a mnemonic accelerator.
+ *
+ * @return The newly created menu item (not yet shown or appended).
+ */
+GtkWidget *pidgin_image_menu_item_new(const char *label, GtkWidget *image,
+					gboolean mnemonic);
 
 /**
  * Creates a button with the specified text and stock icon.

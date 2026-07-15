@@ -3145,8 +3145,7 @@ pidgin_conversations_fill_menu(GtkWidget *menu, GList *convs)
 				gtk_label_get_text(GTK_LABEL(gtkconv->tab_label)),
 				gtkconv->unseen_count);
 
-		item = gtk_image_menu_item_new_with_label(text);
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), icon);
+		item = pidgin_image_menu_item_new(text, icon, FALSE);
 		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(unseen_conv_menu_cb), conv);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 		g_free(text);
