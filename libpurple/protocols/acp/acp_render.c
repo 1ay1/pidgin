@@ -168,6 +168,61 @@ acp_md_inline(const char *text)
 	return g_string_free(out, FALSE);
 }
 
+/* Display width (in glyph columns) of a cell string AFTER inline markdown is
+ * applied -- i.e. with `code` backticks, bold/italic/strike emphasis markers
+ * and [label](url) link syntax removed, counting only what will actually be
+ * drawn. Table column widths and alignment slack MUST use this, not the raw
+ * byte/char length, or cells containing inline markup misalign the borders. */
+static int
+md_visible_width(const char *text)
+{
+	const char *p = text;
+	int cols = 0;
+
+	while (*p) {
+		gsize span;
+		/* inline code `...` -> inner text only */
+		if (*p == '`') {
+			const char *end = strchr(p + 1, '`');
+			if (end && end > p + 1) {
+				cols += (int)g_utf8_strlen(p + 1, end - (p + 1));
+				p = end + 1;
+				continue;
+			}
+		}
+		/* link [label](url) -> label only */
+		if (*p == '[') {
+			const char *rb = strchr(p, ']');
+			if (rb && rb[1] == '(') {
+				const char *rp = strchr(rb + 2, ')');
+				if (rp) {
+					cols += (int)g_utf8_strlen(p + 1, rb - (p + 1));
+					p = rp + 1;
+					continue;
+				}
+			}
+		}
+		/* bold ** / strike ~~ -> drop the 2-char delimiters */
+		if (scan_delim(p, "**", &span)) { char *in = g_strndup(p + 2, span);
+			cols += md_visible_width(in); g_free(in); p += 2 + span + 2; continue; }
+		if (scan_delim(p, "~~", &span)) { char *in = g_strndup(p + 2, span);
+			cols += md_visible_width(in); g_free(in); p += 2 + span + 2; continue; }
+		/* italic * or _ */
+		if ((*p == '*' || *p == '_') && p[1] && p[1] != *p) {
+			char d0[2] = { *p, 0 };
+			if (scan_delim(p, d0, &span)) {
+				char *in = g_strndup(p + 1, span);
+				cols += md_visible_width(in); g_free(in);
+				p += 1 + span + 1; continue;
+			}
+		}
+		/* plain glyph (advance one UTF-8 char) */
+		p = g_utf8_next_char(p);
+		cols++;
+	}
+	return cols;
+}
+
 /* ------------------------------------------------------------------------- *
  *  GFM tables (maya-style box-drawn, alignment-aware)
  * ------------------------------------------------------------------------- */
@@ -286,7 +341,7 @@ table_row(GString *out, char **cells, int ncols, const int *w, const int *al,
 	    "\">\xE2\x94\x82</font>");   /* leading | */
 	for (c = 0; c < ncols; c++) {
 		const char *raw = (c < ncols && cells[c]) ? cells[c] : "";
-		int cw = (int)g_utf8_strlen(raw, -1);
+		int cw = md_visible_width(raw);
 		int slack = w[c] - cw; if (slack < 0) slack = 0;
 		int lp = 0, rp = slack, k;
 		char *inner;
@@ -339,7 +394,7 @@ acp_render_table(char **lines, int nlines)
 
 	/* header widths */
 	for (c = 0; c < ncols; c++)
-		if (head[c]) { int hw = (int)g_utf8_strlen(head[c], -1);
+		if (head[c]) { int hw = md_visible_width(head[c]);
 		               if (hw > w[c]) w[c] = hw; }
 
 	/* body rows (from line 2 on) + widen columns */
@@ -348,7 +403,7 @@ acp_render_table(char **lines, int nlines)
 		char **row = table_split_row(lines[i], &rn);
 		for (c = 0; c < ncols; c++) {
 			const char *v = (c < rn && row[c]) ? row[c] : "";
-			int vw = (int)g_utf8_strlen(v, -1);
+			int vw = md_visible_width(v);
 			if (vw > w[c]) w[c] = vw;
 		}
 		g_ptr_array_add(body, row);
