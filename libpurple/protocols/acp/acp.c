@@ -174,7 +174,6 @@ acp_on_prompt_done(AcpData *d, JsonObject *result, JsonObject *error)
 	acp_stream_flush(d);
 	d->prompting = FALSE;
 	acp_stream_typing_off(d);
-	serv_got_typing_stopped(d->gc, d->buddy);
 
 	if (error) {
 		acp_conv_write_html(d,
@@ -227,7 +226,6 @@ acp_send_prompt(AcpData *d, const char *text)
 	d->prompting = TRUE;
 	acp_stream_reset(d);
 	acp_stream_typing_on(d);
-	serv_got_typing(d->gc, d->buddy, 0, PURPLE_TYPING);
 	acp_request(d, "session/prompt", params, acp_on_prompt_done);
 	return 1;
 }

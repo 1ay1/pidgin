@@ -267,26 +267,29 @@ table_split_row(const char *line, int *ncols)
 	return (char **)g_ptr_array_free(cells, FALSE);
 }
 
-/* Is `line` a GFM alignment separator?  |---|:--:|---:| -- every cell of the
- * form (:?)(-+)(:?) with at least one dash. */
+/* Is `line` a GFM alignment separator?  |---|:--:|---:| -- per CommonMark/GFM
+ * (matching maya's looks_like_table_delim): after trimming it must be non-empty,
+ * contain at least one '-', and consist ONLY of '-', '|', ':', space and tab.
+ * This is stricter (and safer) than parsing cells, so a stray "---" hrule or
+ * ":::" never masquerades as a table separator. */
 gboolean
 acp_table_is_separator(const char *line)
 {
-	int n = 0, i;
-	char **cells = table_split_row(line, &n);
-	gboolean ok = (n > 0);
-	for (i = 0; i < n && ok; i++) {
-		const char *c = cells[i];
-		int dashes = 0;
-		while (*c == ' ') c++;
-		if (*c == ':') c++;
-		while (*c == '-') { dashes++; c++; }
-		if (*c == ':') c++;
-		while (*c == ' ') c++;
-		if (dashes == 0 || *c != '\0') ok = FALSE;
+	const char *p = line;
+	const char *end;
+	gboolean seen_dash = FALSE;
+
+	while (*p == ' ' || *p == '\t') p++;
+	end = p + strlen(p);
+	while (end > p && (end[-1] == ' ' || end[-1] == '\t')) end--;
+	if (end == p)
+		return FALSE;
+	for (; p < end; p++) {
+		if (*p == '-') seen_dash = TRUE;
+		else if (*p != '|' && *p != ':' && *p != ' ' && *p != '\t')
+			return FALSE;
 	}
-	g_strfreev(cells);
-	return ok;
+	return seen_dash;
 }
 
 /* Parse the separator row into per-column alignment codes. */
@@ -330,17 +333,21 @@ table_border(GString *out, const int *w, int ncols, int kind)
 	g_string_append(out, "</font><br>");
 }
 
-/* Emit one data/header row. `is_head` bolds + colours the cell text. */
+/* Emit one data/header row. `is_head` bolds + colours the cell text. `ncells`
+ * is the ACTUAL number of entries in `cells` (which may be fewer OR more than
+ * `ncols` -- a short GFM row is padded with empty cells, a long one is
+ * clipped). Never index past `ncells`: `cells` is only NULL-terminated at
+ * `ncells`, so reading cells[ncells+1] would run off the allocation. */
 static void
-table_row(GString *out, char **cells, int ncols, const int *w, const int *al,
-          gboolean is_head)
+table_row(GString *out, char **cells, int ncells, int ncols, const int *w,
+          const int *al, gboolean is_head)
 {
 	int c;
 	g_string_append(out,
 	    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_BORDER
 	    "\">\xE2\x94\x82</font>");   /* leading | */
 	for (c = 0; c < ncols; c++) {
-		const char *raw = (c < ncols && cells[c]) ? cells[c] : "";
+		const char *raw = (c < ncells && cells[c]) ? cells[c] : "";
 		int cw = md_visible_width(raw);
 		int slack = w[c] - cw; if (slack < 0) slack = 0;
 		int lp = 0, rp = slack, k;
@@ -381,13 +388,19 @@ acp_render_table(char **lines, int nlines)
 	GString *out = g_string_new(NULL);
 	int ncols = 0, i, c;
 	char **head;
+	int headn = 0;
 	int *w, *al;
+	GArray *body_n = g_array_new(FALSE, FALSE, sizeof(int));
 	GPtrArray *body = g_ptr_array_new_with_free_func((GDestroyNotify)g_strfreev);
 
-	if (nlines < 2) { return g_string_free(out, FALSE); }
+	if (nlines < 2) { g_array_free(body_n, TRUE);
+	                  g_ptr_array_free(body, TRUE);
+	                  return g_string_free(out, FALSE); }
 
 	head = table_split_row(lines[0], &ncols);
+	headn = ncols;
 	if (ncols == 0) { g_strfreev(head); g_ptr_array_free(body, TRUE);
+	                  g_array_free(body_n, TRUE);
 	                  return g_string_free(out, FALSE); }
 	al = table_parse_align(lines[1], ncols);
 	w  = g_new0(int, ncols);
@@ -401,30 +414,31 @@ acp_render_table(char **lines, int nlines)
 	for (i = 2; i < nlines && lines[i]; i++) {
 		int rn = 0;
 		char **row = table_split_row(lines[i], &rn);
-		for (c = 0; c < ncols; c++) {
-			const char *v = (c < rn && row[c]) ? row[c] : "";
+		for (c = 0; c < ncols && c < rn; c++) {
+			const char *v = row[c] ? row[c] : "";
 			int vw = md_visible_width(v);
 			if (vw > w[c]) w[c] = vw;
 		}
 		g_ptr_array_add(body, row);
+		g_array_append_val(body_n, rn);
 	}
 	for (c = 0; c < ncols; c++) if (w[c] < 1) w[c] = 1;
 
-	/* compose: top rule, header, mid rule, body rows (dashed separators). */
+	/* compose: top rule, header, mid rule, body rows. */
 	table_border(out, w, ncols, 0);
-	table_row(out, head, ncols, w, al, TRUE);
+	table_row(out, head, headn, ncols, w, al, TRUE);
 	table_border(out, w, ncols, 1);
 	for (i = 0; i < (int)body->len; i++) {
 		char **row = g_ptr_array_index(body, i);
-		int rn = 0; while (row[rn]) rn++;
-		/* pad short rows so table_row always has ncols entries */
-		table_row(out, row, ncols, w, al, FALSE);
+		int rn = g_array_index(body_n, int, i);
+		table_row(out, row, rn, ncols, w, al, FALSE);
 	}
 	table_border(out, w, ncols, 2);
 
 	g_free(w); g_free(al);
 	g_strfreev(head);
 	g_ptr_array_free(body, TRUE);
+	g_array_free(body_n, TRUE);
 	return g_string_free(out, FALSE);
 }
 
