@@ -138,6 +138,17 @@ static PidginWindow *hidden_convwin = NULL;
 static PidginWindow *docked_convwin = NULL;
 static GList *window_list = NULL;
 
+/* Set while pidgin_conv_reparent_all_for_mode_switch() is relocating every
+ * conversation between the docked window and standalone windows. While this is
+ * TRUE, pidgin_conv_window_remove_gtkconv() must NOT auto-destroy an emptied
+ * docked_convwin: its shared content box (notebook + toolbar) is still needed
+ * to re-home the conversation we're mid-move on, and destroying win->window
+ * would take that box -- and the live gtkconv widgets inside it -- down with
+ * it, corrupting them (garbage Pango weight, g_object_unref on a freed object,
+ * SIGABRT). The mode-switch function tears the empty docked window down itself
+ * once every conversation has been safely re-placed. */
+static gboolean reparenting_for_mode_switch = FALSE;
+
 static void pidgin_conv_dock_into_blist(void);
 
 /* GTK3: GtkTextTag no longer exposes ->name; read the construct-only "name"
@@ -10044,6 +10055,15 @@ pidgin_conv_window_remove_gtkconv(PidginWindow *win, PidginConversation *gtkconv
 	}
 
 	if (!win->gtkconvs && win != hidden_convwin) {
+		/* During a single-window mode switch, do NOT tear the emptied docked
+		 * window down here: its shared content box is still hosting the
+		 * conversation we're about to re-place, and destroying win->window
+		 * would finalize that box and the live gtkconv widgets inside it.
+		 * pidgin_conv_reparent_all_for_mode_switch() destroys it after every
+		 * conversation has been safely relocated. */
+		if (win == docked_convwin && reparenting_for_mode_switch)
+			return;
+
 		/* Tearing down the shared docked window: clear the static pointer
 		 * FIRST so nothing (e.g. a later pidgin_conv_get_docked_window()
 		 * during a single-window mode switch) can dereference the freed
@@ -10825,13 +10845,17 @@ pidgin_conv_reparent_all_for_mode_switch(void)
 	/* Detach each from its current window and re-place it according to the
 	 * new mode. pidgin_conv_placement_place() routes to conv_placement_blist
 	 * (docked) when single_window is on, or the user's normal placement when
-	 * it's off. */
+	 * it's off. The guard stops remove_gtkconv from destroying the docked
+	 * window mid-loop (which would finalize the shared content box that still
+	 * holds the conversation being moved). */
+	reparenting_for_mode_switch = TRUE;
 	for (l = gtkconvs; l != NULL; l = l->next) {
 		PidginConversation *gtkconv = l->data;
 
 		pidgin_conv_window_remove_gtkconv(gtkconv->win, gtkconv);
 		pidgin_conv_placement_place(gtkconv);
 	}
+	reparenting_for_mode_switch = FALSE;
 
 	/* After every conversation has been re-placed, make sure the shared docked
 	 * window's own toplevel is not left mapped. In docked mode its content box

@@ -32,6 +32,7 @@
 # else
 #  include <libappindicator/app-indicator.h>
 # endif
+# include <gio/gio.h>
 #endif
 
 #define SHORT_EMBED_TIMEOUT 5
@@ -272,6 +273,54 @@ docklet_gtk_status_destroy(void)
 	purple_debug_info("docklet", "GTK+ destroyed\n");
 }
 
+#ifdef USE_APPINDICATOR
+/*
+ * Return TRUE if a StatusNotifier host/watcher is actually present on the
+ * session bus. The AppIndicator library exports our tray item unconditionally
+ * and never tells us whether anyone is displaying it, so we ask the bus
+ * directly: a real tray exists only if org.kde.StatusNotifierWatcher (the de
+ * facto name; org.freedesktop.* is the older spec) has an owner. This keeps
+ * the buddy list from being hidden behind a phantom tray icon on compositors
+ * with no tray (e.g. Hyprland/sway without a panel), which otherwise looks
+ * like a slow/hung startup.
+ */
+static gboolean
+docklet_gtk_sni_host_present(void)
+{
+	GDBusConnection *bus;
+	gboolean present = FALSE;
+	const char *const watchers[] = {
+		"org.kde.StatusNotifierWatcher",
+		"org.freedesktop.StatusNotifierWatcher",
+		NULL
+	};
+	int i;
+
+	bus = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, NULL);
+	if (bus == NULL)
+		return FALSE;
+
+	for (i = 0; watchers[i] != NULL && !present; i++) {
+		GVariant *reply = g_dbus_connection_call_sync(bus,
+			"org.freedesktop.DBus", "/org/freedesktop/DBus",
+			"org.freedesktop.DBus", "NameHasOwner",
+			g_variant_new("(s)", watchers[i]),
+			G_VARIANT_TYPE("(b)"),
+			G_DBUS_CALL_FLAGS_NONE, 500 /* ms */, NULL, NULL);
+		if (reply != NULL) {
+			gboolean owned = FALSE;
+			g_variant_get(reply, "(b)", &owned);
+			if (owned)
+				present = TRUE;
+			g_variant_unref(reply);
+		}
+	}
+
+	g_object_unref(bus);
+	return present;
+}
+#endif /* USE_APPINDICATOR */
+
 static void
 docklet_gtk_status_create(gboolean recreate)
 {
@@ -310,8 +359,22 @@ docklet_gtk_status_create(gboolean recreate)
 		menu = pidgin_docklet_build_menu();
 		app_indicator_set_menu(app_indicator, GTK_MENU(menu));
 
-		if (!recreate)
-			pidgin_docklet_embedded();
+		/* Only let the tray icon suppress the buddy list if a real tray host
+		 * (StatusNotifierWatcher) is actually present on the session bus.
+		 * app_indicator_new() ALWAYS "succeeds" -- it just exports an SNI
+		 * object and waits for a host to notice it -- so on bare Wayland
+		 * compositors (Hyprland, sway without waybar, ...) there may be no
+		 * host at all. If we unconditionally became a visibility manager the
+		 * buddy list would start hidden behind a tray icon that never renders,
+		 * making Pidgin appear to "hang" at startup. Gate on host presence. */
+		if (!recreate) {
+			if (docklet_gtk_sni_host_present())
+				pidgin_docklet_embedded();
+			else
+				purple_debug_info("docklet",
+					"no StatusNotifier host on the bus; not hiding the "
+					"buddy list behind the tray icon\n");
+		}
 
 		purple_debug_info("docklet", "AppIndicator created\n");
 		return;
