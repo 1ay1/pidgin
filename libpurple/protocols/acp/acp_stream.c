@@ -98,6 +98,13 @@ typedef struct {
 	 * first chunk/card arrives or the turn ends. */
 	gboolean      typing;      /* placeholder currently shown                 */
 	GtkTextMark  *type_start;  /* start of the placeholder region             */
+
+	/* live tool card: the card for `card_id` occupies [card_start .. end] and
+	 * is redrawn IN PLACE on every status update (pending -> running ->
+	 * completed), so tool calls animate live. Sealed (mark dropped) when a
+	 * different card / text chunk / the turn end arrives. */
+	GtkTextMark  *card_start;  /* start of the live card region, or NULL      */
+	gchar        *card_id;     /* toolCallId currently occupying that region  */
 } AcpStream;
 
 enum { BLK_NONE = 0, BLK_PARA, BLK_LIST, BLK_QUOTE, BLK_HEAD, BLK_TABLE };
@@ -108,6 +115,7 @@ char *acp_md_inline(const char *text);
 /* forward decl: defined below, used by ensure_open to clear the placeholder */
 void acp_stream_typing_off(AcpData *d);
 static AcpStream *stream_get(AcpData *d);
+static void seal_live_card(AcpStream *s);
 
 /* A line that could be a table row: contains a '|' and, after trimming, is not
  * a fence / heading / list. (The real promotion to BLK_TABLE still requires a
@@ -811,6 +819,10 @@ acp_stream_message(AcpData *d, const char *text)
 	s = stream_get(d);
 	if (!s->imhtml)          /* no GTK view (headless frontend): give up */
 		return;
+	/* a live tool card is always the last thing in the buffer; text that
+	 * follows it must seal it first so the card freezes above the new text */
+	if (s->card_start)
+		seal_live_card(s);
 	ensure_open(d, s);
 
 	/* Consume the chunk byte-wise for newline splitting, but only repaint the
@@ -929,6 +941,30 @@ acp_stream_reset(AcpData *d)
 		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->type_start);
 	s->type_start = NULL;
 	s->typing = FALSE;
+	/* drop any stale live-card mark from a previous turn */
+	if (s->card_start && s->imhtml && GTK_IS_IMHTML(s->imhtml))
+		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->card_start);
+	s->card_start = NULL;
+	g_free(s->card_id);
+	s->card_id = NULL;
+}
+
+/* Seal the current live tool-card region: append a trailing blank line, move
+ * the commit tail past it, drop the mark + id. After this the card's text is
+ * frozen and subsequent output appends below it. No-op if none is open. */
+static void
+seal_live_card(AcpStream *s)
+{
+	if (!s->card_start)
+		return;
+	if (s->imhtml && GTK_IS_IMHTML(s->imhtml)) {
+		imhtml_append(s, "<br>");   /* breathing room after the card */
+		imhtml_anchor_tail(s);
+		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->card_start);
+	}
+	s->card_start = NULL;
+	g_free(s->card_id);
+	s->card_id = NULL;
 }
 
 /* Append a pre-rendered HTML card (tool call / plan) after committing text.
@@ -941,6 +977,7 @@ acp_stream_write_card(AcpData *d, const char *html)
 	acp_stream_flush(d);
 	s = stream_get(d);
 	if (s->imhtml) {
+		seal_live_card(s);         /* finalize any in-flight live card */
 		ensure_open(d, s);
 		/* blank line before the card so it doesn't crowd the preceding text */
 		imhtml_append(s, "<br>");
@@ -963,6 +1000,59 @@ acp_stream_write_card(AcpData *d, const char *html)
 	}
 }
 
+/* Draw / update a LIVE tool card for `id`. The card occupies its own region
+ * ([card_start .. end of buffer]) which is deleted + redrawn in place on every
+ * call for the same id, so the card animates through pending -> running ->
+ * completed without stacking duplicates. A card for a DIFFERENT id (or any
+ * text chunk / plan / turn end) seals the previous region first.
+ *
+ * `terminal` marks the final state: once true the region is sealed after the
+ * draw, so the next event appends fresh instead of overwriting this card. */
+void
+acp_stream_write_live_card(AcpData *d, const char *id, const char *html,
+                           gboolean terminal)
+{
+	AcpStream *s = stream_get(d);
+	GtkTextIter at, end;
+
+	if (!s->imhtml) {
+		/* headless: just append once, at terminal, via the message path */
+		if (terminal)
+			acp_stream_write_card(d, html);
+		return;
+	}
+
+	/* text may be mid-stream: fold it in, but keep the tool card BELOW it */
+	acp_stream_flush(d);
+	ensure_open(d, s);
+
+	if (s->card_start && s->card_id && id && purple_strequal(s->card_id, id)) {
+		/* same card -> replace its region in place */
+		gtk_text_buffer_get_iter_at_mark(s->imhtml->text_buffer, &at,
+		                                 s->card_start);
+		gtk_text_buffer_get_end_iter(s->imhtml->text_buffer, &end);
+		if (!gtk_text_iter_equal(&at, &end))
+			gtk_imhtml_delete(s->imhtml, &at, &end);
+		gtk_text_buffer_get_iter_at_mark(s->imhtml->text_buffer, &at,
+		                                 s->card_start);
+		gtk_imhtml_insert_html_at_iter(s->imhtml, html,
+		    GTK_IMHTML_NO_SCROLL | GTK_IMHTML_NO_COMMENTS, &at);
+	} else {
+		/* different / first card -> seal previous, open a fresh region */
+		seal_live_card(s);
+		imhtml_append(s, "<br>");        /* breathing room before the card */
+		gtk_text_buffer_get_end_iter(s->imhtml->text_buffer, &end);
+		s->card_start = gtk_text_buffer_create_mark(s->imhtml->text_buffer,
+		                                            NULL, &end, TRUE /*left*/);
+		s->card_id = g_strdup(id ? id : "");
+		imhtml_append(s, html);
+	}
+	gtk_imhtml_scroll_to_end(s->imhtml, FALSE);
+
+	if (terminal)
+		seal_live_card(s);   /* freeze; next event appends fresh */
+}
+
 void
 acp_stream_free(AcpData *d)
 {
@@ -973,6 +1063,8 @@ acp_stream_free(AcpData *d)
 		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->tail);
 	if (s->type_start && s->imhtml && GTK_IS_IMHTML(s->imhtml))
 		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->type_start);
+	if (s->card_start && s->imhtml && GTK_IS_IMHTML(s->imhtml))
+		gtk_text_buffer_delete_mark(s->imhtml->text_buffer, s->card_start);
 	if (s->open)       g_string_free(s->open, TRUE);
 	if (s->open_line)  g_string_free(s->open_line, TRUE);
 	if (s->fence_body) g_string_free(s->fence_body, TRUE);

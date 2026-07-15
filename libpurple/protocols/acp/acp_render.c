@@ -705,42 +705,28 @@ acp_render_tool_call(AcpData *d, JsonObject *update, gboolean is_update)
 		if (status) { g_free(tc->status); tc->status = g_strdup(status); }
 	}
 
-	/* The conversation view is append-only -- we cannot revise an already-drawn
-	 * card in place. So instead of emitting a fresh card on every status update
-	 * (which spammed pending -> pending -> completed duplicates), draw the card
-	 * EXACTLY ONCE, when the tool reaches a terminal state (completed/failed).
-	 * Intermediate pending/in_progress updates are folded into `tc` silently;
-	 * the live "agent is thinking" indicator already shows work is happening. */
-	{
-		const char *s = status ? status : (tc ? tc->status : NULL);
-		gboolean terminal = s && (purple_strequal(s, "completed") ||
-		                          purple_strequal(s, "failed"));
-		if (!terminal)
-			return;
-		if (tc && tc->rendered)
-			return;              /* already drew this one */
-		if (tc)
-			tc->rendered = TRUE;
-	}
-
-	/* Full framed card: top rule (status icon + tool name), header row
-	 * (title · status), an optional diff/content body behind a dashed
-	 * separator, bottom rule. */
+	/* Draw the card LIVE: acp_stream_write_live_card keeps this card in its own
+	 * region and redraws it in place on each update, so the same card animates
+	 * pending -> running (●) -> completed (✓) / failed (✗) without stacking
+	 * duplicates. It is sealed (frozen) once terminal or when other output
+	 * lands. We render on EVERY update -- including the initial tool_call. */
 	html = g_string_new(NULL);
 	{
 		const char *t = title ? title : (tc && tc->title ? tc->title : NULL);
 		const char *k = kind ? kind : (tc ? tc->kind : NULL);
 		const char *s = status ? status : (tc ? tc->status : NULL);
 		gboolean fail = status_failed(s);
-		/* border label = just the tool kind (the status icon carries state; no
-		 * redundant kind emoji). Capitalised for a title-case look. */
+		gboolean terminal = s && (purple_strequal(s, "completed") ||
+		                          purple_strequal(s, "failed"));
+		/* border label = Title-cased tool kind; the status icon carries state. */
 		char *label = g_strdup(k && *k ? k : "tool");
 		gboolean has_body;
 		GString *body = g_string_new(NULL);
 
 		if (label[0]) label[0] = g_ascii_toupper(label[0]);
 
-		/* pre-render the body so we know whether to draw the separator */
+		/* pre-render the body (diff / output) so we know whether to draw the
+		 * separator; output only shows once it has arrived. */
 		has_body = content ? append_tool_content(body, content, fail) : FALSE;
 
 		card_top(html, status_icon(s), status_icon_color(s), label, fail);
@@ -753,10 +739,12 @@ acp_render_tool_call(AcpData *d, JsonObject *update, gboolean is_update)
 		card_bottom(html, fail);
 		g_string_free(body, TRUE);
 		g_free(label);
+
+		acp_stream_write_live_card(d, id, html->str, terminal);
 	}
 
-	acp_stream_write_card(d, html->str);
 	g_string_free(html, TRUE);
+	(void)is_update;
 }
 
 /* ------------------------------------------------------------------------- *

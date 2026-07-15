@@ -111,6 +111,9 @@ void  acp_stream_typing_on(AcpData *d);
 void  acp_stream_typing_off(AcpData *d);
 /* Commit pending text, then append a pre-rendered HTML card (tool/plan). */
 void  acp_stream_write_card(AcpData *d, const char *html);
+/* Draw/update a LIVE tool card keyed by `id`, redrawn in place until terminal. */
+void  acp_stream_write_live_card(AcpData *d, const char *id, const char *html,
+                                 gboolean terminal);
 /* Free all streaming state (on connection close). */
 void  acp_stream_free(AcpData *d);
 
