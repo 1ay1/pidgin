@@ -463,7 +463,7 @@ ensure_open(AcpData *d, AcpStream *s)
 	nick = g_markup_escape_text(d->buddy ? d->buddy : "agent", -1);
 	header = g_strdup_printf(
 	    "<font color=\"" COL_DIM "\" size=\"2\">(%s)</font> "
-	    "<font color=\"#204a87\"><b>%s:</b></font> ",
+	    "<font color=\"" COL_H3 "\"><b>%s:</b></font><br>",
 	    stamp, nick);
 
 	gtk_text_buffer_get_end_iter(s->imhtml->text_buffer, &end);
