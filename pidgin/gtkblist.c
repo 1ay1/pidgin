@@ -290,7 +290,12 @@ static gboolean gtk_blist_configure_cb(GtkWidget *w, GdkEventConfigure *event, g
 	/* store the position */
 	purple_prefs_set_int(PIDGIN_PREFS_ROOT "/blist/x",      x);
 	purple_prefs_set_int(PIDGIN_PREFS_ROOT "/blist/y",      y);
-	purple_prefs_set_int(PIDGIN_PREFS_ROOT "/blist/width",  event->width);
+	/* In single-window mode the whole window is much wider than the buddy
+	 * list -- /blist/width there means the sidebar width and is owned by the
+	 * paned divider handler (conv_paned_position_cb), so don't clobber it with
+	 * the toplevel width. */
+	if (!pidgin_conv_single_window_enabled())
+		purple_prefs_set_int(PIDGIN_PREFS_ROOT "/blist/width",  event->width);
 	purple_prefs_set_int(PIDGIN_PREFS_ROOT "/blist/height", event->height);
 
 	/* continue to handle event normally */
@@ -5829,6 +5834,20 @@ pidgin_blist_search_equal_func(GtkTreeModel *model, gint column,
 	return res;
 }
 
+/* Single-window mode: persist the sidebar (buddy list) width whenever the user
+ * drags the paned divider, so it is restored on the next launch. The divider
+ * position IS the sidebar width; we clamp to the same 150-400 range used when
+ * the paned is first sized. */
+static void
+conv_paned_position_cb(GObject *paned, GParamSpec *pspec, gpointer data)
+{
+	gint pos = gtk_paned_get_position(GTK_PANED(paned));
+
+	if (pos > 0)
+		purple_prefs_set_int(PIDGIN_PREFS_ROOT "/blist/width",
+		                     CLAMP(pos, 150, 400));
+}
+
 static void pidgin_blist_show(PurpleBuddyList *list)
 {
 	PidginBuddyListPrivate *priv;
@@ -5951,6 +5970,11 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 		gtk_paned_set_position(GTK_PANED(paned),
 			CLAMP(purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/width"),
 			      150, 400));
+		/* Remember the sidebar width the user drags to. Connected AFTER the
+		 * initial set_position above so restoring the saved width doesn't count
+		 * as a user change. */
+		g_signal_connect(G_OBJECT(paned), "notify::position",
+				G_CALLBACK(conv_paned_position_cb), NULL);
 		gtk_box_pack_start(GTK_BOX(gtkblist->main_vbox), paned, TRUE, TRUE, 0);
 		gtk_widget_show(paned);
 		gtkblist->conv_paned = paned;
