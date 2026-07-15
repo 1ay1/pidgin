@@ -10,14 +10,19 @@ pidgin_plugin_inc = [
 
 # Simple single-file (or fixed multi-file) GTK plugins.
 pidgin_plugins = {
+  'autoreply'        : ['autoreply.c'],
   'convcolors'       : ['convcolors.c'],
   'extplacement'     : ['extplacement.c'],
   'gtkbuddynote'     : ['gtkbuddynote.c'],
   'history'          : ['history.c'],
   'iconaway'         : ['iconaway.c'],
+  'keywordhighlight' : ['highlight.c'],
+  'lastseen'         : ['lastseen.c'],
+  'messagesplitter'  : ['messagesplitter.c'],
   'markerline'       : ['markerline.c'],
   'notify'           : ['notify.c'],
   'pidginrc'         : ['pidginrc.c'],
+  'quickreplies'     : ['quickreplies.c'],
   'relnot'           : ['relnot.c'],
   'sendbutton'       : ['sendbutton.c'],
   'spellchk'         : ['spellchk.c'],
