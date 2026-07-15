@@ -91,3 +91,18 @@ pidgin_style_adjust_contrast(GtkStyle *style, GdkColor *color) {
 		color->blue = (guint16) (b * 65535.0);
 	}
 }
+
+void
+pidgin_style_adjust_contrast_rgba(GdkRGBA *color) {
+	if (pidgin_style_is_dark(NULL)) {
+		gdouble h, s, v;
+
+		gtk_rgb_to_hsv(color->red, color->green, color->blue, &h, &s, &v);
+
+		v += 0.3;
+		v = v > 1.0 ? 1.0 : v;
+		s = 0.7;
+
+		gtk_hsv_to_rgb(h, s, v, &color->red, &color->green, &color->blue);
+	}
+}

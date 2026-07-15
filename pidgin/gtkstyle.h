@@ -52,6 +52,13 @@ gboolean pidgin_style_is_dark(GtkStyle *style);
 
 void pidgin_style_adjust_contrast(GtkStyle *style, GdkColor *color);
 
+/*
+ * GTK3-native variant of pidgin_style_adjust_contrast() operating on a
+ * GdkRGBA. Brightens a colour when the active theme is dark so it stays
+ * legible. Darkness is derived from the live style context.
+ */
+void pidgin_style_adjust_contrast_rgba(GdkRGBA *color);
+
 /*@}*/
 
 G_END_DECLS

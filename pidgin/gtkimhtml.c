@@ -518,10 +518,25 @@ static void gtk_imhtml_size_allocate(GtkWidget *widget, GtkAllocation *alloc)
 #define DEFAULT_WHISPER_ACTION_COLOR "#6C2585"
 #define DEFAULT_WHISPER_COLOR "#00FF00"
 
-static void (*parent_style_set)(GtkWidget *widget, GtkStyle *prev_style);
+static void (*parent_style_updated)(GtkWidget *widget);
+
+/* GTK3: a widget style property declared as GDK_TYPE_RGBA reports "unset" by
+ * handing back a NULL boxed pointer. Fetch it and tell the caller whether the
+ * theme actually supplied a value. */
+static gboolean
+imhtml_style_get_rgba(GtkWidget *widget, const char *name, GdkRGBA *out)
+{
+	GdkRGBA *val = NULL;
+	gtk_widget_style_get(widget, name, &val, NULL);
+	if (val == NULL)
+		return FALSE;
+	*out = *val;
+	gdk_rgba_free(val);
+	return TRUE;
+}
 
 static void
-gtk_imhtml_style_set(GtkWidget *widget, GtkStyle *prev_style)
+gtk_imhtml_style_updated(GtkWidget *widget)
 {
 	int i;
 	struct {
@@ -541,24 +556,22 @@ gtk_imhtml_style_set(GtkWidget *widget, GtkStyle *prev_style)
 	GtkTextTagTable *table = gtk_text_buffer_get_tag_table(imhtml->text_buffer);
 
 	for (i = 0; styles[i].tag; i++) {
-		GdkColor *color = NULL;
+		GdkRGBA rgba;
 		GtkTextTag *tag = gtk_text_tag_table_lookup(table, styles[i].tag);
 		if (!tag) {
 			purple_debug_warning("gtkimhtml", "Cannot find tag '%s'. This should never happen. Please file a bug.\n", styles[i].tag);
 			continue;
 		}
-		gtk_widget_style_get(widget, styles[i].color, &color, NULL);
-		if (color) {
-			g_object_set(tag, "foreground-gdk", color, NULL);
-			gdk_color_free(color);
+		if (imhtml_style_get_rgba(widget, styles[i].color, &rgba)) {
+			g_object_set(tag, "foreground-rgba", &rgba, NULL);
 		} else {
-			GdkColor defcolor;
-			gdk_color_parse(styles[i].def, &defcolor);
-			pidgin_style_adjust_contrast(gtk_widget_get_style(widget), &defcolor);
-			g_object_set(tag, "foreground-gdk", &defcolor, NULL);
+			gdk_rgba_parse(&rgba, styles[i].def);
+			pidgin_style_adjust_contrast_rgba(&rgba);
+			g_object_set(tag, "foreground-rgba", &rgba, NULL);
 		}
 	}
-	parent_style_set(widget, prev_style);
+	if (parent_style_updated)
+		parent_style_updated(widget);
 }
 
 static gboolean
@@ -582,12 +595,11 @@ imhtml_get_iter_bounds(GtkIMHtml *imhtml, GtkTextIter *start, GtkTextIter *end)
 static void
 gtk_imhtml_set_link_color(GtkIMHtml *imhtml, GtkTextTag *tag)
 {
-	GdkColor *color = NULL;
+	GdkRGBA rgba;
 	gboolean visited = !!g_object_get_data(G_OBJECT(tag), "visited");
-	gtk_widget_style_get(GTK_WIDGET(imhtml), visited ? "hyperlink-visited-color" : "hyperlink-color", &color, NULL);
-	if (color) {
-		g_object_set(G_OBJECT(tag), "foreground-gdk", color, NULL);
-		gdk_color_free(color);
+	if (imhtml_style_get_rgba(GTK_WIDGET(imhtml),
+			visited ? "hyperlink-visited-color" : "hyperlink-color", &rgba)) {
+		g_object_set(G_OBJECT(tag), "foreground-rgba", &rgba, NULL);
 	} else {
 		g_object_set(G_OBJECT(tag), "foreground", visited ? "#800000" : "blue", NULL);
 	}
@@ -665,8 +677,6 @@ gtk_imhtml_tip (gpointer data)
 	}
 	g_signal_connect (G_OBJECT (imhtml->tip_window), "draw",
 							  G_CALLBACK (gtk_imhtml_tip_paint), imhtml);
-
-	gtk_widget_ensure_style (imhtml->tip_window);
 
 	/* We set the text in a separate function call so we can specify a
 	   max length.  This is important so the tooltip isn't too wide for
@@ -751,7 +761,6 @@ gtk_motion_event_notify(GtkWidget *imhtml, GdkEventMotion *event, gpointer data)
 
 	oldprelit_tag = GTK_IMHTML(imhtml)->prelit_tag;
 
-	gdk_window_get_pointer(gtk_widget_get_window(GTK_WIDGET(imhtml)), NULL, NULL, NULL);
 	gtk_text_view_window_to_buffer_coords(GTK_TEXT_VIEW(imhtml), GTK_TEXT_WINDOW_WIDGET,
 	                                      event->x, event->y, &x, &y);
 	gtk_text_view_get_iter_at_location(GTK_TEXT_VIEW(imhtml), &iter, x, y);
@@ -769,11 +778,9 @@ gtk_motion_event_notify(GtkWidget *imhtml, GdkEventMotion *event, gpointer data)
 	if (tip && (!tag || !g_object_get_data(G_OBJECT(tag), "visited"))) {
 		GTK_IMHTML(imhtml)->prelit_tag = tag;
 		if (tag != oldprelit_tag) {
-			GdkColor *pre = NULL;
-			gtk_widget_style_get(GTK_WIDGET(imhtml), "hyperlink-prelight-color", &pre, NULL);
-			if (pre) {
-				g_object_set(G_OBJECT(tag), "foreground-gdk", pre, NULL);
-				gdk_color_free(pre);
+			GdkRGBA pre;
+			if (imhtml_style_get_rgba(GTK_WIDGET(imhtml), "hyperlink-prelight-color", &pre)) {
+				g_object_set(G_OBJECT(tag), "foreground-rgba", &pre, NULL);
 			} else
 				g_object_set(G_OBJECT(tag), "foreground", "#70a0ff", NULL);
 		}
@@ -886,7 +893,7 @@ gtk_imhtml_draw (GtkWidget *widget, cairo_t *cr)
 	int buf_x, buf_y;
 	GdkRectangle visible_rect;
 	GdkRectangle redraw_rect;
-	GdkColor gcolor;
+	GdkRGBA rgba;
 
 	gtk_text_view_get_visible_rect(GTK_TEXT_VIEW(widget), &visible_rect);
 	gtk_text_view_buffer_to_window_coords(GTK_TEXT_VIEW(widget),
@@ -905,11 +912,10 @@ gtk_imhtml_draw (GtkWidget *widget, cairo_t *cr)
 	if (GTK_IMHTML(widget)->editable || GTK_IMHTML(widget)->wbfo) {
 
 		if (GTK_IMHTML(widget)->edit.background) {
-			gdk_color_parse(GTK_IMHTML(widget)->edit.background, &gcolor);
-			gdk_cairo_set_source_color(cr, &gcolor);
+			gdk_rgba_parse(&rgba, GTK_IMHTML(widget)->edit.background);
+			gdk_cairo_set_source_rgba(cr, &rgba);
 		} else {
 			GtkStyleContext *context = gtk_widget_get_style_context(widget);
-			GdkRGBA rgba;
 			gtk_style_context_get_background_color(context,
 					gtk_widget_get_state_flags(widget), &rgba);
 			gdk_cairo_set_source_rgba(cr, &rgba);
@@ -981,15 +987,15 @@ gtk_imhtml_draw (GtkWidget *widget, cairo_t *cr)
 
 			color = imhtml_tag_get_name(tag) + 11;
 
-			if (!gdk_color_parse(color, &gcolor)) {
+			if (!gdk_rgba_parse(&rgba, color)) {
 				gchar tmp[8];
 				tmp[0] = '#';
 				strncpy(&tmp[1], color, 7);
 				tmp[7] = '\0';
-				if (!gdk_color_parse(tmp, &gcolor))
-					gdk_color_parse("white", &gcolor);
+				if (!gdk_rgba_parse(&rgba, tmp))
+					gdk_rgba_parse(&rgba, "white");
 			}
-			gdk_cairo_set_source_color(cr, &gcolor);
+			gdk_cairo_set_source_rgba(cr, &rgba);
 
 			cairo_rectangle(cr,
 			                rect.x, rect.y,
@@ -1716,45 +1722,45 @@ static void gtk_imhtml_class_init (GtkIMHtmlClass *klass)
 	widget_class->draw = gtk_imhtml_draw;
 	parent_size_allocate = widget_class->size_allocate;
 	widget_class->size_allocate = gtk_imhtml_size_allocate;
-	parent_style_set = widget_class->style_set;
-	widget_class->style_set = gtk_imhtml_style_set;
+	parent_style_updated = widget_class->style_updated;
+	widget_class->style_updated = gtk_imhtml_style_updated;
 
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("hyperlink-color",
 	                                        _("Hyperlink color"),
 	                                        _("Color to draw hyperlinks."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("hyperlink-visited-color",
 	                                        _("Hyperlink visited color"),
 	                                        _("Color to draw hyperlink after it has been visited (or activated)."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("hyperlink-prelight-color",
 	                                        _("Hyperlink prelight color"),
 	                                        _("Color to draw hyperlinks when mouse is over them."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("send-name-color",
 	                                        _("Sent Message Name Color"),
 	                                        _("Color to draw the name of a message you sent."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("receive-name-color",
 	                                        _("Received Message Name Color"),
 	                                        _("Color to draw the name of a message you received."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("highlight-name-color",
 	                                        _("\"Attention\" Name Color"),
 	                                        _("Color to draw the name of a message you received containing your name."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("action-name-color",
 	                                        _("Action Message Name Color"),
 	                                        _("Color to draw the name of an action message."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("whisper-action-name-color",
 	                                        _("Action Message Name Color for Whispered Message"),
 	                                        _("Color to draw the name of a whispered action message."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("whisper-name-color",
 	                                        _("Whisper Message Name Color"),
 	                                        _("Color to draw the name of a whispered message."),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 
 	/* Customizable typing notification ... sort of. Example:
 	 *   GtkIMHtml::typing-notification-font = "monospace italic light 8.0"
@@ -1764,7 +1770,7 @@ static void gtk_imhtml_class_init (GtkIMHtmlClass *klass)
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_boxed("typing-notification-color",
 	                                        _("Typing notification color"),
 	                                        _("The color to use for the typing notification"),
-	                                        GDK_TYPE_COLOR, G_PARAM_READABLE));
+	                                        GDK_TYPE_RGBA, G_PARAM_READABLE));
 	gtk_widget_class_install_style_property(widget_class, g_param_spec_string("typing-notification-font",
 	                                        _("Typing notification font"),
 	                                        _("The font to use for the typing notification"),
@@ -4260,16 +4266,16 @@ static GtkTextTag *find_font_forecolor_tag(GtkIMHtml *imhtml, gchar *color)
 
 	tag = gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(imhtml->text_buffer), str);
 	if (!tag) {
-		GdkColor gcolor;
-		if (!gdk_color_parse(color, &gcolor)) {
+		GdkRGBA rgba;
+		if (!gdk_rgba_parse(&rgba, color)) {
 			gchar tmp[8];
 			tmp[0] = '#';
 			strncpy(&tmp[1], color, 7);
 			tmp[7] = '\0';
-			if (!gdk_color_parse(tmp, &gcolor))
-				gdk_color_parse("black", &gcolor);
+			if (!gdk_rgba_parse(&rgba, tmp))
+				gdk_rgba_parse(&rgba, "black");
 		}
-		tag = gtk_text_buffer_create_tag(imhtml->text_buffer, str, "foreground-gdk", &gcolor, NULL);
+		tag = gtk_text_buffer_create_tag(imhtml->text_buffer, str, "foreground-rgba", &rgba, NULL);
 	}
 
 	return tag;
@@ -4284,16 +4290,16 @@ static GtkTextTag *find_font_backcolor_tag(GtkIMHtml *imhtml, gchar *color)
 
 	tag = gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(imhtml->text_buffer), str);
 	if (!tag) {
-		GdkColor gcolor;
-		if (!gdk_color_parse(color, &gcolor)) {
+		GdkRGBA rgba;
+		if (!gdk_rgba_parse(&rgba, color)) {
 			gchar tmp[8];
 			tmp[0] = '#';
 			strncpy(&tmp[1], color, 7);
 			tmp[7] = '\0';
-			if (!gdk_color_parse(tmp, &gcolor))
-				gdk_color_parse("white", &gcolor);
+			if (!gdk_rgba_parse(&rgba, tmp))
+				gdk_rgba_parse(&rgba, "white");
 		}
-		tag = gtk_text_buffer_create_tag(imhtml->text_buffer, str, "background-gdk", &gcolor, NULL);
+		tag = gtk_text_buffer_create_tag(imhtml->text_buffer, str, "background-rgba", &rgba, NULL);
 	}
 
 	return tag;
@@ -5036,7 +5042,7 @@ void gtk_imhtml_toggle_link(GtkIMHtml *imhtml, const char *url)
 	GtkTextTag *linktag;
 	static guint linkno = 0;
 	gchar str[48];
-	GdkColor *color = NULL;
+	GdkRGBA rgba;
 
 	imhtml->edit.link = NULL;
 
@@ -5044,10 +5050,8 @@ void gtk_imhtml_toggle_link(GtkIMHtml *imhtml, const char *url)
 		g_snprintf(str, sizeof(str), "LINK %d", linkno++);
 		str[47] = '\0';
 
-		gtk_widget_style_get(GTK_WIDGET(imhtml), "hyperlink-color", &color, NULL);
-		if (color) {
-			imhtml->edit.link = linktag = gtk_text_buffer_create_tag(imhtml->text_buffer, str, "foreground-gdk", color, "underline", PANGO_UNDERLINE_SINGLE, NULL);
-			gdk_color_free(color);
+		if (imhtml_style_get_rgba(GTK_WIDGET(imhtml), "hyperlink-color", &rgba)) {
+			imhtml->edit.link = linktag = gtk_text_buffer_create_tag(imhtml->text_buffer, str, "foreground-rgba", &rgba, "underline", PANGO_UNDERLINE_SINGLE, NULL);
 		} else {
 			imhtml->edit.link = linktag = gtk_text_buffer_create_tag(imhtml->text_buffer, str, "foreground", "blue", "underline", PANGO_UNDERLINE_SINGLE, NULL);
 		}
@@ -5338,7 +5342,7 @@ static const gchar *tag_to_html_start(GtkTextTag *tag)
 		char *str = buf;
 		gboolean isset;
 		int ivalue = 0;
-		GdkColor *color = NULL;
+		GdkRGBA *color = NULL;
 		GObject *obj = G_OBJECT(tag);
 		gboolean empty = TRUE;
 
@@ -5362,24 +5366,30 @@ static const gchar *tag_to_html_start(GtkTextTag *tag)
 		}
 
 		/* Foreground color */
-		g_object_get(obj, "foreground-set", &isset, "foreground-gdk", &color, NULL);
+		g_object_get(obj, "foreground-set", &isset, "foreground-rgba", &color, NULL);
 		if (isset && color) {
 			str += g_snprintf(str, sizeof(buf) - (str - buf),
 					"color: #%02x%02x%02x;",
-					color->red >> 8, color->green >> 8, color->blue >> 8);
+					(int)(color->red * 255), (int)(color->green * 255), (int)(color->blue * 255));
 			empty = FALSE;
 		}
-		gdk_color_free(color);
+		if (color) {
+			gdk_rgba_free(color);
+			color = NULL;
+		}
 
 		/* Background color */
-		g_object_get(obj, "background-set", &isset, "background-gdk", &color, NULL);
+		g_object_get(obj, "background-set", &isset, "background-rgba", &color, NULL);
 		if (isset && color) {
 			str += g_snprintf(str, sizeof(buf) - (str - buf),
 					"background: #%02x%02x%02x;",
-					color->red >> 8, color->green >> 8, color->blue >> 8);
+					(int)(color->red * 255), (int)(color->green * 255), (int)(color->blue * 255));
 			empty = FALSE;
 		}
-		gdk_color_free(color);
+		if (color) {
+			gdk_rgba_free(color);
+			color = NULL;
+		}
 
 		/* Underline */
 		g_object_get(obj, "underline-set", &isset, "underline", &ivalue, NULL);
@@ -5734,7 +5744,7 @@ void gtk_imhtml_setup_entry(GtkIMHtml *imhtml, PurpleConnectionFlags flags)
 
 	if (flags & PURPLE_CONNECTION_HTML) {
 		char color[8];
-		GdkColor fg_color, bg_color;
+		GdkRGBA fg_color, bg_color;
 
 		buttons = GTK_IMHTML_ALL;
 
@@ -5772,12 +5782,12 @@ void gtk_imhtml_setup_entry(GtkIMHtml *imhtml, PurpleConnectionFlags flags)
 
 		if(!purple_strequal(purple_prefs_get_string(PIDGIN_PREFS_ROOT "/conversations/fgcolor"), ""))
 		{
-			gdk_color_parse(purple_prefs_get_string(PIDGIN_PREFS_ROOT "/conversations/fgcolor"),
-							&fg_color);
+			gdk_rgba_parse(&fg_color,
+				purple_prefs_get_string(PIDGIN_PREFS_ROOT "/conversations/fgcolor"));
 			g_snprintf(color, sizeof(color), "#%02x%02x%02x",
-									fg_color.red   / 256,
-									fg_color.green / 256,
-									fg_color.blue  / 256);
+								(int)(fg_color.red   * 255),
+								(int)(fg_color.green * 255),
+								(int)(fg_color.blue  * 255));
 		} else
 			strcpy(color, "");
 
@@ -5786,12 +5796,12 @@ void gtk_imhtml_setup_entry(GtkIMHtml *imhtml, PurpleConnectionFlags flags)
 		if(!(flags & PURPLE_CONNECTION_NO_BGCOLOR) &&
 		   !purple_strequal(purple_prefs_get_string(PIDGIN_PREFS_ROOT "/conversations/bgcolor"), ""))
 		{
-			gdk_color_parse(purple_prefs_get_string(PIDGIN_PREFS_ROOT "/conversations/bgcolor"),
-							&bg_color);
+			gdk_rgba_parse(&bg_color,
+				purple_prefs_get_string(PIDGIN_PREFS_ROOT "/conversations/bgcolor"));
 			g_snprintf(color, sizeof(color), "#%02x%02x%02x",
-									bg_color.red   / 256,
-									bg_color.green / 256,
-									bg_color.blue  / 256);
+								(int)(bg_color.red   * 255),
+								(int)(bg_color.green * 255),
+								(int)(bg_color.blue  * 255));
 		} else
 			strcpy(color, "");
 
