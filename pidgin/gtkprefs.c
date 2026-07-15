@@ -2149,19 +2149,21 @@ proxy_page(void)
 		purple_prefs_connect_callback(prefs, "/purple/proxy/type",
 					    proxy_changed_cb, prefs_proxy_subframe);
 
-		table = gtk_table_new(4, 2, FALSE);
+		table = gtk_grid_new();
 		gtk_container_set_border_width(GTK_CONTAINER(table), 0);
-		gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-		gtk_table_set_row_spacings(GTK_TABLE(table), 10);
+		gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+		gtk_grid_set_row_spacing(GTK_GRID(table), 10);
 		gtk_container_add(GTK_CONTAINER(prefs_proxy_subframe), table);
 
 		label = gtk_label_new_with_mnemonic(_("_Host:"));
 		pidgin_widget_set_alignment(GTK_WIDGET(label), 1.0, 0.5);
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+		gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+		gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
 
 		entry = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
-		gtk_table_attach(GTK_TABLE(table), entry, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+		gtk_widget_set_halign(entry, GTK_ALIGN_FILL);
+		gtk_grid_attach(GTK_GRID(table), entry, 1, 0, 1, 1);
 		g_signal_connect(G_OBJECT(entry), "changed",
 				 G_CALLBACK(proxy_print_option), (void *)PROXYHOST);
 
@@ -2175,11 +2177,13 @@ proxy_page(void)
 
 		label = gtk_label_new_with_mnemonic(_("P_ort:"));
 		pidgin_widget_set_alignment(GTK_WIDGET(label), 1.0, 0.5);
-		gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1, GTK_FILL, 0, 0, 0);
+		gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+		gtk_grid_attach(GTK_GRID(table), label, 2, 0, 1, 1);
 
 		entry = gtk_spin_button_new_with_range(0, 65535, 1);
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
-		gtk_table_attach(GTK_TABLE(table), entry, 3, 4, 0, 1, GTK_FILL, 0, 0, 0);
+		gtk_widget_set_halign(entry, GTK_ALIGN_FILL);
+		gtk_grid_attach(GTK_GRID(table), entry, 3, 0, 1, 1);
 		g_signal_connect(G_OBJECT(entry), "changed",
 				 G_CALLBACK(proxy_print_option), (void *)PROXYPORT);
 
@@ -2191,11 +2195,13 @@ proxy_page(void)
 
 		label = gtk_label_new_with_mnemonic(_("User_name:"));
 		pidgin_widget_set_alignment(GTK_WIDGET(label), 1.0, 0.5);
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+		gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+		gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
 		entry = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
-		gtk_table_attach(GTK_TABLE(table), entry, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
+		gtk_widget_set_halign(entry, GTK_ALIGN_FILL);
+		gtk_grid_attach(GTK_GRID(table), entry, 1, 1, 1, 1);
 		g_signal_connect(G_OBJECT(entry), "changed",
 				 G_CALLBACK(proxy_print_option), (void *)PROXYUSER);
 
@@ -2209,11 +2215,13 @@ proxy_page(void)
 
 		label = gtk_label_new_with_mnemonic(_("Pa_ssword:"));
 		pidgin_widget_set_alignment(GTK_WIDGET(label), 1.0, 0.5);
-		gtk_table_attach(GTK_TABLE(table), label, 2, 3, 1, 2, GTK_FILL, 0, 0, 0);
+		gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+		gtk_grid_attach(GTK_GRID(table), label, 2, 1, 1, 1);
 
 		entry = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
-		gtk_table_attach(GTK_TABLE(table), entry, 3, 4, 1, 2, GTK_FILL , 0, 0, 0);
+		gtk_widget_set_halign(entry, GTK_ALIGN_FILL);
+		gtk_grid_attach(GTK_GRID(table), entry, 3, 1, 1, 1);
 		gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
 #if !GTK_CHECK_VERSION(2,16,0)
 		if (gtk_entry_get_invisible_char(GTK_ENTRY(entry)) == '*')

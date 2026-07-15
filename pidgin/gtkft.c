@@ -654,10 +654,10 @@ make_info_table(PidginXferDialog *dialog)
 		{ &label, &dialog->time_remaining_label, _("Time Remaining:") }
 	};
 
-	/* Setup the initial table */
-	dialog->table = table = gtk_table_new(G_N_ELEMENTS(labels) + 1, 2, FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table), PIDGIN_HIG_BOX_SPACE);
-	gtk_table_set_col_spacings(GTK_TABLE(table), PIDGIN_HIG_BOX_SPACE);
+	/* Setup the initial grid */
+	dialog->table = table = gtk_grid_new();
+	gtk_grid_set_row_spacing(GTK_GRID(table), PIDGIN_HIG_BOX_SPACE);
+	gtk_grid_set_column_spacing(GTK_GRID(table), PIDGIN_HIG_BOX_SPACE);
 
 	/* Setup the labels */
 	for (i = 0; i < G_N_ELEMENTS(labels); i++) {
@@ -671,23 +671,26 @@ make_info_table(PidginXferDialog *dialog)
 		gtk_label_set_markup(GTK_LABEL(label), buf);
 		gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_RIGHT);
 		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, i, i + 1,
-						 GTK_FILL, 0, 0, 0);
+		gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+		gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+		gtk_grid_attach(GTK_GRID(table), label, 0, i, 1, 1);
 		gtk_widget_show(label);
 
 		*labels[i].val_label = label = gtk_label_new(NULL);
 		pidgin_widget_set_alignment(GTK_WIDGET(label), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(table), label, 1, 2, i, i + 1,
-						 GTK_FILL | GTK_EXPAND, 0, 0, 0);
+		gtk_widget_set_hexpand(label, TRUE);
+		gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+		gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+		gtk_grid_attach(GTK_GRID(table), label, 1, i, 1, 1);
 		gtk_widget_show(label);
 	}
 
 	/* Setup the progress bar */
 	dialog->progress = gtk_progress_bar_new();
-	gtk_table_attach(GTK_TABLE(table), dialog->progress,
-					 0, 2,
-					 G_N_ELEMENTS(labels), G_N_ELEMENTS(labels) + 1,
-					 GTK_FILL, GTK_FILL, 0, 0);
+	gtk_widget_set_halign(dialog->progress, GTK_ALIGN_FILL);
+	gtk_widget_set_valign(dialog->progress, GTK_ALIGN_FILL);
+	gtk_grid_attach(GTK_GRID(table), dialog->progress,
+					 0, G_N_ELEMENTS(labels), 2, 1);
 	gtk_widget_show(dialog->progress);
 
 	return table;

@@ -1385,9 +1385,9 @@ pidgin_request_fields(const char *title, const char *primary,
 #endif
 		}
 
-		table = gtk_table_new(rows, 2 * cols, FALSE);
-		gtk_table_set_row_spacings(GTK_TABLE(table), PIDGIN_HIG_BOX_SPACE);
-		gtk_table_set_col_spacings(GTK_TABLE(table), PIDGIN_HIG_BOX_SPACE);
+		table = gtk_grid_new();
+		gtk_grid_set_row_spacing(GTK_GRID(table), PIDGIN_HIG_BOX_SPACE);
+		gtk_grid_set_column_spacing(GTK_GRID(table), PIDGIN_HIG_BOX_SPACE);
 
 		gtk_container_add(GTK_CONTAINER(frame), table);
 		gtk_widget_show(table);
@@ -1453,9 +1453,10 @@ pidgin_request_fields(const char *title, const char *primary,
 							row_num++;
 #endif
 
-						gtk_table_attach_defaults(GTK_TABLE(table), label,
-												  0, 2 * cols,
-												  row_num, row_num + 1);
+						gtk_widget_set_hexpand(label, TRUE);
+						gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+						gtk_grid_attach(GTK_GRID(table), label,
+								  0, row_num, 2 * cols, 1);
 
 						row_num++;
 #if 0
@@ -1464,9 +1465,9 @@ pidgin_request_fields(const char *title, const char *primary,
 					}
 					else
 					{
-						gtk_table_attach_defaults(GTK_TABLE(table), label,
-												  col_offset, col_offset + 1,
-												  row_num, row_num + 1);
+						gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+						gtk_grid_attach(GTK_GRID(table), label,
+										  col_offset, row_num, 1, 1);
 					}
 
 					gtk_widget_show(label);
@@ -1499,39 +1500,43 @@ pidgin_request_fields(const char *title, const char *primary,
 				if (type == PURPLE_REQUEST_FIELD_STRING &&
 					purple_request_field_string_is_multiline(field))
 				{
-					gtk_table_attach(GTK_TABLE(table), widget,
-									 0, 2 * cols,
-									 row_num, row_num + 1,
-									 GTK_FILL | GTK_EXPAND,
-									 GTK_FILL | GTK_EXPAND,
-									 5, 0);
+					gtk_widget_set_hexpand(widget, TRUE);
+					gtk_widget_set_vexpand(widget, TRUE);
+					gtk_widget_set_halign(widget, GTK_ALIGN_FILL);
+					gtk_widget_set_valign(widget, GTK_ALIGN_FILL);
+					gtk_widget_set_margin_start(widget, 5);
+					gtk_widget_set_margin_end(widget, 5);
+					gtk_grid_attach(GTK_GRID(table), widget,
+									 0, row_num, 2 * cols, 1);
 				}
 				else if (type == PURPLE_REQUEST_FIELD_LIST)
 				{
-									gtk_table_attach(GTK_TABLE(table), widget,
-									0, 2 * cols,
-									row_num, row_num + 1,
-									GTK_FILL | GTK_EXPAND,
-									GTK_FILL | GTK_EXPAND,
-									5, 0);
+					gtk_widget_set_hexpand(widget, TRUE);
+					gtk_widget_set_vexpand(widget, TRUE);
+					gtk_widget_set_halign(widget, GTK_ALIGN_FILL);
+					gtk_widget_set_valign(widget, GTK_ALIGN_FILL);
+					gtk_widget_set_margin_start(widget, 5);
+					gtk_widget_set_margin_end(widget, 5);
+					gtk_grid_attach(GTK_GRID(table), widget,
+									 0, row_num, 2 * cols, 1);
 				}
 				else if (type == PURPLE_REQUEST_FIELD_BOOLEAN)
 				{
-					gtk_table_attach(GTK_TABLE(table), widget,
-									 col_offset, col_offset + 1,
-									 row_num, row_num + 1,
-									 GTK_FILL | GTK_EXPAND,
-									 GTK_FILL | GTK_EXPAND,
-									 5, 0);
+					gtk_widget_set_hexpand(widget, TRUE);
+					gtk_widget_set_halign(widget, GTK_ALIGN_FILL);
+					gtk_widget_set_margin_start(widget, 5);
+					gtk_widget_set_margin_end(widget, 5);
+					gtk_grid_attach(GTK_GRID(table), widget,
+									 col_offset, row_num, 1, 1);
 				}
 				else
 				{
-					gtk_table_attach(GTK_TABLE(table), widget,
-							 		 1, 2 * cols,
-									 row_num, row_num + 1,
-									 GTK_FILL | GTK_EXPAND,
-									 GTK_FILL | GTK_EXPAND,
-									 5, 0);
+					gtk_widget_set_hexpand(widget, TRUE);
+					gtk_widget_set_halign(widget, GTK_ALIGN_FILL);
+					gtk_widget_set_margin_start(widget, 5);
+					gtk_widget_set_margin_end(widget, 5);
+					gtk_grid_attach(GTK_GRID(table), widget,
+							 		 1, row_num, (2 * cols) - 1, 1);
 				}
 
 				gtk_widget_show(widget);
