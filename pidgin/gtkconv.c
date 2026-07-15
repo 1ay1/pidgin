@@ -138,6 +138,8 @@ static PidginWindow *hidden_convwin = NULL;
 static PidginWindow *docked_convwin = NULL;
 static GList *window_list = NULL;
 
+static void pidgin_conv_dock_into_blist(void);
+
 /* GTK3: GtkTextTag no longer exposes ->name; read the construct-only "name"
  * property and cache it in qdata so returned pointers stay valid/stable. */
 static const gchar *
@@ -3046,6 +3048,22 @@ pidgin_conv_present_conversation(PurpleConversation *conv)
 	 * a button or hitting a key. */
 	if (gtk_get_current_event_state(&state))
 		pidgin_conv_window_switch_gtkconv(gtkconv->win, gtkconv);
+
+	/* Single-window mode: the conversation lives docked inside the buddy
+	 * list window, so its own PidginWindow toplevel (docked_convwin->window)
+	 * is an orphan that must never be shown. Presenting it pops a stray empty
+	 * window and wrecks the docked layout. Instead make sure the conversation
+	 * is actually docked and raise the buddy list window that hosts it. */
+	if (pidgin_conv_single_window_enabled() && gtkconv->win == docked_convwin) {
+		PidginBuddyList *gtkblist = pidgin_blist_get_default_gtk_blist();
+
+		pidgin_conv_window_switch_gtkconv(gtkconv->win, gtkconv);
+		pidgin_conv_dock_into_blist();
+		if (gtkblist != NULL && gtkblist->window != NULL)
+			gtk_window_present(GTK_WINDOW(gtkblist->window));
+		return;
+	}
+
 	gtk_window_present(GTK_WINDOW(gtkconv->win->window));
 }
 
