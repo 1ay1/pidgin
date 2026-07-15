@@ -308,6 +308,14 @@ classify(const char *t)
 	return BLK_PARA;
 }
 
+/* Per-block-type left indent (nbsp run) so structure reads at a glance:
+ *   headings   flush-left (section anchors)
+ *   paragraphs inset 2 under the heading
+ *   lists      marker carries its own indent
+ *   quotes     the │ bar carries structure
+ * Body text (paragraphs) uses IND_BODY; headings/rules stay flush. */
+#define IND_BODY "&#160;&#160;"
+
 /* Render one markdown line to an HTML fragment (no trailing separator).
  * Styling mirrors maya's markdown widget (heading accent bar + rule, ▸/◦
  * bullets, │ quote bar). */
@@ -403,6 +411,7 @@ render_line(GString *out, const char *line)
 		return;
 	}
 	inner = acp_md_inline(line);
+	g_string_append(out, IND_BODY);
 	g_string_append(out, inner);
 	g_free(inner);
 }

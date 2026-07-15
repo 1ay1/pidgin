@@ -131,6 +131,33 @@ acp_md_inline(const char *text)
 				}
 			}
 		}
+		/* <kbd>key</kbd> -> a boxed key cap; also swallow other simple inline
+		 * HTML tags we don't support so raw "<tag>" never shows through. */
+		if (*p == '<') {
+			if (g_ascii_strncasecmp(p, "<kbd>", 5) == 0) {
+				const char *end = strstr(p + 5, "</kbd>");
+				if (end) {
+					char *key = g_strndup(p + 5, end - (p + 5));
+					char *ke = g_markup_escape_text(key, -1);
+					g_string_append_printf(out,
+					    "<font face=\"monospace\" color=\"" COL_BOLD
+					    "\">\xE2\x8C\xA8%s</font>", ke);   /* ⌨ key */
+					g_free(key); g_free(ke);
+					p = end + 6;
+					continue;
+				}
+			}
+		}
+		/* bold+italic ***...*** (must precede ** so the triple isn't split) */
+		if (scan_delim(p, "***", &span)) {
+			char *inner = g_strndup(p + 3, span);
+			char *r = acp_md_inline(inner);
+			g_string_append_printf(out,
+			    "<font color=\"" COL_BOLD "\"><b><i>%s</i></b></font>", r);
+			g_free(inner); g_free(r);
+			p += 3 + span + 3;
+			continue;
+		}
 		/* bold **...** */
 		if (scan_delim(p, "**", &span)) {
 			char *inner = g_strndup(p + 2, span);
@@ -204,6 +231,8 @@ md_visible_width(const char *text)
 			}
 		}
 		/* bold ** / strike ~~ -> drop the 2-char delimiters */
+		if (scan_delim(p, "***", &span)) { char *in = g_strndup(p + 3, span);
+			cols += md_visible_width(in); g_free(in); p += 3 + span + 3; continue; }
 		if (scan_delim(p, "**", &span)) { char *in = g_strndup(p + 2, span);
 			cols += md_visible_width(in); g_free(in); p += 2 + span + 2; continue; }
 		if (scan_delim(p, "~~", &span)) { char *in = g_strndup(p + 2, span);
