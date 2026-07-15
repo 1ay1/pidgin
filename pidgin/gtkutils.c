@@ -4029,8 +4029,12 @@ pidgin_make_scrollable(GtkWidget *child, GtkPolicyType hscrollbar_policy, GtkPol
 		if (child) {
 			if (GTK_IS_SCROLLABLE(child))
 				gtk_container_add(GTK_CONTAINER(sw), child);
-			else
-				gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw), child);
+			else {
+				/* GTK3: gtk_scrolled_window_add_with_viewport() is
+				 * deprecated; gtk_container_add() auto-wraps a
+				 * non-scrollable child in a GtkViewport itself. */
+				gtk_container_add(GTK_CONTAINER(sw), child);
+			}
 		}
 		return sw;
 	}

@@ -278,7 +278,9 @@ username_focus_cb(GtkWidget *widget, GdkEventFocus *event, AccountPrefsDialog *d
 
 	if(purple_strequal(gtk_entry_get_text(GTK_ENTRY(widget)), label)) {
 		gtk_entry_set_text(GTK_ENTRY(widget), "");
-		gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, NULL);
+		/* GTK3: gtk_widget_override_color() is deprecated; reset via the
+		 * CSS-provider helper. */
+		pidgin_widget_set_text_color(widget, NULL);
 	}
 
 	g_hash_table_destroy(table);
@@ -304,11 +306,12 @@ username_changed_cb(GtkEntry *entry, AccountPrefsDialog *dialog)
 static gboolean
 username_nofocus_cb(GtkWidget *widget, GdkEventFocus *event, AccountPrefsDialog *dialog)
 {
-	GdkRGBA color;
+	GdkColor color;
 	GHashTable *table = NULL;
 	const char *label = NULL;
 
-	gdk_rgba_parse(&color, "#888988");
+	/* Grey placeholder text for the login label. */
+	gdk_color_parse("#888988", &color);
 
 	if(PURPLE_PROTOCOL_PLUGIN_HAS_FUNC(dialog->prpl_info, get_account_text_table)) {
 		table = dialog->prpl_info->get_account_text_table(NULL);
@@ -322,7 +325,7 @@ username_nofocus_cb(GtkWidget *widget, GdkEventFocus *event, AccountPrefsDialog 
 			gtk_entry_set_text(GTK_ENTRY(widget), label);
 			/* Make sure we can hit it again */
 			g_signal_handlers_unblock_by_func(widget, G_CALLBACK(username_changed_cb), dialog);
-			gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, &color);
+			pidgin_widget_set_text_color(widget, &color);
 		}
 
 		g_hash_table_destroy(table);
@@ -491,10 +494,10 @@ add_login_options(AccountPrefsDialog *dialog, GtkWidget *parent)
 
 	if (!username && dialog->prpl_info
 			&& PURPLE_PROTOCOL_PLUGIN_HAS_FUNC(dialog->prpl_info, get_account_text_table)) {
-		GdkRGBA color;
+		GdkColor color;
 		GHashTable *table;
 		const char *label;
-		gdk_rgba_parse(&color, "#888988");
+		gdk_color_parse("#888988", &color);
 		table = dialog->prpl_info->get_account_text_table(NULL);
 		label = g_hash_table_lookup(table, "login_label");
 
@@ -503,7 +506,7 @@ add_login_options(AccountPrefsDialog *dialog, GtkWidget *parent)
 				G_CALLBACK(username_focus_cb), dialog);
 		g_signal_connect(G_OBJECT(dialog->username_entry), "focus-out-event",
 				G_CALLBACK(username_nofocus_cb), dialog);
-		gtk_widget_override_color(dialog->username_entry, GTK_STATE_FLAG_NORMAL, &color);
+		pidgin_widget_set_text_color(dialog->username_entry, &color);
 		g_hash_table_destroy(table);
 	}
 

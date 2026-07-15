@@ -9920,13 +9920,25 @@ pidgin_conv_tab_pack(PidginWindow *win, PidginConversation *gtkconv)
 		/* Add this pane to the conversation's notebook. */
 		gtk_notebook_append_page(GTK_NOTEBOOK(win->notebook), gtkconv->tab_cont, ebox);
 	} else {
-		/* reparent old widgets on preference changes */
-		gtk_widget_reparent(first,              gtkconv->tabby);
-		gtk_widget_reparent(gtkconv->tab_label, gtkconv->tabby);
-		gtk_widget_reparent(third,              gtkconv->tabby);
-		gtk_box_set_child_packing(GTK_BOX(gtkconv->tabby), first,              FALSE, FALSE, 0, GTK_PACK_START);
-		gtk_box_set_child_packing(GTK_BOX(gtkconv->tabby), gtkconv->tab_label, TRUE,  TRUE,  0, GTK_PACK_START);
-		gtk_box_set_child_packing(GTK_BOX(gtkconv->tabby), third,              FALSE, FALSE, 0, GTK_PACK_START);
+		/* reparent old widgets on preference changes.
+		 * GTK3: gtk_widget_reparent() is deprecated -- ref across an
+		 * explicit remove-from-old-parent + repack into the new box. */
+		GtkWidget *reparent[3];
+		int ri;
+		reparent[0] = first;
+		reparent[1] = gtkconv->tab_label;
+		reparent[2] = third;
+		for (ri = 0; ri < 3; ri++) {
+			GtkWidget *oldparent = gtk_widget_get_parent(reparent[ri]);
+			g_object_ref(reparent[ri]);
+			if (oldparent != NULL)
+				gtk_container_remove(GTK_CONTAINER(oldparent), reparent[ri]);
+		}
+		gtk_box_pack_start(GTK_BOX(gtkconv->tabby), first,              FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(gtkconv->tabby), gtkconv->tab_label, TRUE,  TRUE,  0);
+		gtk_box_pack_start(GTK_BOX(gtkconv->tabby), third,              FALSE, FALSE, 0);
+		for (ri = 0; ri < 3; ri++)
+			g_object_unref(reparent[ri]);
 
 		/* Reset the tabs label to the new version */
 		gtk_notebook_set_tab_label(GTK_NOTEBOOK(win->notebook), gtkconv->tab_cont, ebox);
@@ -10053,9 +10065,14 @@ pidgin_conv_window_get_at_xy(int x, int y)
 {
 	PidginWindow *win;
 	GdkWindow *gdkwin;
+	GdkDevice *pointer;
 	GList *l;
 
-	gdkwin = gdk_window_at_pointer(&x, &y);
+	/* GTK3: gdk_window_at_pointer() is deprecated; query the default seat's
+	 * pointer for the window under it. */
+	pointer = gdk_seat_get_pointer(
+		gdk_display_get_default_seat(gdk_display_get_default()));
+	gdkwin = pointer ? gdk_device_get_window_at_position(pointer, &x, &y) : NULL;
 
 	if (gdkwin)
 		gdkwin = gdk_window_get_toplevel(gdkwin);
