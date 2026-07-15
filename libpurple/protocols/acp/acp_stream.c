@@ -51,12 +51,27 @@
 #include "gtkconv.h"
 #include "gtkimhtml.h"
 
-/* Palette (kept in sync with acp_render.c). */
-#define COL_CODE   "#c7254e"
-#define COL_DIM    "#888888"
-#define COL_HEAD   "#2e3436"
-#define COL_QUOTE  "#5c3566"
-#define COL_CBG    "#f6f6f6"
+/* Palette -- mapped from maya's markdown widget (1ay1/maya) ANSI colours to
+ * hex, so the transcript reads like agentty's renderer:
+ *   heading1 bright_cyan / heading2 cyan / heading3 bright_blue
+ *   code bright_cyan mono / links bright_blue underline / bold bright_white
+ *   quote bright_yellow bar + italic / list markers bright_blue
+ *   dim chrome (rules, lang tags, strike) bright_black. */
+#define COL_H1     "#34e2e2"   /* bright_cyan  */
+#define COL_H2     "#06989a"   /* cyan         */
+#define COL_H3     "#729fcf"   /* bright_blue  */
+#define COL_HDIM   "#3465a4"   /* blue (h4-h6) */
+#define COL_RULE   "#888a85"   /* bright_black */
+#define COL_CODE   "#34e2e2"   /* bright_cyan (code fg)  */
+#define COL_CODEBG "#1a1a1a"   /* near-black code bg      */
+#define COL_LANG   "#888a85"   /* bright_black (lang tag)  */
+#define COL_LINK   "#729fcf"   /* bright_blue  */
+#define COL_BOLD   "#eeeeec"   /* bright_white (emphasis) */
+#define COL_QUOTE  "#fce94f"   /* bright_yellow (quote bar) */
+#define COL_QTEXT  "#cccccc"   /* quote text                */
+#define COL_BULLET "#729fcf"   /* bright_blue (list marker) */
+#define COL_DIM    "#888a85"   /* bright_black */
+#define COL_CHECK  "#8ae234"   /* bright_green (task done)   */
 
 /* ------------------------------------------------------------------------- *
  *  Per-turn streaming state, attached to AcpData->stream (void* in header).
@@ -88,12 +103,45 @@ char *acp_md_inline(const char *text);
  *  Widget lookup
  * ------------------------------------------------------------------------- */
 
+/* Give the conversation view an agentty-like dark canvas so the bright_cyan /
+ * bright_blue markdown palette reads correctly (Pidgin's default IMHtml is a
+ * light background, on which those colours would wash out). Applied once per
+ * widget via a GtkCssProvider on the GtkTextView; guarded by a data flag so we
+ * do not stack providers on every turn. */
+#define ACP_BG    "#1e1e1e"   /* editor-dark canvas */
+#define ACP_FG    "#d4d4d4"   /* body text          */
+
+static void
+acp_apply_dark_theme(GtkIMHtml *imhtml)
+{
+	GtkWidget *w = GTK_WIDGET(imhtml);
+	GtkStyleContext *ctx;
+	GtkCssProvider *prov;
+
+	if (g_object_get_data(G_OBJECT(imhtml), "acp-themed"))
+		return;
+
+	prov = gtk_css_provider_new();
+	gtk_css_provider_load_from_data(prov,
+	    "textview, textview text {"
+	    "  background-color: " ACP_BG ";"
+	    "  color: " ACP_FG ";"
+	    "}", -1, NULL);
+	ctx = gtk_widget_get_style_context(w);
+	gtk_style_context_add_provider(ctx, GTK_STYLE_PROVIDER(prov),
+	    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_object_unref(prov);
+
+	g_object_set_data(G_OBJECT(imhtml), "acp-themed", GINT_TO_POINTER(1));
+}
+
 static GtkIMHtml *
 acp_find_imhtml(AcpData *d)
 {
 	PurpleAccount *acct = purple_connection_get_account(d->gc);
 	PurpleConversation *conv;
 	PidginConversation *gtkconv;
+	GtkIMHtml *imhtml;
 
 	conv = purple_find_conversation_with_account(PURPLE_CONV_TYPE_IM,
 	                                              d->buddy, acct);
@@ -105,7 +153,9 @@ acp_find_imhtml(AcpData *d)
 	gtkconv = PIDGIN_CONVERSATION(conv);
 	if (!gtkconv || !gtkconv->imhtml)
 		return NULL;
-	return GTK_IMHTML(gtkconv->imhtml);
+	imhtml = GTK_IMHTML(gtkconv->imhtml);
+	acp_apply_dark_theme(imhtml);
+	return imhtml;
 }
 
 /* ------------------------------------------------------------------------- *
@@ -222,7 +272,9 @@ classify(const char *t)
 	return BLK_PARA;
 }
 
-/* Render one markdown line to an HTML fragment (no trailing separator). */
+/* Render one markdown line to an HTML fragment (no trailing separator).
+ * Styling mirrors maya's markdown widget (heading accent bar + rule, ▸/◦
+ * bullets, │ quote bar). */
 static void
 render_line(GString *out, const char *line)
 {
@@ -242,18 +294,40 @@ render_line(GString *out, const char *line)
 	}
 	hl = heading_level(t);
 	if (hl) {
-		int size = (6 - hl) + 2;
+		/* maya: h1 bright_cyan+▍, h2 cyan+▍, h3 bright_blue, h4-6 dim+marker */
+		const char *col = (hl == 1) ? COL_H1 : (hl == 2) ? COL_H2
+		               : (hl == 3) ? COL_H3 : COL_HDIM;
+		int size = (hl <= 2) ? 5 : (hl == 3) ? 4 : 3;
+		const char *accent = (hl <= 2) ? "\xE2\x96\x8D " : "";   /* ▍ */
+		const char *marker = (hl == 4) ? "\xC2\xA7 "          /* § */
+		                   : (hl == 5) ? "\xE2\x80\xBA "      /* › */
+		                   : (hl == 6) ? "\xE2\x80\xA3 " : "";  /* ‣ */
 		inner = acp_md_inline(t + hl + (t[hl] == ' ' ? 1 : 0));
 		g_string_append_printf(out,
-		    "<font color=\"" COL_HEAD "\" size=\"%d\"><b>%s</b></font>",
-		    size < 3 ? 3 : size, inner);
+		    "<font color=\"%s\" size=\"%d\"><b>%s%s%s</b></font>",
+		    col, size, accent, marker, inner);
 		g_free(inner);
 		return;
 	}
 	if (t[0] == '>') {
+		/* maya: │ bright_yellow bar + muted italic text */
 		inner = acp_md_inline(t[1] == ' ' ? t + 2 : t + 1);
 		g_string_append_printf(out,
-		    "<font color=\"" COL_QUOTE "\">\xE2\x96\x8E %s</font>", inner);
+		    "<font color=\"" COL_QUOTE "\">\xE2\x94\x82 </font>"
+		    "<font color=\"" COL_QTEXT "\"><i>%s</i></font>", inner);
+		g_free(inner);
+		return;
+	}
+	/* GFM task list: - [ ] / - [x] */
+	if ((t[0] == '-' || t[0] == '*' || t[0] == '+') && t[1] == ' ' &&
+	    t[2] == '[' && (t[3] == ' ' || t[3] == 'x' || t[3] == 'X') && t[4] == ']') {
+		gboolean done = (t[3] == 'x' || t[3] == 'X');
+		inner = acp_md_inline(t[5] == ' ' ? t + 6 : t + 5);
+		g_string_append_printf(out,
+		    "&#160;&#160;<font color=\"%s\">%s</font> %s",
+		    done ? COL_CHECK : COL_DIM,
+		    done ? "\xE2\x9C\x93" : "\xE2\x97\x8B",   /* ✓ / ○ */
+		    inner);
 		g_free(inner);
 		return;
 	}
@@ -261,16 +335,20 @@ render_line(GString *out, const char *line)
 		inner = acp_md_inline(body);
 		if (indent >= 2)
 			g_string_append_printf(out,
-			    "&#160;&#160;&#160;&#160;\xC2\xB7 %s", inner);   /* nested: middle dot */
+			    "&#160;&#160;&#160;&#160;<font color=\"" COL_BULLET
+			    "\">\xE2\x97\xA6</font> %s", inner);   /* ◦ nested */
 		else
 			g_string_append_printf(out,
-			    "&#160;&#160;\xE2\x80\xA2 %s", inner);           /* top: bullet */
+			    "&#160;&#160;<font color=\"" COL_BULLET
+			    "\"><b>\xE2\x96\xB8</b></font> %s", inner);  /* ▸ top */
 		g_free(inner);
 		return;
 	}
 	if (is_olist(t, &body, &num)) {
 		inner = acp_md_inline(body);
-		g_string_append_printf(out, "&#160;&#160;%d. %s", num, inner);
+		g_string_append_printf(out,
+		    "&#160;&#160;<font color=\"" COL_BULLET "\"><b>%d.</b></font> %s",
+		    num, inner);
 		g_free(inner);
 		return;
 	}
@@ -287,27 +365,46 @@ render_open_block(AcpStream *s)
 	GString *out = g_string_new(NULL);
 
 	if (s->in_fence) {
-		/* live code block: language chip + verbatim body in a mono box */
-		char *esc = g_markup_escape_text(
-		    s->fence_body ? s->fence_body->str : "", -1);
-		GString *body = g_string_new(NULL);
-		const char *p;
-		for (p = esc; *p; p++) {
-			if (*p == '\n')      g_string_append(body, "<br>");
-			else if (*p == ' ')  g_string_append(body, "&#160;");
-			else if (*p == '\t') g_string_append(body, "&#160;&#160;&#160;&#160;");
-			else                 g_string_append_c(body, *p);
-		}
-		if (s->fence_lang && *s->fence_lang)
+		/* Code block, maya-style: a │ gutter down the left edge (in the dim
+		 * border colour) with the language tag as a header chip, and the body
+		 * in cyan monospace. The per-line gutter reads as one cohesive box
+		 * (unlike a per-run background, which leaves ragged rectangles in
+		 * IMHtml). Each source line gets its own "│ <code>" row. */
+		const char *src = s->fence_body ? s->fence_body->str : "";
+		gchar **lines = g_strsplit(src, "\n", -1);
+		int i;
+
+		if (s->fence_lang && *s->fence_lang) {
+			char *le = g_markup_escape_text(s->fence_lang, -1);
 			g_string_append_printf(out,
-			    "<font color=\"" COL_DIM "\" size=\"2\">%s</font><br>",
-			    s->fence_lang);
-		g_string_append_printf(out,
-		    "<font back=\"" COL_CBG "\" face=\"monospace\" "
-		    "color=\"" COL_CODE "\" size=\"2\">%s</font>",
-		    body->len ? body->str : "&#160;");
-		g_string_free(body, TRUE);
-		g_free(esc);
+			    "<font color=\"" COL_LANG "\" size=\"2\">"
+			    "\xE2\x95\xAD\xE2\x94\x80 %s</font><br>", le);   /* ╭─ lang */
+			g_free(le);
+		}
+		for (i = 0; lines[i]; i++) {
+			char *e;
+			GString *cl;
+			const char *p;
+			/* drop the trailing empty element from a final '\n' */
+			if (lines[i + 1] == NULL && lines[i][0] == '\0')
+				break;
+			e = g_markup_escape_text(lines[i], -1);
+			cl = g_string_new(NULL);
+			for (p = e; *p; p++) {
+				if (*p == ' ')       g_string_append(cl, "&#160;");
+				else if (*p == '\t') g_string_append(cl, "&#160;&#160;&#160;&#160;");
+				else                 g_string_append_c(cl, *p);
+			}
+			if (i)
+				g_string_append(out, "<br>");
+			g_string_append_printf(out,
+			    "<font color=\"" COL_LANG "\">\xE2\x94\x82 </font>"
+			    "<font face=\"monospace\" color=\"" COL_CODE "\">%s</font>",
+			    cl->len ? cl->str : "&#160;");
+			g_string_free(cl, TRUE);
+			g_free(e);
+		}
+		g_strfreev(lines);
 		return g_string_free(out, FALSE);
 	}
 
@@ -620,16 +717,25 @@ acp_stream_flush(AcpData *d)
 
 	/* fold any partial (newline-less) line into the open block */
 	if (s->open_line && s->open_line->len) {
+		const char *pl = s->open_line->str;
+		/* a closing fence can arrive as the last line with no trailing '\n';
+		 * treat it as the fence close, not as a code line. */
+		if (s->in_fence &&
+		    (strncmp(pl, "```", 3) == 0 || strncmp(pl, "~~~", 3) == 0)) {
+			g_string_truncate(s->open_line, 0);
+			commit_open(d, s);
+			return;
+		}
 		if (s->in_fence) {
 			if (s->fence_body->len)
 				g_string_append_c(s->fence_body, '\n');
-			g_string_append(s->fence_body, s->open_line->str);
+			g_string_append(s->fence_body, pl);
 		} else {
 			if (s->open->len)
 				g_string_append_c(s->open, '\n');
-			g_string_append(s->open, s->open_line->str);
+			g_string_append(s->open, pl);
 			if (s->open_kind == BLK_NONE)
-				s->open_kind = classify(s->open_line->str);
+				s->open_kind = classify(pl);
 		}
 		g_string_truncate(s->open_line, 0);
 	}

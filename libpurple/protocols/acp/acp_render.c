@@ -23,13 +23,15 @@
 #include <ctype.h>
 #include <string.h>
 
-/* Colours for the agent chrome. */
-#define COL_TOOL   "#a05a00"
-#define COL_PLAN   "#5c3566"
-#define COL_DIM    "#888888"
-#define COL_CODE   "#c7254e"
-#define COL_ADD    "#4e9a06"
-#define COL_DEL    "#cc0000"
+/* Colours for the agent chrome + inline markdown (mapped from 1ay1/maya). */
+#define COL_TOOL   "#fcaf3e"   /* orange (tool)        */
+#define COL_PLAN   "#ad7fa8"   /* plum (plan)          */
+#define COL_DIM    "#888a85"   /* bright_black         */
+#define COL_CODE   "#34e2e2"   /* bright_cyan (code)   */
+#define COL_LINK   "#729fcf"   /* bright_blue (link)   */
+#define COL_BOLD   "#eeeeec"   /* bright_white (bold)  */
+#define COL_ADD    "#8ae234"   /* bright_green         */
+#define COL_DEL    "#ef2929"   /* bright_red           */
 
 /* ------------------------------------------------------------------------- *
  *  Conversation plumbing (message-API fallback, used by headless frontends)
@@ -118,7 +120,9 @@ acp_md_inline(const char *text)
 					char *url   = g_strndup(rb + 2, rp - (rb + 2));
 					char *lesc  = g_markup_escape_text(label, -1);
 					char *uesc  = g_markup_escape_text(url, -1);
-					g_string_append_printf(out, "<a href=\"%s\">%s</a>",
+					g_string_append_printf(out,
+					    "<a href=\"%s\"><font color=\"" COL_LINK
+					    "\"><u>%s</u></font></a>",
 					                       uesc, lesc);
 					g_free(label); g_free(url); g_free(lesc); g_free(uesc);
 					p = rp + 1;
@@ -130,7 +134,8 @@ acp_md_inline(const char *text)
 		if (scan_delim(p, "**", &span)) {
 			char *inner = g_strndup(p + 2, span);
 			char *r = acp_md_inline(inner);
-			g_string_append_printf(out, "<b>%s</b>", r);
+			g_string_append_printf(out,
+			    "<font color=\"" COL_BOLD "\"><b>%s</b></font>", r);
 			g_free(inner); g_free(r);
 			p += 2 + span + 2;
 			continue;
