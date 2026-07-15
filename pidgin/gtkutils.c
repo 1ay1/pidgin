@@ -843,8 +843,10 @@ pidgin_image_menu_item_new(const char *label, GtkWidget *image, gboolean mnemoni
 		gtk_widget_set_halign(image, GTK_ALIGN_CENTER);
 		gtk_widget_set_valign(image, GTK_ALIGN_CENTER);
 		gtk_box_pack_start(GTK_BOX(gutter), image, TRUE, TRUE, 0);
+		gtk_widget_show(image);
 	}
 	gtk_box_pack_start(GTK_BOX(box), gutter, FALSE, FALSE, 0);
+	gtk_widget_show(gutter);
 
 	accel_label = gtk_accel_label_new(label ? label : "");
 	gtk_label_set_use_underline(GTK_LABEL(accel_label), mnemonic);
@@ -853,8 +855,10 @@ pidgin_image_menu_item_new(const char *label, GtkWidget *image, gboolean mnemoni
 	if (mnemonic)
 		gtk_label_set_mnemonic_widget(GTK_LABEL(accel_label), menuitem);
 	gtk_box_pack_start(GTK_BOX(box), accel_label, TRUE, TRUE, 0);
+	gtk_widget_show(accel_label);
 
 	gtk_container_add(GTK_CONTAINER(menuitem), box);
+	gtk_widget_show(box);
 
 #undef PIDGIN_MENU_ICON_GUTTER
 	return menuitem;

@@ -272,7 +272,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	}
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(shell), item);
-	gtk_widget_show(item);
+	/* show_all, not show: our GTK3 image-menu-item wraps the icon + label in
+	 * a child box; a bare gtk_widget_show(item) would leave that box (and the
+	 * icon inside it) hidden, so the leading icon column would be invisible. */
+	gtk_widget_show_all(item);
 
 	/* Accelerator. */
 	if (e->accelerator && ift->accel_group) {
