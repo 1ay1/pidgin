@@ -365,22 +365,12 @@ render_open_block(AcpStream *s)
 	GString *out = g_string_new(NULL);
 
 	if (s->in_fence) {
-		/* Code block, maya-style: a language header chip (╭─ lang) above a
-		 * syntax-highlighted body that carries its own right-aligned
-		 * line-number gutter (acp_highlight_code). The whole body is one
-		 * cohesive listing -- keywords magenta, strings green, numbers
-		 * yellow, comments dim-italic, functions blue, etc. */
+		/* Code block, maya-style: acp_highlight_code renders a full framed
+		 * panel -- top rule with the language chip, a line-number gutter +
+		 * syntax-highlighted body on a filled dark background, and a bottom
+		 * rule. Nothing else to add here. */
 		const char *src = s->fence_body ? s->fence_body->str : "";
-		char *body;
-
-		if (s->fence_lang && *s->fence_lang) {
-			char *le = g_markup_escape_text(s->fence_lang, -1);
-			g_string_append_printf(out,
-			    "<font color=\"" COL_LANG "\" size=\"2\">"
-			    "\xE2\x95\xAD\xE2\x94\x80 %s</font><br>", le);   /* ╭─ lang */
-			g_free(le);
-		}
-		body = acp_highlight_code(src, s->fence_lang);
+		char *body = acp_highlight_code(src, s->fence_lang);
 		g_string_append(out, body ? body : "");
 		g_free(body);
 		return g_string_free(out, FALSE);

@@ -45,6 +45,8 @@
 #define SC_PLAIN   "#d4d4d4"   /* body text    */
 #define SC_SHVAR   "#34e2e2"   /* bright_cyan  */
 #define SC_GUTTER  "#666666"   /* dim line-number gutter */
+#define SC_CODEBG  "#181818"   /* code panel background fill */
+#define SC_BORDER  "#3a3a3a"   /* code panel frame           */
 
 /* ── language ids ───────────────────────────────────────────────────── */
 typedef enum {
@@ -236,31 +238,44 @@ static gboolean is_punct_char(char c)
 	       c==';'||c==':'||c=='<'||c=='>'||c=='?'||c=='~'||c=='%'||c=='@'||c=='\\';
 }
 
-/* Append a coloured span of [p,p+len) (HTML-escaped) to out. */
-static void
+/* Append a coloured span of [p,p+len) (HTML-escaped) to out, over a code
+ * panel background. Returns the number of display columns emitted (tabs = 4,
+ * every other byte-run of one glyph = 1) so the caller can pad the line. */
+static int
 span(GString *out, const char *color, gboolean italic, const char *p, gsize len)
 {
 	char *tmp = g_strndup(p, len);
 	char *esc = g_markup_escape_text(tmp, -1);
 	const char *q;
-	g_string_append_printf(out, "<font face=\"monospace\" color=\"%s\">%s",
-	                       color, italic ? "<i>" : "");
+	int cols = 0;
+	g_string_append_printf(out,
+	    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"%s\">%s",
+	    color, italic ? "<i>" : "");
 	/* preserve spaces/tabs as nbsp so indentation survives IMHtml */
 	for (q = esc; *q; q++) {
-		if (*q == ' ')       g_string_append(out, "&#160;");
-		else if (*q == '\t') g_string_append(out, "&#160;&#160;&#160;&#160;");
-		else                 g_string_append_c(out, *q);
+		if (*q == ' ')       { g_string_append(out, "&#160;"); cols++; }
+		else if (*q == '\t') { g_string_append(out, "&#160;&#160;&#160;&#160;"); cols += 4; }
+		else if (*q == '&') { /* an entity like &lt; &#160; -- one glyph */
+			const char *semi = strchr(q, ';');
+			if (semi) { g_string_append_len(out, q, semi - q + 1); q = semi; cols++; }
+			else { g_string_append_c(out, *q); cols++; }
+		}
+		else if (((unsigned char)*q & 0xC0) == 0x80) { g_string_append_c(out, *q); }
+		else                 { g_string_append_c(out, *q); cols++; }
 	}
 	g_string_append_printf(out, "%s</font>", italic ? "</i>" : "");
 	g_free(esc); g_free(tmp);
+	return cols;
 }
 
-/* Tokenise one physical line [p,p+len) into coloured HTML spans. */
-static void
+/* Tokenise one physical line [p,p+len) into coloured HTML spans over the code
+ * panel background. Returns the display width (columns) emitted. */
+static int
 highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
                AcpComment cm, gboolean *in_block)
 {
 	gsize i = 0;
+	int cols = 0;
 
 	/* continuing a multi-line block comment */
 	if (*in_block) {
@@ -276,7 +291,7 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 		} else {
 			j = len;
 		}
-		span(out, SC_COMMENT, TRUE, p, j);
+		cols += span(out, SC_COMMENT, TRUE, p, j);
 		i = j;
 	}
 
@@ -287,24 +302,24 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 		if (ch == ' ' || ch == '\t') {
 			gsize j = i;
 			while (j < len && (p[j] == ' ' || p[j] == '\t')) j++;
-			span(out, SC_PLAIN, FALSE, p + i, j - i);
+			cols += span(out, SC_PLAIN, FALSE, p + i, j - i);
 			i = j;
 			continue;
 		}
 		/* preprocessor (#... at line start, C/C++) */
 		if ((lang == L_C || lang == L_CPP) && ch == '#' && i == 0) {
-			span(out, SC_PREPROC, FALSE, p + i, len - i);
+			cols += span(out, SC_PREPROC, FALSE, p + i, len - i);
 			i = len;
 			continue;
 		}
 		/* line comment */
 		if (cm.line && !strncmp(p + i, cm.line, strlen(cm.line))) {
-			span(out, SC_COMMENT, TRUE, p + i, len - i);
+			cols += span(out, SC_COMMENT, TRUE, p + i, len - i);
 			i = len;
 			continue;
 		}
 		if (cm.hash && ch == '#') {
-			span(out, SC_COMMENT, TRUE, p + i, len - i);
+			cols += span(out, SC_COMMENT, TRUE, p + i, len - i);
 			i = len;
 			continue;
 		}
@@ -321,7 +336,7 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 				j = len;
 				*in_block = TRUE;
 			}
-			span(out, SC_COMMENT, TRUE, p + i, j - i);
+			cols += span(out, SC_COMMENT, TRUE, p + i, j - i);
 			i = j;
 			continue;
 		}
@@ -334,7 +349,7 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 				j++;
 			}
 			if (j < len) j++;   /* include closing quote */
-			span(out, SC_STR, FALSE, p + i, j - i);
+			cols += span(out, SC_STR, FALSE, p + i, j - i);
 			i = j;
 			continue;
 		}
@@ -343,7 +358,7 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 			gsize j = i + 1;
 			if (p[j] == '{') { while (j < len && p[j] != '}') j++; if (j < len) j++; }
 			else while (j < len && (isalnum((unsigned char)p[j]) || p[j]=='_')) j++;
-			span(out, SC_SHVAR, FALSE, p + i, j - i);
+			cols += span(out, SC_SHVAR, FALSE, p + i, j - i);
 			i = j;
 			continue;
 		}
@@ -351,7 +366,7 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 		if (ch == '@' && i + 1 < len && isalpha((unsigned char)p[i+1])) {
 			gsize j = i + 1;
 			while (j < len && (isalnum((unsigned char)p[j]) || p[j]=='_' || p[j]=='.')) j++;
-			span(out, SC_ATTR, FALSE, p + i, j - i);
+			cols += span(out, SC_ATTR, FALSE, p + i, j - i);
 			i = j;
 			continue;
 		}
@@ -370,7 +385,7 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 					j++;
 				while (j < len && (isalpha((unsigned char)p[j]) || p[j]=='_')) j++; /* suffix */
 			}
-			span(out, SC_NUM, FALSE, p + i, j - i);
+			cols += span(out, SC_NUM, FALSE, p + i, j - i);
 			i = j;
 			continue;
 		}
@@ -386,12 +401,12 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 			is_call = (j < len && p[j] == '(');
 			is_type_case = (isupper((unsigned char)word[0]) && (j - i) > 1);
 			cls = classify_word(word, lang);
-			if      (cls == 3)      span(out, SC_CONST, FALSE, p + i, j - i);
-			else if (cls == 1)      span(out, SC_KW,    FALSE, p + i, j - i);
-			else if (cls == 2)      span(out, SC_TYPE,  FALSE, p + i, j - i);
-			else if (is_call)       span(out, SC_FN,    FALSE, p + i, j - i);
-			else if (is_type_case)  span(out, SC_TYPE,  FALSE, p + i, j - i);
-			else                    span(out, SC_PLAIN, FALSE, p + i, j - i);
+			if      (cls == 3)      cols += span(out, SC_CONST, FALSE, p + i, j - i);
+			else if (cls == 1)      cols += span(out, SC_KW,    FALSE, p + i, j - i);
+			else if (cls == 2)      cols += span(out, SC_TYPE,  FALSE, p + i, j - i);
+			else if (is_call)       cols += span(out, SC_FN,    FALSE, p + i, j - i);
+			else if (is_type_case)  cols += span(out, SC_TYPE,  FALSE, p + i, j - i);
+			else                    cols += span(out, SC_PLAIN, FALSE, p + i, j - i);
 			g_free(word);
 			i = j;
 			continue;
@@ -400,13 +415,13 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 		if (is_op_char(ch)) {
 			gsize j = i;
 			while (j < len && is_op_char(p[j]) && (j - i) < 3) j++;
-			span(out, SC_OP, FALSE, p + i, j - i);
+			cols += span(out, SC_OP, FALSE, p + i, j - i);
 			i = j;
 			continue;
 		}
 		/* punctuation */
 		if (is_punct_char(ch)) {
-			span(out, SC_PUNCT, FALSE, p + i, 1);
+			cols += span(out, SC_PUNCT, FALSE, p + i, 1);
 			i++;
 			continue;
 		}
@@ -415,14 +430,17 @@ highlight_line(GString *out, const char *p, gsize len, AcpLang lang,
 			gsize j = i + 1;
 			if ((unsigned char)ch >= 0x80)
 				while (j < len && ((unsigned char)p[j] & 0xC0) == 0x80) j++;
-			span(out, SC_PLAIN, FALSE, p + i, j - i);
+			cols += span(out, SC_PLAIN, FALSE, p + i, j - i);
 			i = j;
 		}
 	}
+	return cols;
 }
 
-/* Public: produce an HTML fragment for a code block body, with a right-
- * aligned line-number gutter and syntax highlighting. Caller frees.
+/* Public: produce an HTML fragment for a code block body as a framed,
+ * background-filled panel: a top rule (╭─ lang ───╮), one row per source line
+ * (line-number gutter + syntax-highlighted code, padded with the panel
+ * background to a uniform width), and a bottom rule (╰───╯). Caller frees.
  * `lang_tag` may be NULL / empty (generic C-style highlighting). */
 char *
 acp_highlight_code(const char *code, const char *lang_tag)
@@ -432,7 +450,9 @@ acp_highlight_code(const char *code, const char *lang_tag)
 	gboolean in_block = FALSE;
 	GString *out = g_string_new(NULL);
 	gchar **lines;
-	int i, nlines = 0, wdig = 3;
+	int i, nlines = 0, wdig = 3, gutter_w, content_w = 0, panel_w;
+	GString **rows;
+	int *rowcols;
 
 	if (!code) code = "";
 	lines = g_strsplit(code, "\n", -1);
@@ -442,19 +462,81 @@ acp_highlight_code(const char *code, const char *lang_tag)
 		if (lines[i + 1] == NULL && lines[i][0] == '\0') break;
 		nlines++;
 	}
+	if (nlines == 0) nlines = 1;   /* always draw at least one (blank) row */
 	{ int v = nlines, need = 1; for (; v >= 10; v /= 10) need++;
 	  if (need > wdig) wdig = need; }   /* stable 3-digit floor */
+	gutter_w = wdig + 3;   /* digits + " │ " (space + bar + space) */
 
+	/* First pass: render each line's code spans into its own buffer and note
+	 * its display width, so the panel can pad every row to one uniform edge. */
+	rows    = g_new0(GString *, nlines);
+	rowcols = g_new0(int, nlines);
 	for (i = 0; i < nlines; i++) {
-		if (i)
-			g_string_append(out, "<br>");
-		/* gutter: right-aligned line number + " │ " */
-		g_string_append_printf(out,
-		    "<font face=\"monospace\" color=\"" SC_GUTTER "\">%*d&#160;\xE2\x94\x82&#160;</font>",
-		    wdig, i + 1);
-		highlight_line(out, lines[i], strlen(lines[i]), lang, cm, &in_block);
+		const char *ln = lines[i] ? lines[i] : "";
+		rows[i] = g_string_new(NULL);
+		rowcols[i] = highlight_line(rows[i], ln, strlen(ln), lang, cm, &in_block);
+		if (rowcols[i] > content_w) content_w = rowcols[i];
+	}
+	if (content_w < 8)  content_w = 8;    /* minimum panel body width  */
+	if (content_w > 96) content_w = 96;   /* cap very wide lines        */
+	panel_w = gutter_w + content_w;
+
+	/* Top rule: ╭─ lang ─────╮ (lang chip inline in the border). */
+	{
+		int dashes, k;
+		char *le = (lang_tag && *lang_tag)
+		    ? g_markup_escape_text(lang_tag, -1) : NULL;
+		int lang_cols = le ? (int)g_utf8_strlen(lang_tag, -1) + 2 : 0; /* " x " */
+		g_string_append(out,
+		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
+		    "\">\xE2\x95\xAD\xE2\x94\x80");   /* ╭─ */
+		if (le) {
+			g_string_append_printf(out,
+			    "&#160;<font color=\"" SC_GUTTER "\">%s</font>&#160;", le);
+		}
+		dashes = panel_w - 2 - lang_cols;
+		if (dashes < 1) dashes = 1;
+		for (k = 0; k < dashes; k++) g_string_append(out, "\xE2\x94\x80"); /* ─ */
+		g_string_append(out, "\xE2\x95\xAE</font><br>");   /* ╮ */
+		g_free(le);
 	}
 
+	/* Body rows. */
+	for (i = 0; i < nlines; i++) {
+		int pad = content_w - rowcols[i], k;
+		/* left border + gutter */
+		g_string_append_printf(out,
+		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
+		    "\">\xE2\x94\x82</font>"   /* │ left border */
+		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_GUTTER
+		    "\">%*d&#160;\xE2\x94\x82&#160;</font>",   /* NNN │ */
+		    wdig, i + 1);
+		/* code content */
+		g_string_append(out, rows[i]->str);
+		/* pad to uniform width with background fill */
+		if (pad > 0) {
+			g_string_append(out,
+			    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\""
+			    SC_CODEBG "\">");
+			for (k = 0; k < pad; k++) g_string_append(out, "&#160;");
+			g_string_append(out, "</font>");
+		}
+		g_string_append(out, "<br>");
+		g_string_free(rows[i], TRUE);
+	}
+
+	/* Bottom rule: ╰─────╯ */
+	{
+		int k;
+		g_string_append(out,
+		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
+		    "\">\xE2\x95\xB0");   /* ╰ */
+		for (k = 0; k < panel_w - 1; k++) g_string_append(out, "\xE2\x94\x80");
+		g_string_append(out, "\xE2\x95\xAF</font>");   /* ╯ */
+	}
+
+	g_free(rows);
+	g_free(rowcols);
 	g_strfreev(lines);
 	return g_string_free(out, FALSE);
 }
