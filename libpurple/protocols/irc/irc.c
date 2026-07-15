@@ -1167,6 +1167,11 @@ static void _init_plugin(PurplePlugin *plugin)
 	option = purple_account_option_string_new(_("Real name"), "realname", "");
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
+	option = purple_account_option_string_new(
+		_("Auto-join channels (comma or space separated)"),
+		"autojoin", "");
+	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
+
 	/*
 	option = purple_account_option_string_new(_("Quit message"), "quitmsg", IRC_DEFAULT_QUIT);
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);

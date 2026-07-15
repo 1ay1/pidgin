@@ -136,6 +136,38 @@ static void irc_connected(struct irc_conn *irc, const char *nick)
 	irc_blist_timeout(irc);
 	if (!irc->timer)
 		irc->timer = purple_timeout_add_seconds(45, (GSourceFunc)irc_blist_timeout, (gpointer)irc);
+
+	/* Auto-join any channels the user configured for this account. The list is
+	 * comma- and/or whitespace-separated; each entry gets a leading '#' if it
+	 * lacks a channel prefix. */
+	{
+		const char *autojoin = purple_account_get_string(irc->account, "autojoin", "");
+
+		if (autojoin && *autojoin) {
+			char **channels = g_strsplit_set(autojoin, ", \t", -1);
+			int i;
+
+			for (i = 0; channels[i] != NULL; i++) {
+				char *channel = g_strstrip(channels[i]);
+				char *buf;
+
+				if (*channel == '\0')
+					continue;
+
+				if (irc_ischannel(channel)) {
+					buf = irc_format(irc, "vc", "JOIN", channel);
+				} else {
+					char *hashed = g_strdup_printf("#%s", channel);
+					buf = irc_format(irc, "vc", "JOIN", hashed);
+					g_free(hashed);
+				}
+				irc_send(irc, buf);
+				g_free(buf);
+			}
+
+			g_strfreev(channels);
+		}
+	}
 }
 
 /* This function is ugly, but it's really an error handler. */
