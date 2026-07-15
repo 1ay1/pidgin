@@ -323,7 +323,7 @@ table_border(GString *out, const int *w, int ncols, int kind)
 	static const char *R[] = { "\xE2\x94\x90", "\xE2\x94\xA4", "\xE2\x94\x98" };
 	int c, k;
 	g_string_append(out,
-	    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_BORDER "\">");
+	    "<font face=\"monospace\" color=\"" TB_BORDER "\">");
 	g_string_append(out, L[kind]);
 	for (c = 0; c < ncols; c++) {
 		if (c > 0) g_string_append(out, M[kind]);
@@ -344,7 +344,7 @@ table_row(GString *out, char **cells, int ncells, int ncols, const int *w,
 {
 	int c;
 	g_string_append(out,
-	    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_BORDER
+	    "<font face=\"monospace\" color=\"" TB_BORDER
 	    "\">\xE2\x94\x82</font>");   /* leading | */
 	for (c = 0; c < ncols; c++) {
 		const char *raw = (c < ncells && cells[c]) ? cells[c] : "";
@@ -354,26 +354,26 @@ table_row(GString *out, char **cells, int ncells, int ncols, const int *w,
 		char *inner;
 		if (al[c] == TB_RIGHT)  { lp = slack; rp = 0; }
 		else if (al[c] == TB_CENTER) { lp = slack / 2; rp = slack - lp; }
-		/* fixed 1-space pad + left slack, over the table bg */
-		g_string_append(out, "<font face=\"monospace\" back=\"" TB_BG "\">");
+		/* fixed 1-space pad + left slack */
+		g_string_append(out, "<font face=\"monospace\">");
 		for (k = 0; k < lp + 1; k++) g_string_append(out, "&#160;");
 		g_string_append(out, "</font>");
 		/* content */
 		inner = acp_md_inline(raw);
 		if (is_head)
 			g_string_append_printf(out,
-			    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_HEAD
+			    "<font face=\"monospace\" color=\"" TB_HEAD
 			    "\"><b>%s</b></font>", inner);
 		else
 			g_string_append_printf(out,
-			    "<font face=\"monospace\" back=\"" TB_BG "\">%s</font>", inner);
+			    "<font face=\"monospace\">%s</font>", inner);
 		g_free(inner);
 		/* right slack + fixed pad, then trailing border */
-		g_string_append(out, "<font face=\"monospace\" back=\"" TB_BG "\">");
+		g_string_append(out, "<font face=\"monospace\">");
 		for (k = 0; k < rp + 1; k++) g_string_append(out, "&#160;");
 		g_string_append(out, "</font>");
 		g_string_append(out,
-		    "<font face=\"monospace\" back=\"" TB_BG "\" color=\"" TB_BORDER
+		    "<font face=\"monospace\" color=\"" TB_BORDER
 		    "\">\xE2\x94\x82</font>");   /* | */
 	}
 	g_string_append(out, "<br>");

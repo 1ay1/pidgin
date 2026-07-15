@@ -249,7 +249,7 @@ span(GString *out, const char *color, gboolean italic, const char *p, gsize len)
 	const char *q;
 	int cols = 0;
 	g_string_append_printf(out,
-	    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"%s\">%s",
+	    "<font face=\"monospace\" color=\"%s\">%s",
 	    color, italic ? "<i>" : "");
 	/* preserve spaces/tabs as nbsp so indentation survives IMHtml */
 	for (q = esc; *q; q++) {
@@ -488,7 +488,7 @@ acp_highlight_code(const char *code, const char *lang_tag)
 		    ? g_markup_escape_text(lang_tag, -1) : NULL;
 		int lang_cols = le ? (int)g_utf8_strlen(lang_tag, -1) + 2 : 0; /* " x " */
 		g_string_append(out,
-		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
+		    "<font face=\"monospace\" color=\"" SC_BORDER
 		    "\">\xE2\x95\xAD\xE2\x94\x80");   /* ╭─ */
 		if (le) {
 			g_string_append_printf(out,
@@ -506,9 +506,9 @@ acp_highlight_code(const char *code, const char *lang_tag)
 		int pad = content_w - rowcols[i], k;
 		/* left border + gutter */
 		g_string_append_printf(out,
-		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
+		    "<font face=\"monospace\" color=\"" SC_BORDER
 		    "\">\xE2\x94\x82</font>"   /* │ left border */
-		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_GUTTER
+		    "<font face=\"monospace\" color=\"" SC_GUTTER
 		    "\">%*d&#160;\xE2\x94\x82&#160;</font>",   /* NNN │ */
 		    wdig, i + 1);
 		/* code content */
@@ -516,14 +516,13 @@ acp_highlight_code(const char *code, const char *lang_tag)
 		/* pad to uniform width with background fill */
 		if (pad > 0) {
 			g_string_append(out,
-			    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\""
-			    SC_CODEBG "\">");
+			    "<font face=\"monospace\">");
 			for (k = 0; k < pad; k++) g_string_append(out, "&#160;");
 			g_string_append(out, "</font>");
 		}
 		/* right border */
 		g_string_append(out,
-		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
+		    "<font face=\"monospace\" color=\"" SC_BORDER
 		    "\">&#160;\xE2\x94\x82</font>");   /* │ right border */
 		g_string_append(out, "<br>");
 		g_string_free(rows[i], TRUE);
@@ -533,7 +532,7 @@ acp_highlight_code(const char *code, const char *lang_tag)
 	{
 		int k;
 		g_string_append(out,
-		    "<font face=\"monospace\" back=\"" SC_CODEBG "\" color=\"" SC_BORDER
+		    "<font face=\"monospace\" color=\"" SC_BORDER
 		    "\">\xE2\x95\xB0");   /* ╰ */
 		for (k = 0; k < panel_w - 1 + 2; k++) g_string_append(out, "\xE2\x94\x80");
 		g_string_append(out, "\xE2\x95\xAF</font>");   /* ╯ */
