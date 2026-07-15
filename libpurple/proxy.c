@@ -51,6 +51,14 @@ struct _PurpleProxyConnectData {
 	int fd;
 	int socket_type;
 	guint inpa;
+	/*
+	 * Timer that bounds how long we wait for a single connect() attempt
+	 * to complete.  Without this, a black-holed SYN (e.g. an unreachable
+	 * IPv6 address or a dead mirror returned first in a multi-A record)
+	 * would stall the whole connection for the kernel's default TCP
+	 * timeout (~2 minutes) before we'd fall through to the next address.
+	 */
+	guint connect_timeout;
 	PurpleProxyInfo *gpi;
 	PurpleDnsQueryData *query_data;
 
@@ -98,7 +106,16 @@ static GList *no_proxy_entries = NULL;
 
 static GSList *handles = NULL;
 
+/*
+ * Maximum time (in seconds) to wait for a single connect() attempt to a
+ * resolved address before giving up on it and moving on to the next one.
+ * A non-responsive address should not hold the whole connection hostage
+ * for the kernel's default TCP connect timeout (which can be ~2 minutes).
+ */
+#define PURPLE_PROXY_CONNECT_TIMEOUT 15
+
 static void try_connect(PurpleProxyConnectData *connect_data);
+static void purple_proxy_connect_data_disconnect(PurpleProxyConnectData *connect_data, const gchar *error_message);
 
 /*
  * TODO: Eventually (GObjectification) this bad boy will be removed, because it is
@@ -736,6 +753,12 @@ purple_proxy_connect_data_disconnect(PurpleProxyConnectData *connect_data, const
 		connect_data->child = NULL;
 	}
 
+	if (connect_data->connect_timeout > 0)
+	{
+		purple_timeout_remove(connect_data->connect_timeout);
+		connect_data->connect_timeout = 0;
+	}
+
 	if (connect_data->inpa > 0)
 	{
 		purple_input_remove(connect_data->inpa);
@@ -804,6 +827,51 @@ purple_proxy_connect_data_connected(PurpleProxyConnectData *connect_data)
 
 	purple_proxy_connect_data_disconnect(connect_data, NULL);
 	purple_proxy_connect_data_destroy(connect_data);
+}
+
+/*
+ * Fired when a single connect() attempt has taken too long.  We treat it
+ * exactly like a failed connection: purple_proxy_connect_data_disconnect()
+ * closes the socket and, if more resolved addresses remain, immediately
+ * tries the next one instead of waiting out the kernel TCP timeout.
+ */
+static gboolean
+connect_timeout_cb(gpointer data)
+{
+	PurpleProxyConnectData *connect_data = data;
+
+	if (!PURPLE_PROXY_CONNECT_DATA_IS_VALID(connect_data))
+		return FALSE;
+
+	/* The timer is one-shot; clear the handle so disconnect doesn't try
+	 * to remove an about-to-be-freed source. */
+	connect_data->connect_timeout = 0;
+
+	purple_debug_info("proxy",
+		"Connect attempt to %s:%d timed out after %d seconds; "
+		"trying the next address if any.\n",
+		connect_data->host, connect_data->port,
+		PURPLE_PROXY_CONNECT_TIMEOUT);
+
+	purple_proxy_connect_data_disconnect(connect_data,
+			_("Connection attempt timed out"));
+
+	return FALSE;
+}
+
+/*
+ * Arm the per-attempt connect timeout for an in-progress (EINPROGRESS)
+ * connection.  Called by each proxy connector right after it registers
+ * its PURPLE_INPUT_WRITE watcher.
+ */
+static void
+purple_proxy_connect_arm_timeout(PurpleProxyConnectData *connect_data)
+{
+	if (connect_data->connect_timeout > 0)
+		purple_timeout_remove(connect_data->connect_timeout);
+
+	connect_data->connect_timeout = purple_timeout_add_seconds(
+			PURPLE_PROXY_CONNECT_TIMEOUT, connect_timeout_cb, connect_data);
 }
 
 static void
@@ -940,6 +1008,7 @@ proxy_connect_none(PurpleProxyConnectData *connect_data, struct sockaddr *addr, 
 			purple_debug_info("proxy", "Connection in progress\n");
 			connect_data->inpa = purple_input_add(connect_data->fd,
 					PURPLE_INPUT_WRITE, socket_ready_cb, connect_data);
+			purple_proxy_connect_arm_timeout(connect_data);
 		}
 		else
 		{
@@ -1332,6 +1401,12 @@ http_canwrite(gpointer data, gint source, PurpleInputCondition cond) {
 	purple_debug_info("proxy", "Connected to %s:%d.\n",
 		connect_data->host, connect_data->port);
 
+	/* The connect() completed; stop the per-attempt connect timer. */
+	if (connect_data->connect_timeout > 0) {
+		purple_timeout_remove(connect_data->connect_timeout);
+		connect_data->connect_timeout = 0;
+	}
+
 	if (connect_data->inpa > 0)	{
 		purple_input_remove(connect_data->inpa);
 		connect_data->inpa = 0;
@@ -1386,6 +1461,7 @@ proxy_connect_http(PurpleProxyConnectData *connect_data, struct sockaddr *addr, 
 
 			connect_data->inpa = purple_input_add(connect_data->fd,
 					PURPLE_INPUT_WRITE, http_canwrite, connect_data);
+			purple_proxy_connect_arm_timeout(connect_data);
 		} else
 			purple_proxy_connect_data_disconnect(connect_data, g_strerror(errno));
 	} else {
@@ -1490,6 +1566,12 @@ s4_canwrite(gpointer data, gint source, PurpleInputCondition cond)
 
 	purple_debug_info("socks4 proxy", "Connected.\n");
 
+	/* The connect() completed; stop the per-attempt connect timer. */
+	if (connect_data->connect_timeout > 0) {
+		purple_timeout_remove(connect_data->connect_timeout);
+		connect_data->connect_timeout = 0;
+	}
+
 	if (connect_data->inpa > 0) {
 		purple_input_remove(connect_data->inpa);
 		connect_data->inpa = 0;
@@ -1574,6 +1656,7 @@ proxy_connect_socks4(PurpleProxyConnectData *connect_data, struct sockaddr *addr
 			purple_debug_info("proxy", "Connection in progress.\n");
 			connect_data->inpa = purple_input_add(connect_data->fd,
 					PURPLE_INPUT_WRITE, s4_canwrite, connect_data);
+			purple_proxy_connect_arm_timeout(connect_data);
 		}
 		else
 		{
@@ -2166,6 +2249,12 @@ s5_canwrite(gpointer data, gint source, PurpleInputCondition cond)
 
 	purple_debug_info("socks5 proxy", "Connected.\n");
 
+	/* The connect() completed; stop the per-attempt connect timer. */
+	if (connect_data->connect_timeout > 0) {
+		purple_timeout_remove(connect_data->connect_timeout);
+		connect_data->connect_timeout = 0;
+	}
+
 	if (connect_data->inpa > 0)
 	{
 		purple_input_remove(connect_data->inpa);
@@ -2231,6 +2320,7 @@ proxy_connect_socks5(PurpleProxyConnectData *connect_data, struct sockaddr *addr
 			purple_debug_info("socks5 proxy", "Connection in progress\n");
 			connect_data->inpa = purple_input_add(connect_data->fd,
 					PURPLE_INPUT_WRITE, s5_canwrite, connect_data);
+			purple_proxy_connect_arm_timeout(connect_data);
 		}
 		else
 		{
