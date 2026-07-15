@@ -2140,7 +2140,7 @@ screenshare_window_cb(GtkWidget *button, PidginRequestData *data)
 			      GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	g_signal_connect(data->dialog, "event", G_CALLBACK(grab_event), data);
 
-	cursor = gdk_cursor_new(GDK_CROSSHAIR);
+	cursor = gdk_cursor_new_for_display(gdk_window_get_display(gdkwin), GDK_CROSSHAIR);
 	gdk_pointer_grab(gdkwin, FALSE,
 			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK,
 			 NULL, cursor, GDK_CURRENT_TIME);

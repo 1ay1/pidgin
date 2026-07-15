@@ -1558,9 +1558,9 @@ gtk_imhtml_finalize (GObject *object)
 
 	g_hash_table_destroy(imhtml->smiley_data);
 	gtk_smiley_tree_destroy(imhtml->default_smilies);
-	gdk_cursor_unref(imhtml->hand_cursor);
-	gdk_cursor_unref(imhtml->arrow_cursor);
-	gdk_cursor_unref(imhtml->text_cursor);
+	g_object_unref(imhtml->hand_cursor);
+	g_object_unref(imhtml->arrow_cursor);
+	g_object_unref(imhtml->text_cursor);
 
 	if(imhtml->tip_window){
 		gtk_widget_destroy(imhtml->tip_window);
@@ -1836,9 +1836,9 @@ static void gtk_imhtml_init (GtkIMHtml *imhtml)
 	gtk_text_buffer_create_tag(imhtml->text_buffer, "whisper-name", "weight", PANGO_WEIGHT_BOLD, NULL);
 
 	/* When hovering over a link, we show the hand cursor--elsewhere we show the plain ol' pointer cursor */
-	imhtml->hand_cursor = gdk_cursor_new (GDK_HAND2);
-	imhtml->arrow_cursor = gdk_cursor_new (GDK_LEFT_PTR);
-	imhtml->text_cursor = gdk_cursor_new (GDK_XTERM);
+	imhtml->hand_cursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_HAND2);
+	imhtml->arrow_cursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_LEFT_PTR);
+	imhtml->text_cursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_XTERM);
 
 	imhtml->show_comments = TRUE;
 

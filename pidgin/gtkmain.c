@@ -748,9 +748,9 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	search_path = g_build_filename(purple_user_dir(), "gtkrc-2.0", NULL);
-	gtk_rc_add_default_file(search_path);
-	g_free(search_path);
+	/* GTK3: gtk_rc_add_default_file()/gtkrc-2.0 theming is gone (CSS now).
+	 * Load an optional user stylesheet (~/.purple/gtk.css) through a
+	 * GtkCssProvider instead, once GTK is up (see below). */
 
 #if defined(HAVE_X11) && defined(USE_VV)
 	/* GStreamer elements such as ximagesrc may require this */
@@ -773,6 +773,24 @@ int main(int argc, char *argv[])
 	}
 
 	g_set_application_name(PIDGIN_NAME);
+
+	/* GTK3 user stylesheet: if the user drops a gtk.css into their purple
+	 * config dir, install it on the default screen at APPLICATION priority
+	 * (below user/theme overrides). Replaces the old gtkrc-2.0 mechanism. */
+	{
+		gchar *css_path = g_build_filename(purple_user_dir(), "gtk.css", NULL);
+		if (g_file_test(css_path, G_FILE_TEST_EXISTS)) {
+			GtkCssProvider *provider = gtk_css_provider_new();
+			if (gtk_css_provider_load_from_path(provider, css_path, NULL)) {
+				gtk_style_context_add_provider_for_screen(
+					gdk_screen_get_default(),
+					GTK_STYLE_PROVIDER(provider),
+					GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+			}
+			g_object_unref(provider);
+		}
+		g_free(css_path);
+	}
 
 #ifdef _WIN32
 	winpidgin_init(hint);

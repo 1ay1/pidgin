@@ -436,8 +436,8 @@ setup_icon_box(PidginStatusBox *status_box)
 			purple_imgstore_unref(img);
 	}
 
-	status_box->hand_cursor = gdk_cursor_new (GDK_HAND2);
-	status_box->arrow_cursor = gdk_cursor_new (GDK_LEFT_PTR);
+	status_box->hand_cursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_HAND2);
+	status_box->arrow_cursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_LEFT_PTR);
 
 	/* Set up DND */
 	gtk_drag_dest_set(status_box->icon_box,
@@ -480,9 +480,9 @@ destroy_icon_box(PidginStatusBox *statusbox)
 	if (!in_destruction && GTK_IS_WIDGET(statusbox->icon_box))
 		gtk_widget_destroy(statusbox->icon_box);
 	if (statusbox->hand_cursor)
-		gdk_cursor_unref(statusbox->hand_cursor);
+		g_object_unref(statusbox->hand_cursor);
 	if (statusbox->arrow_cursor)
-		gdk_cursor_unref(statusbox->arrow_cursor);
+		g_object_unref(statusbox->arrow_cursor);
 
 	purple_imgstore_unref(statusbox->buddy_icon_img);
 

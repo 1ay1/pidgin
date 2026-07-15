@@ -2533,7 +2533,7 @@ void pidgin_set_cursor(GtkWidget *widget, GdkCursorType cursor_type)
 	if (win == NULL)
 		return;
 
-	cursor = gdk_cursor_new(cursor_type);
+	cursor = gdk_cursor_new_for_display(gdk_window_get_display(win), cursor_type);
 	gdk_window_set_cursor(win, cursor);
 	g_object_unref(cursor);
 

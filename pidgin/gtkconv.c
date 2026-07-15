@@ -1141,10 +1141,11 @@ menu_view_log_cb(gpointer data, guint action, GtkWidget *widget)
 
 	gtkblist = pidgin_blist_get_default_gtk_blist();
 
-	cursor = gdk_cursor_new(GDK_WATCH);
+	cursor = gdk_cursor_new_for_display(
+		gdk_window_get_display(gtk_widget_get_window(gtkblist->window)), GDK_WATCH);
 	gdk_window_set_cursor(gtk_widget_get_window(gtkblist->window), cursor);
 	gdk_window_set_cursor(gtk_widget_get_window(win->window), cursor);
-	gdk_cursor_unref(cursor);
+	g_object_unref(cursor);
 	gdk_display_flush(gdk_window_get_display(gtk_widget_get_window(widget)));
 
 	name = purple_conversation_get_name(conv);
@@ -8694,7 +8695,8 @@ notebook_init_grab(PidginWindow *gtkwin, GtkWidget *widget)
 	}
 
 	if (cursor == NULL)
-		cursor = gdk_cursor_new(GDK_FLEUR);
+		cursor = gdk_cursor_new_for_display(
+			gdk_window_get_display(gtk_widget_get_window(gtkwin->notebook)), GDK_FLEUR);
 
 	/* Grab the pointer */
 	gtk_grab_add(gtkwin->notebook);

@@ -6075,8 +6075,8 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 
 	gtkblist->headline_close = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
 		pidgin_stock_icon_name(GTK_STOCK_CLOSE), 11, 0, NULL);
-	gtkblist->hand_cursor = gdk_cursor_new (GDK_HAND2);
-	gtkblist->arrow_cursor = gdk_cursor_new (GDK_LEFT_PTR);
+	gtkblist->hand_cursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_HAND2);
+	gtkblist->arrow_cursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_LEFT_PTR);
 
 	/* Close button. */
 	close = gtk_image_new_from_icon_name(pidgin_stock_icon_name(GTK_STOCK_CLOSE), GTK_ICON_SIZE_MENU);
@@ -7204,8 +7204,8 @@ static void pidgin_blist_destroy(PurpleBuddyList *list)
 	}
 	gtkblist->empty_avatar = NULL;
 
-	gdk_cursor_unref(gtkblist->hand_cursor);
-	gdk_cursor_unref(gtkblist->arrow_cursor);
+	g_object_unref(gtkblist->hand_cursor);
+	g_object_unref(gtkblist->arrow_cursor);
 	gtkblist->hand_cursor = NULL;
 	gtkblist->arrow_cursor = NULL;
 
