@@ -349,6 +349,13 @@ open/close framing lines are accepted silently by `irc_msg_batch` so they are
 not logged as junk. The limit is the per-account **"Backlog messages to fetch
 on join"** option (`chathistory-limit`, default 50, `0` disables the fetch).
 
+Two slash-commands expose this interactively: **`/cap`** prints the list of
+capabilities actually enabled on the current connection (client-side
+introspection, no server round-trip), and **`/chathistory`** fetches more
+backlog on demand — bare, it re-pulls the latest N lines for the current
+channel; with an argument it forwards a raw chathistory subcommand
+(`LATEST` / `BEFORE` / `AFTER` / `AROUND` / `BETWEEN`) to the server.
+
 ## The protocol subsystem (modernized)
 
 Historically a protocol was located with an O(n) linear scan

@@ -669,6 +669,99 @@ int irc_cmd_whowas(struct irc_conn *irc, const char *cmd, const char *target, co
 	return 0;
 }
 
+/*
+ * /cap -- inspect the IRCv3 capabilities negotiated with the server.  This is
+ * purely a client-side introspection command: it lists everything we enabled
+ * during CAP negotiation so the user can see, at a glance, whether features
+ * like chathistory or SASL are actually active on this connection.
+ */
+int irc_cmd_cap(struct irc_conn *irc, const char *cmd, const char *target, const char **args)
+{
+	PurpleConversation *convo;
+	GString *out;
+	GList *keys, *l;
+
+	convo = purple_find_conversation_with_account(PURPLE_CONV_TYPE_ANY,
+	                                              target, irc->account);
+	if (!convo)
+		return 0;
+
+	out = g_string_new(NULL);
+	if (irc->caps_enabled != NULL &&
+	    g_hash_table_size(irc->caps_enabled) > 0) {
+		keys = g_hash_table_get_keys(irc->caps_enabled);
+		keys = g_list_sort(keys, (GCompareFunc)g_strcmp0);
+		g_string_append(out, _("Enabled IRCv3 capabilities:"));
+		for (l = keys; l; l = l->next) {
+			g_string_append_c(out, ' ');
+			g_string_append(out, (const char *)l->data);
+		}
+		g_list_free(keys);
+	} else {
+		g_string_append(out, _("No IRCv3 capabilities are enabled on this connection."));
+	}
+
+	if (purple_conversation_get_type(convo) == PURPLE_CONV_TYPE_IM)
+		purple_conv_im_write(PURPLE_CONV_IM(convo), "", out->str,
+			PURPLE_MESSAGE_SYSTEM | PURPLE_MESSAGE_NO_LOG, time(NULL));
+	else
+		purple_conv_chat_write(PURPLE_CONV_CHAT(convo), "", out->str,
+			PURPLE_MESSAGE_SYSTEM | PURPLE_MESSAGE_NO_LOG, time(NULL));
+
+	g_string_free(out, TRUE);
+	return 0;
+}
+
+/*
+ * /chathistory [subcommand] [args] -- fetch more channel backlog on demand.
+ * With no arguments it pulls the latest N lines for the current channel; the
+ * user can also pass a chathistory subcommand explicitly, e.g.
+ *   /chathistory LATEST #chan * 100
+ *   /chathistory BEFORE #chan timestamp=2024-01-01T00:00:00.000Z 50
+ * Requires the draft/chathistory capability; otherwise we tell the user.
+ */
+int irc_cmd_chathistory(struct irc_conn *irc, const char *cmd, const char *target, const char **args)
+{
+	PurpleConversation *convo;
+	char *buf;
+
+	convo = purple_find_conversation_with_account(PURPLE_CONV_TYPE_ANY,
+	                                              target, irc->account);
+
+	if (!irc_cap_have(irc, "draft/chathistory")) {
+		if (convo)
+			purple_conv_chat_write(PURPLE_CONV_CHAT(convo), "",
+				_("This server does not support chat history."),
+				PURPLE_MESSAGE_SYSTEM | PURPLE_MESSAGE_NO_LOG, time(NULL));
+		return 0;
+	}
+
+	if (args && args[0] && *args[0]) {
+		/* Pass the raw subcommand through verbatim. */
+		buf = irc_format(irc, "vn", "CHATHISTORY", args[0]);
+	} else {
+		/* Default: latest backlog for the current channel. */
+		int limit;
+		char *lim;
+
+		if (!irc_ischannel(target))
+			return 0;
+
+		limit = purple_account_get_int(irc->account,
+		                               "chathistory-limit", 50);
+		if (limit <= 0)
+			limit = 50;
+		lim = g_strdup_printf("%d", limit);
+		buf = irc_format(irc, "vvvvv", "CHATHISTORY", "LATEST",
+		                 target, "*", lim);
+		g_free(lim);
+	}
+
+	irc_send(irc, buf);
+	g_free(buf);
+	return 0;
+}
+
 static void irc_do_mode(struct irc_conn *irc, const char *target, const char *sign, char **ops)
 {
 	char *buf, mode[5];

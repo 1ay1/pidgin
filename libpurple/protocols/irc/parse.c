@@ -147,6 +147,8 @@ static struct _irc_user_cmd {
 	{ "action", ":", irc_cmd_ctcp_action, N_("action &lt;action to perform&gt;:  Perform an action.") },
 	{ "authserv", ":", irc_cmd_service, N_("authserv: Send a command to authserv") },
 	{ "away", ":", irc_cmd_away, N_("away [message]:  Set an away message, or use no message to return from being away.") },
+	{ "cap", "", irc_cmd_cap, N_("cap:  Show the IRCv3 capabilities negotiated with the server.") },
+	{ "chathistory", ":", irc_cmd_chathistory, N_("chathistory [subcommand]:  Fetch channel backlog. With no argument, pulls the latest messages for the current channel.") },
 	{ "ctcp", "t:", irc_cmd_ctcp, N_("ctcp <nick> <msg>: sends ctcp msg to nick.") },
 	{ "chanserv", ":", irc_cmd_service, N_("chanserv: Send a command to chanserv") },
 	{ "deop", ":", irc_cmd_op, N_("deop &lt;nick1&gt; [nick2] ...:  Remove channel operator status from someone. You must be a channel operator to do this.") },
