@@ -2012,13 +2012,26 @@ conv_keypress_common(PidginConversation *gtkconv, GdkEventKey *event)
 			case GDK_KEY_Tab:
 			case GDK_KEY_KP_Tab:
 			case GDK_KEY_ISO_Left_Tab:
-				if (event->state & GDK_SHIFT_MASK) {
-					move_to_next_unread_tab(gtkconv, FALSE);
-				} else {
-					move_to_next_unread_tab(gtkconv, TRUE);
+			{
+				/* Ctrl+Tab cycles to the next conversation tab (Ctrl+Shift+Tab
+				 * to the previous), wrapping around. This is a plain tab
+				 * switch so it always works, even when no tab has unread
+				 * messages -- add Alt to jump to the next unread tab instead. */
+				if (event->state & GDK_MOD1_MASK) {
+					move_to_next_unread_tab(gtkconv, !(event->state & GDK_SHIFT_MASK));
+					return TRUE;
 				}
-
+				int total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(win->notebook));
+				if (total > 1) {
+					int next;
+					if (event->state & GDK_SHIFT_MASK)
+						next = (curconv - 1 + total) % total;
+					else
+						next = (curconv + 1) % total;
+					gtk_notebook_set_current_page(GTK_NOTEBOOK(win->notebook), next);
+				}
 				return TRUE;
+			}
 				break;
 
 			case GDK_KEY_comma:
@@ -9952,6 +9965,14 @@ pidgin_conv_window_remove_gtkconv(PidginWindow *win, PidginConversation *gtkconv
 
 	if (!win->gtkconvs && win != hidden_convwin)
 		pidgin_conv_window_destroy(win);
+
+	/* Single-window mode: when the shared docked window loses its last
+	 * conversation, bring the pretty "no conversation open" placeholder back. */
+	if (win == docked_convwin && win->gtkconvs == NULL) {
+		PidginBuddyList *gtkblist = pidgin_blist_get_default_gtk_blist();
+		if (gtkblist != NULL && gtkblist->conv_placeholder != NULL)
+			gtk_widget_show(gtkblist->conv_placeholder);
+	}
 }
 
 PidginConversation *
@@ -10203,6 +10224,10 @@ pidgin_conv_dock_into_blist(void)
 	gtk_box_pack_start(GTK_BOX(gtkblist->conv_dock), box, TRUE, TRUE, 0);
 	g_object_unref(box);
 	gtk_widget_show(box);
+
+	/* A conversation is now docked: hide the "no conversation open" panel. */
+	if (gtkblist->conv_placeholder != NULL)
+		gtk_widget_hide(gtkblist->conv_placeholder);
 }
 
 /*

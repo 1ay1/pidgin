@@ -78,6 +78,8 @@ struct _PidginBuddyList {
 	                                     buddy list (left) from the docked conversations (right); NULL otherwise */
 	GtkWidget *conv_dock;           /**< In single-window mode, the placeholder box in the paned's right
 	                                     pane that the shared conversation content is docked into lazily */
+	GtkWidget *conv_placeholder;    /**< In single-window mode, the pretty "no conversation open" panel
+	                                     shown in conv_dock while no conversation is docked; NULL otherwise */
 	GtkWidget *vbox;                /**< This is the vbox that everything important gets packed into.
 					   Your plugin might want to pack something in it itself.  Go, plugins! */
 

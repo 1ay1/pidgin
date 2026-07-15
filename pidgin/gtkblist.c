@@ -5964,6 +5964,46 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 		gtk_paned_pack1(GTK_PANED(paned), gtkblist->notebook, FALSE, TRUE);
 		gtk_paned_pack2(GTK_PANED(paned), gtkblist->conv_dock, TRUE, TRUE);
 		gtk_widget_show(gtkblist->conv_dock);
+
+		/* Pretty "no conversation open" placeholder shown in the right pane
+		 * whenever no conversation is docked. A centered icon above a short
+		 * welcome line, vertically and horizontally centered in the pane so
+		 * the empty area doesn't look broken. It is hidden when a conversation
+		 * docks and shown again when the last one closes (see
+		 * pidgin_blist_set_conv_placeholder_visible). */
+		{
+			GtkWidget *ph_outer, *ph_box, *ph_img, *ph_label;
+			gchar *ph_markup;
+
+			ph_outer = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+			ph_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, PIDGIN_HIG_BOX_SPACE);
+			gtk_widget_set_halign(ph_box, GTK_ALIGN_CENTER);
+			gtk_widget_set_valign(ph_box, GTK_ALIGN_CENTER);
+
+			ph_img = gtk_image_new_from_icon_name(
+				pidgin_stock_icon_name(PIDGIN_STOCK_DIALOG_MAIL),
+				GTK_ICON_SIZE_DIALOG);
+			gtk_widget_set_halign(ph_img, GTK_ALIGN_CENTER);
+			gtk_box_pack_start(GTK_BOX(ph_box), ph_img, FALSE, FALSE, 0);
+
+			ph_label = gtk_label_new(NULL);
+			ph_markup = g_strdup_printf(
+				"<span size='large' weight='bold'>%s</span>\n"
+				"<span foreground='#888888'>%s</span>",
+				_("No conversation open"),
+				_("Pick a buddy or chat to start talking."));
+			gtk_label_set_markup(GTK_LABEL(ph_label), ph_markup);
+			g_free(ph_markup);
+			gtk_label_set_justify(GTK_LABEL(ph_label), GTK_JUSTIFY_CENTER);
+			gtk_label_set_line_wrap(GTK_LABEL(ph_label), TRUE);
+			gtk_widget_set_halign(ph_label, GTK_ALIGN_CENTER);
+			gtk_box_pack_start(GTK_BOX(ph_box), ph_label, FALSE, FALSE, 0);
+
+			gtk_box_pack_start(GTK_BOX(ph_outer), ph_box, TRUE, TRUE, 0);
+			gtk_box_pack_start(GTK_BOX(gtkblist->conv_dock), ph_outer, TRUE, TRUE, 0);
+			gtk_widget_show_all(ph_outer);
+			gtkblist->conv_placeholder = ph_outer;
+		}
 		/* Give the buddy list a sensible default width; the rest goes to
 		 * conversations. Cap the width so a wide saved blist pref can't push
 		 * the divider off-window. */
