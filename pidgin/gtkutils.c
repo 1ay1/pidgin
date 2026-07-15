@@ -816,13 +816,15 @@ pidgin_image_menu_item_new(const char *label, GtkWidget *image, gboolean mnemoni
 {
 	GtkWidget *menuitem;
 	GtkWidget *box;
+	GtkWidget *gutter;
 	GtkWidget *accel_label;
 
-	if (image == NULL) {
-		return mnemonic
-			? gtk_menu_item_new_with_mnemonic(label ? label : "")
-			: gtk_menu_item_new_with_label(label ? label : "");
-	}
+	/* Fixed pixel width of the leading icon column. Matches the extra-small
+	 * (16px) icon size Pidgin uses for menu icons; every item reserves this
+	 * gutter -- even icon-less ones -- so labels line up in one shared column
+	 * and the icons that ARE present sit in a consistent left column, the way
+	 * the old GtkImageMenuItem toggle-size gutter used to guarantee. */
+#define PIDGIN_MENU_ICON_GUTTER 16
 
 	menuitem = gtk_menu_item_new();
 
@@ -831,10 +833,18 @@ pidgin_image_menu_item_new(const char *label, GtkWidget *image, gboolean mnemoni
 	/* Reserve a consistent gutter for the icon so that menus mixing image
 	 * items with check/radio items (e.g. the tray menu: "New Message" vs.
 	 * "Show Buddy List") keep their labels in one shared column, matching
-	 * the toggle gutter GTK reserves for the check items. */
-	gtk_widget_set_halign(image, GTK_ALIGN_CENTER);
-	gtk_widget_set_valign(image, GTK_ALIGN_CENTER);
-	gtk_box_pack_start(GTK_BOX(box), image, FALSE, FALSE, 0);
+	 * the toggle gutter GTK reserves for the check items. The gutter is a
+	 * fixed-width slot; the icon (if any) is centered inside it, so all
+	 * icons in a menu align in the same column regardless of their natural
+	 * width and icon-less items still indent their label to match. */
+	gutter = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_widget_set_size_request(gutter, PIDGIN_MENU_ICON_GUTTER, -1);
+	if (image != NULL) {
+		gtk_widget_set_halign(image, GTK_ALIGN_CENTER);
+		gtk_widget_set_valign(image, GTK_ALIGN_CENTER);
+		gtk_box_pack_start(GTK_BOX(gutter), image, TRUE, TRUE, 0);
+	}
+	gtk_box_pack_start(GTK_BOX(box), gutter, FALSE, FALSE, 0);
 
 	accel_label = gtk_accel_label_new(label ? label : "");
 	gtk_label_set_use_underline(GTK_LABEL(accel_label), mnemonic);
@@ -846,6 +856,7 @@ pidgin_image_menu_item_new(const char *label, GtkWidget *image, gboolean mnemoni
 
 	gtk_container_add(GTK_CONTAINER(menuitem), box);
 
+#undef PIDGIN_MENU_ICON_GUTTER
 	return menuitem;
 }
 
