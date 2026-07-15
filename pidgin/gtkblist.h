@@ -74,6 +74,10 @@ struct _PidginBuddyList {
 	GtkWidget *notebook;            /**< The notebook that switches between the real buddy list and the helpful
 					   instructions page */
 	GtkWidget *main_vbox;           /**< This vbox contains the menu and notebook */
+	GtkWidget *conv_paned;          /**< In single-window mode, the horizontal paned that splits the
+	                                     buddy list (left) from the docked conversations (right); NULL otherwise */
+	GtkWidget *conv_dock;           /**< In single-window mode, the placeholder box in the paned's right
+	                                     pane that the shared conversation content is docked into lazily */
 	GtkWidget *vbox;                /**< This is the vbox that everything important gets packed into.
 					   Your plugin might want to pack something in it itself.  Go, plugins! */
 

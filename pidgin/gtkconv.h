@@ -307,4 +307,24 @@ void pidgin_conversations_uninit(void);
 
 /*@}*/
 
+/**
+ * Returns whether single-window ("docked") mode is enabled, in which all
+ * conversations are hosted inside the buddy list window.
+ */
+gboolean pidgin_conv_single_window_enabled(void);
+
+/**
+ * Returns the conversation content box if it is currently docked inside
+ * @dock, else NULL. Used during buddy list teardown in single-window mode to
+ * detach the shared conversation content before the blist window is destroyed.
+ */
+GtkWidget *pidgin_conv_get_docked_child(GtkWidget *dock);
+
+/**
+ * Re-parents the docked conversation content box back into its own hidden
+ * conversation toplevel. Used during buddy list teardown in single-window
+ * mode. The caller must hold a reference on @box across the call.
+ */
+void pidgin_conv_redock_widget(GtkWidget *box);
+
 #endif /* _PIDGIN_CONVERSATION_H_ */

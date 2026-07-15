@@ -135,6 +135,7 @@ static GtkWidget *invite_dialog = NULL;
 static GtkWidget *warn_close_dialog = NULL;
 
 static PidginWindow *hidden_convwin = NULL;
+static PidginWindow *docked_convwin = NULL;
 static GList *window_list = NULL;
 
 /* GTK3: GtkTextTag no longer exposes ->name; read the construct-only "name"
@@ -8082,6 +8083,7 @@ pidgin_conversations_init(void)
 	purple_prefs_add_string(PIDGIN_PREFS_ROOT "/conversations/font_face", "");
 	purple_prefs_add_int(PIDGIN_PREFS_ROOT "/conversations/font_size", 3);
 	purple_prefs_add_bool(PIDGIN_PREFS_ROOT "/conversations/tabs", TRUE);
+	purple_prefs_add_bool(PIDGIN_PREFS_ROOT "/conversations/single_window", FALSE);
 	purple_prefs_add_int(PIDGIN_PREFS_ROOT "/conversations/tab_side", GTK_POS_TOP);
 	purple_prefs_add_int(PIDGIN_PREFS_ROOT "/conversations/scrollback_lines", 4000);
 
@@ -9598,6 +9600,10 @@ pidgin_conv_window_new()
 
 	gtk_container_add(GTK_CONTAINER(win->window), testidea);
 
+	/* Remember the content box so it can be re-parented into the buddy
+	 * list window when single-window (docked) mode is active. */
+	g_object_set_data(G_OBJECT(win->window), "pidgin-content-box", testidea);
+
 	gtk_widget_show(testidea);
 
 	/* Update the plugin actions when plugins are (un)loaded */
@@ -10106,6 +10112,132 @@ typedef struct
 static GList *conv_placement_fncs = NULL;
 static PidginConvPlacementFunc place_conv = NULL;
 
+/*
+ * Single-window ("docked") mode support.
+ *
+ * When PIDGIN_PREFS_ROOT "/conversations/single_window" is set, all
+ * conversations are routed into ONE shared PidginWindow whose content box is
+ * re-parented out of its own (never-shown) toplevel and into the buddy list
+ * window, so the buddy list and conversations live side by side in a single
+ * window. The toplevel is kept alive because it owns the menubar, accel group
+ * and item factory; only its content widget is displayed, inside the blist.
+ */
+
+/* Lazily create the shared docked conversation window. */
+static PidginWindow *
+pidgin_conv_get_docked_window(void)
+{
+	if (docked_convwin == NULL) {
+		docked_convwin = pidgin_conv_window_new();
+		/* It must never behave as its own top-level window. */
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(docked_convwin->notebook),
+		                           purple_prefs_get_bool(PIDGIN_PREFS_ROOT "/conversations/tabs"));
+	}
+	return docked_convwin;
+}
+
+/*
+ * Whether single-window (docked) mode is enabled.
+ */
+gboolean
+pidgin_conv_single_window_enabled(void)
+{
+	return purple_prefs_get_bool(PIDGIN_PREFS_ROOT "/conversations/single_window");
+}
+
+/*
+ * Return the conversation content box if it is currently docked inside the
+ * given dock container, else NULL. Used by the buddy list teardown to detach
+ * it before the blist window is destroyed.
+ */
+GtkWidget *
+pidgin_conv_get_docked_child(GtkWidget *dock)
+{
+	PidginWindow *win;
+	GtkWidget *box;
+
+	if (dock == NULL || docked_convwin == NULL)
+		return NULL;
+
+	win = docked_convwin;
+	box = g_object_get_data(G_OBJECT(win->window), "pidgin-content-box");
+	if (box != NULL && gtk_widget_get_parent(box) == dock)
+		return box;
+	return NULL;
+}
+
+/*
+ * Lazily move the shared docked conversation window's content box into the
+ * buddy list's dock placeholder. Called the first time a conversation is
+ * actually placed in single-window mode, so we never build the conversation
+ * widget tree during early buddy-list construction (which corrupted the heap).
+ * Idempotent: if the box is already parented in the dock, does nothing.
+ */
+static void
+pidgin_conv_dock_into_blist(void)
+{
+	PidginBuddyList *gtkblist = pidgin_blist_get_default_gtk_blist();
+	PidginWindow *win;
+	GtkWidget *box;
+
+	if (gtkblist == NULL || gtkblist->conv_dock == NULL)
+		return;
+
+	win = pidgin_conv_get_docked_window();
+	if (win == NULL)
+		return;
+
+	box = g_object_get_data(G_OBJECT(win->window), "pidgin-content-box");
+	if (box == NULL)
+		return;
+
+	/* Already docked? Nothing to do. */
+	if (gtk_widget_get_parent(box) == gtkblist->conv_dock)
+		return;
+
+	/* Detach from the (hidden) conversation toplevel, holding a ref across the
+	 * remove so the container's drop can't finalize it. */
+	g_object_ref(box);
+	if (gtk_widget_get_parent(box) != NULL)
+		gtk_container_remove(GTK_CONTAINER(gtk_widget_get_parent(box)), box);
+	gtk_box_pack_start(GTK_BOX(gtkblist->conv_dock), box, TRUE, TRUE, 0);
+	g_object_unref(box);
+	gtk_widget_show(box);
+}
+
+/*
+ * Re-parent the docked content box back into its own (hidden) conversation
+ * toplevel. Called when the buddy list window is being torn down so the
+ * conversation window regains ownership of its widget tree and can clean it
+ * up through its normal destroy path. The caller holds a ref on `box` across
+ * this call.
+ */
+void
+pidgin_conv_redock_widget(GtkWidget *box)
+{
+	if (docked_convwin == NULL || box == NULL)
+		return;
+
+	if (gtk_widget_get_parent(box) == NULL)
+		gtk_container_add(GTK_CONTAINER(docked_convwin->window), box);
+}
+
+/* Placement: every conversation goes into the shared docked window. */
+static void
+conv_placement_blist(PidginConversation *conv)
+{
+	PidginWindow *win = pidgin_conv_get_docked_window();
+
+	pidgin_conv_window_add_gtkconv(win, conv);
+
+	/* Make sure the buddy list (which hosts us) is visible, then move the
+	 * conversation content box into the buddy list's dock placeholder. Doing
+	 * this lazily (here, not during blist construction) avoids building the
+	 * conversation widget tree too early. */
+	purple_blist_set_visible(TRUE);
+	pidgin_conv_dock_into_blist();
+}
+
 /* This one places conversations in the last made window. */
 static void
 conv_placement_last_created_win(PidginConversation *conv)
@@ -10378,6 +10510,8 @@ ensure_default_funcs(void)
 		                       conv_placement_by_group);
 		add_conv_placement_fnc("account", _("By account"),
 		                       conv_placement_by_account);
+		add_conv_placement_fnc("blist", _("In the buddy list window"),
+		                       conv_placement_blist);
 	}
 }
 
@@ -10478,6 +10612,13 @@ pidgin_conv_placement_get_current_func(void)
 void
 pidgin_conv_placement_place(PidginConversation *gtkconv)
 {
+	/* Single-window mode overrides the user's placement choice: everything
+	 * docks into the buddy list window. */
+	if (pidgin_conv_single_window_enabled()) {
+		conv_placement_blist(gtkconv);
+		return;
+	}
+
 	if (place_conv)
 		place_conv(gtkconv);
 	else

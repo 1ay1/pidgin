@@ -603,6 +603,13 @@ pidgin_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **tool
 	pidgin_setup_imhtml(imhtml);
 
 	sw = pidgin_make_scrollable(imhtml, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC, GTK_SHADOW_NONE, -1, -1);
+	/* GTK3: a GtkTextView reports a min-content-width wide enough for its
+	 * longest unbreakable run, which becomes a hard floor on the whole
+	 * conversation column and, in single-window (docked) mode, can push the
+	 * unified window wider than the screen. Word-char wrapping means we can
+	 * safely advertise a small minimum and let the text reflow, so the
+	 * conversation pane stays responsive. */
+	gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(sw), 80);
 	gtk_box_pack_start(GTK_BOX(vbox), sw, TRUE, TRUE, 0);
 
 	if (imhtml_ret != NULL)

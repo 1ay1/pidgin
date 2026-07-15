@@ -1411,8 +1411,11 @@ interface_page(void)
 	/* All the tab options! */
 	vbox = pidgin_make_frame(ret, _("Tabs"));
 
+	pidgin_prefs_checkbox(_("Show the buddy _list and conversations in one window"),
+						PIDGIN_PREFS_ROOT "/conversations/single_window", vbox);
+
 	pidgin_prefs_checkbox(_("Show IMs and chats in _tabbed windows"),
-							PIDGIN_PREFS_ROOT "/conversations/tabs", vbox);
+						PIDGIN_PREFS_ROOT "/conversations/tabs", vbox);
 
 	/*
 	 * Connect a signal to the above preference.  When conversations are not

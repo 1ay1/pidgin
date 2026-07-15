@@ -5918,7 +5918,45 @@ static void pidgin_blist_show(PurpleBuddyList *list)
 	gtkblist->notebook = gtk_notebook_new();
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(gtkblist->notebook), FALSE);
 	gtk_notebook_set_show_border(GTK_NOTEBOOK(gtkblist->notebook), FALSE);
-	gtk_box_pack_start(GTK_BOX(gtkblist->main_vbox), gtkblist->notebook, TRUE, TRUE, 0);
+
+	/* Single-window mode: put the buddy list on the left of a horizontal
+	 * paned and dock the shared conversation window on the right, so the
+	 * whole app lives in one window. Otherwise the buddy list notebook fills
+	 * the window as before. */
+	if (pidgin_conv_single_window_enabled()) {
+		GtkWidget *paned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
+
+		/* Both children must be allowed to SHRINK below their natural size,
+		 * otherwise the sum of the buddy list's minimum width and the
+		 * conversation area's (toolbar + entry + send-to) minimum width pins
+		 * the whole window and it overflows horizontally / can't be resized
+		 * smaller. pack1: don't grab extra space on resize (the blist keeps
+		 * its set width); pack2: take the remaining space and also shrink.
+		 *
+		 * NOTE: We do NOT build the docked conversation window here. Creating a
+		 * full PidginWindow (with its imhtml/toolbar widget tree) this early in
+		 * blist construction proved fragile -- it ran conversation-side init
+		 * before the rest of the buddy list window existed and intermittently
+		 * corrupted the heap (garbage GValue in a later gtk_imhtml_init tag
+		 * create). Instead pack an empty placeholder box on the right now, and
+		 * dock the real conversation content into it lazily the first time a
+		 * conversation is actually placed (see pidgin_conv_dock_into_blist). */
+		gtkblist->conv_dock = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+		gtk_paned_pack1(GTK_PANED(paned), gtkblist->notebook, FALSE, TRUE);
+		gtk_paned_pack2(GTK_PANED(paned), gtkblist->conv_dock, TRUE, TRUE);
+		gtk_widget_show(gtkblist->conv_dock);
+		/* Give the buddy list a sensible default width; the rest goes to
+		 * conversations. Cap the width so a wide saved blist pref can't push
+		 * the divider off-window. */
+		gtk_paned_set_position(GTK_PANED(paned),
+			CLAMP(purple_prefs_get_int(PIDGIN_PREFS_ROOT "/blist/width"),
+			      150, 400));
+		gtk_box_pack_start(GTK_BOX(gtkblist->main_vbox), paned, TRUE, TRUE, 0);
+		gtk_widget_show(paned);
+		gtkblist->conv_paned = paned;
+	} else {
+		gtk_box_pack_start(GTK_BOX(gtkblist->main_vbox), gtkblist->notebook, TRUE, TRUE, 0);
+	}
 
 #if 0
 	gtk_notebook_append_page(GTK_NOTEBOOK(gtkblist->notebook), kiosk_page(), NULL);
@@ -7048,6 +7086,30 @@ static void pidgin_blist_destroy(PurpleBuddyList *list)
 	if (gtkblist->ift && G_IS_OBJECT(gtkblist->ift))
 		g_object_unref(G_OBJECT(gtkblist->ift));
 	gtkblist->ift = NULL;
+
+	/* Single-window mode: the docked conversation content box is a child of
+	 * our paned but is OWNED by the (separate, hidden) conversation toplevel.
+	 * Detach it before we destroy the blist window so that destroying the
+	 * blist doesn't finalize widgets the conversation window still references.
+	 * The conversation window is torn down on its own during conversations
+	 * uninit. */
+	if (gtkblist->conv_paned) {
+		/* The conversation content lives inside conv_dock (the placeholder we
+		 * packed into the paned's right pane). Detach it and hand it back to
+		 * the conversation toplevel so that window's own destroy path cleans
+		 * it up. If no conversation was ever docked, conv_dock is just empty. */
+		if (gtkblist->conv_dock) {
+			GtkWidget *conv_widget = pidgin_conv_get_docked_child(gtkblist->conv_dock);
+			if (conv_widget) {
+				g_object_ref(conv_widget);
+				gtk_container_remove(GTK_CONTAINER(gtkblist->conv_dock), conv_widget);
+				pidgin_conv_redock_widget(conv_widget);
+				g_object_unref(conv_widget);
+			}
+		}
+		gtkblist->conv_dock = NULL;
+		gtkblist->conv_paned = NULL;
+	}
 
 	gtk_widget_destroy(gtkblist->window);
 
