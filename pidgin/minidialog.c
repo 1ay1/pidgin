@@ -457,34 +457,12 @@ pidgin_mini_dialog_class_init(PidginMiniDialogClass *klass)
 }
 
 /* 16 is the width of the icon, due to PIDGIN_ICON_SIZE_TANGO_EXTRA_SMALL */
-#define BLIST_WIDTH_OTHER_THAN_LABEL \
-	((PIDGIN_HIG_BOX_SPACE * 3) + 16)
-
-#define BLIST_WIDTH_PREF \
-	(PIDGIN_PREFS_ROOT "/blist/width")
-
-static void
-blist_width_changed_cb(const char *name,
-                       PurplePrefType type,
-                       gconstpointer val,
-                       gpointer data)
-{
-	PidginMiniDialog *self = PIDGIN_MINI_DIALOG(data);
-	PidginMiniDialogPrivate *priv = PIDGIN_MINI_DIALOG_GET_PRIVATE(self);
-	guint blist_width = GPOINTER_TO_INT(val);
-	guint label_width = blist_width - BLIST_WIDTH_OTHER_THAN_LABEL;
-
-	gtk_widget_set_size_request(GTK_WIDGET(priv->title), label_width, -1);
-	gtk_widget_set_size_request(GTK_WIDGET(priv->desc), label_width, -1);
-}
 
 static void
 pidgin_mini_dialog_init(PidginMiniDialog *self,
                         G_GNUC_UNUSED GTypeClass *klass)
 {
 	GtkBox *self_box = GTK_BOX(self);
-	guint blist_width = purple_prefs_get_int(BLIST_WIDTH_PREF);
-	guint label_width = blist_width - BLIST_WIDTH_OTHER_THAN_LABEL;
 
 	PidginMiniDialogPrivate *priv = g_new0(PidginMiniDialogPrivate, 1);
 	self->priv = priv;
@@ -497,17 +475,27 @@ pidgin_mini_dialog_init(PidginMiniDialog *self,
 	pidgin_widget_set_alignment(GTK_WIDGET(priv->icon), 0, 0);
 
 	priv->title = GTK_LABEL(gtk_label_new(NULL));
-	gtk_widget_set_size_request(GTK_WIDGET(priv->title), label_width, -1);
 	gtk_label_set_line_wrap(priv->title, TRUE);
 	gtk_label_set_selectable(priv->title, TRUE);
+	/*
+	 * Pin the wrap width to a fixed character count (width == max) so the
+	 * label's height-for-width is deterministic from the very first size
+	 * request. Leaving a range let GtkNotebook measure at one width and
+	 * allocate at another, so wrapping labels needed more rows than the
+	 * committed height -> buttons/close overlapped siblings until a later
+	 * resize corrected it.
+	 */
+	gtk_label_set_width_chars(priv->title, 28);
+	gtk_label_set_max_width_chars(priv->title, 28);
 	pidgin_widget_set_alignment(GTK_WIDGET(priv->title), 0, 0);
 
 	gtk_box_pack_start(priv->title_box, GTK_WIDGET(priv->icon), FALSE, FALSE, 0);
 	gtk_box_pack_start(priv->title_box, GTK_WIDGET(priv->title), TRUE, TRUE, 0);
 
 	priv->desc = GTK_LABEL(gtk_label_new(NULL));
-	gtk_widget_set_size_request(GTK_WIDGET(priv->desc), label_width, -1);
 	gtk_label_set_line_wrap(priv->desc, TRUE);
+	gtk_label_set_width_chars(priv->desc, 28);
+	gtk_label_set_max_width_chars(priv->desc, 28);
 	pidgin_widget_set_alignment(GTK_WIDGET(priv->desc), 0, 0);
 	gtk_label_set_selectable(priv->desc, TRUE);
 	/* make calling show_all() on the minidialog not affect desc even though
@@ -515,8 +503,13 @@ pidgin_mini_dialog_init(PidginMiniDialog *self,
 	 */
 	g_object_set(G_OBJECT(priv->desc), "no-show-all", TRUE, NULL);
 
-	purple_prefs_connect_callback(self, BLIST_WIDTH_PREF,
-		blist_width_changed_cb, self);
+	/*
+	 * NB: we no longer force a fixed pixel width on the title/desc labels
+	 * (that GTK2-era hack broke GTK3 height-for-width and made the dialog
+	 * mis-size, letting buttons/close overlap sibling widgets). The labels
+	 * now wrap naturally to their allocation, so there is nothing to update
+	 * when the buddy-list width changes.
+	 */
 
 	self->contents = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
 

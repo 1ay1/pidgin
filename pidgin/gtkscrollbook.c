@@ -31,10 +31,6 @@ static void pidgin_scroll_book_init (PidginScrollBook *scroll_book,
                                      GTypeClass *klass);
 static void pidgin_scroll_book_class_init (PidginScrollBookClass *klass,
                                            gpointer class_data);
-static void pidgin_scroll_book_forall (GtkContainer *c,
-					 gboolean include_internals,
-					 GtkCallback callback,
-					 gpointer user_data);
 
 GType
 pidgin_scroll_book_get_type (void)
@@ -128,6 +124,18 @@ refresh_scroll_box(PidginScrollBook *scroll_book, int index, int count)
 		gtk_widget_set_sensitive(scroll_book->right_arrow, FALSE);
 	else
 		gtk_widget_set_sensitive(scroll_book->right_arrow, TRUE);
+
+	/*
+	 * GtkNotebook commits to a height based on the visible page's
+	 * height-at-natural-width and does NOT re-request when that page's
+	 * height-for-width later changes (e.g. a wrapping label gets a
+	 * narrower allocation and needs more rows). That left the mini-dialog
+	 * buttons/close overflowing their allocation and overlapping sibling
+	 * widgets until some unrelated event finally triggered a resize --
+	 * the "it fixes itself after a while" symptom. Force the recompute now.
+	 */
+	gtk_widget_queue_resize(scroll_book->notebook);
+	gtk_widget_queue_resize(GTK_WIDGET(scroll_book));
 }
 
 
@@ -189,38 +197,6 @@ pidgin_scroll_book_remove(GtkContainer *container, GtkWidget *widget)
 }
 
 static void
-pidgin_scroll_book_forall(GtkContainer *container,
-			   gboolean include_internals,
-			   GtkCallback callback,
-			   gpointer callback_data)
-{
-#if 0
-	GList *children;
-#endif
-	PidginScrollBook *scroll_book;
-
-	g_return_if_fail(GTK_IS_CONTAINER(container));
-
-	scroll_book = PIDGIN_SCROLL_BOOK(container);
-
-	if (include_internals) {
-		(*callback)(scroll_book->hbox, callback_data);
-		(*callback)(scroll_book->notebook, callback_data);
-	}
-
-#if 0
-	children = scroll_book->children;
-
-	while (children) {
-		GtkWidget *child;
-		child = children->data;
-		children = children->next;
-		(*callback)(child, callback_data);
-	}
-#endif
-}
-
-static void
 pidgin_scroll_book_class_init (PidginScrollBookClass *klass,
                                G_GNUC_UNUSED gpointer class_data)
 {
@@ -228,7 +204,20 @@ pidgin_scroll_book_class_init (PidginScrollBookClass *klass,
 
 	container_class->add = pidgin_scroll_book_add;
 	container_class->remove = pidgin_scroll_book_remove;
-	container_class->forall = pidgin_scroll_book_forall;
+	/*
+	 * Deliberately NOT overriding container_class->forall.
+	 *
+	 * hbox and notebook are packed into this widget with
+	 * gtk_box_pack_start(), so the inherited GtkBox forall() already
+	 * reports them -- which is exactly what GTK3's size negotiation and
+	 * allocation need. The old GTK2-era override reported the children
+	 * only under include_internals and #if 0'd out everything else; under
+	 * GTK3 that hid the children from the size machinery, so the widget
+	 * requested ~zero height and its nav header/notebook were mis-placed
+	 * (empty scroll bars floating over the status box, real alert content
+	 * drawn on top of "Available"). Letting GtkBox handle forall() fixes
+	 * the layout.
+	 */
 }
 
 static gboolean
